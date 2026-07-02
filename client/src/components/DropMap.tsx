@@ -1,4 +1,6 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -23,61 +25,104 @@ interface DropMapProps {
   height?: string;
 }
 
-// ─── Google Maps loader (singleton) ──────────────────────────────────────────
+// ─── Custom SVG marker (branded, no image assets) ────────────────────────────
 
-let scriptLoaded = false;
-let scriptLoading = false;
-const callbacks: Array<() => void> = [];
-
-function loadGoogleMaps(apiKey: string, onLoad: () => void) {
-  if (scriptLoaded) { onLoad(); return; }
-  callbacks.push(onLoad);
-  if (scriptLoading) return;
-  scriptLoading = true;
-
-  (window as any).__gmapsReady = () => {
-    scriptLoaded = true;
-    callbacks.forEach(cb => cb());
-    callbacks.length = 0;
-  };
-
-  const script = document.createElement("script");
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=__gmapsReady`;
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
+function makeMarkerSVG(isLive: boolean, scarce: boolean): string {
+  const fill = scarce ? "#E8341C" : "#141210";
+  if (isLive) {
+    return [
+      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">',
+      `<circle cx="16" cy="16" r="13" fill="${fill}" opacity="0.2">`,
+      '<animate attributeName="r" from="13" to="18" dur="2s" repeatCount="indefinite"/>',
+      '<animate attributeName="opacity" from="0.2" to="0" dur="2s" repeatCount="indefinite"/>',
+      "</circle>",
+      `<circle cx="16" cy="16" r="10" fill="${fill}" />`,
+      "</svg>",
+    ].join("");
+  }
+  return [
+    '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">',
+    `<circle cx="10" cy="10" r="8" fill="${fill}" />`,
+    "</svg>",
+  ].join("");
 }
 
-// ─── Minimal light map style (matches #FAFAF8 palette) ───────────────────────
+function makeIcon(isLive: boolean, scarce: boolean): L.DivIcon {
+  const size = isLive ? 32 : 20;
+  return L.divIcon({
+    className: "",
+    html: makeMarkerSVG(isLive, scarce),
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+    popupAnchor: [0, -(size / 2 + 4)],
+  });
+}
 
-const MAP_STYLE = [
-  { featureType: "all", elementType: "labels.text.fill", stylers: [{ color: "#7a7a7a" }] },
-  { featureType: "all", elementType: "labels.text.stroke", stylers: [{ visibility: "off" }] },
-  { featureType: "administrative", elementType: "geometry.fill", stylers: [{ color: "#F5F4F0" }] },
-  { featureType: "landscape", elementType: "all", stylers: [{ color: "#F5F4F0" }] },
-  { featureType: "poi", elementType: "all", stylers: [{ visibility: "off" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#E0DFD9" }] },
-  { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [{ color: "#7a7a7a" }] },
-  { featureType: "transit", elementType: "all", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#E0DFD9" }] },
-];
+// ─── Popup HTML ───────────────────────────────────────────────────────────────
 
-// ─── SVG pin for vermillion drop marker ──────────────────────────────────────
+function makePopupHTML(drop: DropPin): string {
+  const end = new Date(drop.collectionEnd);
+  const endStr = end.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  const scarce = drop.availableQuantity <= 3;
+  const availBadge = scarce
+    ? `<span style="color:#E8341C;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} left</span>`
+    : `<span style="color:#7A7A7A;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} available</span>`;
 
-function makeMarkerSVG(isLive: boolean, scarce: boolean) {
-  const fill = scarce ? "#E8341C" : "#141210";
-  const size = isLive ? 14 : 10;
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="${size * 2}" height="${size * 2}">
-      <circle cx="${size}" cy="${size}" r="${size - 1}" fill="${fill}" />
-      ${isLive ? `<circle cx="${size}" cy="${size}" r="${size - 1}" fill="${fill}" opacity="0.3">
-        <animate attributeName="r" from="${size - 1}" to="${size + 4}" dur="2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" from="0.3" to="0" dur="2s" repeatCount="indefinite"/>
-      </circle>` : ""}
-    </svg>
+  return `
+    <div style="font-family:'DM Sans',sans-serif;min-width:190px">
+      <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:4px">
+        ${drop.businessName.toUpperCase()}
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#141210;margin-bottom:8px;line-height:1.2">
+        ${drop.title}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#141210">
+          £${(drop.price / 100).toFixed(2)}
+        </span>
+        ${availBadge}
+      </div>
+      <div style="font-size:11px;color:#7A7A7A;margin-bottom:12px">
+        Until ${endStr}
+      </div>
+      <button
+        onclick="window.__unwrappedDropClick && window.__unwrappedDropClick('${drop.id}')"
+        style="background:#141210;color:#FAFAF8;border:none;font-family:'Space Mono',monospace;
+               font-size:10px;letter-spacing:0.1em;padding:9px 0;cursor:pointer;width:100%;display:block"
+      >
+        VIEW DROP
+      </button>
+    </div>
   `;
-  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
+
+// ─── Popup style (injected once) ─────────────────────────────────────────────
+
+const POPUP_CSS = `
+  .uw-popup .leaflet-popup-content-wrapper {
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    padding: 0;
+    border: 1px solid #E0DFD9;
+  }
+  .uw-popup .leaflet-popup-content {
+    margin: 16px;
+  }
+  .uw-popup .leaflet-popup-tip-container {
+    display: none;
+  }
+  .leaflet-control-attribution {
+    font-size: 9px !important;
+  }
+`;
+
+let cssInjected = false;
+function injectCSS() {
+  if (cssInjected) return;
+  const style = document.createElement("style");
+  style.textContent = POPUP_CSS;
+  document.head.appendChild(style);
+  cssInjected = true;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -91,137 +136,84 @@ export default function DropMap({
   height = "480px",
 }: DropMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
-  const infoWindowRef = useRef<any>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
 
-  const apiKey = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY ?? "";
-
-  const initMap = useCallback(() => {
+  // ── Initialise map once ──────────────────────────────────────────────────
+  useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-    const google = (window as any).google;
 
-    mapRef.current = new google.maps.Map(containerRef.current, {
-      center: { lat: defaultLat, lng: defaultLng },
+    injectCSS();
+
+    const map = L.map(containerRef.current, {
+      center: [defaultLat, defaultLng],
       zoom,
-      styles: MAP_STYLE,
-      disableDefaultUI: true,
-      zoomControl: true,
-      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
-      clickableIcons: false,
+      zoomControl: false,
+      attributionControl: true,
     });
 
-    infoWindowRef.current = new google.maps.InfoWindow({
-      pixelOffset: new google.maps.Size(0, -10),
-    });
-  }, [defaultLat, defaultLng, zoom]);
+    // CartoDB light tiles — free, no API key, matches cream palette
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: "abcd",
+      maxZoom: 20,
+    }).addTo(map);
 
-  // Place/update markers whenever drops change
-  const updateMarkers = useCallback(() => {
+    L.control.zoom({ position: "bottomright" }).addTo(map);
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      markersRef.current = [];
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Recenter when search changes defaultLat/defaultLng ──────────────────
+  useEffect(() => {
     if (!mapRef.current) return;
-    const google = (window as any).google;
+    mapRef.current.setView([defaultLat, defaultLng], mapRef.current.getZoom(), { animate: true });
+  }, [defaultLat, defaultLng]);
 
-    // Clear old markers
-    markersRef.current.forEach(m => m.setMap(null));
+  // ── Expose drop-click handler to popup buttons ───────────────────────────
+  useEffect(() => {
+    (window as any).__unwrappedDropClick = (id: string) => {
+      onDropClick?.(id);
+    };
+    return () => {
+      delete (window as any).__unwrappedDropClick;
+    };
+  }, [onDropClick]);
+
+  // ── Render/update markers whenever drops list changes ────────────────────
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
 
     drops.forEach(drop => {
-      const scarce = drop.availableQuantity <= 3;
-      const marker = new google.maps.Marker({
-        position: { lat: drop.lat, lng: drop.lng },
-        map: mapRef.current,
-        icon: {
-          url: makeMarkerSVG(drop.isLive, scarce),
-          scaledSize: new google.maps.Size(drop.isLive ? 28 : 20, drop.isLive ? 28 : 20),
-          anchor: new google.maps.Point(drop.isLive ? 14 : 10, drop.isLive ? 14 : 10),
-        },
-        title: drop.title,
-      });
+      const scarce = drop.availableQuantity > 0 && drop.availableQuantity <= 3;
+      const icon = makeIcon(drop.isLive, scarce);
 
-      marker.addListener("click", () => {
-        const end = new Date(drop.collectionEnd);
-        const endStr = end.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-        const scarceBadge = drop.availableQuantity <= 3
-          ? `<span style="color:#E8341C;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} left</span>`
-          : `<span style="color:#7a7a7a;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} available</span>`;
+      const marker = L.marker([drop.lat, drop.lng], { icon }).addTo(mapRef.current!);
 
-        infoWindowRef.current.setContent(`
-          <div style="font-family:'DM Sans',sans-serif;min-width:200px;padding:4px">
-            <div style="font-size:11px;color:#7a7a7a;font-family:'Space Mono',monospace;letter-spacing:0.08em;margin-bottom:4px">
-              ${drop.businessName.toUpperCase()}
-            </div>
-            <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#141210;margin-bottom:6px;line-height:1.2">
-              ${drop.title}
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-              <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#141210">
-                £${(drop.price / 100).toFixed(2)}
-              </span>
-              ${scarceBadge}
-            </div>
-            <div style="font-size:11px;color:#7a7a7a;margin-bottom:10px">
-              Until ${endStr}
-            </div>
-            <button
-              onclick="window.__unwrappedDropClick && window.__unwrappedDropClick('${drop.id}')"
-              style="background:#141210;color:#FAFAF8;border:none;font-family:'Space Mono',monospace;
-                     font-size:10px;letter-spacing:0.08em;padding:8px 16px;cursor:pointer;width:100%"
-            >
-              VIEW DROP
-            </button>
-          </div>
-        `);
-        infoWindowRef.current.open(mapRef.current, marker);
+      marker.bindPopup(makePopupHTML(drop), {
+        closeButton: false,
+        className: "uw-popup",
+        maxWidth: 240,
       });
 
       markersRef.current.push(marker);
     });
   }, [drops]);
 
-  // Expose click handler to window so info window button can call it
-  useEffect(() => {
-    (window as any).__unwrappedDropClick = (id: string) => {
-      infoWindowRef.current?.close();
-      onDropClick?.(id);
-    };
-    return () => { delete (window as any).__unwrappedDropClick; };
-  }, [onDropClick]);
-
-  // Load Google Maps and initialise
-  useEffect(() => {
-    if (!apiKey) return;
-    loadGoogleMaps(apiKey, () => {
-      initMap();
-      updateMarkers();
-    });
-  }, [apiKey, initMap, updateMarkers]);
-
-  // Re-draw markers when drops list changes (after map already loaded)
-  useEffect(() => {
-    if (mapRef.current) updateMarkers();
-  }, [drops, updateMarkers]);
-
-  if (!apiKey) {
-    return (
-      <div style={{
-        height, background: "#F5F4F0",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center", gap: 8,
-      }}>
-        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 16, color: "#7a7a7a", fontStyle: "italic" }}>
-          Map coming soon
-        </span>
-        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#b0a89e", letterSpacing: "0.1em" }}>
-          Set VITE_GOOGLE_MAPS_API_KEY to enable
-        </span>
-      </div>
-    );
-  }
-
   return <div ref={containerRef} style={{ width: "100%", height }} />;
 }
 
-// ─── Helper: convert tRPC drop result to DropPin ──────────────────────────────
+// ─── Helper: convert tRPC drop result to DropPin ─────────────────────────────
 
 export function toDropPin(item: { drop: any; business: any; location: any }): DropPin {
   const now = new Date();
