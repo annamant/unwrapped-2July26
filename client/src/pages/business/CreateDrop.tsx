@@ -20,7 +20,7 @@ export default function CreateDrop() {
   const [, navigate] = useLocation();
   const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: "", description: "", imageUrl: "", category: "", format: "standard",
+    title: "", description: "", imageUrl: "", category: "", format: "limited_item",
     price: "", totalQuantity: "",
     collectionStart: "", collectionEnd: "",
     locationAddress: "", locationCity: "", locationPostcode: "",
@@ -57,7 +57,7 @@ export default function CreateDrop() {
       description: form.description || undefined,
       imageUrl: form.imageUrl || undefined,
       category: form.category,
-      format: form.format as "standard" | "auction" | "bundle",
+      format: form.format as "limited_item" | "clearance_discount" | "bundle" | "service_window",
       price: priceInPence,
       totalQuantity: qty,
       collectionStart: new Date(form.collectionStart).toISOString(),
@@ -111,8 +111,10 @@ export default function CreateDrop() {
               </Field>
               <Field label="Format">
                 <select value={form.format} onChange={set("format")} style={inputStyle}>
-                  <option value="standard">Standard (fixed price)</option>
+                  <option value="limited_item">Limited item</option>
+                  <option value="clearance_discount">Clearance / discount</option>
                   <option value="bundle">Bundle</option>
+                  <option value="service_window">Service window</option>
                 </select>
               </Field>
             </div>

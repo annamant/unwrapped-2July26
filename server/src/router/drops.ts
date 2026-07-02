@@ -95,7 +95,7 @@ export const dropsRouter = router({
         latitude: z.number().optional(),
         longitude: z.number().optional(),
       }).optional(),
-      format: z.enum(["standard", "limited_item", "clearance_discount", "bundle", "service_window", "auction"]).default("standard"),
+      format: z.enum(["limited_item", "clearance_discount", "bundle", "service_window"]).default("limited_item"),
       category: z.string(),
       title: z.string().min(1).max(100),
       description: z.string().max(1000).optional(),
