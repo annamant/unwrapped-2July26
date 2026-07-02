@@ -22,7 +22,7 @@ export default function BusinessApply() {
   });
   const [error, setError] = useState("");
 
-  const apply = trpc.businesses.apply.useMutation({
+  const apply = trpc.businesses.submitApplication.useMutation({
     onSuccess: () => setSubmitted(true),
     onError: (e) => setError(e.message),
   });
