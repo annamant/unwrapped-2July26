@@ -55,14 +55,24 @@ export const adminRouter = router({
       if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
       if (app.status !== "pending") throw new TRPCError({ code: "BAD_REQUEST", message: "Application already reviewed" });
 
-      // Find user by contactEmail, or fall back to admin as placeholder
+      // Find the applicant's user account by contactEmail. If they haven't
+      // registered yet, create a passwordless placeholder account — they claim
+      // it by registering with the same email (handled in auth.register).
+      const email = app.contactEmail.toLowerCase();
       const [owner] = await ctx.db
         .select()
         .from(users)
-        .where(eq(users.email, app.contactEmail))
+        .where(eq(users.email, email))
         .limit(1);
 
-      const ownerId = owner?.id ?? ctx.user.id; // fallback to admin for now
+      let ownerId = owner?.id;
+      if (!ownerId) {
+        const [placeholder] = await ctx.db
+          .insert(users)
+          .values({ email, name: app.name, role: "consumer", onboardingComplete: false })
+          .returning();
+        ownerId = placeholder.id;
+      }
 
       const [business] = await ctx.db
         .insert(businesses)

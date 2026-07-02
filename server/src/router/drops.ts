@@ -4,6 +4,8 @@ import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, ad
 import { drops, businesses, locations, reservations, waitlist } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { dispatchDropNotifications } from "../notifications/dispatch";
+import { stripeEnabled, refundPaymentIntent } from "../payments/stripe";
+import { geocodeAddress, haversineKm } from "../geo";
 
 const CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
@@ -60,6 +62,13 @@ export const dropsRouter = router({
         .orderBy(desc(drops.featured), desc(drops.createdAt))
         .limit(input.limit);
 
+      // Optional proximity filter
+      if (input.lat !== undefined && input.lng !== undefined) {
+        return results.filter(r =>
+          haversineKm(input.lat!, input.lng!, r.location.latitude, r.location.longitude) <= input.radiusKm,
+        );
+      }
+
       return results;
     }),
 
@@ -107,6 +116,16 @@ export const dropsRouter = router({
       sendEarlyAccess: z.boolean().default(false),
     }))
     .mutation(async ({ ctx, input }) => {
+      // Validate the collection window
+      const windowStart = new Date(input.collectionStart);
+      const windowEnd = new Date(input.collectionEnd);
+      if (windowEnd <= windowStart) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Collection window must end after it starts" });
+      }
+      if (windowEnd <= new Date()) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Collection window is entirely in the past" });
+      }
+
       let loc: typeof locations.$inferSelect | undefined;
 
       if (input.locationId) {
@@ -119,6 +138,25 @@ export const dropsRouter = router({
         if (!existing) throw new TRPCError({ code: "FORBIDDEN", message: "Location not found" });
         loc = existing;
       } else if (input.location) {
+        // Resolve coordinates: use provided lat/lng, otherwise geocode the address
+        let latitude = input.location.latitude;
+        let longitude = input.location.longitude;
+        if (latitude === undefined || longitude === undefined) {
+          const geo = await geocodeAddress({
+            address: input.location.address,
+            postcode: input.location.postcode,
+            city: input.location.city ?? ctx.business.city,
+          });
+          if (!geo) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Couldn't locate that address on the map. Check the address/postcode, or enter latitude and longitude manually.",
+            });
+          }
+          latitude = geo.latitude;
+          longitude = geo.longitude;
+        }
+
         // Create location on the fly
         const [created] = await ctx.db
           .insert(locations)
@@ -128,8 +166,8 @@ export const dropsRouter = router({
             address: input.location.address,
             city: input.location.city ?? ctx.business.city ?? "London",
             postcode: input.location.postcode ?? undefined,
-            latitude: input.location.latitude ?? 51.5074,
-            longitude: input.location.longitude ?? -0.1278,
+            latitude,
+            longitude,
           })
           .returning();
         loc = created;
@@ -222,19 +260,26 @@ export const dropsRouter = router({
         .set({ status: "cancelled", cancelledAt: now, cancelledBy: "business" })
         .where(eq(drops.id, input.dropId));
 
-      // In production: trigger Stripe refunds + push notifications to all reservers
       // Get active reservations for this drop
       const activeReservations = await ctx.db
         .select()
         .from(reservations)
         .where(and(eq(reservations.dropId, input.dropId), eq(reservations.status, "active")));
 
-      // Mark all reservations as cancelled + refunded
+      // Mark all reservations as cancelled and refund their payments
       if (activeReservations.length > 0) {
         await ctx.db
           .update(reservations)
           .set({ status: "cancelled", cancelledAt: now })
           .where(and(eq(reservations.dropId, input.dropId), eq(reservations.status, "active")));
+
+        if (stripeEnabled()) {
+          await Promise.allSettled(
+            activeReservations
+              .filter(r => r.stripePaymentIntentId)
+              .map(r => refundPaymentIntent(r.stripePaymentIntentId!)),
+          );
+        }
       }
 
       return { success: true, refundedCount: activeReservations.length };

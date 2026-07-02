@@ -60,6 +60,16 @@ function makeIcon(isLive: boolean, scarce: boolean): L.DivIcon {
 
 // ─── Popup HTML ───────────────────────────────────────────────────────────────
 
+// Escape user-supplied strings before interpolating into popup HTML (XSS).
+function esc(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function makePopupHTML(drop: DropPin): string {
   const end = new Date(drop.collectionEnd);
   const endStr = end.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -71,10 +81,10 @@ function makePopupHTML(drop: DropPin): string {
   return `
     <div style="font-family:'DM Sans',sans-serif;min-width:190px">
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:4px">
-        ${drop.businessName.toUpperCase()}
+        ${esc(drop.businessName.toUpperCase())}
       </div>
       <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#141210;margin-bottom:8px;line-height:1.2">
-        ${drop.title}
+        ${esc(drop.title)}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#141210">
@@ -86,7 +96,7 @@ function makePopupHTML(drop: DropPin): string {
         Until ${endStr}
       </div>
       <button
-        onclick="window.__unwrappedDropClick && window.__unwrappedDropClick('${drop.id}')"
+        onclick="window.__unwrappedDropClick && window.__unwrappedDropClick('${esc(drop.id)}')"
         style="background:#141210;color:#FAFAF8;border:none;font-family:'Space Mono',monospace;
                font-size:10px;letter-spacing:0.1em;padding:9px 0;cursor:pointer;width:100%;display:block"
       >
@@ -141,16 +151,27 @@ export default function DropMap({
 
   // ── Initialise map once ──────────────────────────────────────────────────
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    const container = containerRef.current;
+    if (!container || mapRef.current) return;
+
+    // React 18 Strict Mode runs effects twice; if Leaflet already stamped this
+    // container from the first run, bail out so we don't throw "already initialised".
+    if ((container as any)._leaflet_id) return;
 
     injectCSS();
 
-    const map = L.map(containerRef.current, {
-      center: [defaultLat, defaultLng],
-      zoom,
-      zoomControl: false,
-      attributionControl: true,
-    });
+    let map: L.Map;
+    try {
+      map = L.map(container, {
+        center: [defaultLat, defaultLng],
+        zoom,
+        zoomControl: false,
+        attributionControl: true,
+      });
+    } catch {
+      // Container was already initialised (can happen in dev Strict Mode)
+      return;
+    }
 
     // CartoDB light tiles — free, no API key, matches cream palette
     L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
@@ -164,7 +185,24 @@ export default function DropMap({
 
     mapRef.current = map;
 
+    // Recalculate tile layout after the browser has painted — critical when the
+    // container is conditionally rendered or inside a flex/grid parent.
+    const raf = requestAnimationFrame(() => {
+      map.invalidateSize();
+    });
+
+    // Re-invalidate whenever the container is shown after being display:none
+    // (e.g. toggling between list and map view in Home.tsx).
+    const observer = new ResizeObserver(() => {
+      if (mapRef.current && container.offsetWidth > 0) {
+        mapRef.current.invalidateSize();
+      }
+    });
+    observer.observe(container);
+
     return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
       map.remove();
       mapRef.current = null;
       markersRef.current = [];

@@ -6,13 +6,16 @@
  * The subscription is sent to POST /api/push/subscribe on the server.
  */
 
-const VAPID_PUBLIC_KEY = (import.meta as any).env?.VITE_VAPID_PUBLIC_KEY ?? "";
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ?? "";
+const API_URL = import.meta.env.VITE_API_URL ?? "";
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
+function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
   const raw = window.atob(base64);
-  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  const bytes = new Uint8Array(new ArrayBuffer(raw.length));
+  for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return bytes;
 }
 
 export async function requestPushPermission(): Promise<"granted" | "denied" | "unavailable"> {
@@ -38,7 +41,7 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
 
     const { endpoint, keys } = subscription.toJSON() as any;
 
-    await fetch("/api/push/subscribe", {
+    await fetch(`${API_URL}/api/push/subscribe`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -62,7 +65,7 @@ export async function unregisterPush(): Promise<void> {
   const sub = await reg.pushManager.getSubscription();
   if (sub) {
     await sub.unsubscribe();
-    await fetch("/api/push/unsubscribe", {
+    await fetch(`${API_URL}/api/push/unsubscribe`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

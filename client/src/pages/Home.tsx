@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
@@ -31,7 +31,7 @@ export default function Home() {
     limit: 60,
   });
 
-  const pins = (drops ?? []).map(toDropPin);
+  const pins = useMemo(() => (drops ?? []).map(toDropPin), [drops]);
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
@@ -129,17 +129,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── Map view ── */}
-        {viewMode === "map" && (
-          <div style={{ border: `1px solid ${BORDER}` }}>
-            <DropMap
-              drops={pins}
-              onDropClick={(id) => navigate(`/drop/${id}`)}
-              height="600px"
-              zoom={13}
-            />
-          </div>
-        )}
+        {/* ── Map view — always mounted so Leaflet isn't torn down on toggle ── */}
+        <div style={{ display: viewMode === "map" ? "block" : "none", border: `1px solid ${BORDER}` }}>
+          <DropMap
+            drops={pins}
+            onDropClick={(id) => navigate(`/drop/${id}`)}
+            height="600px"
+            zoom={13}
+          />
+        </div>
 
         {/* ── List view ── */}
         {viewMode === "list" && (

@@ -27,13 +27,14 @@ export default function Scanner() {
 
   const checkin = trpc.reservations.scanCheckin.useMutation({
     onSuccess: (data) => {
-      if (data.error === "outside_window") {
+      const res = data as ScanResult;
+      if (res.error === "outside_window") {
         setOutsideWindow(true);
         setLastCode(code);
-        setResult(data as ScanResult);
+        setResult(res);
       } else {
-        setResult(data as ScanResult);
-        if (data.success) setCode("");
+        setResult(res);
+        if (res.success) setCode("");
       }
     },
   });

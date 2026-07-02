@@ -51,6 +51,10 @@ export default function CreateDrop() {
     if (isNaN(priceInPence) || priceInPence < 0) { setError("Invalid price."); return; }
     const qty = parseInt(form.totalQuantity);
     if (isNaN(qty) || qty < 1) { setError("Quantity must be at least 1."); return; }
+    if (new Date(form.collectionEnd) <= new Date(form.collectionStart)) {
+      setError("The collection window must end after it starts.");
+      return;
+    }
 
     create.mutate({
       title: form.title,
@@ -180,7 +184,7 @@ export default function CreateDrop() {
               </Field>
             </div>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
-              Latitude/longitude places your drop on the map and powers location-based notifications.
+              Leave latitude/longitude blank and we'll place your drop on the map automatically from the address and postcode.
             </p>
           </Section>
 

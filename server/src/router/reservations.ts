@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { and, eq, desc, inArray } from "drizzle-orm";
+import { and, eq, desc, inArray, sql, gt } from "drizzle-orm";
 import { router, protectedProcedure, businessOwnerProcedure } from "../trpc";
 import { reservations, drops, businesses, locations, users } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { generateReferenceCode } from "../auth/oauth";
+import { stripeEnabled, createPaymentIntent, retrievePaymentIntent, refundPaymentIntent } from "../payments/stripe";
 import crypto from "crypto";
 
 function generateQRHash(): string {
@@ -12,14 +13,44 @@ function generateQRHash(): string {
 
 export const reservationsRouter = router({
 
-  // Create a reservation (requires payment intent from Stripe)
+  // Step 1 (paid drops): create a Stripe PaymentIntent, return its client secret
+  createPaymentIntent: protectedProcedure
+    .input(z.object({ dropId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const [drop] = await ctx.db
+        .select()
+        .from(drops)
+        .where(eq(drops.id, input.dropId))
+        .limit(1);
+
+      if (!drop) throw new TRPCError({ code: "NOT_FOUND", message: "Drop not found" });
+      if (drop.status !== "active") throw new TRPCError({ code: "BAD_REQUEST", message: "Drop is not available" });
+      if (drop.availableQuantity <= 0) {
+        throw new TRPCError({ code: "CONFLICT", message: "Just missed it — this drop is sold out" });
+      }
+      if (drop.price <= 0) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "This drop is free — reserve it directly" });
+      }
+      if (!stripeEnabled()) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Payments are not configured yet. Try again later." });
+      }
+
+      const pi = await createPaymentIntent({
+        amountPence: drop.price,
+        dropId: drop.id,
+        userId: ctx.user.id,
+      });
+      return { clientSecret: pi.client_secret, paymentIntentId: pi.id, amount: drop.price };
+    }),
+
+  // Step 2: create the reservation. Free drops skip payment; paid drops
+  // require a succeeded PaymentIntent that matches this drop/user/amount.
   create: protectedProcedure
     .input(z.object({
       dropId: z.string().uuid(),
-      stripePaymentIntentId: z.string(),
+      stripePaymentIntentId: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
-      // Get drop with a lock to prevent overselling
       const [drop] = await ctx.db
         .select()
         .from(drops)
@@ -32,17 +63,55 @@ export const reservationsRouter = router({
         throw new TRPCError({ code: "CONFLICT", message: "Just missed it — this drop is sold out" });
       }
 
-      // Decrement availability atomically
+      // ── Payment verification ──────────────────────────────────────────────
+      if (drop.price > 0) {
+        if (!input.stripePaymentIntentId) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Payment required for this drop" });
+        }
+        if (!stripeEnabled()) {
+          throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Payments are not configured yet." });
+        }
+
+        // Reject reuse of the same PaymentIntent
+        const [existing] = await ctx.db
+          .select({ id: reservations.id })
+          .from(reservations)
+          .where(eq(reservations.stripePaymentIntentId, input.stripePaymentIntentId))
+          .limit(1);
+        if (existing) throw new TRPCError({ code: "CONFLICT", message: "This payment was already used" });
+
+        const pi = await retrievePaymentIntent(input.stripePaymentIntentId);
+        if (
+          !pi ||
+          pi.status !== "succeeded" ||
+          pi.amount !== drop.price ||
+          pi.currency !== "gbp" ||
+          pi.metadata?.dropId !== drop.id ||
+          pi.metadata?.userId !== ctx.user.id
+        ) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Payment could not be verified" });
+        }
+      }
+
+      // ── Decrement availability atomically ───────────────────────────────
       const [updated] = await ctx.db
         .update(drops)
         .set({
-          availableQuantity: drop.availableQuantity - 1,
-          status: drop.availableQuantity - 1 === 0 ? "sold_out" : "active",
+          availableQuantity: sql`${drops.availableQuantity} - 1`,
+          status: sql`CASE WHEN ${drops.availableQuantity} - 1 <= 0 THEN 'sold_out'::drop_status ELSE ${drops.status} END`,
         })
-        .where(and(eq(drops.id, input.dropId), eq(drops.availableQuantity, drop.availableQuantity))) // optimistic lock
+        .where(and(eq(drops.id, input.dropId), gt(drops.availableQuantity, 0)))
         .returning();
 
       if (!updated) {
+        // Sold out between payment and reservation — refund automatically
+        if (drop.price > 0 && input.stripePaymentIntentId) {
+          await refundPaymentIntent(input.stripePaymentIntentId);
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Just missed it — someone took the last one. Your payment has been refunded.",
+          });
+        }
         throw new TRPCError({ code: "CONFLICT", message: "Just missed it — someone reserved the last one" });
       }
 
@@ -52,7 +121,7 @@ export const reservationsRouter = router({
         .values({
           dropId: input.dropId,
           userId: ctx.user.id,
-          stripePaymentIntentId: input.stripePaymentIntentId,
+          stripePaymentIntentId: input.stripePaymentIntentId ?? null,
           qrCodeHash: generateQRHash(),
           referenceCode: generateReferenceCode(),
           status: "active",
@@ -146,10 +215,15 @@ export const reservationsRouter = router({
       await ctx.db
         .update(drops)
         .set({
-          availableQuantity: res.drop.availableQuantity + 1,
-          status: "active",
+          availableQuantity: sql`${drops.availableQuantity} + 1`,
+          status: sql`CASE WHEN ${drops.status} = 'sold_out'::drop_status THEN 'active'::drop_status ELSE ${drops.status} END`,
         })
         .where(eq(drops.id, res.drop.id));
+
+      // Refund the payment (item price; adjust if you retain a fee)
+      if (res.reservation.stripePaymentIntentId && stripeEnabled()) {
+        await refundPaymentIntent(res.reservation.stripePaymentIntentId);
+      }
 
       // In production: trigger Stripe refund (item price only, fee retained)
       return { success: true };

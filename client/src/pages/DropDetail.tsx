@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useRoute, useLocation } from "wouter";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
+
+const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
+const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -40,8 +45,25 @@ export default function DropDetail() {
     onSuccess: () => utils.businesses.followStatus.invalidate({ businessId: data?.business.id ?? "" }),
   });
 
-  const [reserving, setReserving] = useState(false);
   const [reserveError, setReserveError] = useState("");
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
+
+  const createPI = trpc.reservations.createPaymentIntent.useMutation({
+    onSuccess: (d) => {
+      setClientSecret(d.clientSecret);
+      setPaymentIntentId(d.paymentIntentId);
+    },
+    onError: (e) => setReserveError(e.message),
+  });
+
+  const reserve = trpc.reservations.create.useMutation({
+    onSuccess: (r) => {
+      utils.drops.getById.invalidate({ id });
+      navigate(`/ticket/${r.id}`);
+    },
+    onError: (e) => setReserveError(e.message),
+  });
 
   if (isLoading) return <PageShell><Spinner /></PageShell>;
   if (error || !data) return <PageShell><NotFound /></PageShell>;
@@ -58,13 +80,21 @@ export default function DropDetail() {
   const pct = Math.round(((total - drop.availableQuantity) / total) * 100);
   const scarce = !soldOut && drop.availableQuantity <= 3;
 
+  const reserving = createPI.isPending || reserve.isPending;
+
   function handleReserve() {
     if (!user) { navigate("/signin"); return; }
-    // In production: open Stripe payment sheet here, then call reservations.create
-    // with the resulting paymentIntentId. For now, navigate to sign in if not authed.
-    setReserving(true);
-    setReserveError("Payment integration coming soon — connect Stripe to enable reservations.");
-    setReserving(false);
+    setReserveError("");
+    if (drop.price === 0) {
+      // Free drop — no payment needed
+      reserve.mutate({ dropId: id });
+      return;
+    }
+    if (!stripePromise) {
+      setReserveError("Payments aren't available right now. Please try again later.");
+      return;
+    }
+    createPI.mutate({ dropId: id });
   }
 
   return (
@@ -222,7 +252,7 @@ export default function DropDetail() {
                   <button
                     onClick={() => waitlistStatus?.onWaitlist
                       ? leaveWaitlist.mutate({ dropId: id })
-                      : joinWaitlist.mutate({ dropId: id, businessId: business.id })}
+                      : joinWaitlist.mutate({ dropId: id })}
                     style={{
                       width: "100%", padding: "13px",
                       border: `1px solid ${BORDER}`, background: BG, color: FG,
@@ -232,6 +262,23 @@ export default function DropDetail() {
                   >
                     {waitlistStatus?.onWaitlist ? "ON WAITLIST — REMOVE" : "JOIN WAITLIST"}
                   </button>
+                )}
+              </div>
+            ) : clientSecret && stripePromise ? (
+              <div>
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <CheckoutForm
+                    amountLabel={`£${(drop.price / 100).toFixed(2)}`}
+                    onPaid={(piId) => reserve.mutate({ dropId: id, stripePaymentIntentId: piId })}
+                    onCancel={() => { setClientSecret(null); setPaymentIntentId(null); setReserveError(""); }}
+                    finalizing={reserve.isPending}
+                    fallbackPaymentIntentId={paymentIntentId}
+                  />
+                </Elements>
+                {reserveError && (
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, lineHeight: 1.5, marginTop: 12 }}>
+                    {reserveError}
+                  </p>
                 )}
               </div>
             ) : (
@@ -247,7 +294,11 @@ export default function DropDetail() {
                     opacity: reserving ? 0.6 : 1, marginBottom: 12,
                   }}
                 >
-                  {reserving ? "PROCESSING…" : `RESERVE — £${(drop.price / 100).toFixed(2)}`}
+                  {reserving
+                    ? "PROCESSING…"
+                    : drop.price === 0
+                    ? "RESERVE — FREE"
+                    : `RESERVE — £${(drop.price / 100).toFixed(2)}`}
                 </button>
                 {reserveError && (
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, lineHeight: 1.5 }}>
@@ -279,6 +330,86 @@ export default function DropDetail() {
         </div>
       </div>
     </PageShell>
+  );
+}
+
+function CheckoutForm({ amountLabel, onPaid, onCancel, finalizing, fallbackPaymentIntentId }: {
+  amountLabel: string;
+  onPaid: (paymentIntentId: string) => void;
+  onCancel: () => void;
+  finalizing: boolean;
+  fallbackPaymentIntentId: string | null;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
+
+  async function handlePay(e: React.FormEvent) {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setPaying(true);
+    setPayError("");
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required",
+      confirmParams: { return_url: window.location.href },
+    });
+
+    if (error) {
+      setPayError(error.message ?? "Payment failed. Try another card.");
+      setPaying(false);
+      return;
+    }
+
+    const piId = paymentIntent?.id ?? fallbackPaymentIntentId;
+    if (paymentIntent?.status === "succeeded" && piId) {
+      onPaid(piId);
+    } else {
+      setPayError("Payment didn't complete. You haven't been charged — try again.");
+      setPaying(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handlePay}>
+      <div style={{ border: `1px solid ${BORDER}`, padding: 16, background: "#FFFFFF", marginBottom: 12 }}>
+        <PaymentElement />
+      </div>
+      {payError && (
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, lineHeight: 1.5, marginBottom: 12 }}>
+          {payError}
+        </p>
+      )}
+      <button
+        type="submit"
+        disabled={!stripe || paying || finalizing}
+        style={{
+          width: "100%", padding: "16px",
+          background: FG, color: BG, border: "none",
+          fontFamily: "'Space Mono', monospace", fontSize: 11,
+          letterSpacing: "0.12em",
+          cursor: paying || finalizing ? "not-allowed" : "pointer",
+          opacity: paying || finalizing ? 0.6 : 1, marginBottom: 8,
+        }}
+      >
+        {finalizing ? "ISSUING TICKET…" : paying ? "PROCESSING…" : `PAY ${amountLabel}`}
+      </button>
+      <button
+        type="button"
+        onClick={onCancel}
+        disabled={paying || finalizing}
+        style={{
+          width: "100%", padding: "12px",
+          background: BG, color: MUTED_FG, border: `1px solid ${BORDER}`,
+          fontFamily: "'Space Mono', monospace", fontSize: 10,
+          letterSpacing: "0.1em", cursor: "pointer",
+        }}
+      >
+        CANCEL
+      </button>
+    </form>
   );
 }
 

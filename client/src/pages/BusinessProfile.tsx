@@ -60,7 +60,7 @@ export default function BusinessProfile() {
   );
 
   const { business, drops } = data;
-  const activeDrops = drops.filter(d => d.status === "active" || d.status === "live");
+  const activeDrops = drops.filter(d => d.status === "active" || d.status === "sold_out");
   const isFollowing = followStatus?.following ?? false;
 
   return (

@@ -2,7 +2,11 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { users, sessions, notificationPreferences, locationZones, businesses } from "../db/schema";
+import { and } from "drizzle-orm";
+import {
+  users, sessions, notificationPreferences, locationZones, businesses,
+  reservations, waitlist, follows, notificationMutes, pushSubscriptions,
+} from "../db/schema";
 import { TRPCError } from "@trpc/server";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
@@ -26,11 +30,27 @@ async function hashPassword(password: string): Promise<string> {
 async function verifyPassword(password: string, stored: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const [salt, key] = stored.split(":");
+    if (!salt || !key) return resolve(false);
     crypto.scrypt(password, salt, 64, (err, derived) => {
-      if (err) reject(err);
-      else resolve(key === derived.toString("hex"));
+      if (err) return reject(err);
+      const keyBuf = Buffer.from(key, "hex");
+      resolve(keyBuf.length === derived.length && crypto.timingSafeEqual(keyBuf, derived));
     });
   });
+}
+
+// ─── Simple in-memory rate limiter (per key, sliding window) ──────────────────
+
+const attempts = new Map<string, number[]>();
+function rateLimit(key: string, max: number, windowMs: number) {
+  const now = Date.now();
+  const list = (attempts.get(key) ?? []).filter(t => now - t < windowMs);
+  if (list.length >= max) {
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Try again in a few minutes." });
+  }
+  list.push(now);
+  attempts.set(key, list);
+  if (attempts.size > 10_000) attempts.clear(); // crude memory cap
 }
 
 async function createSession(ctx: any, userId: string) {
@@ -60,22 +80,36 @@ export const authRouter = router({
       name: z.string().min(1, "Name is required").max(80),
     }))
     .mutation(async ({ ctx, input }) => {
-      const existing = await ctx.db
-        .select({ id: users.id })
+      rateLimit(`register-ip:${ctx.req.ip ?? "unknown"}`, 20, 10 * 60 * 1000);
+
+      const email = input.email.toLowerCase();
+      const [existing] = await ctx.db
+        .select({ id: users.id, passwordHash: users.passwordHash })
         .from(users)
-        .where(eq(users.email, input.email.toLowerCase()))
+        .where(eq(users.email, email))
         .limit(1);
 
-      if (existing.length > 0) {
-        throw new TRPCError({ code: "CONFLICT", message: "An account with this email already exists." });
-      }
-
       const passwordHash = await hashPassword(input.password);
+
+      // Placeholder accounts (created when an admin approves a business
+      // application before the owner registered) have no password — let the
+      // owner claim the account by registering with the matching email.
+      if (existing) {
+        if (existing.passwordHash) {
+          throw new TRPCError({ code: "CONFLICT", message: "An account with this email already exists." });
+        }
+        await ctx.db
+          .update(users)
+          .set({ passwordHash, name: input.name })
+          .where(eq(users.id, existing.id));
+        await createSession(ctx, existing.id);
+        return { success: true, redirect: "/onboarding" };
+      }
 
       const [user] = await ctx.db
         .insert(users)
         .values({
-          email: input.email.toLowerCase(),
+          email,
           passwordHash,
           name: input.name,
           role: "consumer",
@@ -94,6 +128,9 @@ export const authRouter = router({
       password: z.string(),
     }))
     .mutation(async ({ ctx, input }) => {
+      rateLimit(`login:${input.email.toLowerCase()}`, 10, 10 * 60 * 1000);
+      rateLimit(`login-ip:${ctx.req.ip ?? "unknown"}`, 30, 10 * 60 * 1000);
+
       const [user] = await ctx.db
         .select()
         .from(users)
@@ -149,7 +186,7 @@ export const authRouter = router({
     if (token) {
       await ctx.db.delete(sessions).where(eq(sessions.token, token));
     }
-    ctx.res.clearCookie("session_token", { sameSite: "none", secure: true });
+    ctx.res.clearCookie("session_token");
     return { success: true };
   }),
 
@@ -248,7 +285,9 @@ export const authRouter = router({
   removeLocationZone: protectedProcedure
     .input(z.object({ zoneId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.delete(locationZones).where(eq(locationZones.id, input.zoneId));
+      await ctx.db
+        .delete(locationZones)
+        .where(and(eq(locationZones.id, input.zoneId), eq(locationZones.userId, ctx.user.id)));
       return { success: true };
     }),
 
@@ -256,8 +295,33 @@ export const authRouter = router({
   deleteAccount: protectedProcedure
     .input(z.object({ confirmation: z.literal("DELETE") }))
     .mutation(async ({ ctx }) => {
-      await ctx.db.delete(users).where(eq(users.id, ctx.user.id));
-      ctx.res.clearCookie("session_token", { sameSite: "none", secure: true });
+      // Business owners must contact support (deleting a business with live
+      // drops/reservations has financial consequences).
+      const [owned] = await ctx.db
+        .select({ id: businesses.id })
+        .from(businesses)
+        .where(eq(businesses.ownerId, ctx.user.id))
+        .limit(1);
+      if (owned) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You own a business on Unwrapped. Contact support to close your business account first.",
+        });
+      }
+
+      // Remove dependent rows that don't cascade, then the user.
+      const uid = ctx.user.id;
+      await ctx.db.delete(reservations).where(eq(reservations.userId, uid));
+      await ctx.db.delete(waitlist).where(eq(waitlist.userId, uid));
+      await ctx.db.delete(follows).where(eq(follows.userId, uid));
+      await ctx.db.delete(notificationMutes).where(eq(notificationMutes.userId, uid));
+      await ctx.db.delete(pushSubscriptions).where(eq(pushSubscriptions.userId, uid));
+      await ctx.db.delete(notificationPreferences).where(eq(notificationPreferences.userId, uid));
+      await ctx.db.delete(locationZones).where(eq(locationZones.userId, uid));
+      await ctx.db.delete(sessions).where(eq(sessions.userId, uid));
+      await ctx.db.delete(users).where(eq(users.id, uid));
+
+      ctx.res.clearCookie("session_token");
       return { success: true };
     }),
 });

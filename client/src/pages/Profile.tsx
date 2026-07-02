@@ -249,7 +249,7 @@ export default function Profile() {
                   }}
                 />
                 <button
-                  onClick={() => deleteAccount.mutate()}
+                  onClick={() => deleteAccount.mutate({ confirmation: "DELETE" })}
                   disabled={deleteConfirm !== "DELETE" || deleteAccount.isPending}
                   style={{
                     padding: "10px 20px", background: deleteConfirm === "DELETE" ? V : MUTED,

@@ -17,7 +17,17 @@ import {
   notificationMutes,
   pushSubscriptions,
 } from "../db/schema";
-import { eq, sql, and, ne } from "drizzle-orm";
+import { eq, inArray, arrayContains } from "drizzle-orm";
+
+// Escape user-supplied strings before interpolating into email HTML (XSS).
+function esc(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 // ─── VAPID setup ──────────────────────────────────────────────────────────────
 
@@ -29,17 +39,7 @@ if (VAPID_PUBLIC && VAPID_PRIVATE) {
   webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
 }
 
-// ─── Haversine distance (km) ──────────────────────────────────────────────────
-
-function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+import { haversineKm } from "../geo";
 
 // ─── Current hour check (respects quiet hours) ────────────────────────────────
 
@@ -70,14 +70,14 @@ async function sendDropEmail(to: string, drop: DropPayload) {
       body: JSON.stringify({
         from: "Unwrapped <drops@unwrapped.shop>",
         to,
-        subject: `New drop near you: ${drop.title}`,
+        subject: `New drop near you: ${drop.title.replace(/[\r\n]/g, " ")}`,
         html: `
           <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
             <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · New drop
             </p>
-            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:8px">${drop.title}</h1>
-            <p style="font-size:14px;color:#7a7a7a;margin-bottom:20px">${drop.businessName}</p>
+            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:8px">${esc(drop.title)}</h1>
+            <p style="font-size:14px;color:#7a7a7a;margin-bottom:20px">${esc(drop.businessName)}</p>
             <p style="font-size:15px;color:#141210;margin-bottom:24px">
               <strong style="font-family:monospace">£${(drop.price / 100).toFixed(2)}</strong>
               &nbsp;·&nbsp; Collect until ${endStr}
@@ -89,7 +89,7 @@ async function sendDropEmail(to: string, drop: DropPayload) {
               CLAIM YOUR SPOT
             </a>
             <p style="font-size:12px;color:#b0a89e;margin-top:32px">
-              You're receiving this because you follow ${drop.businessName} or have matching interests.
+              You're receiving this because you follow ${esc(drop.businessName)} or have matching interests.
               <a href="https://unwrapped.shop/profile" style="color:#7a7a7a">Manage preferences</a>
             </p>
           </div>
@@ -149,11 +149,12 @@ export interface DropPayload {
 
 export async function dispatchDropNotifications(drop: DropPayload): Promise<void> {
   try {
-    // 1. Find all users with a matching category preference
-    const allUsers = await db.select().from(users);
-    const interested = allUsers.filter(u =>
-      u.interestCategories.includes(drop.category),
-    );
+    // 1. Find users with a matching category preference (filtered in SQL —
+    // don't load the whole users table into memory)
+    const interested = await db
+      .select()
+      .from(users)
+      .where(arrayContains(users.interestCategories, [drop.category]));
 
     if (interested.length === 0) return;
     const interestedIds = interested.map(u => u.id);
@@ -162,23 +163,23 @@ export async function dispatchDropNotifications(drop: DropPayload): Promise<void
     const zones = await db
       .select()
       .from(locationZones)
-      .where(sql`${locationZones.userId} = ANY(${interestedIds})`);
+      .where(inArray(locationZones.userId, interestedIds));
 
     const prefs = await db
       .select()
       .from(notificationPreferences)
-      .where(sql`${notificationPreferences.userId} = ANY(${interestedIds})`);
+      .where(inArray(notificationPreferences.userId, interestedIds));
 
     const mutes = await db
       .select()
       .from(notificationMutes)
-      .where(sql`${notificationMutes.userId} = ANY(${interestedIds})`);
+      .where(inArray(notificationMutes.userId, interestedIds));
 
     // 3. Load their push subscriptions
     const subs = await db
       .select()
       .from(pushSubscriptions)
-      .where(sql`${pushSubscriptions.userId} = ANY(${interestedIds})`);
+      .where(inArray(pushSubscriptions.userId, interestedIds));
 
     // 4. Build lookup maps
     const zonesByUser = new Map<string, typeof zones>();

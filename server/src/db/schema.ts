@@ -1,5 +1,5 @@
 import {
-  pgTable, text, integer, boolean, timestamp, real, jsonb, pgEnum, uuid, varchar
+  pgTable, text, integer, boolean, timestamp, doublePrecision, jsonb, pgEnum, uuid, varchar, uniqueIndex
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -32,9 +32,9 @@ export const locationZones = pgTable("location_zones", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   label: text("label").notNull(), // "Home", "Work", etc.
-  latitude: real("latitude").notNull(),
-  longitude: real("longitude").notNull(),
-  radiusKm: real("radius_km").default(2).notNull(),
+  latitude: doublePrecision("latitude").notNull(),
+  longitude: doublePrecision("longitude").notNull(),
+  radiusKm: doublePrecision("radius_km").default(2).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -113,8 +113,8 @@ export const locations = pgTable("locations", {
   address: text("address").notNull(),
   city: text("city").notNull(),
   postcode: text("postcode"),
-  latitude: real("latitude").notNull(),
-  longitude: real("longitude").notNull(),
+  latitude: doublePrecision("latitude").notNull(),
+  longitude: doublePrecision("longitude").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -169,7 +169,9 @@ export const waitlist = pgTable("waitlist", {
   businessId: uuid("business_id").references(() => businesses.id).notNull(),
   notifiedAt: timestamp("notified_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (t) => [
+  uniqueIndex("waitlist_drop_user_unique").on(t.dropId, t.userId),
+]);
 
 // ─── Follows ──────────────────────────────────────────────────────────────────
 
@@ -178,7 +180,9 @@ export const follows = pgTable("follows", {
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   businessId: uuid("business_id").references(() => businesses.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (t) => [
+  uniqueIndex("follows_user_business_unique").on(t.userId, t.businessId),
+]);
 
 // ─── Notification Mutes ───────────────────────────────────────────────────────
 

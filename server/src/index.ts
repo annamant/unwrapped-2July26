@@ -72,23 +72,16 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     return res.status(400).json({ error: "No file provided" });
   }
 
-  // In production: upload to S3 / Cloudflare R2 and return the public URL.
-  // For now: return a placeholder URL. Replace this block with your storage provider.
-  try {
-    // Example with Cloudflare R2 (add @aws-sdk/client-s3 as dependency):
-    // const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
-    // const s3 = new S3Client({ ... });
-    // const key = `uploads/${Date.now()}-${req.file.originalname}`;
-    // await s3.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, Body: req.file.buffer, ContentType: req.file.mimetype }));
-    // const url = `${process.env.R2_PUBLIC_URL}/${key}`;
-
-    // Placeholder:
-    const url = `https://placeholder.unwrapped.shop/uploads/${Date.now()}-${req.file.originalname}`;
-    return res.json({ url });
-  } catch (err) {
-    console.error("Upload failed:", err);
-    return res.status(500).json({ error: "Upload failed" });
-  }
+  // Storage is not configured yet. Fail loudly rather than returning a fake
+  // URL that renders as a broken image. To enable, add @aws-sdk/client-s3 and
+  // upload to S3/Cloudflare R2 here, returning the public URL:
+  //   const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
+  //   const key = `uploads/${Date.now()}-${req.file.originalname}`;
+  //   await s3.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, Body: req.file.buffer, ContentType: req.file.mimetype }));
+  //   return res.json({ url: `${process.env.R2_PUBLIC_URL}/${key}` });
+  return res.status(501).json({
+    error: "Image uploads aren't configured. Paste an image URL instead, or configure R2/S3 storage.",
+  });
 });
 
 // ─── tRPC ─────────────────────────────────────────────────────────────────────

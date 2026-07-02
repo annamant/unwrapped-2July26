@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, eq, desc, count, gte, lte } from "drizzle-orm";
+import { and, eq, desc, count, gte, lte, inArray } from "drizzle-orm";
 import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, adminProcedure } from "../trpc";
 import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations } from "../db/schema";
 import { TRPCError } from "@trpc/server";
@@ -34,10 +34,14 @@ export const businessesRouter = router({
         .from(follows)
         .where(eq(follows.businessId, biz.id));
 
+      // Only expose publicly visible drops (no drafts/cancelled)
       const bizDrops = await ctx.db
         .select()
         .from(drops)
-        .where(eq(drops.businessId, biz.id))
+        .where(and(
+          eq(drops.businessId, biz.id),
+          inArray(drops.status, ["active", "sold_out", "expired"]),
+        ))
         .orderBy(desc(drops.collectionStart))
         .limit(20);
 
@@ -294,7 +298,10 @@ export const businessesRouter = router({
         })
         .from(reservations)
         .innerJoin(drops, eq(reservations.dropId, drops.id))
-        .where(eq(drops.businessId, ctx.business.id));
+        .where(and(
+          eq(drops.businessId, ctx.business.id),
+          inArray(reservations.dropId, dropIds),
+        ));
 
       const fulfilled = allReservations.filter(r => r.status === "fulfilled");
       const totalRevenuePence = fulfilled.reduce((sum, r) => sum + Math.floor(r.drop.price * 0.85), 0);

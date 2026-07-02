@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import { format } from "date-fns";
@@ -15,8 +15,7 @@ const V = "#E8341C";
 export default function Landing() {
   const [, navigate] = useLocation();
 
-  const { data: loginData } = trpc.auth.getLoginUrl.useQuery({ returnPath: "/home" });
-  const { data: drops } = trpc.drops.list.useQuery({ limit: 6, timeWindow: undefined });
+  const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
 
   const liveDrops = drops?.filter(({ drop }) => {
     const now = new Date();
@@ -28,7 +27,7 @@ export default function Landing() {
     .sort((a, b) => new Date(a.drop.collectionEnd).getTime() - new Date(b.drop.collectionEnd).getTime())
     .slice(0, 1)[0];
 
-  const dropCount = drops?.length ?? 0;
+  const dropCount = liveDrops.length;
   const endingInHour = liveDrops.filter(({ drop }) => {
     const end = new Date(drop.collectionEnd);
     return end.getTime() - Date.now() < 60 * 60 * 1000;
@@ -65,7 +64,7 @@ export default function Landing() {
           }}>
             List your business
           </a>
-          <a href={loginData?.url ?? "/signin"} style={{
+          <a href="/signin" style={{
             fontFamily: "'Space Mono', monospace", fontSize: 10,
             color: FG, letterSpacing: "0.08em",
             border: `1px solid ${FG}`, padding: "8px 16px",
@@ -99,7 +98,7 @@ export default function Landing() {
             lineHeight: 1.35, marginBottom: 28, maxWidth: 440,
           }}>
             things dropping near you right now.<br />
-            <span style={{ fontSize: "0.75em", color: MUTED_FF }}>Limited. Local. Gone when they're gone.</span>
+            <span style={{ fontSize: "0.75em", color: MUTED_FG }}>Limited. Local. Gone when they're gone.</span>
           </div>
 
           {endingInHour > 0 && (
@@ -132,7 +131,7 @@ export default function Landing() {
             >
               SEE ALL DROPS
             </button>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FF }}>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG }}>
               Free to browse. Sign up for drop alerts.
             </span>
           </div>
@@ -171,7 +170,9 @@ export default function Landing() {
           borderTop: `1px solid ${BORDER}`,
           borderBottom: `1px solid ${BORDER}`,
         }}>
-          {drops && drops.length > 0
+          {dropsLoading
+            ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
+            : drops && drops.length > 0
             ? drops.slice(0, 3).map(({ drop, business, location }) => (
                 <GridDropCard
                   key={drop.id}
@@ -181,7 +182,16 @@ export default function Landing() {
                   onClick={() => navigate(`/drop/${drop.id}`)}
                 />
               ))
-            : [0, 1, 2].map(i => <SkeletonCard key={i} />)
+            : (
+              <div style={{ gridColumn: "1 / -1", background: BG, padding: "56px 40px", textAlign: "center" }}>
+                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, color: MUTED_FG, marginBottom: 8 }}>
+                  Nothing dropping right now
+                </p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG }}>
+                  Check back soon — drops appear daily.
+                </p>
+              </div>
+            )
           }
         </div>
 
@@ -194,7 +204,7 @@ export default function Landing() {
               padding: 0, borderBottom: `1px solid ${FG}`, paddingBottom: 1,
             }}
           >
-            {drops && drops.length > 3 ? `${drops.length - 3} more drops today ₂ ` : "Browse all drops →"}
+            {drops && drops.length > 3 ? `${drops.length - 3} more drops today →` : "Browse all drops →"}
           </button>
         </div>
       </section>
@@ -202,7 +212,7 @@ export default function Landing() {
       {/* ── Map section ── */}
       <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
 
-      {/* -- Business pitch section */}
+      {/* ── Business pitch — all warm cream ── */}
       <section style={{
         padding: "72px 40px",
         display: "grid", gridTemplateColumns: "1fr 1fr",
@@ -251,6 +261,7 @@ export default function Landing() {
           </a>
         </div>
 
+        {/* Business value props — editorial, no financials */}
         <div style={{ border: `1px solid ${BORDER}` }}>
           {[
             {
@@ -516,7 +527,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
   const [search, setSearch] = useState("");
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
 
-  const pins = drops.map(toDropPin);
+  const pins = useMemo(() => drops.map(toDropPin), [drops]);
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
