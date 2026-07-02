@@ -40,8 +40,8 @@ async function createSession(ctx: any, userId: string) {
   await ctx.db.insert(sessions).values({ userId, token, expiresAt });
   ctx.res.cookie("session_token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     expires: expiresAt,
     path: "/",
   });
@@ -126,7 +126,7 @@ export const authRouter = router({
       return { success: true, redirect };
     }),
 
-  // ── Current user ─────────────────────────────────────────────────────────
+  // ── Current user ──────────────────────────────────────────────────────────
   me: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) return null;
 
@@ -149,7 +149,7 @@ export const authRouter = router({
     if (token) {
       await ctx.db.delete(sessions).where(eq(sessions.token, token));
     }
-    ctx.res.clearCookie("session_token");
+    ctx.res.clearCookie("session_token", { sameSite: "none", secure: true });
     return { success: true };
   }),
 
@@ -257,7 +257,7 @@ export const authRouter = router({
     .input(z.object({ confirmation: z.literal("DELETE") }))
     .mutation(async ({ ctx }) => {
       await ctx.db.delete(users).where(eq(users.id, ctx.user.id));
-      ctx.res.clearCookie("session_token");
+      ctx.res.clearCookie("session_token", { sameSite: "none", secure: true });
       return { success: true };
     }),
 });
