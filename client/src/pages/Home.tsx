@@ -24,6 +24,29 @@ export default function Home() {
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [timeWindow, setTimeWindow] = useState<TimeWindow | undefined>(undefined);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [search, setSearch] = useState("");
+  const [searchError, setSearchError] = useState("");
+  const [mapCenter, setMapCenter] = useState({ lat: 51.509865, lng: -0.118092 });
+
+  async function handleMapSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setSearchError("");
+    if (!search.trim()) return;
+    try {
+      const resp = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1&countrycodes=gb`,
+        { headers: { "Accept-Language": "en" } }
+      );
+      const data = await resp.json();
+      if (data[0]) {
+        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+      } else {
+        setSearchError("Couldn't find that place — try a full postcode or area name.");
+      }
+    } catch {
+      setSearchError("Search failed — check your connection and try again.");
+    }
+  }
 
   const { data: drops, isLoading } = trpc.drops.list.useQuery({
     category: category || undefined,
@@ -130,13 +153,44 @@ export default function Home() {
         </div>
 
         {/* ── Map view — always mounted so Leaflet isn't torn down on toggle ── */}
-        <div style={{ display: viewMode === "map" ? "block" : "none", border: `1px solid ${BORDER}` }}>
-          <DropMap
-            drops={pins}
-            onDropClick={(id) => navigate(`/drop/${id}`)}
-            height="600px"
-            zoom={13}
-          />
+        <div style={{ display: viewMode === "map" ? "block" : "none" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
+            {searchError && (
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: V }}>{searchError}</span>
+            )}
+            <form onSubmit={handleMapSearch} style={{ display: "flex", gap: 0 }}>
+              <input
+                type="text"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setSearchError(""); }}
+                placeholder="Search an area or postcode…"
+                style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                  padding: "9px 14px", border: `1px solid ${BORDER}`,
+                  borderRight: "none", background: BG, color: FG,
+                  outline: "none", width: 240,
+                }}
+              />
+              <button type="submit" style={{
+                background: FG, color: BG,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                letterSpacing: "0.08em", padding: "9px 18px",
+                border: "none", cursor: "pointer",
+              }}>
+                GO
+              </button>
+            </form>
+          </div>
+          <div style={{ border: `1px solid ${BORDER}` }}>
+            <DropMap
+              drops={pins}
+              onDropClick={(id) => navigate(`/drop/${id}`)}
+              defaultLat={mapCenter.lat}
+              defaultLng={mapCenter.lng}
+              height="600px"
+              zoom={13}
+            />
+          </div>
         </div>
 
         {/* ── List view ── */}

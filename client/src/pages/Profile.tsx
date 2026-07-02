@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { trpc } from "../trpc";
+import { trpc, clearSessionToken } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
@@ -32,8 +32,8 @@ export default function Profile() {
   const { data: notifPrefs } = trpc.auth.getNotificationPreferences.useQuery(undefined, { enabled: tab === "notifications" });
 
   const utils = trpc.useUtils();
-  const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { window.location.href = "/"; } });
-  const deleteAccount = trpc.auth.deleteAccount.useMutation({ onSuccess: () => { window.location.href = "/"; } });
+  const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { clearSessionToken(); window.location.href = "/"; } });
+  const deleteAccount = trpc.auth.deleteAccount.useMutation({ onSuccess: () => { clearSessionToken(); window.location.href = "/"; } });
   const updateNotifPrefs = trpc.auth.updateNotificationPreferences.useMutation({
     onSuccess: () => utils.auth.getNotificationPreferences.invalidate(),
   });

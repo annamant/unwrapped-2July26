@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { trpc } from "../trpc";
+import { trpc, clearSessionToken } from "../trpc";
 
 const styles: Record<string, React.CSSProperties> = {
   nav: {
@@ -49,7 +49,7 @@ const styles: Record<string, React.CSSProperties> = {
 export default function Nav() {
   const { data: user } = trpc.auth.me.useQuery();
   const signOut = trpc.auth.signOut.useMutation({
-    onSuccess: () => { window.location.href = "/"; },
+    onSuccess: () => { clearSessionToken(); window.location.href = "/"; },
   });
   const [, navigate] = useLocation();
 

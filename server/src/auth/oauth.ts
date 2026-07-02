@@ -16,8 +16,16 @@ export function generateReferenceCode(): string {
 
 // ─── Get current user from session cookie ────────────────────────────────────
 
+export function getSessionToken(req: Request): string | null {
+  // Prefer Authorization header (works cross-origin where third-party
+  // cookies are blocked), fall back to the session cookie.
+  const header = req.headers.authorization;
+  if (header?.startsWith("Bearer ")) return header.slice(7);
+  return req.cookies?.session_token ?? null;
+}
+
 export async function getUserFromRequest(req: Request) {
-  const token = req.cookies?.session_token;
+  const token = getSessionToken(req);
   if (!token) return null;
 
   const [session] = await db

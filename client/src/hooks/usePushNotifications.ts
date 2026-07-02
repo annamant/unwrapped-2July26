@@ -6,8 +6,18 @@
  * The subscription is sent to POST /api/push/subscribe on the server.
  */
 
+import { getSessionToken } from "../trpc";
+
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ?? "";
 const API_URL = import.meta.env.VITE_API_URL ?? "";
+
+function authHeaders(): Record<string, string> {
+  const token = getSessionToken();
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -44,7 +54,7 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
     await fetch(`${API_URL}/api/push/subscribe`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify({
         endpoint,
         p256dh: keys.p256dh,
@@ -68,7 +78,7 @@ export async function unregisterPush(): Promise<void> {
     await fetch(`${API_URL}/api/push/unsubscribe`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify({ endpoint: sub.endpoint }),
     });
   }

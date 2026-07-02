@@ -102,8 +102,8 @@ export const authRouter = router({
           .update(users)
           .set({ passwordHash, name: input.name })
           .where(eq(users.id, existing.id));
-        await createSession(ctx, existing.id);
-        return { success: true, redirect: "/onboarding" };
+        const token = await createSession(ctx, existing.id);
+        return { success: true, redirect: "/onboarding", token };
       }
 
       const [user] = await ctx.db
@@ -117,8 +117,8 @@ export const authRouter = router({
         })
         .returning();
 
-      await createSession(ctx, user.id);
-      return { success: true, redirect: "/onboarding" };
+      const token = await createSession(ctx, user.id);
+      return { success: true, redirect: "/onboarding", token };
     }),
 
   // ── Login (email + password) ──────────────────────────────────────────────
@@ -146,7 +146,7 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Incorrect email or password." });
       }
 
-      await createSession(ctx, user.id);
+      const token = await createSession(ctx, user.id);
 
       const [business] = await ctx.db
         .select({ id: businesses.id, status: businesses.status })
@@ -160,7 +160,7 @@ export const authRouter = router({
         ? "/dashboard"
         : "/home";
 
-      return { success: true, redirect };
+      return { success: true, redirect, token };
     }),
 
   // ── Current user ──────────────────────────────────────────────────────────
@@ -182,7 +182,8 @@ export const authRouter = router({
 
   // ── Sign out ──────────────────────────────────────────────────────────────
   signOut: protectedProcedure.mutation(async ({ ctx }) => {
-    const token = ctx.req.cookies?.session_token;
+    const header = ctx.req.headers.authorization;
+    const token = header?.startsWith("Bearer ") ? header.slice(7) : ctx.req.cookies?.session_token;
     if (token) {
       await ctx.db.delete(sessions).where(eq(sessions.token, token));
     }

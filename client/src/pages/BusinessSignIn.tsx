@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { trpc } from "../trpc";
+import { trpc, setSessionToken } from "../trpc";
 
 const V = "rgb(232, 52, 28)";
 
@@ -21,9 +21,11 @@ export default function BusinessSignIn() {
     try {
       if (mode === "login") {
         const result = await login.mutateAsync({ email, password });
+        setSessionToken(result.token);
         window.location.href = result.redirect;
       } else {
         const result = await register.mutateAsync({ email, password, name });
+        setSessionToken(result.token);
         window.location.href = result.redirect;
       }
     } catch (err: any) {
