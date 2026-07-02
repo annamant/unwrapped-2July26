@@ -52,8 +52,8 @@ async function exchangeCodeForUser(code: string, state: string): Promise<{
       return null;
     }
 
-    const data = await response.json();
-    return data.user ?? null;
+    const data = await response.json() as { user?: unknown };
+    return (data.user as Record<string, unknown>) ?? null;
   } catch (err) {
     console.error("OAuth exchange error:", err);
     return null;

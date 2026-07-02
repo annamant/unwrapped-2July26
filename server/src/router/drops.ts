@@ -126,8 +126,8 @@ export const dropsRouter = router({
             businessId: ctx.business.id,
             name: "Drop location",
             address: input.location.address,
-            city: input.location.city ?? ctx.business.city,
-            postcode: input.location.postcode ?? null,
+            city: input.location.city ?? ctx.business.city ?? "London",
+            postcode: input.location.postcode ?? undefined,
             latitude: input.location.latitude ?? 51.5074,
             longitude: input.location.longitude ?? -0.1278,
           })
