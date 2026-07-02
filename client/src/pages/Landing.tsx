@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import { format } from "date-fns";
@@ -99,7 +99,7 @@ export default function Landing() {
             lineHeight: 1.35, marginBottom: 28, maxWidth: 440,
           }}>
             things dropping near you right now.<br />
-            <span style={{ fontSize: "0.75em", color: MUTED_FG }}>Limited. Local. Gone when they're gone.</span>
+            <span style={{ fontSize: "0.75em", color: MUTED_FF }}>Limited. Local. Gone when they're gone.</span>
           </div>
 
           {endingInHour > 0 && (
@@ -132,7 +132,7 @@ export default function Landing() {
             >
               SEE ALL DROPS
             </button>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG }}>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FF }}>
               Free to browse. Sign up for drop alerts.
             </span>
           </div>
@@ -194,7 +194,7 @@ export default function Landing() {
               padding: 0, borderBottom: `1px solid ${FG}`, paddingBottom: 1,
             }}
           >
-            {drops && drops.length > 3 ? `${drops.length - 3} more drops today →` : "Browse all drops →"}
+            {drops && drops.length > 3 ? `${drops.length - 3} more drops today ₂ ` : "Browse all drops →"}
           </button>
         </div>
       </section>
@@ -202,7 +202,7 @@ export default function Landing() {
       {/* ── Map section ── */}
       <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
 
-      {/* ── Business pitch — all warm cream ── */}
+      {/* -- Business pitch section */}
       <section style={{
         padding: "72px 40px",
         display: "grid", gridTemplateColumns: "1fr 1fr",
@@ -251,7 +251,6 @@ export default function Landing() {
           </a>
         </div>
 
-        {/* Business value props — editorial, no financials */}
         <div style={{ border: `1px solid ${BORDER}` }}>
           {[
             {
@@ -516,24 +515,24 @@ function GridDropCard({ drop, business, location, onClick }: {
 function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: string) => void }) {
   const [search, setSearch] = useState("");
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
-  const geocoderRef = useRef<any>(null);
 
   const pins = drops.map(toDropPin);
 
-  function handleSearch(e: React.FormEvent) {
+  async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    const google = (window as any).google;
-    if (!google || !search.trim()) return;
-
-    if (!geocoderRef.current) {
-      geocoderRef.current = new google.maps.Geocoder();
-    }
-    geocoderRef.current.geocode({ address: search + ", London, UK" }, (results: any, status: any) => {
-      if (status === "OK" && results[0]) {
-        const loc = results[0].geometry.location;
-        setMapCenter({ lat: loc.lat(), lng: loc.lng() });
+    if (!search.trim()) return;
+    try {
+      const resp = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
+        { headers: { "Accept-Language": "en" } }
+      );
+      const data = await resp.json();
+      if (data[0]) {
+        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
       }
-    });
+    } catch {
+      // silently ignore network errors
+    }
   }
 
   return (
