@@ -5,7 +5,7 @@ import multer from "multer";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { createContext } from "./trpc";
 import { appRouter } from "./router";
-import { oauthCallbackHandler, signOutHandler, getUserFromRequest } from "./auth/oauth";
+import { getUserFromRequest } from "./auth/oauth";
 import { db } from "./db";
 import { pushSubscriptions } from "./db/schema";
 import { eq } from "drizzle-orm";
@@ -22,10 +22,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-// ─── Auth routes (not tRPC) ───────────────────────────────────────────────────
-
-app.get("/api/oauth/callback", oauthCallbackHandler);
-app.post("/api/auth/sign-out", signOutHandler);
+// ─── Auth routes (not tRPC — sign-out handled via tRPC mutation) ─────────────
 
 // ─── Push notification subscription ──────────────────────────────────────────
 

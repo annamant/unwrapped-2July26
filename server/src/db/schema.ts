@@ -16,8 +16,8 @@ export const payoutStatusEnum = pgEnum("payout_status", ["pending", "released"])
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
-  manusId: text("manus_id").unique().notNull(),
-  email: text("email"),
+  email: text("email").unique().notNull(),
+  passwordHash: text("password_hash"),
   name: text("name"),
   phone: text("phone"),
   role: userRoleEnum("role").default("consumer").notNull(),
