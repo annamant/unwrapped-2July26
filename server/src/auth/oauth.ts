@@ -9,13 +9,13 @@ const MANUS_APP_SECRET = process.env.MANUS_APP_SECRET!;
 const BASE_URL = process.env.BASE_URL || "https://unwrapped.shop";
 const SESSION_DURATION_DAYS = 90;
 
-// ─── Generate a secure session token ─────────────────────────────────────────
+// âââ Generate a secure session token âââââââââââââââââââââââââââââââââââââââââ
 
 function generateToken(): string {
   return crypto.randomBytes(48).toString("hex");
 }
 
-// ─── Generate a unique reference code for reservations ───────────────────────
+// âââ Generate a unique reference code for reservations âââââââââââââââââââââââ
 
 export function generateReferenceCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -26,7 +26,7 @@ export function generateReferenceCode(): string {
   return code;
 }
 
-// ─── Exchange Manus OAuth code for user info ──────────────────────────────────
+// âââ Exchange Manus OAuth code for user info ââââââââââââââââââââââââââââââââââ
 
 async function exchangeCodeForUser(code: string, state: string): Promise<{
   id: string;
@@ -52,15 +52,15 @@ async function exchangeCodeForUser(code: string, state: string): Promise<{
       return null;
     }
 
-    const data = await response.json() as { user?: unknown };
-    return (data.user as Record<string, unknown>) ?? null;
+    const data = await response.json() as { user?: { id: string; email?: string; name?: string; phone?: string } };
+    return data.user ?? null;
   } catch (err) {
     console.error("OAuth exchange error:", err);
     return null;
   }
 }
 
-// ─── OAuth Callback Handler ───────────────────────────────────────────────────
+// âââ OAuth Callback Handler âââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 export async function oauthCallbackHandler(req: Request, res: Response) {
   const { code, state } = req.query as { code?: string; state?: string };
@@ -158,7 +158,7 @@ export async function oauthCallbackHandler(req: Request, res: Response) {
   return res.redirect(returnPath === "/" ? "/" : returnPath);
 }
 
-// ─── Get current user from session cookie ────────────────────────────────────
+// âââ Get current user from session cookie ââââââââââââââââââââââââââââââââââââ
 
 export async function getUserFromRequest(req: Request) {
   const token = req.cookies?.session_token;
@@ -181,7 +181,7 @@ export async function getUserFromRequest(req: Request) {
   return user ?? null;
 }
 
-// ─── Sign out ─────────────────────────────────────────────────────────────────
+// âââ Sign out âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 export async function signOutHandler(req: Request, res: Response) {
   const token = req.cookies?.session_token;
@@ -192,7 +192,7 @@ export async function signOutHandler(req: Request, res: Response) {
   res.json({ success: true });
 }
 
-// ─── Build the Manus OAuth login URL ─────────────────────────────────────────
+// âââ Build the Manus OAuth login URL âââââââââââââââââââââââââââââââââââââââââ
 
 export function getLoginUrl(returnPath = "/"): string {
   const state = Buffer.from(returnPath).toString("base64");
