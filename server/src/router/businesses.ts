@@ -125,7 +125,7 @@ export const businessesRouter = router({
     }),
 
   // Public: submit a business application (no auth required)
-  apply: publicProcedure
+  submitApplication: publicProcedure
     .input(z.object({
       name: z.string().min(1).max(100),
       contactEmail: z.string().email(),
