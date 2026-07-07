@@ -15,9 +15,23 @@ const PORT = process.env.PORT || 3001;
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
+// CLIENT_URL may hold one or more comma-separated origins (e.g. the apex
+// domain and its www subdomain). Falls back to localhost for local dev.
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
-  credentials: true,
+    origin: (origin, callback) => {
+          // Allow same-origin/non-browser requests (no Origin header) through.
+      if (!origin || allowedOrigins.includes(origin)) {
+              callback(null, true);
+      } else {
+              callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
 }));
 app.use(cookieParser());
 app.use(express.json());
@@ -27,77 +41,77 @@ app.use(express.json());
 // ─── Push notification subscription ──────────────────────────────────────────
 
 app.post("/api/push/subscribe", async (req, res) => {
-  const user = await getUserFromRequest(req);
-  if (!user) return res.status(401).json({ error: "Unauthorized" });
+    const user = await getUserFromRequest(req);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { endpoint, p256dh, auth } = req.body;
-  if (!endpoint || !p256dh || !auth) return res.status(400).json({ error: "Missing fields" });
+           const { endpoint, p256dh, auth } = req.body;
+    if (!endpoint || !p256dh || !auth) return res.status(400).json({ error: "Missing fields" });
 
-  try {
-    await db
-      .insert(pushSubscriptions)
-      .values({ userId: user.id, endpoint, p256dh, auth })
-      .onConflictDoNothing(); // endpoint is unique — ignore duplicates
-    return res.json({ ok: true });
-  } catch (err) {
-    console.error("Push subscribe error:", err);
-    return res.status(500).json({ error: "Failed" });
-  }
+           try {
+                 await db
+                   .insert(pushSubscriptions)
+                   .values({ userId: user.id, endpoint, p256dh, auth })
+                   .onConflictDoNothing(); // endpoint is unique — ignore duplicates
+      return res.json({ ok: true });
+           } catch (err) {
+                 console.error("Push subscribe error:", err);
+                 return res.status(500).json({ error: "Failed" });
+           }
 });
 
 app.post("/api/push/unsubscribe", async (req, res) => {
-  const user = await getUserFromRequest(req);
-  if (!user) return res.status(401).json({ error: "Unauthorized" });
+    const user = await getUserFromRequest(req);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { endpoint } = req.body;
-  if (!endpoint) return res.status(400).json({ error: "Missing endpoint" });
+           const { endpoint } = req.body;
+    if (!endpoint) return res.status(400).json({ error: "Missing endpoint" });
 
-  await db.delete(pushSubscriptions).where(eq(pushSubscriptions.endpoint, endpoint));
-  return res.json({ ok: true });
+           await db.delete(pushSubscriptions).where(eq(pushSubscriptions.endpoint, endpoint));
+    return res.json({ ok: true });
 });
 
 // ─── Image upload ─────────────────────────────────────────────────────────────
 
 const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-  fileFilter: (_req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) cb(null, true);
-    else cb(new Error("Only image files are allowed"));
-  },
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    fileFilter: (_req, file, cb) => {
+          if (file.mimetype.startsWith("image/")) cb(null, true);
+          else cb(new Error("Only image files are allowed"));
+    },
 });
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file provided" });
-  }
+    if (!req.file) {
+          return res.status(400).json({ error: "No file provided" });
+    }
 
-  // Storage is not configured yet. Fail loudly rather than returning a fake
-  // URL that renders as a broken image. To enable, add @aws-sdk/client-s3 and
-  // upload to S3/Cloudflare R2 here, returning the public URL:
-  //   const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
-  //   const key = `uploads/${Date.now()}-${req.file.originalname}`;
-  //   await s3.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, Body: req.file.buffer, ContentType: req.file.mimetype }));
-  //   return res.json({ url: `${process.env.R2_PUBLIC_URL}/${key}` });
-  return res.status(501).json({
-    error: "Image uploads aren't configured. Paste an image URL instead, or configure R2/S3 storage.",
-  });
+           // Storage is not configured yet. Fail loudly rather than returning a fake
+           // URL that renders as a broken image. To enable, add @aws-sdk/client-s3 and
+           // upload to S3/Cloudflare R2 here, returning the public URL:
+           //   const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
+           //   const key = `uploads/${Date.now()}-${req.file.originalname}`;
+           //   await s3.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, Body: req.file.buffer, ContentType: req.file.mimetype }));
+           //   return res.json({ url: `${process.env.R2_PUBLIC_URL}/${key}` });
+           return res.status(501).json({
+                 error: "Image uploads aren't configured. Paste an image URL instead, or configure R2/S3 storage.",
+           });
 });
 
 // ─── tRPC ─────────────────────────────────────────────────────────────────────
 
 app.use(
-  "/api/trpc",
-  createExpressMiddleware({
-    router: appRouter,
-    createContext,
-    onError: ({ path, error }) => {
-      if (error.code !== "UNAUTHORIZED") {
-        console.error(`tRPC error on ${path}:`, error.message);
-      }
-    },
-  }),
-);
+    "/api/trpc",
+    createExpressMiddleware({
+          router: appRouter,
+          createContext,
+          onError: ({ path, error }) => {
+                  if (error.code !== "UNAUTHORIZED") {
+                            console.error(`tRPC error on ${path}:`, error.message);
+                  }
+          },
+    }),
+  );
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 
@@ -106,5 +120,5 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 // ─── Start ────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, () => {
-  console.log(`Unwrapped server running on port ${PORT}`);
+    console.log(`Unwrapped server running on port ${PORT}`);
 });
