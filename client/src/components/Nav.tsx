@@ -1,5 +1,6 @@
 import { useLocation } from "wouter";
 import { trpc, clearSessionToken } from "../trpc";
+import useIsMobile from "../hooks/useIsMobile";
 
 const styles: Record<string, React.CSSProperties> = {
   nav: {
@@ -47,6 +48,7 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 export default function Nav() {
+  const isMobile = useIsMobile();
   const { data: user } = trpc.auth.me.useQuery();
   const signOut = trpc.auth.signOut.useMutation({
     onSuccess: () => { clearSessionToken(); window.location.href = "/"; },
@@ -54,9 +56,9 @@ export default function Nav() {
   const [, navigate] = useLocation();
 
   return (
-    <nav style={styles.nav}>
+    <nav style={{ ...styles.nav, padding: isMobile ? "0 16px" : "0 24px" }}>
       <a href={user ? "/home" : "/"} style={styles.logo}>Unwrapped</a>
-      <div style={styles.actions}>
+      <div style={{ ...styles.actions, gap: isMobile ? 14 : 20 }}>
         {user ? (
           <>
             {user.hasBusiness && (
