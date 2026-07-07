@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import { format } from "date-fns";
@@ -14,6 +14,13 @@ const V = "#E8341C";
 
 export default function Landing() {
   const [, navigate] = useLocation();
+    // No CSS breakpoints in this file (everything is inline styles) — track viewport width in JS so the hero grid stacks on narrow screens instead of overflowing.
+    const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
+    useEffect(() => {
+          const onResize = () => setIsMobile(window.innerWidth < 640);
+          window.addEventListener("resize", onResize);
+          return () => window.removeEventListener("resize", onResize);
+    }, []);
 
   const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
 
@@ -77,9 +84,9 @@ export default function Landing() {
 
       {/* ── Hero ── */}
       <section style={{
-        padding: "56px 40px 0",
-        display: "grid", gridTemplateColumns: "1fr 380px",
-        gap: 48, alignItems: "end",
+        padding: isMobile ? "40px 20px 0" : "56px 40px 0",
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 380px",
+          gap: isMobile ? 32 : 48, alignItems: isMobile ? "stretch" : "end",
       }}>
         <div>
           <div style={{
