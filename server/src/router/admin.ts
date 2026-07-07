@@ -3,6 +3,7 @@ import { and, eq, desc, count, gte, lte } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, users, drops, reservations, follows } from "../db/schema";
 import { TRPCError } from "@trpc/server";
+import { sendApplicationApprovedEmail, sendApplicationRejectedEmail } from "../notifications/dispatch";
 
 function generateSlug(name: string): string {
   return name
@@ -98,14 +99,26 @@ export const adminRouter = router({
         .set({ status: "approved", reviewedAt: new Date() })
         .where(eq(businessApplications.id, input.applicationId));
 
-      return business;
+// Fire-and-forget — sendApplicationApprovedEmail no-ops if RESEND_API_KEY
+              // isn't set and swallows its own errors, so this never blocks approval.
+              void sendApplicationApprovedEmail(app.contactEmail, business.name);
+      
+              return business;
     }),
 
   // Reject application
   rejectApplication: adminProcedure
     .input(z.object({ applicationId: z.string().uuid(), reason: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.db
+      const [app] = await ctx.db
+                .select()
+                .from(businessApplications)
+                .where(eq(businessApplications.id, input.applicationId))
+                .limit(1);
+      
+            if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
+      
+            await ctx.db
         .update(businessApplications)
         .set({
           status: "rejected",
@@ -114,7 +127,9 @@ export const adminRouter = router({
         })
         .where(eq(businessApplications.id, input.applicationId));
 
-      return { success: true };
+      void sendApplicationRejectedEmail(app.contactEmail, app.name, input.reason);
+      
+            return { success: true };
     }),
 
   // List all businesses (with status filter)
