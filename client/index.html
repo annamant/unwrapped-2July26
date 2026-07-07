@@ -17,13 +17,24 @@
         --light: #F4F4F4;
         --border: #E2E2E2;
       }
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
       body {
         font-family: 'DM Sans', sans-serif;
         background: var(--white);
         color: var(--black);
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
       }
       #root { min-height: 100vh; }
+      img, svg, video, canvas { max-width: 100%; height: auto; }
+      /* Prevent iOS Safari auto-zoom on input focus: fields must be >= 16px on small screens */
+      @media (max-width: 640px) {
+        input, select, textarea { font-size: 16px !important; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+      }
     </style>
   </head>
   <body>
