@@ -29,7 +29,7 @@ export async function geocodeAddress(parts: {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=gb`;
     const resp = await fetch(url, {
       headers: {
-        "User-Agent": "Unwrapped/1.0 (hello@unwrapped.shop)",
+        "User-Agent": "Unwrapped/1.0 (hello@shopunwrapped.com)",
         "Accept-Language": "en",
       },
     });
