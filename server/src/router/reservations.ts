@@ -115,21 +115,44 @@ export const reservationsRouter = router({
         throw new TRPCError({ code: "CONFLICT", message: "Just missed it — someone reserved the last one" });
       }
 
-      // Create reservation
-      const [reservation] = await ctx.db
-        .insert(reservations)
-        .values({
-          dropId: input.dropId,
-          userId: ctx.user.id,
-          stripePaymentIntentId: input.stripePaymentIntentId ?? null,
-          qrCodeHash: generateQRHash(),
-          referenceCode: generateReferenceCode(),
-          status: "active",
-          payoutStatus: "pending",
-        })
-        .returning();
+      // Create reservation. stripePaymentIntentId has a unique DB constraint —
+      // this is the real defence against a duplicate request (retry, double
+      // click, two tabs) redeeming the same payment into two reservations;
+      // the "existing" check above is just a fast path.
+      try {
+        const [reservation] = await ctx.db
+          .insert(reservations)
+          .values({
+            dropId: input.dropId,
+            userId: ctx.user.id,
+            stripePaymentIntentId: input.stripePaymentIntentId ?? null,
+            qrCodeHash: generateQRHash(),
+            referenceCode: generateReferenceCode(),
+            status: "active",
+            payoutStatus: "pending",
+          })
+          .returning();
 
-      return reservation;
+        return reservation;
+      } catch (err: any) {
+        if (err?.code === "23505" && err?.constraint === "reservations_stripe_payment_intent_unique") {
+          // Lost the race to another request using the same payment — release
+          // the unit we just decremented and refund this duplicate attempt.
+          await ctx.db
+            .update(drops)
+            .set({
+              availableQuantity: sql`${drops.availableQuantity} + 1`,
+              status: sql`CASE WHEN ${drops.status} = 'sold_out'::drop_status THEN 'active'::drop_status ELSE ${drops.status} END`,
+            })
+            .where(eq(drops.id, input.dropId));
+
+          if (drop.price > 0 && input.stripePaymentIntentId) {
+            await refundPaymentIntent(input.stripePaymentIntentId);
+          }
+          throw new TRPCError({ code: "CONFLICT", message: "This payment was already used" });
+        }
+        throw err;
+      }
     }),
 
   // Get a single reservation (consumer viewing their ticket)

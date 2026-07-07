@@ -158,7 +158,11 @@ export const reservations = pgTable("reservations", {
   fulfilledAt: timestamp("fulfilled_at"),
   cancelledAt: timestamp("cancelled_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (t) => [
+  // Postgres treats NULLs as distinct, so free (null) reservations are unaffected —
+  // this only blocks the same Stripe payment from being redeemed into two reservations.
+  uniqueIndex("reservations_stripe_payment_intent_unique").on(t.stripePaymentIntentId),
+]);
 
 // ─── Waitlist ─────────────────────────────────────────────────────────────────
 

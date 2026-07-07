@@ -8,7 +8,7 @@ import { appRouter } from "./router";
 import { getUserFromRequest } from "./auth/oauth";
 import { db } from "./db";
 import { pushSubscriptions } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -66,7 +66,7 @@ app.post("/api/push/unsubscribe", async (req, res) => {
            const { endpoint } = req.body;
     if (!endpoint) return res.status(400).json({ error: "Missing endpoint" });
 
-           await db.delete(pushSubscriptions).where(eq(pushSubscriptions.endpoint, endpoint));
+           await db.delete(pushSubscriptions).where(and(eq(pushSubscriptions.endpoint, endpoint), eq(pushSubscriptions.userId, user.id)));
     return res.json({ ok: true });
 });
 
