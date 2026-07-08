@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trpc } from "../../trpc";
 import { AdminLayout } from "./Dashboard";
 import { format } from "date-fns";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -13,6 +14,7 @@ const V = "#E8341C";
 type AppFilter = "pending" | "approved" | "rejected" | "all";
 
 export default function Applications() {
+  const isMobile = useIsMobile(768);
   const [filter, setFilter] = useState<AppFilter>("pending");
   const [selected, setSelected] = useState<any | null>(null);
   const [rejectReason, setRejectReason] = useState("");
@@ -45,13 +47,13 @@ export default function Applications() {
 
   return (
     <AdminLayout>
-      <div style={{ padding: "40px 48px" }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px" }}>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, marginBottom: 32 }}>
           Applications
         </h1>
 
         {/* Filter tabs */}
-        <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 24 }}>
+        <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 24, overflowX: "auto", scrollbarWidth: "none" }}>
           {FILTERS.map(f => (
             <button
               key={f.key}
@@ -91,9 +93,10 @@ export default function Applications() {
                 key={app.id}
                 onClick={() => setSelected(app)}
                 style={{
-                  display: "grid", gridTemplateColumns: "1fr 120px 100px 100px",
-                  gap: 16, alignItems: "center",
-                  padding: "16px 20px",
+                  display: "grid",
+                  gridTemplateColumns: isMobile ? "1fr auto" : "1fr 120px 100px 100px",
+                  gap: isMobile ? 8 : 16, alignItems: "center",
+                  padding: isMobile ? "16px" : "16px 20px",
                   borderBottom: i < applications.length - 1 ? `1px solid ${BORDER}` : "none",
                   cursor: "pointer",
                 }}

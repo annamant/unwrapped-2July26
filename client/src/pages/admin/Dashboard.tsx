@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { format } from "date-fns";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -10,6 +11,7 @@ const MUTED_FG = "#7A7A7A";
 const V = "#E8341C";
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile(768);
   const [location] = useLocation();
   const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { window.location.href = "/"; } });
 
@@ -17,6 +19,50 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     { href: "/admin", label: "Overview" },
     { href: "/admin/applications", label: "Applications" },
   ];
+
+  if (isMobile) {
+    return (
+      <div style={{ minHeight: "100vh", background: BG, display: "flex", flexDirection: "column" }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "14px 16px", borderBottom: `1px solid ${BORDER}`,
+        }}>
+          <div>
+            <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 700, color: FG, textDecoration: "none" }}>
+              Unwrapped
+            </a>
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: V, letterSpacing: "0.15em", marginLeft: 8 }}>
+              ADMIN
+            </span>
+          </div>
+          <button
+            onClick={() => signOut.mutate()}
+            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            Sign out
+          </button>
+        </div>
+        <nav style={{ display: "flex", overflowX: "auto", scrollbarWidth: "none", borderBottom: `1px solid ${BORDER}` }}>
+          {NAV.map(n => (
+            <a
+              key={n.href}
+              href={n.href}
+              style={{
+                padding: "12px 16px", whiteSpace: "nowrap",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                color: location === n.href ? FG : MUTED_FG,
+                textDecoration: "none",
+                borderBottom: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
+              }}
+            >
+              {n.label}
+            </a>
+          ))}
+        </nav>
+        <div style={{ flex: 1 }}>{children}</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: BG, display: "flex" }}>
@@ -64,12 +110,13 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 export { AdminLayout };
 
 export default function AdminDashboard() {
+  const isMobile = useIsMobile(768);
   const { data: stats } = trpc.admin.stats.useQuery();
   const { data: recentDrops } = trpc.admin.recentDrops.useQuery({ limit: 10 });
 
   return (
     <AdminLayout>
-      <div style={{ padding: "40px 48px" }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px" }}>
         <div style={{ marginBottom: 36 }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
             Platform overview
@@ -80,7 +127,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Stats grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
           {[
             { label: "Total users", value: stats?.totalUsers },
             { label: "Total businesses", value: stats?.totalBusinesses },
@@ -134,9 +181,10 @@ export default function AdminDashboard() {
               <div
                 key={drop.id}
                 style={{
-                  display: "grid", gridTemplateColumns: "1fr 120px 100px 80px",
-                  gap: 16, alignItems: "center",
-                  padding: "14px 20px",
+                  display: "grid",
+                  gridTemplateColumns: isMobile ? "1fr auto" : "1fr 120px 100px 80px",
+                  gap: isMobile ? 8 : 16, alignItems: "center",
+                  padding: isMobile ? "14px 16px" : "14px 20px",
                   borderBottom: i < recentDrops.length - 1 ? `1px solid ${BORDER}` : "none",
                 }}
               >
