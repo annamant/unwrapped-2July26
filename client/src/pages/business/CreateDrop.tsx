@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { DashLayout } from "./Dashboard";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -17,6 +18,8 @@ const CATEGORIES = [
 ];
 
 export default function CreateDrop() {
+  const isMobile = useIsMobile(768);
+  const twoCol = { display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 } as const;
   const [, navigate] = useLocation();
   const [error, setError] = useState("");
   const [form, setForm] = useState({
@@ -78,7 +81,7 @@ export default function CreateDrop() {
 
   return (
     <DashLayout>
-      <div style={{ padding: "40px 48px", maxWidth: 700 }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 700 }}>
         <div style={{ marginBottom: 36 }}>
           <a href="/dashboard/drops" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}>
             ← Drops
@@ -106,7 +109,7 @@ export default function CreateDrop() {
 
           {/* ── Category + format ── */}
           <Section label="CATEGORY">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={twoCol}>
               <Field label="Category *">
                 <select value={form.category} onChange={set("category")} style={inputStyle}>
                   <option value="">Select…</option>
@@ -126,7 +129,7 @@ export default function CreateDrop() {
 
           {/* ── Pricing + stock ── */}
           <Section label="PRICE & STOCK">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={twoCol}>
               <Field label="Price (£) *">
                 <input
                   value={form.price} onChange={set("price")}
@@ -149,7 +152,7 @@ export default function CreateDrop() {
 
           {/* ── Collection window ── */}
           <Section label="COLLECTION WINDOW">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={twoCol}>
               <Field label="Opens *">
                 <input type="datetime-local" value={form.collectionStart} onChange={set("collectionStart")} style={inputStyle} />
               </Field>
@@ -167,7 +170,7 @@ export default function CreateDrop() {
             <Field label="Address *">
               <input value={form.locationAddress} onChange={set("locationAddress")} placeholder="123 Portobello Road" style={inputStyle} />
             </Field>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={twoCol}>
               <Field label="City">
                 <input value={form.locationCity} onChange={set("locationCity")} placeholder="London" style={inputStyle} />
               </Field>
@@ -175,7 +178,7 @@ export default function CreateDrop() {
                 <input value={form.locationPostcode} onChange={set("locationPostcode")} placeholder="W11 2DY" style={inputStyle} />
               </Field>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={twoCol}>
               <Field label="Latitude (for map)">
                 <input value={form.locationLat} onChange={set("locationLat")} type="number" step="any" placeholder="51.5074" style={inputStyle} />
               </Field>

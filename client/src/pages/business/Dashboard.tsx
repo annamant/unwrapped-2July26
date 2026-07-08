@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { format } from "date-fns";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -10,6 +11,7 @@ const MUTED_FG = "#7A7A7A";
 const V = "#E8341C";
 
 function DashLayout({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile(768);
   const [location, navigate] = useLocation();
   const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { window.location.href = "/"; } });
 
@@ -19,6 +21,60 @@ function DashLayout({ children }: { children: React.ReactNode }) {
     { href: "/dashboard/drops/new", label: "New drop" },
     { href: "/dashboard/scanner", label: "Scanner" },
   ];
+
+  if (isMobile) {
+    // Stacked layout: compact header + horizontally scrollable nav
+    return (
+      <div style={{ minHeight: "100vh", background: BG, display: "flex", flexDirection: "column" }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "14px 16px", borderBottom: `1px solid ${BORDER}`,
+        }}>
+          <div>
+            <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: FG, textDecoration: "none" }}>
+              Unwrapped
+            </a>
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginLeft: 8 }}>
+              BUSINESS
+            </span>
+          </div>
+          <button
+            onClick={() => signOut.mutate()}
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG,
+              background: "none", border: "none", cursor: "pointer", padding: 0,
+            }}
+          >
+            Sign out
+          </button>
+        </div>
+        <nav style={{
+          display: "flex", overflowX: "auto", scrollbarWidth: "none",
+          borderBottom: `1px solid ${BORDER}`, background: BG,
+          position: "sticky", top: 0, zIndex: 50,
+        }}>
+          {NAV.map(n => (
+            <a
+              key={n.href}
+              href={n.href}
+              style={{
+                padding: "12px 16px", whiteSpace: "nowrap",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                color: location === n.href ? FG : MUTED_FG,
+                textDecoration: "none",
+                borderBottom: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
+              }}
+            >
+              {n.label}
+            </a>
+          ))}
+        </nav>
+        <div style={{ flex: 1 }}>
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: BG, display: "flex" }}>
@@ -74,13 +130,14 @@ function DashLayout({ children }: { children: React.ReactNode }) {
 export { DashLayout };
 
 export default function Dashboard() {
+  const isMobile = useIsMobile(768);
   const { data: stats } = trpc.businesses.dashboardStats.useQuery();
   const { data: recentDrops } = trpc.drops.myDrops.useQuery({ limit: 5 });
   const [, navigate] = useLocation();
 
   return (
     <DashLayout>
-      <div style={{ padding: "40px 48px", maxWidth: 900 }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 900 }}>
         <div style={{ marginBottom: 40 }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, marginBottom: 4 }}>
             {stats?.businessName ?? "Dashboard"}
@@ -91,7 +148,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 40 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 40 }}>
           {[
             { label: "Active drops", value: stats?.activeDrops ?? "—" },
             { label: "Reservations today", value: stats?.reservationsToday ?? "—" },
@@ -110,7 +167,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick actions */}
-        <div style={{ display: "flex", gap: 12, marginBottom: 48 }}>
+        <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap" }}>
           <button
             onClick={() => navigate("/dashboard/drops/new")}
             style={{

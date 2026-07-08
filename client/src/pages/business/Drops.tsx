@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { DashLayout, StatusBadge } from "./Dashboard";
 import { format } from "date-fns";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -14,6 +15,7 @@ const V = "#E8341C";
 type Filter = "all" | "active" | "past";
 
 export default function Drops() {
+  const isMobile = useIsMobile(768);
   const [, navigate] = useLocation();
   const [filter, setFilter] = useState<Filter>("all");
   const [cancelTarget, setCancelTarget] = useState<string | null>(null);
@@ -41,8 +43,8 @@ export default function Drops() {
 
   return (
     <DashLayout>
-      <div style={{ padding: "40px 48px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
             Drops
           </h1>
@@ -103,9 +105,10 @@ export default function Drops() {
               <div
                 key={drop.id}
                 style={{
-                  padding: "20px 24px",
+                  padding: isMobile ? "16px" : "20px 24px",
                   borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
-                  display: "grid", gridTemplateColumns: "1fr auto", gap: 24, alignItems: "center",
+                  display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+                  gap: isMobile ? 14 : 24, alignItems: "center",
                 }}
               >
                 <div>

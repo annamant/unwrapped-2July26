@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "../../trpc";
 import { DashLayout } from "./Dashboard";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -52,30 +53,34 @@ export default function Scanner() {
     inputRef.current?.focus();
   }, [result]);
 
-  // Determine if input is a reference code (UW-XXXXXX, optionally entered
-  // without the "UW-" prefix) or a QR hash (hex string), and normalize
-  // reference codes to the full "UW-XXXXXX" form stored in the database.
-  function parseCode(input: string): { referenceCode?: string; qrCodeHash?: string } {
-    const trimmed = input.trim().toUpperCase();
-    if (/^UW-[A-Z0-9]{6}$/.test(trimmed)) return { referenceCode: trimmed };
-    if (/^[A-Z0-9]{6}$/.test(trimmed)) return { referenceCode: `UW-${trimmed}` };
-    return { qrCodeHash: trimmed };
-  }
-
   function handleScan() {
     if (!code.trim()) return;
     setResult(null);
     setOutsideWindow(false);
-    checkin.mutate({ ...parseCode(code), forceAccept: false });
+    const trimmed = code.trim().toUpperCase();
+    // Determine if it's a reference code (UW-XXXXXX) or a QR hash (hex string)
+    const isRef = /^UW-[A-Z0-9]{6}$/.test(trimmed) || /^[A-Z0-9]{6}$/.test(trimmed);
+    checkin.mutate({
+      referenceCode: isRef ? trimmed : undefined,
+      qrCodeHash: !isRef ? trimmed : undefined,
+      forceAccept: false,
+    });
   }
 
   function handleForceAccept() {
-    forceCheckin.mutate({ ...parseCode(lastCode), forceAccept: true });
+    const trimmed = lastCode.trim().toUpperCase();
+    const isRef = /^UW-[A-Z0-9]{6}$/.test(trimmed) || /^[A-Z0-9]{6}$/.test(trimmed);
+    forceCheckin.mutate({
+      referenceCode: isRef ? trimmed : undefined,
+      qrCodeHash: !isRef ? trimmed : undefined,
+      forceAccept: true,
+    });
   }
 
+  const isMobile = useIsMobile(768);
   return (
     <DashLayout>
-      <div style={{ padding: "40px 48px", maxWidth: 560 }}>
+      <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 560 }}>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, marginBottom: 8 }}>
           Scanner
         </h1>
