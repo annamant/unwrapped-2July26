@@ -68,14 +68,14 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 32 }}>
+        <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 32, overflowX: "auto", scrollbarWidth: "none" }}>
           {TABS.map(t => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                padding: "12px 20px", background: "none", border: "none",
+                padding: "12px 20px", background: "none", border: "none", whiteSpace: "nowrap",
                 borderBottom: tab === t.key ? `2px solid ${FG}` : "2px solid transparent",
                 color: tab === t.key ? FG : MUTED_FG,
                 cursor: "pointer", marginBottom: -1,

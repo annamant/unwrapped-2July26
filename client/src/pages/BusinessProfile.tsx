@@ -4,6 +4,7 @@ import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
+import useIsMobile from "../hooks/useIsMobile";
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -13,6 +14,7 @@ const MUTED = "#F5F4F0";
 const MUTED_FG = "#7A7A7A";
 
 export default function BusinessProfile() {
+  const isMobile = useIsMobile();
   const [, params] = useRoute("/business/:slug");
   const [, navigate] = useLocation();
   const slug = params?.slug ?? "";
@@ -68,7 +70,7 @@ export default function BusinessProfile() {
       <Nav />
 
       {/* Hero band */}
-      <div style={{ borderBottom: `1px solid ${BORDER}`, padding: "48px 40px" }}>
+      <div style={{ borderBottom: `1px solid ${BORDER}`, padding: isMobile ? "32px 20px" : "48px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
             <div>
@@ -135,8 +137,12 @@ export default function BusinessProfile() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 56, alignItems: "start" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "32px 20px" : "48px 40px" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 320px",
+          gap: isMobile ? 32 : 56, alignItems: "start",
+        }}>
 
           {/* ── Left: drops ── */}
           <div>
@@ -161,7 +167,7 @@ export default function BusinessProfile() {
           </div>
 
           {/* ── Right: sidebar ── */}
-          <div style={{ position: "sticky", top: 88 }}>
+          <div style={isMobile ? {} : { position: "sticky", top: 88 }}>
 
             {/* Get notified */}
             <div style={{ border: `1px solid ${BORDER}`, padding: "24px", marginBottom: 16 }}>

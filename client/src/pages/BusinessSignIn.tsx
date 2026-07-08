@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { trpc, setSessionToken } from "../trpc";
+import useIsMobile from "../hooks/useIsMobile";
 
 const V = "rgb(232, 52, 28)";
 
 export default function BusinessSignIn() {
+  const isMobile = useIsMobile(900);
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,8 +51,8 @@ export default function BusinessSignIn() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-      <div style={{ background: "#020202", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 48 }}>
+    <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
+      <div style={{ background: "#020202", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: isMobile ? 24 : 48, gap: isMobile ? 20 : 0 }}>
         <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#FCFCFC", textDecoration: "none" }}>
           Unwrapped
         </a>
@@ -58,15 +60,17 @@ export default function BusinessSignIn() {
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: V, letterSpacing: 2, textTransform: "uppercase", marginBottom: 24 }}>
             Business Portal
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(36px, 4vw, 56px)", fontWeight: 700, color: "#FCFCFC", lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 24 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 28 : "clamp(36px, 4vw, 56px)", fontWeight: 700, color: "#FCFCFC", lineHeight: 1.1, letterSpacing: "-1px", marginBottom: isMobile ? 12 : 24 }}>
             Create a drop.<br />
             <em style={{ color: V, fontStyle: "italic" }}>In 2 minutes.</em>
           </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", lineHeight: 1.65 }}>
-            Manage your drops, scan QR codes at check-in, and track your payouts — all from one dashboard.
-          </p>
+          {!isMobile && (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", lineHeight: 1.65 }}>
+              Manage your drops, scan QR codes at check-in, and track your payouts — all from one dashboard.
+            </p>
+          )}
         </div>
-        <div style={{ display: "flex", gap: 32 }}>
+        <div style={{ display: "flex", gap: isMobile ? 24 : 32, flexWrap: "wrap" }}>
           {[["85%", "You keep"], ["0", "Monthly fees"], ["2 min", "To publish"]].map(([val, label]) => (
             <div key={label}>
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#FCFCFC" }}>{val}</div>
@@ -76,7 +80,7 @@ export default function BusinessSignIn() {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 48, background: "#FCFCFC" }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FCFCFC" }}>
         <div style={{ width: "100%", maxWidth: 380 }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: "#020202" }}>
             {mode === "login" ? "Business sign in" : "Create business account"}

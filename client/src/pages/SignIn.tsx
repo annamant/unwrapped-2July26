@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { trpc, setSessionToken } from "../trpc";
+import useIsMobile from "../hooks/useIsMobile";
 
 const V = "rgb(232, 52, 28)";
 
 export default function SignIn() {
+  const isMobile = useIsMobile(900);
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,26 +51,30 @@ export default function SignIn() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-      <div style={{ background: "#020202", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 48 }}>
+    <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
+      <div style={{ background: "#020202", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: isMobile ? 24 : 48, gap: isMobile ? 20 : 0 }}>
         <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#FCFCFC", textDecoration: "none" }}>
           Unwrapped
         </a>
         <div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(40px, 5vw, 64px)", fontWeight: 700, color: "#FCFCFC", lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 24 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 30 : "clamp(40px, 5vw, 64px)", fontWeight: 700, color: "#FCFCFC", lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: isMobile ? 12 : 24 }}>
             The best things<br />
             <em style={{ color: V, fontStyle: "italic" }}>don't last long.</em>
           </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-            Reserve local drops from independent shops, cafés, and studios near you. Your ticket, your QR code, your pick-up.
-          </p>
+          {!isMobile && (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
+              Reserve local drops from independent shops, cafés, and studios near you. Your ticket, your QR code, your pick-up.
+            </p>
+          )}
         </div>
-        <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: "#444", letterSpacing: 1.5 }}>
-          UNWRAPPED.SHOP
-        </p>
+        {!isMobile && (
+          <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: "#444", letterSpacing: 1.5 }}>
+            UNWRAPPED.SHOP
+          </p>
+        )}
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 48, background: "#FCFCFC" }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FCFCFC" }}>
         <div style={{ width: "100%", maxWidth: 380 }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: "#020202" }}>
             {mode === "login" ? "Sign in" : "Create account"}

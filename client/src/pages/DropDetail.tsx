@@ -5,6 +5,7 @@ import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
+import useIsMobile from "../hooks/useIsMobile";
 
 const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
@@ -17,6 +18,7 @@ const MUTED = "#F5F4F0";
 const MUTED_FG = "#7A7A7A";
 
 export default function DropDetail() {
+  const isMobile = useIsMobile();
   const [, params] = useRoute("/drop/:id");
   const [, navigate] = useLocation();
   const id = params?.id ?? "";
@@ -99,8 +101,12 @@ export default function DropDetail() {
 
   return (
     <PageShell>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: 56, alignItems: "start" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "24px 20px" : "40px 24px" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 400px",
+          gap: isMobile ? 32 : 56, alignItems: "start",
+        }}>
 
           {/* ── Left: image + description ── */}
           <div>
@@ -206,7 +212,7 @@ export default function DropDetail() {
           </div>
 
           {/* ── Right: price + reserve ── */}
-          <div style={{ position: "sticky", top: 88 }}>
+          <div style={isMobile ? {} : { position: "sticky", top: 88 }}>
             {/* Price */}
             <div style={{ borderBottom: `1px solid ${BORDER}`, paddingBottom: 20, marginBottom: 20 }}>
               <div style={{

@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import { format } from "date-fns";
 import DropMap, { toDropPin } from "../components/DropMap";
+import useIsMobile from "../hooks/useIsMobile";
 
 // Design tokens — Unwrapped Design System
 const BG = "#FAFAF8";
@@ -14,13 +15,7 @@ const V = "#E8341C";
 
 export default function Landing() {
   const [, navigate] = useLocation();
-    // No CSS breakpoints in this file (everything is inline styles) — track viewport width in JS so the hero grid stacks on narrow screens instead of overflowing.
-    const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
-    useEffect(() => {
-          const onResize = () => setIsMobile(window.innerWidth < 640);
-          window.addEventListener("resize", onResize);
-          return () => window.removeEventListener("resize", onResize);
-    }, []);
+  const isMobile = useIsMobile();
 
   const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
 
@@ -48,14 +43,16 @@ export default function Landing() {
       {/* ── Masthead nav ── */}
       <nav style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "18px 40px", borderBottom: `1px solid ${BORDER}`,
+        padding: isMobile ? "14px 20px" : "18px 40px", borderBottom: `1px solid ${BORDER}`,
       }}>
-        <span style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 10,
-          color: MUTED_FG, letterSpacing: "0.12em",
-        }}>
-          LONDON · {today}
-        </span>
+        {!isMobile && (
+          <span style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 10,
+            color: MUTED_FG, letterSpacing: "0.12em",
+          }}>
+            LONDON · {today}
+          </span>
+        )}
 
         <span style={{
           fontFamily: "'Playfair Display', serif", fontSize: 22,
@@ -91,7 +88,7 @@ export default function Landing() {
         <div>
           <div style={{
             fontFamily: "'Space Mono', monospace",
-            fontSize: "clamp(72px, 10vw, 108px)",
+            fontSize: "clamp(56px, 12vw, 108px)",
             fontWeight: 700, color: FG,
             lineHeight: 1, letterSpacing: "-5px", marginBottom: 8,
           }}>
@@ -124,7 +121,7 @@ export default function Landing() {
           )}
 
           <div style={{
-            display: "flex", alignItems: "center", gap: 20,
+            display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
             marginTop: endingInHour > 0 ? 0 : 36,
           }}>
             <button
@@ -160,7 +157,7 @@ export default function Landing() {
       {/* ── Drop grid ── */}
       <section style={{ marginTop: 56 }}>
         <div style={{
-          padding: "0 40px 20px",
+          padding: isMobile ? "0 20px 20px" : "0 40px 20px",
           borderBottom: `1px solid ${BORDER}`,
         }}>
           <span style={{
@@ -172,8 +169,8 @@ export default function Landing() {
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 0, background: BORDER,
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gap: 1, background: BORDER,
           borderTop: `1px solid ${BORDER}`,
           borderBottom: `1px solid ${BORDER}`,
         }}>
@@ -202,7 +199,7 @@ export default function Landing() {
           }
         </div>
 
-        <div style={{ padding: "20px 40px", borderBottom: `1px solid ${BORDER}` }}>
+        <div style={{ padding: isMobile ? "20px" : "20px 40px", borderBottom: `1px solid ${BORDER}` }}>
           <button
             onClick={() => navigate("/signin")}
             style={{
@@ -221,9 +218,9 @@ export default function Landing() {
 
       {/* ── Business pitch — all warm cream ── */}
       <section style={{
-        padding: "72px 40px",
-        display: "grid", gridTemplateColumns: "1fr 1fr",
-        gap: 80, alignItems: "center",
+        padding: isMobile ? "48px 20px" : "72px 40px",
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+        gap: isMobile ? 40 : 80, alignItems: "center",
         borderBottom: `1px solid ${BORDER}`,
       }}>
         <div>
@@ -309,7 +306,7 @@ export default function Landing() {
       </section>
 
       {/* ── How it works ── */}
-      <section style={{ padding: "64px 40px", borderBottom: `1px solid ${BORDER}` }}>
+      <section style={{ padding: isMobile ? "48px 20px" : "64px 40px", borderBottom: `1px solid ${BORDER}` }}>
         <div style={{
           fontFamily: "'Space Mono', monospace", fontSize: 9,
           color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 40,
@@ -318,8 +315,8 @@ export default function Landing() {
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 0, background: BORDER,
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gap: 1, background: BORDER,
         }}>
           {[
             {
@@ -365,8 +362,9 @@ export default function Landing() {
 
       {/* ── Footer ── */}
       <footer style={{
-        padding: "20px 40px",
+        padding: isMobile ? "20px" : "20px 40px",
         display: "flex", justifyContent: "space-between", alignItems: "center",
+        flexWrap: "wrap", gap: 12,
       }}>
         <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: FG }}>
           Unwrapped
@@ -531,6 +529,7 @@ function GridDropCard({ drop, business, location, onClick }: {
 }
 
 function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: string) => void }) {
+  const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
 
@@ -557,7 +556,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
     <section style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
       {/* Header + search */}
       <div style={{
-        padding: "24px 40px",
+        padding: isMobile ? "20px" : "24px 40px",
         display: "flex", justifyContent: "space-between",
         alignItems: "center", borderBottom: `1px solid ${BORDER}`,
         flexWrap: "wrap", gap: 16,
@@ -577,7 +576,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
           </p>
         </div>
 
-        <form onSubmit={handleSearch} style={{ display: "flex", gap: 0 }}>
+        <form onSubmit={handleSearch} style={{ display: "flex", gap: 0, width: isMobile ? "100%" : "auto" }}>
           <input
             type="text"
             value={search}
@@ -587,7 +586,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
               padding: "10px 16px", border: `1px solid ${BORDER}`,
               borderRight: "none", background: BG, color: FG,
-              outline: "none", width: 260,
+              outline: "none", width: isMobile ? "100%" : 260, minWidth: 0, flex: isMobile ? 1 : "none",
             }}
           />
           <button type="submit" style={{
@@ -607,7 +606,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
         defaultLat={mapCenter.lat}
         defaultLng={mapCenter.lng}
         zoom={13}
-        height="480px"
+        height={isMobile ? "340px" : "480px"}
       />
     </section>
   );

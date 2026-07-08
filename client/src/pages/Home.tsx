@@ -4,6 +4,7 @@ import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import DropMap, { toDropPin } from "../components/DropMap";
 import { format } from "date-fns";
+import useIsMobile from "../hooks/useIsMobile";
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -21,6 +22,7 @@ type TimeWindow = "now" | "today" | "tomorrow";
 
 export default function Home() {
   const [, navigate] = useLocation();
+  const isMobile = useIsMobile();
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [timeWindow, setTimeWindow] = useState<TimeWindow | undefined>(undefined);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
@@ -100,7 +102,7 @@ export default function Home() {
           alignItems: "center", marginBottom: 28,
           flexWrap: "wrap", gap: 12,
         }}>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {[
               { key: undefined as TimeWindow | undefined, label: "All drops" },
               { key: "now" as TimeWindow, label: "Live now" },
@@ -158,7 +160,7 @@ export default function Home() {
             {searchError && (
               <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: V }}>{searchError}</span>
             )}
-            <form onSubmit={handleMapSearch} style={{ display: "flex", gap: 0 }}>
+            <form onSubmit={handleMapSearch} style={{ display: "flex", gap: 0, width: isMobile ? "100%" : "auto" }}>
               <input
                 type="text"
                 value={search}
@@ -168,7 +170,7 @@ export default function Home() {
                   fontFamily: "'DM Sans', sans-serif", fontSize: 13,
                   padding: "9px 14px", border: `1px solid ${BORDER}`,
                   borderRight: "none", background: BG, color: FG,
-                  outline: "none", width: 240,
+                  outline: "none", width: isMobile ? "100%" : 240, minWidth: 0, flex: isMobile ? 1 : "none",
                 }}
               />
               <button type="submit" style={{
@@ -187,7 +189,7 @@ export default function Home() {
               onDropClick={(id) => navigate(`/drop/${id}`)}
               defaultLat={mapCenter.lat}
               defaultLng={mapCenter.lng}
-              height="600px"
+              height={isMobile ? "420px" : "600px"}
               zoom={13}
             />
           </div>
