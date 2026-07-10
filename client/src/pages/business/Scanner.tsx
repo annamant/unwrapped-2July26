@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import QrScanner from "qr-scanner";
 import { trpc } from "../../trpc";
 import { DashLayout } from "./Dashboard";
 import useIsMobile from "../../hooks/useIsMobile";
@@ -24,15 +25,18 @@ export default function Scanner() {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [outsideWindow, setOutsideWindow] = useState(false);
   const [lastCode, setLastCode] = useState("");
+  const [cameraError, setCameraError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const scannerRef = useRef<QrScanner | null>(null);
+  const lastScanRef = useRef<{ value: string; at: number }>({ value: "", at: 0 });
 
   const checkin = trpc.reservations.scanCheckin.useMutation({
     onSuccess: (data) => {
       const res = data as ScanResult;
       if (res.error === "outside_window") {
         setOutsideWindow(true);
-        setLastCode(code);
-        setResult(res);
+        setResult(res); // lastCode already captured in submitCode
       } else {
         setResult(res);
         if (res.success) setCode("");
@@ -53,25 +57,69 @@ export default function Scanner() {
     inputRef.current?.focus();
   }, [result]);
 
-  function handleScan() {
-    if (!code.trim()) return;
+  function submitCode(raw: string) {
+    const trimmed = raw.trim();
+    if (!trimmed) return;
     setResult(null);
     setOutsideWindow(false);
-    const trimmed = code.trim().toUpperCase();
-    // Determine if it's a reference code (UW-XXXXXX) or a QR hash (hex string)
-    const isRef = /^UW-[A-Z0-9]{6}$/.test(trimmed) || /^[A-Z0-9]{6}$/.test(trimmed);
+    const upper = trimmed.toUpperCase();
+    // Reference code (UW-XXXXXX) vs QR hash (hex — case-sensitive, don't uppercase)
+    const isRef = /^UW-[A-Z0-9]{6}$/.test(upper) || /^[A-Z0-9]{6}$/.test(upper);
+    setLastCode(trimmed);
     checkin.mutate({
-      referenceCode: isRef ? trimmed : undefined,
+      referenceCode: isRef ? upper : undefined,
       qrCodeHash: !isRef ? trimmed : undefined,
       forceAccept: false,
     });
   }
 
+  function handleScan() {
+    submitCode(code);
+  }
+
+  // Camera scanning — starts/stops with the mode toggle
+  useEffect(() => {
+    if (mode !== "camera") return;
+    setCameraError("");
+    const video = videoRef.current;
+    if (!video) return;
+
+    const scanner = new QrScanner(
+      video,
+      (res) => {
+        const value = res.data?.trim();
+        if (!value) return;
+        // Debounce: ignore the same code re-detected within 5 seconds
+        const now = Date.now();
+        if (lastScanRef.current.value === value && now - lastScanRef.current.at < 5000) return;
+        lastScanRef.current = { value, at: now };
+        submitCode(value);
+      },
+      { returnDetailedScanResult: true, highlightScanRegion: true, preferredCamera: "environment" }
+    );
+    scannerRef.current = scanner;
+    scanner.start().catch((err: any) => {
+      setCameraError(
+        err?.name === "NotAllowedError"
+          ? "Camera access was denied. Allow camera access in your browser settings, or use manual entry."
+          : "Couldn't start the camera on this device. Use manual entry instead."
+      );
+    });
+
+    return () => {
+      scanner.stop();
+      scanner.destroy();
+      scannerRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
   function handleForceAccept() {
-    const trimmed = lastCode.trim().toUpperCase();
-    const isRef = /^UW-[A-Z0-9]{6}$/.test(trimmed) || /^[A-Z0-9]{6}$/.test(trimmed);
+    const trimmed = lastCode.trim();
+    const upper = trimmed.toUpperCase();
+    const isRef = /^UW-[A-Z0-9]{6}$/.test(upper) || /^[A-Z0-9]{6}$/.test(upper);
     forceCheckin.mutate({
-      referenceCode: isRef ? trimmed : undefined,
+      referenceCode: isRef ? upper : undefined,
       qrCodeHash: !isRef ? trimmed : undefined,
       forceAccept: true,
     });
@@ -149,16 +197,26 @@ export default function Scanner() {
         )}
 
         {mode === "camera" && (
-          <div style={{ border: `1px solid ${BORDER}`, padding: "40px", textAlign: "center", marginBottom: 24 }}>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, color: MUTED_FG, fontStyle: "italic", marginBottom: 12 }}>
-              Camera scanning
-            </p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 20, lineHeight: 1.6 }}>
-              Point the camera at the customer's QR code. Requires a browser with camera access and a secure (HTTPS) connection.
-            </p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG }}>
-              In production: integrate with a QR scanning library (e.g. <code>@zxing/browser</code>) and pipe decoded values into the check-in mutation above. The manual entry mode above works on any device right now.
-            </p>
+          <div style={{ border: `1px solid ${BORDER}`, marginBottom: 24, overflow: "hidden" }}>
+            {cameraError ? (
+              <div style={{ padding: "40px 24px", textAlign: "center" }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: V, lineHeight: 1.6 }}>
+                  {cameraError}
+                </p>
+              </div>
+            ) : (
+              <>
+                <video
+                  ref={videoRef}
+                  style={{ width: "100%", display: "block", maxHeight: 420, objectFit: "cover", background: FG }}
+                  muted
+                  playsInline
+                />
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, padding: "10px 14px", margin: 0 }}>
+                  Point the camera at the customer's QR code — check-in is automatic.
+                </p>
+              </>
+            )}
           </div>
         )}
 
