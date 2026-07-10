@@ -68,7 +68,7 @@ async function sendDropEmail(to: string, drop: DropPayload) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Unwrapped <drops@shopunwrapped.com>",
+        from: "Unwrapped <anna@shopunwrapped.com>",
         to,
         subject: `New drop near you: ${drop.title.replace(/[\r\n]/g, " ")}`,
         html: `
@@ -115,7 +115,7 @@ export async function sendApplicationApprovedEmail(to: string, businessName: str
                             "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                            from: "Unwrapped <hello@shopunwrapped.com>",
+                            from: "Unwrapped <anna@shopunwrapped.com>",
                             to,
                             subject: "You're approved to list on Unwrapped",
                             html: `
@@ -157,7 +157,7 @@ export async function sendApplicationRejectedEmail(to: string, businessName: str
                             "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                            from: "Unwrapped <hello@shopunwrapped.com>",
+                            from: "Unwrapped <anna@shopunwrapped.com>",
                             to,
                             subject: "Update on your Unwrapped application",
                             html: `
@@ -338,7 +338,7 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string) {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "Unwrapped <hello@shopunwrapped.com>",
+        from: "Unwrapped <anna@shopunwrapped.com>",
         to,
         subject: "Reset your Unwrapped password",
         html: `
@@ -379,7 +379,7 @@ export async function sendReservationConfirmationEmail(params: {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "Unwrapped <drops@shopunwrapped.com>",
+        from: "Unwrapped <anna@shopunwrapped.com>",
         to: params.to,
         subject: `Reserved: ${params.dropTitle.replace(/[\r\n]/g, " ")} — ref ${params.referenceCode}`,
         html: `
