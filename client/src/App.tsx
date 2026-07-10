@@ -18,6 +18,8 @@ import BusinessDrops from "./pages/business/Drops";
 import BusinessScanner from "./pages/business/Scanner";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminApplications from "./pages/admin/Applications";
+import ResetPassword from "./pages/ResetPassword";
+import { Privacy, Terms } from "./pages/Legal";
 
 export default function App() {
   const { data: user, isLoading } = trpc.auth.me.useQuery();
@@ -39,6 +41,9 @@ export default function App() {
       <Route path="/signin" component={() => user ? <Redirect to="/home" /> : <SignIn />} />
       <Route path="/business/signin" component={() => user?.hasBusiness ? <Redirect to="/dashboard" /> : <BusinessSignIn />} />
       <Route path="/business-apply" component={BusinessApply} />
+      <Route path="/reset-password" component={ResetPassword} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route path="/business/:slug" component={BusinessProfile} />
 
       {/* Consumer — requires auth */}
