@@ -324,3 +324,82 @@ export async function dispatchDropNotifications(drop: DropPayload): Promise<void
     console.error("[notifications] dispatch error:", err);
   }
 }
+
+// ─── Password reset email ──────────────────────────────────────────────────────
+
+export async function sendPasswordResetEmail(to: string, resetUrl: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    console.error("[notifications] RESEND_API_KEY missing — password reset email NOT sent to", to);
+    return;
+  }
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "Unwrapped <hello@shopunwrapped.com>",
+        to,
+        subject: "Reset your Unwrapped password",
+        html: `
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
+            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Password reset</p>
+            <h1 style="font-size:24px;font-weight:700;line-height:1.2;margin-bottom:12px">Reset your password</h1>
+            <p style="font-size:15px;line-height:1.6;margin-bottom:24px">Someone (hopefully you) asked to reset the password for this email address. This link is valid for 1 hour and can be used once.</p>
+            <a href="${resetUrl}" style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">CHOOSE A NEW PASSWORD</a>
+            <p style="font-size:12px;color:#b0a89e;margin-top:32px">If you didn't request this, ignore this email — your password is unchanged. Questions: <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a></p>
+          </div>
+        `,
+      }),
+    });
+  } catch (err) {
+    console.error("[notifications] password reset email error:", err);
+  }
+}
+
+// ─── Reservation confirmation email ────────────────────────────────────────────
+
+export async function sendReservationConfirmationEmail(params: {
+  to: string;
+  dropTitle: string;
+  businessName: string;
+  address: string;
+  collectionStart: Date;
+  collectionEnd: Date;
+  pricePence: number;
+  referenceCode: string;
+  reservationId: string;
+}) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  try {
+    const fmt = (d: Date) =>
+      d.toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "Unwrapped <drops@shopunwrapped.com>",
+        to: params.to,
+        subject: `Reserved: ${params.dropTitle.replace(/[\r\n]/g, " ")} — ref ${params.referenceCode}`,
+        html: `
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
+            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Reservation confirmed</p>
+            <h1 style="font-size:26px;font-weight:700;line-height:1.15;margin-bottom:6px">${esc(params.dropTitle)}</h1>
+            <p style="font-size:14px;color:#7a7a7a;margin-bottom:24px">${esc(params.businessName)}</p>
+            <table style="width:100%;font-size:14px;border-collapse:collapse;margin-bottom:24px">
+              <tr><td style="padding:8px 0;color:#7a7a7a">Reference</td><td style="padding:8px 0;font-family:monospace;font-weight:700">${esc(params.referenceCode)}</td></tr>
+              <tr><td style="padding:8px 0;color:#7a7a7a">Collect</td><td style="padding:8px 0">${fmt(params.collectionStart)} – ${params.collectionEnd.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</td></tr>
+              <tr><td style="padding:8px 0;color:#7a7a7a">Where</td><td style="padding:8px 0">${esc(params.address)}</td></tr>
+              <tr><td style="padding:8px 0;color:#7a7a7a">Paid</td><td style="padding:8px 0;font-family:monospace">£${(params.pricePence / 100).toFixed(2)}</td></tr>
+            </table>
+            <a href="https://shopunwrapped.com/ticket/${params.reservationId}" style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">VIEW YOUR QR TICKET</a>
+            <p style="font-size:12px;color:#b0a89e;margin-top:32px">Show the QR code (or your reference) at the door during the collection window. Need help? <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a></p>
+          </div>
+        `,
+      }),
+    });
+  } catch (err) {
+    console.error("[notifications] reservation confirmation email error:", err);
+  }
+}
