@@ -370,12 +370,16 @@ export default function Landing() {
           Unwrapped
         </span>
         <div style={{ display: "flex", gap: 24 }}>
-          {["Privacy", "Terms", "Contact"].map(l => (
-            <a key={l} href="#" style={{
+          {[
+            { label: "Privacy", href: "/privacy" },
+            { label: "Terms", href: "/terms" },
+            { label: "Contact", href: "mailto:anna@shopunwrapped.com" },
+          ].map(({ label, href }) => (
+            <a key={label} href={href} style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 12, color: MUTED_FG, textDecoration: "none",
             }}>
-              {l}
+              {label}
             </a>
           ))}
         </div>

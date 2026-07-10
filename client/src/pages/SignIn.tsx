@@ -69,7 +69,7 @@ export default function SignIn() {
         </div>
         {!isMobile && (
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: "#444", letterSpacing: 1.5 }}>
-            UNWRAPPED.SHOP
+            SHOPUNWRAPPED.COM
           </p>
         )}
       </div>
@@ -106,6 +106,12 @@ export default function SignIn() {
               {loading ? "Please wait…" : mode === "login" ? "Sign in →" : "Create account →"}
             </button>
           </form>
+
+          {mode === "login" && (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginTop: 16, textAlign: "center" }}>
+              <a href="/reset-password" style={{ color: "#888", textDecoration: "none" }}>Forgot your password?</a>
+            </p>
+          )}
 
           <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid #E2E2E2", textAlign: "center" }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB" }}>
