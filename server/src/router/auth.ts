@@ -6,8 +6,10 @@ import { and } from "drizzle-orm";
 import {
   users, sessions, notificationPreferences, locationZones, businesses,
   reservations, waitlist, follows, notificationMutes, pushSubscriptions,
+  passwordResetTokens,
 } from "../db/schema";
 import { TRPCError } from "@trpc/server";
+import { sendPasswordResetEmail } from "../notifications/dispatch";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
 
@@ -146,6 +148,14 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Incorrect email or password." });
       }
 
+      // Admin bootstrap: emails listed in ADMIN_EMAILS (comma-separated env)
+      // are promoted to admin on login. Removes the need for manual DB edits.
+      const adminEmails = (process.env.ADMIN_EMAILS ?? "")
+        .split(",").map(e => e.trim().toLowerCase()).filter(Boolean);
+      if (user.role !== "admin" && adminEmails.includes(user.email)) {
+        await ctx.db.update(users).set({ role: "admin" }).where(eq(users.id, user.id));
+      }
+
       const token = await createSession(ctx, user.id);
 
       const [business] = await ctx.db
@@ -161,6 +171,60 @@ export const authRouter = router({
         : "/home";
 
       return { success: true, redirect, token };
+    }),
+
+  // ── Password reset ────────────────────────────────────────────────────────
+  requestPasswordReset: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .mutation(async ({ ctx, input }) => {
+      rateLimit(`pwreset:${input.email.toLowerCase()}`, 3, 15 * 60 * 1000);
+      rateLimit(`pwreset-ip:${ctx.req.ip ?? "unknown"}`, 10, 15 * 60 * 1000);
+
+      const email = input.email.toLowerCase();
+      const [user] = await ctx.db
+        .select({ id: users.id, email: users.email, passwordHash: users.passwordHash })
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+
+      // Always return success — never reveal whether an email is registered.
+      if (user && user.passwordHash) {
+        const raw = crypto.randomBytes(32).toString("hex");
+        const tokenHash = crypto.createHash("sha256").update(raw).digest("hex");
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+        await ctx.db.insert(passwordResetTokens).values({ userId: user.id, tokenHash, expiresAt });
+        const base = (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim();
+        void sendPasswordResetEmail(user.email, `${base}/reset-password?token=${raw}`);
+      }
+      return { success: true };
+    }),
+
+  resetPassword: publicProcedure
+    .input(z.object({
+      token: z.string().min(32),
+      password: z.string().min(8, "Password must be at least 8 characters"),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      rateLimit(`pwreset-confirm-ip:${ctx.req.ip ?? "unknown"}`, 10, 15 * 60 * 1000);
+
+      const tokenHash = crypto.createHash("sha256").update(input.token).digest("hex");
+      const [row] = await ctx.db
+        .select()
+        .from(passwordResetTokens)
+        .where(eq(passwordResetTokens.tokenHash, tokenHash))
+        .limit(1);
+
+      if (!row || row.usedAt || row.expiresAt < new Date()) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "This reset link is invalid or has expired. Request a new one." });
+      }
+
+      const passwordHash = await hashPassword(input.password);
+      await ctx.db.update(users).set({ passwordHash }).where(eq(users.id, row.userId));
+      await ctx.db.update(passwordResetTokens).set({ usedAt: new Date() }).where(eq(passwordResetTokens.id, row.id));
+      // Invalidate all existing sessions for safety
+      await ctx.db.delete(sessions).where(eq(sessions.userId, row.userId));
+
+      return { success: true };
     }),
 
   // ── Current user ──────────────────────────────────────────────────────────

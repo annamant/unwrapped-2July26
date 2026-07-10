@@ -5,6 +5,7 @@ import { reservations, drops, businesses, locations, users } from "../db/schema"
 import { TRPCError } from "@trpc/server";
 import { generateReferenceCode } from "../auth/oauth";
 import { stripeEnabled, createPaymentIntent, retrievePaymentIntent, refundPaymentIntent } from "../payments/stripe";
+import { sendReservationConfirmationEmail } from "../notifications/dispatch";
 import crypto from "crypto";
 
 function generateQRHash(): string {
@@ -133,6 +134,35 @@ export const reservationsRouter = router({
           })
           .returning();
 
+        // Confirmation email — fire-and-forget, must never block the ticket
+        void (async () => {
+          const [info] = await ctx.db
+            .select({
+              businessName: businesses.name,
+              address: locations.address,
+              email: users.email,
+            })
+            .from(drops)
+            .innerJoin(businesses, eq(drops.businessId, businesses.id))
+            .innerJoin(locations, eq(drops.locationId, locations.id))
+            .innerJoin(users, eq(users.id, reservation.userId))
+            .where(eq(drops.id, reservation.dropId))
+            .limit(1);
+          if (info?.email) {
+            await sendReservationConfirmationEmail({
+              to: info.email,
+              dropTitle: drop.title,
+              businessName: info.businessName,
+              address: info.address,
+              collectionStart: new Date(drop.collectionStart),
+              collectionEnd: new Date(drop.collectionEnd),
+              pricePence: drop.price,
+              referenceCode: reservation.referenceCode,
+              reservationId: reservation.id,
+            });
+          }
+        })().catch(err => console.error("[reservations] confirmation email failed:", err));
+
         return reservation;
       } catch (err: any) {
         if (err?.code === "23505" && err?.constraint === "reservations_stripe_payment_intent_unique") {
@@ -225,7 +255,7 @@ export const reservationsRouter = router({
       if (now >= twentyFourHoursBeforeWindow) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Cannot cancel within 24 hours of collection. Contact Unwrapped support.",
+          message: "Cannot cancel within 24 hours of collection. Contact anna@shopunwrapped.com for help.",
         });
       }
 

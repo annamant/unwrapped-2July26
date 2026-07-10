@@ -230,6 +230,54 @@ export const dropsRouter = router({
       return drop;
     }),
 
+  // Business: edit a drop's presentational fields (safe — doesn't touch
+  // inventory or existing reservations). Quantity can only be increased;
+  // the collection window can only be extended, never shortened, so existing
+  // ticket-holders are never stranded.
+  update: businessOwnerProcedure
+    .input(z.object({
+      dropId: z.string().uuid(),
+      title: z.string().min(1).max(100).optional(),
+      description: z.string().max(1000).optional(),
+      imageUrl: z.string().url().nullable().optional(),
+      addQuantity: z.number().int().positive().max(999).optional(),
+      collectionEnd: z.string().datetime().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const [drop] = await ctx.db
+        .select()
+        .from(drops)
+        .where(and(eq(drops.id, input.dropId), eq(drops.businessId, ctx.business.id)))
+        .limit(1);
+
+      if (!drop) throw new TRPCError({ code: "NOT_FOUND", message: "Drop not found" });
+      if (drop.status === "cancelled" || drop.status === "expired") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "This drop can no longer be edited" });
+      }
+
+      if (input.collectionEnd && new Date(input.collectionEnd) <= new Date(drop.collectionEnd)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "The collection window can only be extended" });
+      }
+
+      const [updated] = await ctx.db
+        .update(drops)
+        .set({
+          ...(input.title !== undefined && { title: input.title }),
+          ...(input.description !== undefined && { description: input.description }),
+          ...(input.imageUrl !== undefined && { imageUrl: input.imageUrl }),
+          ...(input.collectionEnd !== undefined && { collectionEnd: new Date(input.collectionEnd) }),
+          ...(input.addQuantity !== undefined && {
+            totalQuantity: sql`${drops.totalQuantity} + ${input.addQuantity}`,
+            availableQuantity: sql`${drops.availableQuantity} + ${input.addQuantity}`,
+            status: sql`CASE WHEN ${drops.status} = 'sold_out'::drop_status THEN 'active'::drop_status ELSE ${drops.status} END`,
+          }),
+        })
+        .where(eq(drops.id, input.dropId))
+        .returning();
+
+      return updated;
+    }),
+
   // Business: cancel a drop
   cancel: businessOwnerProcedure
     .input(z.object({
