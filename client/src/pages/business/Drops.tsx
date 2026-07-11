@@ -4,6 +4,7 @@ import { trpc } from "../../trpc";
 import { DashLayout, StatusBadge } from "./Dashboard";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
+import ImageUpload from "../../components/ImageUpload";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -224,8 +225,8 @@ export default function Drops() {
                     <EditField label="Description">
                       <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows={3} style={{ ...editInputStyle, resize: "vertical" }} maxLength={1000} />
                     </EditField>
-                    <EditField label="Image URL">
-                      <input value={editForm.imageUrl} onChange={e => setEditForm(f => ({ ...f, imageUrl: e.target.value }))} placeholder="https://…" style={editInputStyle} />
+                    <EditField label="Photo">
+                      <ImageUpload value={editForm.imageUrl} onChange={(url) => setEditForm(f => ({ ...f, imageUrl: url }))} />
                     </EditField>
                     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
                       <EditField label="Add stock (existing tickets unaffected)">

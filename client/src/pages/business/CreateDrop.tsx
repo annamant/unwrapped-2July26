@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { DashLayout } from "./Dashboard";
 import useIsMobile from "../../hooks/useIsMobile";
+import ImageUpload from "../../components/ImageUpload";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -102,8 +103,12 @@ export default function CreateDrop() {
                 placeholder="What is this drop? What makes it worth showing up for?"
                 style={{ ...inputStyle, resize: "vertical" }} />
             </Field>
-            <Field label="Image URL">
-              <input value={form.imageUrl} onChange={set("imageUrl")} placeholder="https://..." style={inputStyle} />
+            <Field label="Photo">
+              <ImageUpload value={form.imageUrl} onChange={(url) => setForm(prev => ({ ...prev, imageUrl: url }))} />
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
+                Or paste an image URL:
+              </p>
+              <input value={form.imageUrl} onChange={set("imageUrl")} placeholder="https://..." style={{ ...inputStyle, marginTop: 6 }} />
             </Field>
           </Section>
 
