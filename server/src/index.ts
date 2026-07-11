@@ -201,21 +201,56 @@ const upload = multer({
     },
 });
 
+// Uploads go to Cloudinary via its signed REST API (no SDK needed).
+// Env: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.
 app.post("/api/upload", upload.single("file"), async (req, res) => {
+    const user = await getUserFromRequest(req);
+    if (!user) return res.status(401).json({ error: "Sign in to upload images" });
+
     if (!req.file) {
           return res.status(400).json({ error: "No file provided" });
     }
 
-           // Storage is not configured yet. Fail loudly rather than returning a fake
-           // URL that renders as a broken image. To enable, add @aws-sdk/client-s3 and
-           // upload to S3/Cloudflare R2 here, returning the public URL:
-           //   const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
-           //   const key = `uploads/${Date.now()}-${req.file.originalname}`;
-           //   await s3.send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, Body: req.file.buffer, ContentType: req.file.mimetype }));
-           //   return res.json({ url: `${process.env.R2_PUBLIC_URL}/${key}` });
-           return res.status(501).json({
-                 error: "Image uploads aren't configured. Paste an image URL instead, or configure R2/S3 storage.",
-           });
+    const cloud = process.env.CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+    if (!cloud || !apiKey || !apiSecret) {
+          return res.status(501).json({
+                error: "Image uploads aren't configured yet. Paste an image URL instead.",
+          });
+    }
+
+    try {
+          const timestamp = Math.floor(Date.now() / 1000);
+          const folder = "drops";
+          // Signature: sha1 of the alphabetically-sorted params + api_secret
+          const toSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
+          const signature = crypto.createHash("sha1").update(toSign).digest("hex");
+
+          const form = new FormData();
+          form.append("file", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+          form.append("api_key", apiKey);
+          form.append("timestamp", String(timestamp));
+          form.append("folder", folder);
+          form.append("signature", signature);
+
+          const resp = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/image/upload`, {
+                method: "POST",
+                body: form,
+          });
+          const data = (await resp.json()) as any;
+          if (!resp.ok || !data.secure_url) {
+                console.error("[upload] Cloudinary error:", data?.error?.message ?? resp.status);
+                return res.status(502).json({ error: "Upload failed — try again or paste an image URL." });
+          }
+
+          // Serve a sane display size via Cloudinary's on-the-fly transformation
+          const url = (data.secure_url as string).replace("/upload/", "/upload/w_1600,q_auto,f_auto/");
+          return res.json({ url });
+    } catch (err) {
+          console.error("[upload] error:", err);
+          return res.status(500).json({ error: "Upload failed — try again or paste an image URL." });
+    }
 });
 
 // ─── tRPC ─────────────────────────────────────────────────────────────────────
