@@ -29,6 +29,48 @@ export default function Drops() {
     },
   });
 
+  // ── Edit drop state ──
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ title: "", description: "", imageUrl: "", addQuantity: "", collectionEnd: "" });
+  const [editError, setEditError] = useState("");
+  const updateDrop = trpc.drops.update.useMutation({
+    onSuccess: () => {
+      utils.drops.myDrops.invalidate();
+      setEditingId(null);
+      setEditError("");
+    },
+    onError: (e) => setEditError(e.message),
+  });
+
+  function startEdit(drop: any) {
+    setEditError("");
+    setEditingId(drop.id);
+    setEditForm({
+      title: drop.title ?? "",
+      description: drop.description ?? "",
+      imageUrl: drop.imageUrl ?? "",
+      addQuantity: "",
+      collectionEnd: "",
+    });
+  }
+
+  function saveEdit(drop: any) {
+    setEditError("");
+    const addQty = editForm.addQuantity ? parseInt(editForm.addQuantity) : undefined;
+    if (editForm.addQuantity && (isNaN(addQty!) || addQty! < 1)) {
+      setEditError("Added stock must be a positive number.");
+      return;
+    }
+    updateDrop.mutate({
+      dropId: drop.id,
+      ...(editForm.title !== drop.title && editForm.title.trim() && { title: editForm.title.trim() }),
+      ...(editForm.description !== (drop.description ?? "") && { description: editForm.description }),
+      ...(editForm.imageUrl !== (drop.imageUrl ?? "") && { imageUrl: editForm.imageUrl.trim() || null }),
+      ...(addQty && { addQuantity: addQty }),
+      ...(editForm.collectionEnd && { collectionEnd: new Date(editForm.collectionEnd).toISOString() }),
+    });
+  }
+
   const filtered = (drops ?? []).filter((d: any) => {
     if (filter === "active") return d.status === "active" || d.status === "live";
     if (filter === "past") return d.status === "expired" || d.status === "cancelled" || d.status === "sold_out";
@@ -102,11 +144,10 @@ export default function Drops() {
         ) : (
           <div style={{ border: `1px solid ${BORDER}` }}>
             {filtered.map((drop: any, i: number) => (
+              <div key={drop.id} style={{ borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none" }}>
               <div
-                key={drop.id}
                 style={{
                   padding: isMobile ? "16px" : "20px 24px",
-                  borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
                   display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
                   gap: isMobile ? 14 : 24, alignItems: "center",
                 }}
@@ -144,6 +185,19 @@ export default function Drops() {
                   >
                     VIEW
                   </a>
+                  {(drop.status === "active" || drop.status === "sold_out" || drop.status === "draft") && (
+                    <button
+                      onClick={() => editingId === drop.id ? setEditingId(null) : startEdit(drop)}
+                      style={{
+                        fontFamily: "'Space Mono', monospace", fontSize: 9,
+                        letterSpacing: "0.1em", color: FG,
+                        border: `1px solid ${FG}`, padding: "6px 12px",
+                        background: editingId === drop.id ? MUTED : BG, cursor: "pointer",
+                      }}
+                    >
+                      {editingId === drop.id ? "CLOSE" : "EDIT"}
+                    </button>
+                  )}
                   {(drop.status === "active" || drop.status === "draft") && (
                     <button
                       onClick={() => setCancelTarget(drop.id)}
@@ -158,6 +212,61 @@ export default function Drops() {
                     </button>
                   )}
                 </div>
+              </div>
+
+              {/* Inline editor */}
+              {editingId === drop.id && (
+                <div style={{ padding: isMobile ? "0 16px 20px" : "0 24px 24px", background: MUTED }}>
+                  <div style={{ paddingTop: 18, display: "flex", flexDirection: "column", gap: 12 }}>
+                    <EditField label="Title">
+                      <input value={editForm.title} onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))} style={editInputStyle} maxLength={100} />
+                    </EditField>
+                    <EditField label="Description">
+                      <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows={3} style={{ ...editInputStyle, resize: "vertical" }} maxLength={1000} />
+                    </EditField>
+                    <EditField label="Image URL">
+                      <input value={editForm.imageUrl} onChange={e => setEditForm(f => ({ ...f, imageUrl: e.target.value }))} placeholder="https://…" style={editInputStyle} />
+                    </EditField>
+                    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+                      <EditField label="Add stock (existing tickets unaffected)">
+                        <input type="number" min="1" value={editForm.addQuantity} onChange={e => setEditForm(f => ({ ...f, addQuantity: e.target.value }))} placeholder="e.g. 5" style={editInputStyle} />
+                      </EditField>
+                      <EditField label="Extend collection end (later than current only)">
+                        <input type="datetime-local" value={editForm.collectionEnd} onChange={e => setEditForm(f => ({ ...f, collectionEnd: e.target.value }))} style={editInputStyle} />
+                      </EditField>
+                    </div>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, margin: 0 }}>
+                      Price, date and start time can't be edited once a drop is live — cancel and recreate if those are wrong (refunds are automatic).
+                    </p>
+                    {editError && (
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, margin: 0 }}>{editError}</p>
+                    )}
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <button
+                        onClick={() => saveEdit(drop)}
+                        disabled={updateDrop.isPending}
+                        style={{
+                          padding: "11px 20px", background: FG, color: BG, border: "none",
+                          fontFamily: "'Space Mono', monospace", fontSize: 10,
+                          letterSpacing: "0.1em", cursor: "pointer",
+                        }}
+                      >
+                        {updateDrop.isPending ? "SAVING…" : "SAVE CHANGES"}
+                      </button>
+                      <button
+                        onClick={() => { setEditingId(null); setEditError(""); }}
+                        style={{
+                          padding: "11px 20px", border: `1px solid ${BORDER}`, background: BG, color: FG,
+                          fontFamily: "'Space Mono', monospace", fontSize: 10,
+                          letterSpacing: "0.1em", cursor: "pointer",
+                        }}
+                      >
+                        DISCARD
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
               </div>
             ))}
           </div>
@@ -206,6 +315,23 @@ export default function Drops() {
         )}
       </div>
     </DashLayout>
+  );
+}
+
+const editInputStyle: React.CSSProperties = {
+  width: "100%", padding: "10px 12px", boxSizing: "border-box",
+  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+  border: `1px solid ${BORDER}`, background: BG, color: FG, outline: "none",
+};
+
+function EditField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, display: "block", marginBottom: 5 }}>
+        {label}
+      </label>
+      {children}
+    </div>
   );
 }
 
