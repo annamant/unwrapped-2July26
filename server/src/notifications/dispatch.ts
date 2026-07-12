@@ -103,46 +103,48 @@ async function sendDropEmail(to: string, drop: DropPayload) {
 
 // ─── Business application emails ───────────────────────────────────────────────
 
-export async function sendApplicationApprovedEmail(to: string, businessName: string) {
-    const key = process.env.RESEND_API_KEY;
-    if (!key) return;
+export async function sendApplicationApprovedEmail(to: string, businessName: string, setupUrl: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
 
-    try {
-          await fetch("https://api.resend.com/emails", {
-                  method: "POST",
-                  headers: {
-                            Authorization: `Bearer ${key}`,
-                            "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                            from: "Unwrapped <anna@shopunwrapped.com>",
-                            to,
-                            subject: "You're approved to list on Unwrapped",
-                            html: `
-                                      <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-                                                  <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
-                                                                Unwrapped · Business application
-                                                                            </p>
-                                                                                        <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">You're approved!</h1>
-                                                                                                    <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
-                                                                                                                  Good news — <strong>${esc(businessName)}</strong> has been approved to list on Unwrapped.
-                                                                                                                                Create your account below using this same email address (${esc(to)}) to set a password and access your business dashboard.
-                                                                                                                                            </p>
-                                                                                                                                                        <a href="https://shopunwrapped.com/business/signin"
-                                                                                                                                                                       style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
-                                                                                                                                                                                             font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">
-                                                                                                                                                                                                           SET UP YOUR ACCOUNT
-                                                                                                                                                                                                                       </a>
-                                                                                                                                                                                                                                   <p style="font-size:12px;color:#b0a89e;margin-top:32px">
-                                                                                                                                                                                                                                                 Questions? Just reply to this email.
-                                                                                                                                                                                                                                                             </p>
-                                                                                                                                                                                                                                                                       </div>
-                                                                                                                                                                                                                                                                               `,
-                  }),
-          });
-    } catch (err) {
-          console.error("[notifications] approval email error:", err);
-    }
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Unwrapped <anna@shopunwrapped.com>",
+        to,
+        subject: "You're approved to list on Unwrapped",
+        html: `
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
+            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
+              Unwrapped · Business application
+            </p>
+            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">You're approved!</h1>
+            <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
+              Good news — <strong>${esc(businessName)}</strong> has been approved to list on Unwrapped.
+              Click below to set your password (this link is valid for 7 days), then sign in with this
+              email address (${esc(to)}) to access your business dashboard.
+            </p>
+            <a href="${setupUrl}"
+               style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
+                      font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">
+              SET YOUR PASSWORD
+            </a>
+            <p style="font-size:12px;color:#b0a89e;margin-top:32px">
+              Link expired? Use "Forgot your password?" at shopunwrapped.com/reset-password with this email.
+              Questions? Just reply to this email.
+            </p>
+          </div>
+        `,
+      }),
+    });
+  } catch (err) {
+    console.error("[notifications] approval email error:", err);
+  }
 }
 
 export async function sendApplicationRejectedEmail(to: string, businessName: string, reason?: string | null) {
