@@ -188,7 +188,9 @@ export const authRouter = router({
         .limit(1);
 
       // Always return success — never reveal whether an email is registered.
-      if (user && user.passwordHash) {
+      // Note: also works for passwordless placeholder accounts (created when a
+      // business application is approved) — for them this IS the set-password flow.
+      if (user) {
         const raw = crypto.randomBytes(32).toString("hex");
         const tokenHash = crypto.createHash("sha256").update(raw).digest("hex");
         const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour

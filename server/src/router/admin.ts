@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { and, eq, desc, count, gte, lte } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
-import { businesses, businessApplications, users, drops, reservations, follows } from "../db/schema";
+import { businesses, businessApplications, users, drops, reservations, follows, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { sendApplicationApprovedEmail, sendApplicationRejectedEmail } from "../notifications/dispatch";
+import crypto from "crypto";
 
 function generateSlug(name: string): string {
   return name
@@ -99,11 +100,22 @@ export const adminRouter = router({
         .set({ status: "approved", reviewedAt: new Date() })
         .where(eq(businessApplications.id, input.applicationId));
 
-// Fire-and-forget — sendApplicationApprovedEmail no-ops if RESEND_API_KEY
-              // isn't set and swallows its own errors, so this never blocks approval.
-              void sendApplicationApprovedEmail(app.contactEmail, business.name);
-      
-              return business;
+      // Give the owner a set-password link (valid 7 days). Without this a
+      // freshly created placeholder account has no password and no way in.
+      const rawToken = crypto.randomBytes(32).toString("hex");
+      await ctx.db.insert(passwordResetTokens).values({
+        userId: ownerId,
+        tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      });
+      const base = (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim();
+      const setupUrl = `${base}/reset-password?token=${rawToken}`;
+
+      // Fire-and-forget — sendApplicationApprovedEmail no-ops if RESEND_API_KEY
+      // isn't set and swallows its own errors, so this never blocks approval.
+      void sendApplicationApprovedEmail(app.contactEmail, business.name, setupUrl);
+
+      return business;
     }),
 
   // Reject application
