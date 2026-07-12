@@ -92,6 +92,10 @@ export default function BusinessSignIn() {
             </button>
           </form>
 
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginTop: 16, textAlign: "center" }}>
+            <a href="/reset-password" style={{ color: "#888", textDecoration: "none" }}>Forgot your password, or setting it for the first time?</a>
+          </p>
+
           <div style={{ background: "#F4F4F4", padding: 16, marginTop: 20 }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#666", lineHeight: 1.6, margin: 0 }}>
               New to Unwrapped?{" "}
