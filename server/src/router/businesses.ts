@@ -48,7 +48,7 @@ export const businessesRouter = router({
       return { business: biz, followCount: followCount.count, drops: bizDrops };
     }),
 
-  // Consumer: follow a business
+  // Shopper: follow a business
   follow: protectedProcedure
     .input(z.object({ businessId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
@@ -70,7 +70,7 @@ export const businessesRouter = router({
       return { success: true };
     }),
 
-  // Consumer: unfollow a business
+  // Shopper: unfollow a business
   unfollow: protectedProcedure
     .input(z.object({ businessId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
@@ -80,7 +80,7 @@ export const businessesRouter = router({
       return { success: true };
     }),
 
-  // Consumer: check follow status for a business
+  // Shopper: check follow status for a business
   followStatus: protectedProcedure
     .input(z.object({ businessId: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
@@ -92,7 +92,7 @@ export const businessesRouter = router({
       return { following: !!row };
     }),
 
-  // Consumer: list followed businesses
+  // Shopper: list followed businesses
   myFollows: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
       .select({
@@ -105,7 +105,7 @@ export const businessesRouter = router({
       .orderBy(desc(follows.createdAt));
   }),
 
-  // Consumer: mute/unmute notifications from a business
+  // Shopper: mute/unmute notifications from a business
   toggleMute: protectedProcedure
     .input(z.object({ businessId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {

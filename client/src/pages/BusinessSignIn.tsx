@@ -18,7 +18,7 @@ export default function BusinessSignIn() {
     setError("");
     setLoading(true);
     try {
-      const result = await login.mutateAsync({ email, password });
+      const result = await login.mutateAsync({ email, password, portal: "business" });
       setSessionToken(result.token);
       window.location.href = result.redirect;
     } catch (err: any) {
@@ -107,7 +107,7 @@ export default function BusinessSignIn() {
           <div style={{ paddingTop: 32, marginTop: 32, borderTop: "1px solid #E2E2E2", textAlign: "center" }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB" }}>
               Looking for drops?{" "}
-              <a href="/signin" style={{ color: "#020202", textDecoration: "none", fontWeight: 500 }}>Consumer sign in →</a>
+              <a href="/signin" style={{ color: "#020202", textDecoration: "none", fontWeight: 500 }}>Shopper sign in →</a>
             </p>
           </div>
         </div>

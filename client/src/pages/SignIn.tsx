@@ -22,7 +22,7 @@ export default function SignIn() {
     setLoading(true);
     try {
       if (mode === "login") {
-        const result = await login.mutateAsync({ email, password });
+        const result = await login.mutateAsync({ email, password, portal: "shopper" });
         setSessionToken(result.token);
         window.location.href = result.redirect;
       } else {

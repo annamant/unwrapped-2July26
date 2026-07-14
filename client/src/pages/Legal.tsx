@@ -31,7 +31,7 @@ const CONTACT = <a href="mailto:anna@shopunwrapped.com" style={{ color: "#E8341C
 export function Privacy() {
   return (
     <LegalShell title="Privacy Policy" updated="8 JULY 2026">
-      <P>Unwrapped ("we", "us") operates shopunwrapped.com, a platform where local businesses publish time-limited drops and consumers reserve them for collection. This policy explains what personal data we collect, why, and your rights over it. Contact for anything privacy-related: {CONTACT}.</P>
+      <P>Unwrapped ("we", "us") operates shopunwrapped.com, a platform where local businesses publish time-limited drops and shoppers reserve them for collection. This policy explains what personal data we collect, why, and your rights over it. Contact for anything privacy-related: {CONTACT}.</P>
 
       <H>What we collect</H>
       <P>Account data: your name, email address, and a securely hashed password (we can never see your actual password). Preference data: the drop categories you select and the notification location zones you add (an approximate point and radius you choose — we never track your live location). Activity data: your reservations, follows, waitlist entries, and check-ins. Device data: a push-notification subscription if you enable alerts.</P>
@@ -63,7 +63,7 @@ export function Terms() {
       <P>These terms govern your use of shopunwrapped.com, operated from the United Kingdom. By creating an account or making a reservation you agree to them. Questions: {CONTACT}.</P>
 
       <H>What Unwrapped is</H>
-      <P>Unwrapped is a marketplace. Businesses list time-limited "drops"; consumers reserve and pay (where applicable) through the platform and collect in person during the stated window. The contract for the goods or services in a drop is between you and the business — Unwrapped facilitates the reservation and payment.</P>
+      <P>Unwrapped is a marketplace. Businesses list time-limited "drops"; shoppers reserve and pay (where applicable) through the platform and collect in person during the stated window. The contract for the goods or services in a drop is between you and the business — Unwrapped facilitates the reservation and payment.</P>
 
       <H>Reservations and collection</H>
       <P>A reservation entitles you to collect the item during the drop's collection window by presenting your QR ticket or reference code. If you do not collect within the window, the reservation expires and no refund is due, as the business has held the item for you.</P>

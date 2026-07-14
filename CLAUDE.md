@@ -20,7 +20,7 @@ This is the ACTIVE repository: `annamant/unwrapped-2July26`, branch `master`. Th
 
 ## Things deliberately removed — do not reintroduce
 
-- `BusinessSignIn.tsx` is login-only. A "Create account" tab was removed because it silently created consumer accounts. Business accounts are created/claimed when an admin approves an application submitted at `/business-apply` (`server/src/router/auth.ts`).
+- `BusinessSignIn.tsx` is login-only. A "Create account" tab was removed because it silently created shopper accounts. Business accounts are created/claimed when an admin approves an application submitted at `/business-apply` (`server/src/router/auth.ts`).
 - `server/src/router/reservations.ts` relies on a unique DB constraint on `stripePaymentIntentId` to prevent payment double-spend. Keep that intact.
 
 ## What already exists — do not rebuild

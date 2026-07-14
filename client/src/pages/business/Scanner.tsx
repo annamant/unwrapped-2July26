@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import QrScanner from "qr-scanner";
 import { trpc } from "../../trpc";
-import { DashLayout } from "./Dashboard";
+import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 
 const BG = "#FAFAF8";
@@ -18,6 +18,18 @@ type ScanResult = {
   dropTitle?: string;
   referenceCode?: string;
 };
+
+/** Reference codes (UW-XXXXXX) vs QR hash (hex — case-sensitive). */
+function parseCheckinCode(trimmed: string): { referenceCode?: string; qrCodeHash?: string } {
+  const upper = trimmed.toUpperCase();
+  if (/^UW-[A-Z0-9]{6}$/.test(upper)) {
+    return { referenceCode: upper };
+  }
+  if (/^[A-Z0-9]{6}$/.test(upper)) {
+    return { referenceCode: `UW-${upper}` };
+  }
+  return { qrCodeHash: trimmed };
+}
 
 export default function Scanner() {
   const [mode, setMode] = useState<"manual" | "camera">("manual");
@@ -62,13 +74,9 @@ export default function Scanner() {
     if (!trimmed) return;
     setResult(null);
     setOutsideWindow(false);
-    const upper = trimmed.toUpperCase();
-    // Reference code (UW-XXXXXX) vs QR hash (hex — case-sensitive, don't uppercase)
-    const isRef = /^UW-[A-Z0-9]{6}$/.test(upper) || /^[A-Z0-9]{6}$/.test(upper);
     setLastCode(trimmed);
     checkin.mutate({
-      referenceCode: isRef ? upper : undefined,
-      qrCodeHash: !isRef ? trimmed : undefined,
+      ...parseCheckinCode(trimmed),
       forceAccept: false,
     });
   }
@@ -116,18 +124,16 @@ export default function Scanner() {
 
   function handleForceAccept() {
     const trimmed = lastCode.trim();
-    const upper = trimmed.toUpperCase();
-    const isRef = /^UW-[A-Z0-9]{6}$/.test(upper) || /^[A-Z0-9]{6}$/.test(upper);
+    if (!trimmed) return;
     forceCheckin.mutate({
-      referenceCode: isRef ? upper : undefined,
-      qrCodeHash: !isRef ? trimmed : undefined,
+      ...parseCheckinCode(trimmed),
       forceAccept: true,
     });
   }
 
   const isMobile = useIsMobile(768);
   return (
-    <DashLayout>
+    <BusinessShell>
       <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 560 }}>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, marginBottom: 8 }}>
           Scanner
@@ -312,6 +318,6 @@ export default function Scanner() {
           </button>
         )}
       </div>
-    </DashLayout>
+    </BusinessShell>
   );
 }

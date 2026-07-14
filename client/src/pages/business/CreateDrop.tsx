@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
-import { DashLayout } from "./Dashboard";
+import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import ImageUpload from "../../components/ImageUpload";
 
@@ -81,7 +81,7 @@ export default function CreateDrop() {
   }
 
   return (
-    <DashLayout>
+    <BusinessShell>
       <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 700 }}>
         <div style={{ marginBottom: 36 }}>
           <a href="/dashboard/drops" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}>
@@ -231,7 +231,7 @@ export default function CreateDrop() {
           </p>
         </div>
       </div>
-    </DashLayout>
+    </BusinessShell>
   );
 }
 

@@ -10,6 +10,7 @@ import {
 } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { sendPasswordResetEmail } from "../notifications/dispatch";
+import { resolveLoginRedirect } from "../auth/resolveLoginRedirect";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
 
@@ -128,6 +129,7 @@ export const authRouter = router({
     .input(z.object({
       email: z.string().email(),
       password: z.string(),
+      portal: z.enum(["shopper", "business"]).default("shopper"),
     }))
     .mutation(async ({ ctx, input }) => {
       rateLimit(`login:${input.email.toLowerCase()}`, 10, 10 * 60 * 1000);
@@ -152,8 +154,10 @@ export const authRouter = router({
       // are promoted to admin on login. Removes the need for manual DB edits.
       const adminEmails = (process.env.ADMIN_EMAILS ?? "")
         .split(",").map(e => e.trim().toLowerCase()).filter(Boolean);
-      if (user.role !== "admin" && adminEmails.includes(user.email)) {
+      let role = user.role;
+      if (role !== "admin" && adminEmails.includes(user.email)) {
         await ctx.db.update(users).set({ role: "admin" }).where(eq(users.id, user.id));
+        role = "admin";
       }
 
       const token = await createSession(ctx, user.id);
@@ -164,11 +168,11 @@ export const authRouter = router({
         .where(eq(businesses.ownerId, user.id))
         .limit(1);
 
-      const redirect = !user.onboardingComplete
-        ? "/onboarding"
-        : business?.status === "active"
-        ? "/dashboard"
-        : "/home";
+      const redirect = resolveLoginRedirect(
+        { onboardingComplete: user.onboardingComplete, role },
+        business,
+        input.portal,
+      );
 
       return { success: true, redirect, token };
     }),

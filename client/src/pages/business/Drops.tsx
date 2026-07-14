@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
-import { DashLayout, StatusBadge } from "./Dashboard";
+import BusinessShell from "../../components/business/BusinessShell";
+import { StatusBadge } from "./Dashboard";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
 import ImageUpload from "../../components/ImageUpload";
@@ -85,7 +86,7 @@ export default function Drops() {
   ];
 
   return (
-    <DashLayout>
+    <BusinessShell>
       <div style={{ padding: isMobile ? "24px 16px" : "40px 48px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
@@ -315,7 +316,7 @@ export default function Drops() {
           </div>
         )}
       </div>
-    </DashLayout>
+    </BusinessShell>
   );
 }
 

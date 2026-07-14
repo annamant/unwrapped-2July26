@@ -185,7 +185,7 @@ export const reservationsRouter = router({
       }
     }),
 
-  // Get a single reservation (consumer viewing their ticket)
+  // Get a single reservation (shopper viewing their ticket)
   getById: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
@@ -233,7 +233,7 @@ export const reservationsRouter = router({
         .orderBy(desc(reservations.createdAt));
     }),
 
-  // Cancel a reservation (consumer, >24h before collection)
+  // Cancel a reservation (shopper, >24h before collection)
   cancel: protectedProcedure
     .input(z.object({ reservationId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {

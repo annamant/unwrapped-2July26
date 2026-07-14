@@ -2,132 +2,9 @@ import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
+import BusinessShell, { BG, FG, BORDER, MUTED, MUTED_FG } from "../../components/business/BusinessShell";
 
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
 const V = "#E8341C";
-
-function DashLayout({ children }: { children: React.ReactNode }) {
-  const isMobile = useIsMobile(768);
-  const [location, navigate] = useLocation();
-  const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { window.location.href = "/"; } });
-
-  const NAV = [
-    { href: "/dashboard", label: "Overview" },
-    { href: "/dashboard/drops", label: "Drops" },
-    { href: "/dashboard/drops/new", label: "New drop" },
-    { href: "/dashboard/scanner", label: "Scanner" },
-  ];
-
-  if (isMobile) {
-    // Stacked layout: compact header + horizontally scrollable nav
-    return (
-      <div style={{ minHeight: "100vh", background: BG, display: "flex", flexDirection: "column" }}>
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "14px 16px", borderBottom: `1px solid ${BORDER}`,
-        }}>
-          <div>
-            <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: FG, textDecoration: "none" }}>
-              Unwrapped
-            </a>
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginLeft: 8 }}>
-              BUSINESS
-            </span>
-          </div>
-          <button
-            onClick={() => signOut.mutate()}
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG,
-              background: "none", border: "none", cursor: "pointer", padding: 0,
-            }}
-          >
-            Sign out
-          </button>
-        </div>
-        <nav style={{
-          display: "flex", overflowX: "auto", scrollbarWidth: "none",
-          borderBottom: `1px solid ${BORDER}`, background: BG,
-          position: "sticky", top: 0, zIndex: 50,
-        }}>
-          {NAV.map(n => (
-            <a
-              key={n.href}
-              href={n.href}
-              style={{
-                padding: "12px 16px", whiteSpace: "nowrap",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: location === n.href ? FG : MUTED_FG,
-                textDecoration: "none",
-                borderBottom: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
-              }}
-            >
-              {n.label}
-            </a>
-          ))}
-        </nav>
-        <div style={{ flex: 1 }}>
-          {children}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ minHeight: "100vh", background: BG, display: "flex" }}>
-      {/* Sidebar */}
-      <div style={{ width: 220, borderRight: `1px solid ${BORDER}`, display: "flex", flexDirection: "column", flexShrink: 0 }}>
-        <div style={{ padding: "24px 24px 0", borderBottom: `1px solid ${BORDER}`, paddingBottom: 20 }}>
-          <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: FG, textDecoration: "none" }}>
-            Unwrapped
-          </a>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginTop: 4 }}>
-            BUSINESS
-          </div>
-        </div>
-        <nav style={{ flex: 1, padding: "16px 0" }}>
-          {NAV.map(n => (
-            <a
-              key={n.href}
-              href={n.href}
-              style={{
-                display: "block", padding: "11px 24px",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: location === n.href ? FG : MUTED_FG,
-                textDecoration: "none",
-                background: location === n.href ? MUTED : "transparent",
-                borderLeft: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
-              }}
-            >
-              {n.label}
-            </a>
-          ))}
-        </nav>
-        <div style={{ padding: "16px 24px", borderTop: `1px solid ${BORDER}` }}>
-          <button
-            onClick={() => signOut.mutate()}
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG,
-              background: "none", border: "none", cursor: "pointer", padding: 0,
-            }}
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div style={{ flex: 1, overflowY: "auto" }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-export { DashLayout };
 
 export default function Dashboard() {
   const isMobile = useIsMobile(768);
@@ -136,7 +13,7 @@ export default function Dashboard() {
   const [, navigate] = useLocation();
 
   return (
-    <DashLayout>
+    <BusinessShell>
       <div style={{ padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 900 }}>
         <div style={{ marginBottom: 40 }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, marginBottom: 4 }}>
@@ -245,7 +122,7 @@ export default function Dashboard() {
           )}
         </div>
       </div>
-    </DashLayout>
+    </BusinessShell>
   );
 }
 

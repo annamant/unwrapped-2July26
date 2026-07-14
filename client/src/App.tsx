@@ -16,6 +16,7 @@ import BusinessDashboard from "./pages/business/Dashboard";
 import BusinessCreateDrop from "./pages/business/CreateDrop";
 import BusinessDrops from "./pages/business/Drops";
 import BusinessScanner from "./pages/business/Scanner";
+import BusinessSettings from "./pages/business/Settings";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminApplications from "./pages/admin/Applications";
 import ResetPassword from "./pages/ResetPassword";
@@ -23,6 +24,11 @@ import { Privacy, Terms } from "./pages/Legal";
 
 export default function App() {
   const { data: user, isLoading } = trpc.auth.me.useQuery();
+
+  const postLoginPath =
+    user?.role === "admin" && !user?.hasBusiness
+      ? "/admin"
+      : "/home";
 
   if (isLoading) {
     return (
@@ -37,8 +43,8 @@ export default function App() {
   return (
     <Switch>
       {/* Public */}
-      <Route path="/" component={() => user ? <Redirect to="/home" /> : <Landing />} />
-      <Route path="/signin" component={() => user ? <Redirect to="/home" /> : <SignIn />} />
+      <Route path="/" component={() => user ? <Redirect to={postLoginPath} /> : <Landing />} />
+      <Route path="/signin" component={() => user ? <Redirect to={postLoginPath} /> : <SignIn />} />
       <Route path="/business/signin" component={() => user?.hasBusiness ? <Redirect to="/dashboard" /> : <BusinessSignIn />} />
       <Route path="/business-apply" component={BusinessApply} />
       <Route path="/reset-password" component={ResetPassword} />
@@ -46,8 +52,8 @@ export default function App() {
       <Route path="/terms" component={Terms} />
       <Route path="/business/:slug" component={BusinessProfile} />
 
-      {/* Consumer — requires auth */}
-      <Route path="/onboarding" component={() => !user ? <Redirect to="/signin" /> : <Onboarding />} />
+      {/* Shopper — requires auth */}
+      <Route path="/onboarding" component={() => !user ? <Redirect to="/signin" /> : user.hasBusiness ? <Redirect to="/dashboard" /> : user.role === "admin" ? <Redirect to="/admin" /> : <Onboarding />} />
       <Route path="/home" component={() => !user ? <Redirect to="/signin" /> : <Home />} />
       <Route path="/drop/:id" component={DropDetail} />
       <Route path="/ticket/:id" component={() => !user ? <Redirect to="/signin" /> : <Ticket />} />
@@ -58,6 +64,7 @@ export default function App() {
       <Route path="/dashboard/drops/new" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessCreateDrop />} />
       <Route path="/dashboard/drops" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessDrops />} />
       <Route path="/dashboard/scanner" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessScanner />} />
+      <Route path="/dashboard/settings" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessSettings />} />
 
       {/* Admin */}
       <Route path="/admin" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminDashboard />} />

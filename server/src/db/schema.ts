@@ -37,7 +37,7 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// ─── Location Zones (consumer notification zones) ─────────────────────────────
+// ─── Location Zones (shopper notification zones) ──────────────────────────────
 
 export const locationZones = pgTable("location_zones", {
   id: uuid("id").primaryKey().defaultRandom(),

@@ -62,7 +62,7 @@ export default function Nav() {
         {user ? (
           <>
             {user.hasBusiness && (
-              <a href="/dashboard" style={styles.link}>Dashboard</a>
+              <a href="/dashboard" style={{ ...styles.link, fontWeight: 500 }}>Business mode</a>
             )}
             {user.role === "admin" && (
               <a href="/admin" style={styles.link}>Admin</a>
