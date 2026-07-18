@@ -254,10 +254,40 @@ export const adminRouter = router({
         .limit(input.limit);
     }),
 
+  // List all reservations
+  listReservations: adminProcedure
+    .input(z.object({
+      status: z.enum(["active", "fulfilled", "cancelled", "expired"]).optional(),
+      limit: z.number().default(100),
+    }))
+    .query(async ({ ctx, input }) => {
+      const conditions = input.status ? [eq(reservations.status, input.status)] : [];
+      return ctx.db
+        .select({
+          id: reservations.id,
+          referenceCode: reservations.referenceCode,
+          status: reservations.status,
+          createdAt: reservations.createdAt,
+          fulfilledAt: reservations.fulfilledAt,
+          dropTitle: drops.title,
+          price: drops.price,
+          userEmail: users.email,
+          userName: users.name,
+          businessName: businesses.name,
+        })
+        .from(reservations)
+        .innerJoin(drops, eq(reservations.dropId, drops.id))
+        .innerJoin(users, eq(reservations.userId, users.id))
+        .innerJoin(businesses, eq(drops.businessId, businesses.id))
+        .where(conditions.length ? and(...conditions) : undefined)
+        .orderBy(desc(reservations.createdAt))
+        .limit(input.limit);
+    }),
+
   // List all drops with moderation info
   listDrops: adminProcedure
     .input(z.object({
-      status: z.enum(["active", "cancelled", "sold_out", "expired"]).optional(),
+      status: z.enum(["draft", "active", "cancelled", "sold_out", "expired"]).optional(),
       limit: z.number().default(50),
     }))
     .query(async ({ ctx, input }) => {

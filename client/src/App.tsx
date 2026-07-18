@@ -19,6 +19,10 @@ import BusinessScanner from "./pages/business/Scanner";
 import BusinessSettings from "./pages/business/Settings";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminApplications from "./pages/admin/Applications";
+import AdminUsers from "./pages/admin/Users";
+import AdminBusinesses from "./pages/admin/Businesses";
+import AdminDrops from "./pages/admin/Drops";
+import AdminReservations from "./pages/admin/Reservations";
 import ResetPassword from "./pages/ResetPassword";
 import { Privacy, Terms } from "./pages/Legal";
 
@@ -68,6 +72,10 @@ export default function App() {
 
       {/* Admin */}
       <Route path="/admin" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminDashboard />} />
+      <Route path="/admin/users" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminUsers />} />
+      <Route path="/admin/businesses" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminBusinesses />} />
+      <Route path="/admin/drops" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminDrops />} />
+      <Route path="/admin/reservations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminReservations />} />
       <Route path="/admin/applications" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApplications />} />
 
       {/* 404 */}

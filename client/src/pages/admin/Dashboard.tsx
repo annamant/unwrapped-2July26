@@ -17,6 +17,10 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 
   const NAV = [
     { href: "/admin", label: "Overview" },
+    { href: "/admin/users", label: "Users" },
+    { href: "/admin/businesses", label: "Businesses" },
+    { href: "/admin/drops", label: "Drops" },
+    { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
   ];
 
@@ -43,21 +47,23 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
           </button>
         </div>
         <nav style={{ display: "flex", overflowX: "auto", scrollbarWidth: "none", borderBottom: `1px solid ${BORDER}` }}>
-          {NAV.map(n => (
+          {NAV.map(n => {
+            const active = n.href === "/admin" ? location === "/admin" : location.startsWith(n.href);
+            return (
             <a
               key={n.href}
               href={n.href}
               style={{
                 padding: "12px 16px", whiteSpace: "nowrap",
                 fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: location === n.href ? FG : MUTED_FG,
+                color: active ? FG : MUTED_FG,
                 textDecoration: "none",
-                borderBottom: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
+                borderBottom: active ? `2px solid ${FG}` : "2px solid transparent",
               }}
             >
               {n.label}
             </a>
-          ))}
+          );})}
         </nav>
         <div style={{ flex: 1 }}>{children}</div>
       </div>
@@ -76,22 +82,24 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <nav style={{ flex: 1, padding: "12px 0" }}>
-          {NAV.map(n => (
+          {NAV.map(n => {
+            const active = n.href === "/admin" ? location === "/admin" : location.startsWith(n.href);
+            return (
             <a
               key={n.href}
               href={n.href}
               style={{
                 display: "block", padding: "10px 20px",
                 fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: location === n.href ? FG : MUTED_FG,
+                color: active ? FG : MUTED_FG,
                 textDecoration: "none",
-                background: location === n.href ? MUTED : "transparent",
-                borderLeft: location === n.href ? `2px solid ${FG}` : "2px solid transparent",
+                background: active ? MUTED : "transparent",
+                borderLeft: active ? `2px solid ${FG}` : "2px solid transparent",
               }}
             >
               {n.label}
             </a>
-          ))}
+          );})}
         </nav>
         <div style={{ padding: "16px 20px", borderTop: `1px solid ${BORDER}` }}>
           <button
@@ -129,26 +137,39 @@ export default function AdminDashboard() {
         {/* Stats grid */}
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
           {[
-            { label: "Total users", value: stats?.totalUsers },
-            { label: "Total businesses", value: stats?.totalBusinesses },
-            { label: "Active drops", value: stats?.activeDrops },
-            { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0 },
-            { label: "Total reservations", value: stats?.totalReservations },
-            { label: "Fulfillments today", value: stats?.fulfillmentsToday },
+            { label: "Total users", value: stats?.totalUsers, href: "/admin/users" },
+            { label: "Total businesses", value: stats?.totalBusinesses, href: "/admin/businesses" },
+            { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
+            { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
+            { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
+            { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
             { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
             { label: "Platform take", value: stats?.platformRevenue != null ? `£${(stats.platformRevenue / 100).toFixed(2)}` : "—" },
-          ].map(({ label, value, accent }) => (
-            <div key={label} style={{ background: BG, padding: "24px 20px" }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
-                fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
-              }}>
-                {value ?? "—"}
+          ].map(({ label, value, accent, href }) => {
+            const inner = (
+              <>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
+                  fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
+                }}>
+                  {value ?? "—"}
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                  {label}{href ? " →" : ""}
+                </div>
+              </>
+            );
+            return href ? (
+              <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
+                {inner}
+              </a>
+            ) : (
+              <div key={label} style={{ background: BG, padding: "24px 20px" }}>
+                {inner}
               </div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>{label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Pending applications shortcut */}
@@ -169,8 +190,13 @@ export default function AdminDashboard() {
 
         {/* Recent drops */}
         <div>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 16 }}>
-            RECENT DROPS
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em" }}>
+              RECENT DROPS
+            </div>
+            <a href="/admin/drops" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textDecoration: "none" }}>
+              View all →
+            </a>
           </div>
           <div style={{ border: `1px solid ${BORDER}` }}>
             {!recentDrops?.length ? (
