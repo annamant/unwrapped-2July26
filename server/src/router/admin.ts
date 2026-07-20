@@ -1,10 +1,70 @@
 import { z } from "zod";
-import { and, eq, desc, count, gte, lte } from "drizzle-orm";
+import { and, eq, desc, count, gte, lte, sql } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
-import { businesses, businessApplications, users, drops, reservations, follows, passwordResetTokens } from "../db/schema";
+import { businesses, businessApplications, users, drops, reservations, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
-import { sendApplicationApprovedEmail, sendApplicationRejectedEmail } from "../notifications/dispatch";
+import {
+  sendApplicationApprovedEmail,
+  sendApplicationRejectedEmail,
+  sendBusinessClaimInviteEmail,
+} from "../notifications/dispatch";
 import crypto from "crypto";
+import type { DB } from "../db";
+
+const BUSINESS_CATEGORIES = [
+  "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
+  "Art & Culture", "Books & Music", "Sports & Outdoor", "Tech & Gadgets",
+  "Kids & Family", "Services & Experiences",
+] as const;
+
+const importRowSchema = z.object({
+  name: z.string().min(1).max(120),
+  // Optional for directory seeding (e.g. Google Maps scrape without email enrichment).
+  // When omitted, the business is owned by a shared unclaimed placeholder account
+  // and no claim invite is sent.
+  contactEmail: z.string().email().optional(),
+  category: z.enum(BUSINESS_CATEGORIES),
+  city: z.string().min(1).max(80),
+  address: z.string().max(200).optional(),
+  postcode: z.string().max(20).optional(),
+  instagramHandle: z.string().max(80).optional(),
+  website: z.string().max(200).optional(),
+  description: z.string().max(2000).optional(),
+});
+
+const UNCLAIMED_OWNER_EMAIL = "unclaimed-directory@shopunwrapped.com";
+
+async function getUnclaimedOwnerId(db: DB): Promise<string> {
+  const [existing] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, UNCLAIMED_OWNER_EMAIL))
+    .limit(1);
+  if (existing) return existing.id;
+
+  const [created] = await db
+    .insert(users)
+    .values({
+      email: UNCLAIMED_OWNER_EMAIL,
+      name: "Unclaimed Directory",
+      role: "consumer",
+      onboardingComplete: true,
+    })
+    .returning({ id: users.id });
+  return created.id;
+}
+
+type ProvisionInput = {
+  name: string;
+  contactEmail: string;
+  category: string;
+  city: string;
+  address?: string;
+  postcode?: string;
+  instagramHandle?: string;
+  website?: string;
+  description?: string;
+};
 
 function generateSlug(name: string): string {
   return name
@@ -13,6 +73,79 @@ function generateSlug(name: string): string {
     .replace(/\s+/g, "-")
     .slice(0, 50)
     + "-" + Math.random().toString(36).slice(2, 6);
+}
+
+function clientBaseUrl(): string {
+  return (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim();
+}
+
+/** Create (or reuse) a passwordless owner + active business. Optionally email a claim link. */
+async function provisionClaimableBusiness(
+  db: DB,
+  input: ProvisionInput,
+  opts: { sendInvite: boolean; emailKind: "approval" | "claim" },
+) {
+  const email = input.contactEmail.toLowerCase();
+  const [owner] = await db
+    .select({ id: users.id, passwordHash: users.passwordHash })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  let ownerId = owner?.id;
+  let createdPlaceholder = false;
+  if (!ownerId) {
+    const [placeholder] = await db
+      .insert(users)
+      .values({ email, name: input.name, role: "consumer", onboardingComplete: false })
+      .returning();
+    ownerId = placeholder.id;
+    createdPlaceholder = true;
+  }
+
+  const [business] = await db
+    .insert(businesses)
+    .values({
+      ownerId,
+      name: input.name,
+      slug: generateSlug(input.name),
+      description: input.description ?? undefined,
+      category: input.category,
+      contactEmail: email,
+      instagramHandle: input.instagramHandle ?? undefined,
+      website: input.website ?? undefined,
+      city: input.city,
+      address: input.address ?? undefined,
+      postcode: input.postcode ?? undefined,
+      status: "active",
+      approvedAt: new Date(),
+    })
+    .returning();
+
+  // Approval always emails (same as before). Claim invites only go to accounts
+  // that still need a password — existing signed-up owners already have access.
+  const needsPassword = createdPlaceholder || !owner?.passwordHash;
+  const shouldEmail =
+    opts.sendInvite && (opts.emailKind === "approval" || needsPassword);
+  let inviteSent = false;
+
+  if (shouldEmail) {
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    await db.insert(passwordResetTokens).values({
+      userId: ownerId,
+      tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+    const setupUrl = `${clientBaseUrl()}/reset-password?token=${rawToken}`;
+    if (opts.emailKind === "approval") {
+      void sendApplicationApprovedEmail(email, business.name, setupUrl);
+    } else {
+      void sendBusinessClaimInviteEmail(email, business.name, setupUrl);
+    }
+    inviteSent = true;
+  }
+
+  return { business, inviteSent, ownerId };
 }
 
 export const adminRouter = router({
@@ -57,65 +190,134 @@ export const adminRouter = router({
       if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
       if (app.status !== "pending") throw new TRPCError({ code: "BAD_REQUEST", message: "Application already reviewed" });
 
-      // Find the applicant's user account by contactEmail. If they haven't
-      // registered yet, create a passwordless placeholder account — they claim
-      // it by registering with the same email (handled in auth.register).
-      const email = app.contactEmail.toLowerCase();
-      const [owner] = await ctx.db
-        .select()
-        .from(users)
-        .where(eq(users.email, email))
-        .limit(1);
-
-      let ownerId = owner?.id;
-      if (!ownerId) {
-        const [placeholder] = await ctx.db
-          .insert(users)
-          .values({ email, name: app.name, role: "consumer", onboardingComplete: false })
-          .returning();
-        ownerId = placeholder.id;
-      }
-
-      const [business] = await ctx.db
-        .insert(businesses)
-        .values({
-          ownerId,
+      const { business } = await provisionClaimableBusiness(
+        ctx.db,
+        {
           name: app.name,
-          slug: generateSlug(app.name),
-          description: app.description ?? undefined,
-          category: app.category,
           contactEmail: app.contactEmail,
-          instagramHandle: app.instagramHandle ?? undefined,
-          website: app.website ?? undefined,
+          category: app.category,
           city: app.city,
           address: app.address ?? undefined,
           postcode: app.postcode ?? undefined,
-          status: "active",
-          approvedAt: new Date(),
-        })
-        .returning();
+          instagramHandle: app.instagramHandle ?? undefined,
+          website: app.website ?? undefined,
+          description: app.description ?? undefined,
+        },
+        { sendInvite: true, emailKind: "approval" },
+      );
 
       await ctx.db
         .update(businessApplications)
         .set({ status: "approved", reviewedAt: new Date() })
         .where(eq(businessApplications.id, input.applicationId));
 
-      // Give the owner a set-password link (valid 7 days). Without this a
-      // freshly created placeholder account has no password and no way in.
-      const rawToken = crypto.randomBytes(32).toString("hex");
-      await ctx.db.insert(passwordResetTokens).values({
-        userId: ownerId,
-        tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      });
-      const base = (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim();
-      const setupUrl = `${base}/reset-password?token=${rawToken}`;
-
-      // Fire-and-forget — sendApplicationApprovedEmail no-ops if RESEND_API_KEY
-      // isn't set and swallows its own errors, so this never blocks approval.
-      void sendApplicationApprovedEmail(app.contactEmail, business.name, setupUrl);
-
       return business;
+    }),
+
+  // Bulk-create claimable business profiles from a list (CSV upload).
+  importBusinesses: adminProcedure
+    .input(z.object({
+      rows: z.array(importRowSchema).min(1).max(500),
+      sendInviteEmails: z.boolean().default(true),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const created: { id: string; name: string; slug: string; contactEmail: string; inviteSent: boolean }[] = [];
+      const skipped: { name: string; contactEmail: string; reason: string }[] = [];
+      let unclaimedOwnerId: string | null = null;
+
+      for (const row of input.rows) {
+        const hasEmail = Boolean(row.contactEmail?.trim());
+        const email = hasEmail
+          ? row.contactEmail!.toLowerCase()
+          : UNCLAIMED_OWNER_EMAIL;
+
+        // Skip duplicates: same name + postcode when seeded without email,
+        // otherwise same email + name.
+        const [existing] = await ctx.db
+          .select({ id: businesses.id })
+          .from(businesses)
+          .where(
+            hasEmail
+              ? and(
+                  eq(businesses.contactEmail, email),
+                  sql`lower(${businesses.name}) = ${row.name.toLowerCase()}`,
+                )
+              : and(
+                  sql`lower(${businesses.name}) = ${row.name.toLowerCase()}`,
+                  row.postcode
+                    ? sql`lower(coalesce(${businesses.postcode}, '')) = ${row.postcode.toLowerCase()}`
+                    : sql`true`,
+                ),
+          )
+          .limit(1);
+
+        if (existing) {
+          skipped.push({
+            name: row.name,
+            contactEmail: email,
+            reason: "Already exists",
+          });
+          continue;
+        }
+
+        try {
+          if (!hasEmail) {
+            if (!unclaimedOwnerId) unclaimedOwnerId = await getUnclaimedOwnerId(ctx.db);
+            const [business] = await ctx.db
+              .insert(businesses)
+              .values({
+                ownerId: unclaimedOwnerId,
+                name: row.name,
+                slug: generateSlug(row.name),
+                description: row.description ?? undefined,
+                category: row.category,
+                contactEmail: email,
+                website: row.website ?? undefined,
+                instagramHandle: row.instagramHandle ?? undefined,
+                city: row.city,
+                address: row.address ?? undefined,
+                postcode: row.postcode ?? undefined,
+                status: "active",
+                approvedAt: new Date(),
+              })
+              .returning();
+            created.push({
+              id: business.id,
+              name: business.name,
+              slug: business.slug,
+              contactEmail: business.contactEmail,
+              inviteSent: false,
+            });
+            continue;
+          }
+
+          const { business, inviteSent } = await provisionClaimableBusiness(
+            ctx.db,
+            { ...row, contactEmail: email },
+            { sendInvite: input.sendInviteEmails, emailKind: "claim" },
+          );
+          created.push({
+            id: business.id,
+            name: business.name,
+            slug: business.slug,
+            contactEmail: business.contactEmail,
+            inviteSent,
+          });
+        } catch (err) {
+          skipped.push({
+            name: row.name,
+            contactEmail: email,
+            reason: err instanceof Error ? err.message : "Failed to create",
+          });
+        }
+      }
+
+      return {
+        createdCount: created.length,
+        skippedCount: skipped.length,
+        created,
+        skipped,
+      };
     }),
 
   // Reject application
