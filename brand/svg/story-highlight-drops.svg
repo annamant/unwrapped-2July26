@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <rect width="1080" height="1080" fill="#141210"/>
+  <circle cx="540" cy="480" r="8" fill="#E8341C"/>
+  <text x="540" y="560" text-anchor="middle" font-family="monospace" font-size="48" fill="#FAFAF8" letter-spacing="8">LIVE</text>
+  <text x="540" y="620" text-anchor="middle" font-family="monospace" font-size="48" fill="#FAFAF8" letter-spacing="8">DROPS</text>
+</svg>

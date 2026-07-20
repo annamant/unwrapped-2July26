@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <rect width="1080" height="1080" fill="#FAFAF8"/>
+  <text x="80" y="100" font-family="monospace" font-size="24" fill="#7A7A7A" letter-spacing="5">RIGHT NOW IN LONDON</text>
+  <text x="80" y="520" font-family="monospace" font-weight="700" font-size="280" fill="#141210" letter-spacing="-12">12</text>
+  <text x="80" y="680" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="52" fill="#141210">things dropping near you.</text>
+  <text x="80" y="760" font-family="sans-serif" font-size="32" fill="#7A7A7A">Limited. Local. Gone when they're gone.</text>
+  <circle cx="80" cy="860" r="6" fill="#E8341C"/>
+  <text x="100" y="868" font-family="monospace" font-size="22" fill="#E8341C" letter-spacing="3">3 ENDING IN THE NEXT HOUR</text>
+</svg>

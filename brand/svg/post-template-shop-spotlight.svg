@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" fill="none">
+  <rect width="1080" height="1350" fill="#141210"/>
+  <rect x="0" y="0" width="1080" height="720" fill="#F5F4F0"/>
+  <text x="540" y="400" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#7A7A7A">[ shop photo ]</text>
+  <text x="80" y="820" font-family="monospace" font-size="24" fill="#E8341C" letter-spacing="5">SHOP SPOTLIGHT</text>
+  <text x="80" y="920" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="64" fill="#FAFAF8" letter-spacing="-2">Business name</text>
+  <text x="80" y="1000" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="36" fill="#ABABAB">Category � Neighbourhood</text>
+  <text x="80" y="1100" font-family="sans-serif" font-size="28" fill="#ABABAB">Short description of what they do and why</text>
+  <text x="80" y="1160" font-family="sans-serif" font-size="28" fill="#ABABAB">locals love them.</text>
+  <text x="80" y="1280" font-family="monospace" font-size="20" fill="#FAFAF8" letter-spacing="3">SHOPUNWRAPPED.COM</text>
+</svg>

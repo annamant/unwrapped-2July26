@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <rect width="1080" height="1080" fill="#FAFAF8"/>
+  <rect x="0" y="0" width="1080" height="6" fill="#E8341C"/>
+  <text x="80" y="100" font-family="monospace" font-size="28" fill="#E8341C" letter-spacing="6">� LIVE NOW</text>
+  <text x="80" y="220" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="72" fill="#141210" letter-spacing="-2">Shop name</text>
+  <text x="80" y="320" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="48" fill="#141210">Drop title goes here</text>
+  <text x="80" y="420" font-family="sans-serif" font-size="36" fill="#7A7A7A">�XX � Collect today 26pm</text>
+  <text x="80" y="480" font-family="sans-serif" font-size="28" fill="#7A7A7A">Streatham � SW16</text>
+  <rect x="80" y="880" width="340" height="64" fill="#141210"/>
+  <text x="250" y="924" text-anchor="middle" font-family="monospace" font-size="22" fill="#FAFAF8" letter-spacing="3">RESERVE ON UNWRAPPED</text>
+  <text x="1000" y="1040" text-anchor="end" font-family="Georgia, serif" font-weight="700" font-size="32" fill="#141210">Unwrapped</text>
+</svg>

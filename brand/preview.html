@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unwrapped — Brand Assets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAFAF8;
+      --fg: #141210;
+      --v: #E8341C;
+      --muted: #F5F4F0;
+      --muted-fg: #7A7A7A;
+      --border: #E0DFD9;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      padding: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted-fg);
+      font-size: 15px;
+      margin-bottom: 40px;
+      max-width: 640px;
+      line-height: 1.6;
+    }
+    .tokens {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .token {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+    .swatch {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+    }
+    section { margin-bottom: 56px; }
+    h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted-fg);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      background: white;
+      padding: 20px;
+    }
+    .card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      color: var(--muted-fg);
+    }
+    .card-size {
+      font-size: 12px;
+      color: var(--muted-fg);
+      margin-bottom: 16px;
+    }
+    .preview-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--muted);
+      padding: 16px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .preview-wrap.light { background: repeating-conic-gradient(#e8e8e8 0% 25%, #fff 0% 50%) 50% / 16px 16px; }
+    canvas, .render-target { display: block; max-width: 100%; height: auto; }
+    .render-target { transform-origin: top left; }
+    button {
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 10px 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover { opacity: 0.85; }
+    .bio-box {
+      border: 1px solid var(--border);
+      padding: 24px;
+      background: white;
+      max-width: 420px;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .bio-box strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      display: block;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Unwrapped brand assets</h1>
+  <p class="subtitle">
+    Open this file in Chrome or Safari, wait for fonts to load, then download PNGs for Instagram and social.
+    SVG source files are in <code>brand/svg/</code>.
+  </p>
+
+  <div class="tokens">
+    <div class="token"><span class="swatch" style="background:#FAFAF8"></span> BG #FAFAF8</div>
+    <div class="token"><span class="swatch" style="background:#141210"></span> FG #141210</div>
+    <div class="token"><span class="swatch" style="background:#E8341C"></span> V #E8341C</div>
+    <div class="token"><span class="swatch" style="background:#7A7A7A"></span> Muted #7A7A7A</div>
+  </div>
+
+  <section>
+    <h2>INSTAGRAM BIO (COPY/PASTE)</h2>
+    <div class="bio-box">
+      <strong>Unwrapped</strong>Limited local drops from independent shops near you.
+Reserve in seconds · Collect with QR
+London
+shopunwrapped.com/instagram
+    </div>
+  </section>
+
+  <section>
+    <h2>EXPORT ASSETS</h2>
+    <div class="grid" id="asset-grid"></div>
+  </section>
+
+  <script>
+    const BG = "#FAFAF8";
+    const FG = "#141210";
+    const V = "#E8341C";
+    const MUTED = "#F5F4F0";
+    const MUTED_FG = "#7A7A7A";
+    const BORDER = "#E0DFD9";
+
+    const ASSETS = [
+      { id: "profile-picture", label: "Profile picture", w: 512, h: 512, render: renderProfile },
+      { id: "og-image", label: "Link preview (OG)", w: 1200, h: 630, render: renderOgImage },
+      { id: "highlight-drops", label: "Story highlight — Drops", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "LIVE\nDROPS", "dot") },
+      { id: "highlight-how", label: "Story highlight — How it works", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "1 → 2 → 3", "steps") },
+      { id: "highlight-shops", label: "Story highlight — Shops", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "SHOPS", "shop") },
+      { id: "highlight-business", label: "Story highlight — For business", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "FOR\nBUSINESS", "business") },
+      { id: "post-drop-alert", label: "Post template — Drop alert", w: 1080, h: 1080, render: renderDropAlert },
+      { id: "post-shop-spotlight", label: "Post template — Shop spotlight", w: 1080, h: 1350, render: renderShopSpotlight },
+      { id: "post-stat", label: "Post template — Stat", w: 1080, h: 1080, render: renderStatPost },
+      { id: "story-ending-soon", label: "Story template — Ending soon", w: 1080, h: 1920, render: renderStoryEnding },
+    ];
+
+    function setFont(c, family, size, weight = "400", style = "normal") {
+      c.font = `${style} ${weight} ${size}px ${family}`;
+    }
+
+    function drawMark(c, x, y, size) {
+      const s = size;
+      c.fillStyle = FG;
+      c.fillRect(x, y, s, s);
+      c.fillStyle = BG;
+      setFont(c, "'Playfair Display', Georgia, serif", s * 0.66, "700");
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      c.fillText("U", x + s / 2, y + s * 0.58);
+      c.fillStyle = V;
+      c.beginPath();
+      c.arc(x + s * 0.85, y + s * 0.15, s * 0.08, 0, Math.PI * 2);
+      c.fill();
+    }
+
+    function renderProfile(c, w, h) {
+      c.fillStyle = FG;
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = BG;
+      setFont(c, "'Playfair Display', Georgia, serif", w * 0.66, "700");
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      c.fillText("U", w / 2, h * 0.58);
+      c.fillStyle = V;
+      c.beginPath();
+      c.arc(w * 0.78, h * 0.23, w * 0.078, 0, Math.PI * 2);
+      c.fill();
+    }
+
+    function renderOgImage(c, w, h) {
+      c.fillStyle = BG;
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = V;
+      c.fillRect(0, 0, w, 4);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'Space Mono', monospace", 18, "400");
+      c.textAlign = "left";
+      c.textBaseline = "top";
+      c.fillText("LONDON · LIMITED LOCAL DROPS", 80, 56);
+
+      c.fillStyle = FG;
+      setFont(c, "'Playfair Display', Georgia, serif", 108, "700");
+      c.fillText("Unwrapped", 80, 200);
+
+      setFont(c, "'Playfair Display', Georgia, serif", 36, "400", "italic");
+      c.fillText("Limited. Local. Gone when they're gone.", 80, 330);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'DM Sans', sans-serif", 24, "400");
+      c.fillText("Reserve in seconds · Collect with a QR code", 80, 400);
+
+      c.fillStyle = FG;
+      c.fillRect(80, 480, 260, 48);
+      c.fillStyle = BG;
+      setFont(c, "'Space Mono', monospace", 16, "400");
+      c.textAlign = "center";
+      c.fillText("SHOPUNWRAPPED.COM", 210, 496);
+
+      drawMark(c, w - 280, 80, 200);
+    }
+
+    function renderHighlight(c, w, h, text, type) {
+      c.fillStyle = FG;
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = BG;
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+
+      if (type === "dot") {
+        c.fillStyle = V;
+        c.beginPath();
+        c.arc(w / 2, h * 0.38, 8, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = BG;
+        setFont(c, "'Space Mono', monospace", 48, "400");
+        const lines = text.split("\n");
+        lines.forEach((line, i) => c.fillText(line, w / 2, h * 0.48 + i * 60));
+      } else if (type === "steps") {
+        setFont(c, "'Playfair Display', Georgia, serif", 96, "700");
+        c.fillStyle = BG;
+        c.fillText("1", w / 2, h * 0.42);
+        c.fillStyle = MUTED_FG;
+        c.fillText("→", w / 2, h * 0.52);
+        c.fillStyle = BG;
+        c.fillText("2", w / 2, h * 0.62);
+        c.fillStyle = MUTED_FG;
+        c.fillText("→", w / 2, h * 0.72);
+        c.fillStyle = BG;
+        c.fillText("3", w / 2, h * 0.82);
+      } else if (type === "shop") {
+        c.strokeStyle = BG;
+        c.lineWidth = 4;
+        c.strokeRect(w * 0.36, h * 0.35, w * 0.28, h * 0.22);
+        c.fillRect(w * 0.4, h * 0.39, w * 0.08, h * 0.12);
+        c.fillStyle = V;
+        c.fillRect(w * 0.51, h * 0.39, w * 0.1, h * 0.08);
+        c.fillStyle = MUTED_FG;
+        c.fillRect(w * 0.4, h * 0.53, w * 0.21, h * 0.02);
+      } else if (type === "business") {
+        setFont(c, "'Space Mono', monospace", 40, "400");
+        c.fillStyle = BG;
+        c.fillText("FOR", w / 2, h * 0.46);
+        c.fillStyle = V;
+        c.fillText("BUSINESS", w / 2, h * 0.54);
+      }
+    }
+
+    function renderDropAlert(c, w, h) {
+      c.fillStyle = BG;
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = V;
+      c.fillRect(0, 0, w, 6);
+
+      c.fillStyle = V;
+      setFont(c, "'Space Mono', monospace", 28, "400");
+      c.textAlign = "left";
+      c.textBaseline = "top";
+      c.fillText("● LIVE NOW", 80, 72);
+
+      c.fillStyle = FG;
+      setFont(c, "'Playfair Display', Georgia, serif", 72, "700");
+      c.fillText("Shop name", 80, 160);
+
+      setFont(c, "'Playfair Display', Georgia, serif", 48, "400", "italic");
+      c.fillText("Drop title goes here", 80, 260);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'DM Sans', sans-serif", 36, "400");
+      c.fillText("£XX · Collect today 2–6pm", 80, 370);
+      c.fillText("Streatham · SW16", 80, 430);
+
+      c.fillStyle = FG;
+      c.fillRect(80, 880, 380, 64);
+      c.fillStyle = BG;
+      setFont(c, "'Space Mono', monospace", 22, "400");
+      c.textAlign = "center";
+      c.fillText("RESERVE ON UNWRAPPED", 270, 902);
+
+      c.fillStyle = FG;
+      setFont(c, "'Playfair Display', Georgia, serif", 32, "700");
+      c.textAlign = "right";
+      c.fillText("Unwrapped", w - 80, h - 40);
+    }
+
+    function renderShopSpotlight(c, w, h) {
+      c.fillStyle = FG;
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = MUTED;
+      c.fillRect(0, 0, w, 720);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'DM Sans', sans-serif", 28, "400");
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      c.fillText("[ shop photo ]", w / 2, 360);
+
+      c.textAlign = "left";
+      c.textBaseline = "top";
+      c.fillStyle = V;
+      setFont(c, "'Space Mono', monospace", 24, "400");
+      c.fillText("SHOP SPOTLIGHT", 80, 780);
+
+      c.fillStyle = BG;
+      setFont(c, "'Playfair Display', Georgia, serif", 64, "700");
+      c.fillText("Business name", 80, 860);
+
+      setFont(c, "'Playfair Display', Georgia, serif", 36, "400", "italic");
+      c.fillStyle = "#ABABAB";
+      c.fillText("Category · Neighbourhood", 80, 960);
+
+      setFont(c, "'DM Sans', sans-serif", 28, "400");
+      c.fillText("Short description of what they do and why", 80, 1060);
+      c.fillText("locals love them.", 80, 1110);
+
+      c.fillStyle = BG;
+      setFont(c, "'Space Mono', monospace", 20, "400");
+      c.fillText("SHOPUNWRAPPED.COM", 80, 1280);
+    }
+
+    function renderStatPost(c, w, h) {
+      c.fillStyle = BG;
+      c.fillRect(0, 0, w, h);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'Space Mono', monospace", 24, "400");
+      c.textAlign = "left";
+      c.textBaseline = "top";
+      c.fillText("RIGHT NOW IN LONDON", 80, 72);
+
+      c.fillStyle = FG;
+      setFont(c, "'Space Mono', monospace", 280, "700");
+      c.fillText("12", 80, 220);
+
+      setFont(c, "'Playfair Display', Georgia, serif", 52, "400", "italic");
+      c.fillText("things dropping near you.", 80, 580);
+
+      c.fillStyle = MUTED_FG;
+      setFont(c, "'DM Sans', sans-serif", 32, "400");
+      c.fillText("Limited. Local. Gone when they're gone.", 80, 680);
+
+      c.fillStyle = V;
+      c.beginPath();
+      c.arc(86, 820, 6, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = V;
+      setFont(c, "'Space Mono', monospace", 22, "400");
+      c.fillText("3 ENDING IN THE NEXT HOUR", 100, 812);
+    }
+
+    function renderStoryEnding(c, w, h) {
+      c.fillStyle = FG;
+      c.fillRect(0, 0, w, h);
+
+      c.fillStyle = V;
+      setFont(c, "'Space Mono', monospace", 24, "400");
+      c.textAlign = "left";
+      c.textBaseline = "top";
+      c.fillText("ENDING SOON", 80, 120);
+
+      c.fillStyle = BG;
+      setFont(c, "'Playfair Display', Georgia, serif", 88, "700");
+      c.fillText("Drop title", 80, 280);
+
+      setFont(c, "'Playfair Display', Georgia, serif", 44, "400", "italic");
+      c.fillStyle = "#ABABAB";
+      c.fillText("at Shop name", 80, 400);
+
+      c.fillStyle = V;
+      setFont(c, "'Space Mono', monospace", 120, "700");
+      c.fillText("1h", 80, 520);
+
+      c.fillStyle = "#ABABAB";
+      setFont(c, "'DM Sans', sans-serif", 32, "400");
+      c.fillText("left to reserve", 80, 660);
+
+      c.fillStyle = BG;
+      c.fillRect(80, 1680, w - 160, 80);
+      c.fillStyle = FG;
+      setFont(c, "'Space Mono', monospace", 24, "400");
+      c.textAlign = "center";
+      c.fillText("SWIPE UP · SHOPUNWRAPPED.COM", w / 2, 1710);
+    }
+
+    async function waitForFonts() {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    function downloadCanvas(canvas, filename) {
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    function buildCard(asset) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const label = document.createElement("div");
+      label.className = "card-label";
+      label.textContent = asset.label;
+
+      const size = document.createElement("div");
+      size.className = "card-size";
+      size.textContent = `${asset.w} × ${asset.h}px`;
+
+      const wrap = document.createElement("div");
+      wrap.className = "preview-wrap" + (asset.id.includes("highlight") || asset.id === "profile-picture" ? "" : "");
+
+      const canvas = document.createElement("canvas");
+      canvas.width = asset.w;
+      canvas.height = asset.h;
+      const ctx = canvas.getContext("2d");
+      asset.render(ctx, asset.w, asset.h);
+
+      const preview = document.createElement("canvas");
+      const maxW = 240;
+      const scale = Math.min(1, maxW / asset.w);
+      preview.width = Math.round(asset.w * scale);
+      preview.height = Math.round(asset.h * scale);
+      const pctx = preview.getContext("2d");
+      pctx.drawImage(canvas, 0, 0, preview.width, preview.height);
+
+      wrap.appendChild(preview);
+
+      const btn = document.createElement("button");
+      btn.textContent = "DOWNLOAD PNG";
+      btn.onclick = () => downloadCanvas(canvas, `unwrapped-${asset.id}.png`);
+
+      card.append(label, size, wrap, btn);
+      return { card, canvas, asset };
+    }
+
+    async function init() {
+      await waitForFonts();
+      const grid = document.getElementById("asset-grid");
+      const built = ASSETS.map(buildCard);
+      built.forEach(({ card }) => grid.appendChild(card));
+
+      const toData = (id) => built.find(b => b.asset.id === id).canvas.toDataURL("image/png");
+
+      window.__unwrappedOgDataUrl = toData("og-image");
+      window.__unwrappedExportAll = () => {
+        const profile = built.find(b => b.asset.id === "profile-picture").canvas;
+        const icon512 = document.createElement("canvas");
+        icon512.width = 512; icon512.height = 512;
+        icon512.getContext("2d").drawImage(profile, 0, 0);
+        const icon192 = document.createElement("canvas");
+        icon192.width = 192; icon192.height = 192;
+        icon192.getContext("2d").drawImage(profile, 0, 0, 192, 192);
+        return {
+          "og-image.png": toData("og-image"),
+          "icon-512.png": icon512.toDataURL("image/png"),
+          "icon-192.png": icon192.toDataURL("image/png"),
+        };
+      };
+    }
+
+    init();
+  </script>
+</body>
+</html>

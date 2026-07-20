@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#FAFAF8"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#E8341C"/>
+  <text x="80" y="72" font-family="monospace" font-size="18" fill="#7A7A7A" letter-spacing="4">LONDON � LIMITED LOCAL DROPS</text>
+  <text x="80" y="280" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="120" fill="#141210" letter-spacing="-4">Unwrapped</text>
+  <text x="80" y="360" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="36" fill="#141210">Limited. Local. Gone when they're gone.</text>
+  <text x="80" y="420" font-family="sans-serif" font-size="24" fill="#7A7A7A">Reserve in seconds � Collect with a QR code</text>
+  <rect x="80" y="500" width="220" height="48" fill="#141210"/>
+  <text x="190" y="532" text-anchor="middle" font-family="monospace" font-size="16" fill="#FAFAF8" letter-spacing="2">SHOPUNWRAPPED.COM</text>
+  <rect x="920" y="80" width="200" height="200" fill="#141210"/>
+  <text x="1020" y="200" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="140" fill="#FAFAF8">U</text>
+  <circle cx="1080" cy="120" r="22" fill="#E8341C"/>
+</svg>

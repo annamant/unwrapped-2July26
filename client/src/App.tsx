@@ -24,6 +24,7 @@ import AdminBusinesses from "./pages/admin/Businesses";
 import AdminDrops from "./pages/admin/Drops";
 import AdminReservations from "./pages/admin/Reservations";
 import ResetPassword from "./pages/ResetPassword";
+import Instagram from "./pages/Instagram";
 import { Privacy, Terms } from "./pages/Legal";
 
 export default function App() {
@@ -51,6 +52,7 @@ export default function App() {
       <Route path="/signin" component={() => user ? <Redirect to={postLoginPath} /> : <SignIn />} />
       <Route path="/business/signin" component={() => user?.hasBusiness ? <Redirect to="/dashboard" /> : <BusinessSignIn />} />
       <Route path="/business-apply" component={BusinessApply} />
+      <Route path="/instagram" component={Instagram} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
