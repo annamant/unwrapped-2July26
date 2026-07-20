@@ -83,6 +83,9 @@ export const businesses = pgTable("businesses", {
   status: businessStatusEnum("status").default("pending").notNull(),
   rejectedAt: timestamp("rejected_at"),
   approvedAt: timestamp("approved_at"),
+  // Set when a claim-invite email has been sent for this seeded profile, so the
+  // batch sender never double-emails the same business.
+  claimInviteSentAt: timestamp("claim_invite_sent_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

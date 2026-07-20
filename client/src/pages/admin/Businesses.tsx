@@ -78,6 +78,23 @@ export default function AdminBusinesses() {
     },
   });
 
+  const { data: claimStats } = trpc.admin.claimInviteStats.useQuery();
+  const [inviteResult, setInviteResult] = useState<{
+    sentCount: number;
+    failedCount: number;
+    remaining: number;
+  } | null>(null);
+  const sendInvites = trpc.admin.sendClaimInvites.useMutation({
+    onSuccess: (data) => {
+      setInviteResult({
+        sentCount: data.sentCount,
+        failedCount: data.failedCount,
+        remaining: data.remaining,
+      });
+      utils.admin.claimInviteStats.invalidate();
+    },
+  });
+
   const FILTERS: { key: StatusFilter; label: string }[] = [
     { key: "all", label: "All" },
     { key: "active", label: "Active" },
@@ -128,6 +145,53 @@ export default function AdminBusinesses() {
             }}
           >
             {showImport ? "CLOSE IMPORT" : "IMPORT LIST"}
+          </button>
+        </div>
+
+        <div style={{
+          border: `1px solid ${BORDER}`, padding: isMobile ? 16 : 20, marginBottom: 32, background: MUTED,
+          display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16, justifyContent: "space-between",
+        }}>
+          <div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 6 }}>
+              CLAIM INVITES
+            </div>
+            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>
+              {claimStats
+                ? `${claimStats.pending} unclaimed profile${claimStats.pending === 1 ? "" : "s"} awaiting an invite · ${claimStats.invited} already sent`
+                : "Loading…"}
+            </div>
+            {inviteResult && (
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: inviteResult.failedCount ? V : "#15803D", marginTop: 6 }}>
+                Sent {inviteResult.sentCount}
+                {inviteResult.failedCount ? ` · ${inviteResult.failedCount} failed` : ""}
+                {" "}· {inviteResult.remaining} remaining
+              </div>
+            )}
+            {sendInvites.isError && (
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 6 }}>
+                {sendInvites.error.message}
+              </div>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm("Send the next 50 claim invites now?")) {
+                sendInvites.mutate({ limit: 50 });
+              }
+            }}
+            disabled={sendInvites.isPending || !claimStats?.pending}
+            style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+              padding: "12px 18px",
+              background: (sendInvites.isPending || !claimStats?.pending) ? BORDER : FG,
+              color: BG, border: "none",
+              cursor: (sendInvites.isPending || !claimStats?.pending) ? "not-allowed" : "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {sendInvites.isPending ? "SENDING…" : "SEND NEXT 50 INVITES"}
           </button>
         </div>
 

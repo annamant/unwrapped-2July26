@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, eq, desc, count, gte, lte, sql } from "drizzle-orm";
+import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, users, drops, reservations, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
@@ -318,6 +318,95 @@ export const adminRouter = router({
         created,
         skipped,
       };
+    }),
+
+  // How many seeded profiles are still waiting for a claim invite (and how many
+  // have already been sent one). Drives the "send next batch" admin button.
+  claimInviteStats: adminProcedure.query(async ({ ctx }) => {
+    const pendingWhere = and(
+      eq(businesses.status, "active"),
+      isNull(businesses.claimInviteSentAt),
+      sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
+      isNull(users.passwordHash),
+    );
+    const [{ pending }] = await ctx.db
+      .select({ pending: count() })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(pendingWhere);
+    const [{ invited }] = await ctx.db
+      .select({ invited: count() })
+      .from(businesses)
+      .where(isNotNull(businesses.claimInviteSentAt));
+    return { pending, invited };
+  }),
+
+  // Send the next batch of claim invites to seeded, still-unclaimed profiles.
+  // Sends sequentially (gentle on the shared sender) and marks each as invited
+  // so the next batch picks up different businesses. Run this ~daily.
+  sendClaimInvites: adminProcedure
+    .input(z.object({ limit: z.number().int().min(1).max(200).default(50) }))
+    .mutation(async ({ ctx, input }) => {
+      const candidates = await ctx.db
+        .select({
+          id: businesses.id,
+          name: businesses.name,
+          slug: businesses.slug,
+          contactEmail: businesses.contactEmail,
+          ownerId: businesses.ownerId,
+        })
+        .from(businesses)
+        .innerJoin(users, eq(businesses.ownerId, users.id))
+        .where(and(
+          eq(businesses.status, "active"),
+          isNull(businesses.claimInviteSentAt),
+          sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
+          isNull(users.passwordHash),
+        ))
+        .orderBy(asc(businesses.createdAt))
+        .limit(input.limit);
+
+      const sent: { name: string; contactEmail: string }[] = [];
+      const failed: { name: string; contactEmail: string; reason: string }[] = [];
+
+      for (const b of candidates) {
+        try {
+          const rawToken = crypto.randomBytes(32).toString("hex");
+          await ctx.db.insert(passwordResetTokens).values({
+            userId: b.ownerId,
+            tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          });
+          const setupUrl = `${clientBaseUrl()}/reset-password?token=${rawToken}`;
+          await sendBusinessClaimInviteEmail(b.contactEmail, b.name, setupUrl);
+          // Mark sent only after the send call resolves. If it throws we leave
+          // claimInviteSentAt null so the row is retried in the next batch.
+          await ctx.db
+            .update(businesses)
+            .set({ claimInviteSentAt: new Date() })
+            .where(eq(businesses.id, b.id));
+          sent.push({ name: b.name, contactEmail: b.contactEmail });
+        } catch (err) {
+          failed.push({
+            name: b.name,
+            contactEmail: b.contactEmail,
+            reason: err instanceof Error ? err.message : "Failed to send",
+          });
+        }
+      }
+
+      const [{ remaining }] = await ctx.db
+        .select({ remaining: count() })
+        .from(businesses)
+        .innerJoin(users, eq(businesses.ownerId, users.id))
+        .where(and(
+          eq(businesses.status, "active"),
+          isNull(businesses.claimInviteSentAt),
+          sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
+          isNull(users.passwordHash),
+        ));
+
+      return { sentCount: sent.length, failedCount: failed.length, remaining, sent, failed };
     }),
 
   // Reject application

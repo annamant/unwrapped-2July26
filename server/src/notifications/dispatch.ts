@@ -19,6 +19,12 @@ import {
 } from "../db/schema";
 import { eq, inArray, arrayContains } from "drizzle-orm";
 
+// Physical postal address required in bulk/outreach email (CAN-SPAM / PECR).
+// Set MAILING_ADDRESS in the server env — the fallback is a placeholder and must
+// be replaced before any real outreach send.
+const POSTAL_ADDRESS =
+  process.env.MAILING_ADDRESS ?? "Unwrapped · [SET MAILING_ADDRESS ENV VAR]";
+
 // Escape user-supplied strings before interpolating into email HTML (XSS).
 function esc(s: string): string {
   return s
@@ -168,20 +174,28 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
             <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · Claim your profile
             </p>
-            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">You're on Unwrapped</h1>
+            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">Tell your community what you've got</h1>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              <a href="https://shopunwrapped.com" style="color:#141210">Unwrapped</a> is a local discovery platform —
-              independent shops, cafés, studios, and makers publish short, time-limited <em>drops</em>
-              (limited releases, pop-ups, collections). Nearby shoppers get alerts and claim a spot with a QR ticket.
+              <a href="https://shopunwrapped.com" style="color:#141210">Unwrapped</a> is a new venture built by local
+              people who love independent shops. We want neighbourhoods to actually connect with the businesses around
+              them — so you're more than just a pin on a map.
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We've created a free profile for <strong>${esc(businessName)}</strong> so people in your area
-              can find you. Have a look around first:
-              <a href="https://shopunwrapped.com" style="color:#141210">shopunwrapped.com</a>
+              It's not for listing your menu or full catalogue. It's for the real moments — a new product, a discount,
+              a deal, a launch, a one-off. You post a short <em>drop</em>, nearby people get an alert, and they claim
+              their spot with a QR ticket.
+            </p>
+            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
+              We've made a free profile for <strong>${esc(businessName)}</strong> so people in your area can find you.
+              Have a look: <a href="https://shopunwrapped.com" style="color:#141210">shopunwrapped.com</a>
+            </p>
+            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
+              We're brand new, so please be patient — there'll be rough edges. But join now and you won't just be
+              using Unwrapped; you'll be one of the people who built it with us.
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
-              When you're ready, claim the profile — set a password (link valid for 7 days), then sign in with
-              ${esc(to)} to edit your page and start listing drops.
+              When you're ready, claim your profile — set a password (link valid for 7 days), then sign in with
+              ${esc(to)} to edit your page and post your first drop.
             </p>
             <a href="${setupUrl}"
                style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
@@ -190,8 +204,12 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
             </a>
             <p style="font-size:12px;color:#b0a89e;margin-top:32px">
               Not interested? You can ignore this email — nothing goes live from your side until you claim.
+              Don't want a profile at all? Reply "REMOVE" and we'll delete it and won't email again.
               Link expired? Use "Forgot your password?" at shopunwrapped.com/reset-password with this email.
               Questions? Just reply — or email <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a>.
+            </p>
+            <p style="font-size:11px;color:#c9c3ba;margin-top:16px">
+              ${esc(POSTAL_ADDRESS)}
             </p>
           </div>
         `,
