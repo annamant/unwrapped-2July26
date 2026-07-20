@@ -1,0 +1,9 @@
+(() => {
+  const add = "schoolofnaturaltherapies.co.uk\nschottmusiclondon.com\nscope.org.uk\nseacc.uk\nseacontainerslondon.com\nsecretoasisspa.co.uk\nsecretspa.co.uk\nsecuredatamgt.com\nselfridges.com\nsellierknightsbridge.com\nsense.org.uk\nseraphinapilates.com\nserenajoyoliver.com\nserenityspace.uk\nsglotanning.co.uk\nshoespa.co.uk\nshonamac.com\nshop.bl.uk\nshop.mind.org.uk\nshop.towerbridge.org.uk\nsiambreeze.co.uk\nsiamthaispacricklewood.co.uk\nsifuoskar.com\nsimplyrelaxspa.com\nsingdayt-muaythai.com\nsisterray.co.uk\nsivanandalondon.org\nsixsenses.com\nsleekbarbers.uk\nsliquespa.net\nsmithandwollensky.co.uk\nsmythstoys.com\nsnapfitness.com\nsofitelstjames.com\nsoho-sound-house.com\nsolcorfield.com\nsonomusic.co\nsotinylondon.com\nsoulbrother.com\nsoulproprietors.co.uk\nsoundsoftheuniverse.com\nsoup-dragon.co.uk\nsouthafricanshoplondon.com\nsouthbankclub.co.uk\nsouthlondonkarate.co.uk\nsouthnorwoodjitsu.com\nsouthwarkleisure.co.uk\nspaandmassage.co.uk\nspadivas.co.uk\nspaexperience.org.uk\nsparkcreative.london\nsportkaratecoalition.com\nsportsdirect.com\nssintgrading.com\nstarsgym.co.uk\nstartreerecords.com\nstationspa.co.uk\nstchristophers.org.uk\nsteakandcompany.co.uk\nsteakoutuk.com\nstillpoint.yoga\nstore.paddington.com\nstores.ray-ban.com\nstores.shopdisney.co.uk\nstrangerthanparadiserecords.com\nstreathamkitchen.com\nstreathampharmacy.co.uk\nstreathamsociety.org.uk\nsuck.uk.com\nsunnymassage.co.uk\nsuperdrug.com\nsupertonerecords.co.uk\nsw4pilates.com\nswissbutter.com\nsyct.org.uk\ntaekwondoclub.london\ntaekwondoescorpio.info\ntaichibrixton.co.uk\ntaichinews.com\ntailored-pilates.com";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()

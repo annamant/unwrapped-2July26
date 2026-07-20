@@ -1,0 +1,9 @@
+(() => {
+  const add = "maggie-olszak.co.uk\nmandarinoriental.com\nmargaretdabbs.co.uk\nmarinatto.uk\nmarriott.com\nmartialarteducation.org\nmeijimartialarts.co.uk\nmelissajanepilates.co.uk\nmenkind.co.uk\nmfeshops.com\nmiguelsboxinggym.co.uk\nmillenniumhotels.com\nmillerswayproject.com\nmind.org.uk\nmindovermatterboxing.co.uk\nmmaden.com\nmmagymlondon.com\nmojostudios.co.uk\nmoreyoga.co.uk\nmortalartacademy.co.uk\nmovementharbour.com\nmoveyourframe.com\nmungoandmaud.com\nmycrisisvolunteering.crisis.org.uk\nmyfacespa.co.uk\nmylittlesalon.co.uk\nmytime.com\nnailspa.org\nnataliefishwick.com\nnattawanthaispa.co.uk\nnaturalatmospherespa.co.uk\nnaturalwaysbodybalance.com\nneillstrain.com\nnelowellness.co.uk\nnewforms.uk\nnewschoolbjjbrixton.com\nnextdoorrecords.co.uk\nnicholaspolo.com\nnicolearendpilates.com\nniddlenoddle.com\nninja-kids.co.uk\nnorthcoterecords.com\nnorwoodcommunitygroup.co.uk\nnth12.com\nnueground.co.uk\nnuffieldhealth.com\nnypilates.co.uk\noandlhifi.co.uk\nobliquebeauty.uk\noctaviafoundation.org.uk\noff-cutbarbers.com\nolympicstudiosrecords.co.uk\nomoiyarikarate.co.uk\nomthaimassagespa.co.uk\nonbroadway161.com\noncorelondon.com\noneldn.com\nopulencethaispa.co.uk\norchidthaispa.co.uk\norcsnest.com\noruspace.co\noryatextiles.com\nourahhairsalon.co.uk\novalyoga.com\noxfam.org.uk\npalcictaekwondo.co.uk\npandoradressagency.com\npaola-yoga.com\npaolasbodybarre.com\nparagongym.co.uk\nparentstudio.co.uk\npatrickstoys.net\npaulkhair.co.uk\npeacock-pilates.com\npeckhamkravmaga.co.uk\npeckhamsoul.co.uk\npenge.new-wave-academy.com\npeninsula.com\nperolabruta.com\nphoenixeyewingtsunlondon.co.uk";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()

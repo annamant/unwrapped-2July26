@@ -1,0 +1,9 @@
+(() => {
+  const add = "instagram.com\ninverted-audio.store\nironmountain.co.uk\nislingtonboxingclub.org\nislingtonmartialarts.com\njasma.org.uk\njetts.co.uk\njigsaw-arts.co.uk\njissoacademy.com\njohansford.com\njonathanlilleywrites.com\njosephwebster.co.uk\njpstudios-pilates.com\njust-eat.co.uk\njustwilliamstoys.com\nkalaberakombat.com\nkalmafitness.co.uk\nkannikathaispa.co.uk\nkenshukai.net\nkentishtownkarate.com\nkhamamspa.com\nkhbarbers.com\nkhunnine.com\nkindmindyoga.co.uk\nkissaten.co.uk\nkniferestaurant.co.uk\nkocombatacademy.com\nkplayground.co.uk\nkrav-maga-london.co.uk\nkravmagaclasses.online\nkricketrestaurants.com\nkxu.co.uk\nlabspa.co.uk\nlacasitatapas.co.uk\nlacoste.com\nlaellondon.com\nlandmarklondon.co.uk\nlannathaiuk.com\nlarklondon.com\nlarkpilates.co.uk\nlavenderontheprimrosehill.com\nlearningtutor.co.uk\nlego.com\nleilanilondon.co.uk\nlemartialclub.com\nlemongrassboutiquespa.co.uk\nleonardohotels.co.uk\nleroyalbeauty.com\nlesalonuk.com\nlesmills.com\nlevelcrossingrecords.co.uk\nlevelout.london\nleylandsdm.co.uk\nlidl.co.uk\nlightcentre.com\nlionrecordspr.wixsite.com\nlionvibes.com\nlittlejannah.co.uk\nlittlelives.org.uk\nllivyourlife.com\nlobitogrill.com\nlocations.levi.com\nlockerroomsauna.co.uk\nlondon-toy-shop.com\nlondonbeautyspot.co.uk\nlondoncommunityboxing.com\nlondoncroydonmartialarts.com\nlondonfightacademy.com\nlondonfightfactory.com\nlondonipmanwingchun.co.uk\nlondontreehouse.com\nlongfieldhall.org.uk\nlontechpt.com\nloop-generation.com\nlostinyoga.com\nlotus-spa-wandsworth.com\nlush.com\nluxurybeautyandspa.co.uk\nlws.sumupstore.com\nmaestrorecords.uk";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()

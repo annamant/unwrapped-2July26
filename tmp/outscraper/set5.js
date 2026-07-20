@@ -1,0 +1,9 @@
+(() => {
+  const add = "phoenixyoga.co.uk\nphonicarecords.com\npias.com\npilates4you.co.uk\npilatescentral.co.uk\npilatesclinique.co.uk\npilatesindulwich.co.uk\npilatesmatwork.co.uk\npilatespt.co.uk\npilatestar.com\npilatestree.com\npilatesvita.com\npilateswithimo.com\npilateswithmariannbenko.com\npimlicotrove.co.uk\npingopongo.com\nplacesleisure.org\nplanetwax.net\npollocks-coventgarden.co.uk\npopmart.com\npopwestnorwood.co.uk\nportena.co.uk\nprintingplanetuk.com\nprivateyoga.london\nprokutbalham.co.uk\nptahkhischool.com\npuppetplanet.co.uk\npuregym.com\nputneyclinic.co.uk\nputneyexchange.co.uk\nputneyyogacentre.co.uk\npyc-studios.com\nqihealthandbeauty.co.uk\nquanspa.co.uk\nqwankido.co.uk\nrachelandmalikas.com\nradissonhotels.com\nranchodelalo.com\nrawbella.co.uk\nrebel-records.co.uk\nreckless.co.uk\nrecordtokens.co.uk\nredzhaircrazy.com\nreformerritual.co.uk\nreformerroomlondon.co.uk\nreframepilates.com\nrefreshandspa.co.uk\nreignvintage.com\nremixsalon.co.uk\nrenatapilates.co.uk\nretrofitlondon.com\nreveal-hair-beauty.ueniweb.com\nrevivemassagestudios.co.uk\nreviveyogalondon.com\nrichersounds.com\nrighttrackrecords.com\nriseaboverecordsandrelics.com\nrokit.co.uk\nrookrecords.co.uk\nrootpilates.co.uk\nroseandblossomnailspa.co.uk\nrosewoodhotels.com\nroughtrade.com\nrovr.live\nroyaltrinityhospice.london\nrupertjade.com\nsadhana-wellbeing.com\nsahajayogalondon.co.uk\nsalbox.co.uk\nsalvationarmy.org.uk\nsandakickboxingacademy.co.uk\nsangyeyoga.com\nsantamariadelsur.com\nsantilondon.com\nsarahbrownyoga.co.uk\nsas-martialarts.co.uk\nsavethechildren.org.uk\nsawasdeethaispa.co.uk\nsbtkd.com\nscanning-hub.co.uk";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()

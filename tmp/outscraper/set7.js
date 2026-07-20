@@ -1,0 +1,9 @@
+(() => {
+  const add = "tannail.co.uk\ntapertime.uk\ntapi.co.uk\nteamshark-martial-arts.com\ntempo301.co.uk\nten.co.uk\ntesco.com\ntgjonesonline.co.uk\nthailondonmassage.co.uk\nthaisensespa.co.uk\nthaispavictoria.co.uk\nthaitharaspa.com\nthe-connaught.co.uk\ntheafterschoolcookieclub.com\nthebentley-hotel.com\ntheblackkitchen.co.uk\ntheblueskitchen.com\nthebullstreatham.co.uk\nthechelseaspa.co.uk\nthecirclegymandspa.co.uk\ntheelmsacademy.org.uk\nthegaruda.net\nthegymgroup.com\nthegymway.com\nthehillsw16.com\nthehogarth.co.uk\nthehopecentre.uk\nthehotspotyoga.co.uk\ntheislandstudio.co.uk\nthekensingtonstudio.com\ntheloftpilatesstudio.co.uk\nthemartialartsplace.com\nthemayfairhotel.co.uk\nthemudroomlondon.com\ntheofficeyogaco.com\nthepilateshome.co.uk\nthepilatesstudioldn.com\ntheregentspa.co.uk\ntherestorativeplace.com\ntheshalalondon.com\nthespacelondon.co.uk\nthestorex.com\nthetaocollective.com\nthetoychest.uk\nthetoyproject.co.uk\nthetoyshop.com\nthevinylfactory.com\nthewingchunschool-sifumax.co.uk\ntheworks.co.uk\ntheyogasloth.co.uk\nthirdmanrecords.com\nthirdmanstore.co.uk\nthirdspace.london\ntht.org.uk\ntiaraorganic.com\ntiashairsalon.com\ntkdimpact.co.uk\ntmboxing.co.uk\ntofem.co.uk\ntoyfair.co.uk\ntraceynails.com\ntraid.org.uk\ntreatwell.co.uk\ntreehouseyoga.co.uk\ntrinityrestaurant.co.uk\ntriyoga.co.uk\ntrotters.co.uk\ntruepilateslondon.com\ntsunamitkd.co.uk\nturkishbathhamam.co.uk\nuk.elemis.com\nuk.webuy.com\numaa.club\nupg.org.uk\nurbanfitandfearless.com\nvalentinafrotahair.mytreatwell.co.uk\nvintage-threads.com\nvinylsignstudio.com\nvirginactive.co.uk\nvitaboutiquefitness.com";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()

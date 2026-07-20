@@ -1,0 +1,9 @@
+(() => {
+  const add = "executivefitclub.com\nexhalepilateslondon.com\nfacebook.com\nfaracharity.org\nfaracharityshops.org\nfekm-uk.com\nfeltmusic.com\nfightcitygym.co.uk\nfighterfit.com\nfightforsight.org.uk\nfighting-fit.com\nfigtreegames.com\nfisonfitness.co.uk\nfitforgym.co.uk\nfitnessfinetic.com\nfitnessfirst.co.uk\nflashback.co.uk\nflatironsteak.co.uk\nflexandreset.co.uk\nflowstatefitclub.com\nflyingfantastic.co.uk\nflyingtiger.com\nfopp.com\nforbiddenplanet.com\nformstudios.co.uk\nfosterandpartners.com\nfourseasons.com\nfoyles.co.uk\nfreeparks.co.uk\nfresha.com\nfrota-team.ch\nfullcircleqi.co.uk\nfwckungfu.com\ngame.co.uk\ngetridofit-donate.com\ngforcereformerpilates.com\ngivealittleshop.org\nglamhairstudio.uk\nglobeauty.london\nglobehouse.org\ngobanya.co.uk\ngoboxingfit.com\ngouldbarbers.co.uk\ngrapplersden.com\ngreengoatstorage.co.uk\ngym-nation.co.uk\nhamleys.com\nhammamspa.london\nhannahlondon.com\nhannahpocketyoga.com\nhappy-returns.co.uk\nharrods.com\nhayleycrosspilates.com\nheadmasters.com\nhealthfirstspa.co.uk\nherdefinition.co.uk\nheromartialartsschools.com\nhighachieverslab.com\nhighvibe.co.uk\nhiitgyms.com\nhilondonkensington.com\nhistoricroyalpalaces.com\nhmv.com\nhopburnsblack.co.uk\nhoplikeabunny.co.uk\nhospicesofhope.co.uk\nhotpodyoga.com\nhotyogabrixton.com\nhotyogasouth.com\nhrf.org.uk\nhubertessakow.co.uk\nhybrid-fma.com\niasis.uk\niconicbarbers.co.uk\nikshana-wellbeing.org\nilovepilates.org.uk\nimagehairlondon.co.uk\nimages-beauty.co.uk\ninmotiontraining.co.uk\ninspa-retreats.com";
+  const el = document.querySelector('textarea');
+  const proto = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
+  const next = el.value + '\n' + add;
+  proto.set.call(el, next);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  return el.value.split('\n').filter(Boolean).length;
+})()
