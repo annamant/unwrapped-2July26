@@ -50,18 +50,13 @@ export default function Instagram() {
 
         {/* Logo mark */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
-          <div style={{ position: "relative", width: 72, height: 72, background: FG }}>
-            <span style={{
-              position: "absolute", inset: 0,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "'Playfair Display', serif", fontWeight: 700,
-              fontSize: 44, color: BG, paddingTop: 6,
-            }}>U</span>
-            <span style={{
-              position: "absolute", top: 10, right: 10,
-              width: 10, height: 10, borderRadius: "50%", background: V,
-            }} />
-          </div>
+          <img
+            src="/icon-512.png"
+            alt="Unwrapped"
+            width={72}
+            height={72}
+            style={{ display: "block" }}
+          />
         </div>
 
         <h1 style={{
