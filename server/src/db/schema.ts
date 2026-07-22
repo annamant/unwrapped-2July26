@@ -1,5 +1,5 @@
 import {
-  pgTable, text, integer, boolean, timestamp, doublePrecision, jsonb, pgEnum, uuid, varchar, uniqueIndex
+  pgTable, text, integer, boolean, timestamp, real, jsonb, pgEnum, uuid, varchar, uniqueIndex
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -43,9 +43,9 @@ export const locationZones = pgTable("location_zones", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   label: text("label").notNull(), // "Home", "Work", etc.
-  latitude: doublePrecision("latitude").notNull(),
-  longitude: doublePrecision("longitude").notNull(),
-  radiusKm: doublePrecision("radius_km").default(2).notNull(),
+  latitude: real("latitude").notNull(),
+  longitude: real("longitude").notNull(),
+  radiusKm: real("radius_km").default(2).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -127,8 +127,8 @@ export const locations = pgTable("locations", {
   address: text("address").notNull(),
   city: text("city").notNull(),
   postcode: text("postcode"),
-  latitude: doublePrecision("latitude").notNull(),
-  longitude: doublePrecision("longitude").notNull(),
+  latitude: real("latitude").notNull(),
+  longitude: real("longitude").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
