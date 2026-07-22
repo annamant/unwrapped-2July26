@@ -19,12 +19,6 @@ import {
 } from "../db/schema";
 import { eq, inArray, arrayContains } from "drizzle-orm";
 
-// Physical postal address required in bulk/outreach email (CAN-SPAM / PECR).
-// Set MAILING_ADDRESS in the server env — the fallback is a placeholder and must
-// be replaced before any real outreach send.
-const POSTAL_ADDRESS =
-  process.env.MAILING_ADDRESS ?? "Unwrapped · [SET MAILING_ADDRESS ENV VAR]";
-
 // Escape user-supplied strings before interpolating into email HTML (XSS).
 function esc(s: string): string {
   return s
@@ -174,24 +168,28 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
             <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · Claim your profile
             </p>
-            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">Tell your community what you've got</h1>
+            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">Help us pilot something for local shops</h1>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              <a href="https://shopunwrapped.com" style="color:#141210">Unwrapped</a> is a new venture built by local
-              people who love independent shops. We want neighbourhoods to actually connect with the businesses around
-              them — so you're more than just a pin on a map.
+              We're running a small pilot for independent shops, cafés, studios and makers. It's called
+              <a href="https://shopunwrapped.com" style="color:#141210">Unwrapped</a>, and it is built by local
+              people who want neighbourhoods to do more than find businesses on a map.
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              It's not for listing your menu or full catalogue. It's for the real moments — a new product, a discount,
-              a deal, a launch, a one-off. You post a short <em>drop</em>, nearby people get an alert, and they claim
-              their spot with a QR ticket.
+              Unwrapped gives businesses a way to tell nearby people when something is happening — a new product,
+              a discount, a deal, a launch or a one-off. You post a short <em>drop</em>; nearby shoppers get an
+              alert and can claim a QR ticket. It isn't for listing your whole menu or catalogue — it's for the
+              moments worth sharing.
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We've made a free profile for <strong>${esc(businessName)}</strong> so people in your area can find you.
-              Have a look: <a href="https://shopunwrapped.com" style="color:#141210">shopunwrapped.com</a>
+              We've made a free profile for <strong>${esc(businessName)}</strong> using publicly available business
+              information, such as your Google Maps listing or website. We'll only add or change information if you
+              choose to provide it. Have a look:
+              <a href="https://shopunwrapped.com" style="color:#141210">shopunwrapped.com</a>
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We're brand new, so please be patient — there'll be rough edges. But join now and you won't just be
-              using Unwrapped; you'll be one of the people who built it with us.
+              We're testing this with a small group first, and we don't have it all figured out yet. We want your
+              feedback: what's useful, what's missing, and what would make you want to post a drop. If you join,
+              you're helping shape what it becomes.
             </p>
             <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
               When you're ready, claim your profile — set a password (link valid for 7 days), then sign in with
@@ -206,10 +204,8 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
               Not interested? You can ignore this email — nothing goes live from your side until you claim.
               Don't want a profile at all? Reply "REMOVE" and we'll delete it and won't email again.
               Link expired? Use "Forgot your password?" at shopunwrapped.com/reset-password with this email.
-              Questions? Just reply — or email <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a>.
-            </p>
-            <p style="font-size:11px;color:#c9c3ba;margin-top:16px">
-              ${esc(POSTAL_ADDRESS)}
+              Thoughts, questions, or feedback on the idea itself? Just reply — or email
+              <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a>. We read everything.
             </p>
           </div>
         `,
