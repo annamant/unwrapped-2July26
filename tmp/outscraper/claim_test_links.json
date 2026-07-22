@@ -1,0 +1,32 @@
+[
+  {
+    "id": "907ad39e-70fb-4efe-b8c1-48b483fa4c7e",
+    "name": "[TEST] Claim Caf\u00e9 One",
+    "slug": "claim-cafe-one-bac5",
+    "contact_email": "mantova.a+claim1@gmail.com",
+    "owner_id": "908d5464-7b8b-4278-99d3-752fb9fc1e8e",
+    "needs_pw": true,
+    "setup": "https://shopunwrapped.com/reset-password?token=83184c078dad0f1976c4e3bcd133f45b015a67137b56d8da2670db820a60152e",
+    "token": "83184c078dad0f1976c4e3bcd133f45b015a67137b56d8da2670db820a60152e"
+  },
+  {
+    "id": "9868ba1c-1688-4f2c-996f-b6f7ed888b84",
+    "name": "[TEST] Claim Shop Three",
+    "slug": "claim-shop-three-d49f",
+    "contact_email": "mantova.a+claim3@gmail.com",
+    "owner_id": "f71782d7-8ca6-4763-957b-1286c8b24efc",
+    "needs_pw": true,
+    "setup": "https://shopunwrapped.com/reset-password?token=7f43d787202c8875a75a4eb019344bb86869ca0e0a7045a48c583e4f51937bb1",
+    "token": "7f43d787202c8875a75a4eb019344bb86869ca0e0a7045a48c583e4f51937bb1"
+  },
+  {
+    "id": "5df10e51-6ea3-4425-97a6-195131be4533",
+    "name": "[TEST] Claim Studio Two",
+    "slug": "claim-studio-two-d7a9",
+    "contact_email": "mantova.a+claim2@gmail.com",
+    "owner_id": "7d7a44b5-0c65-4683-b8a4-ca6e723a28fb",
+    "needs_pw": true,
+    "setup": "https://shopunwrapped.com/reset-password?token=c76ce80dc64271fe0d17c6ac4abfd3ee73c03fa0b52dddc8ca7b65bbefd27044",
+    "token": "c76ce80dc64271fe0d17c6ac4abfd3ee73c03fa0b52dddc8ca7b65bbefd27044"
+  }
+]

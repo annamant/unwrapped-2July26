@@ -1,0 +1,32 @@
+[
+  {
+    "id": "907ad39e-70fb-4efe-b8c1-48b483fa4c7e",
+    "slug": "claim-cafe-one-bac5",
+    "name": "[TEST] Claim Caf\u00e9 One",
+    "contact_email": "mantova.a+claim1@gmail.com",
+    "owner_id": "e9b95f01-ccfb-48a6-9c46-ece164c7b2bb",
+    "status": "failed",
+    "error": "HTTP Error 403: Forbidden",
+    "resend": null
+  },
+  {
+    "id": "5df10e51-6ea3-4425-97a6-195131be4533",
+    "slug": "claim-studio-two-d7a9",
+    "name": "[TEST] Claim Studio Two",
+    "contact_email": "mantova.a+claim2@gmail.com",
+    "owner_id": "e9b95f01-ccfb-48a6-9c46-ece164c7b2bb",
+    "status": "failed",
+    "error": "HTTP Error 403: Forbidden",
+    "resend": null
+  },
+  {
+    "id": "9868ba1c-1688-4f2c-996f-b6f7ed888b84",
+    "slug": "claim-shop-three-d49f",
+    "name": "[TEST] Claim Shop Three",
+    "contact_email": "mantova.a+claim3@gmail.com",
+    "owner_id": "e9b95f01-ccfb-48a6-9c46-ece164c7b2bb",
+    "status": "failed",
+    "error": "HTTP Error 403: Forbidden",
+    "resend": null
+  }
+]
