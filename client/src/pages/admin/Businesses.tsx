@@ -92,6 +92,7 @@ export default function AdminBusinesses() {
         remaining: data.remaining,
       });
       utils.admin.claimInviteStats.invalidate();
+      utils.admin.listBusinesses.invalidate();
     },
   });
 

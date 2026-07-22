@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull } from "drizzle-orm";
+import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, users, drops, reservations, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
@@ -79,6 +79,65 @@ function clientBaseUrl(): string {
   return (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim();
 }
 
+/**
+ * Ensure the business is owned by a user for its contactEmail (not the shared
+ * unclaimed-directory placeholder). Creates a passwordless user when needed.
+ */
+async function attachContactOwner(
+  db: DB,
+  business: { id: string; name: string; contactEmail: string; ownerId: string },
+): Promise<{ ownerId: string; needsPassword: boolean }> {
+  const email = business.contactEmail.toLowerCase().trim();
+  if (!email || email === UNCLAIMED_OWNER_EMAIL) {
+    throw new Error("Business has no real contact email");
+  }
+
+  const [existing] = await db
+    .select({ id: users.id, passwordHash: users.passwordHash })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  let ownerId = existing?.id;
+  let needsPassword = !existing?.passwordHash;
+  if (!ownerId) {
+    const [created] = await db
+      .insert(users)
+      .values({
+        email,
+        name: business.name,
+        role: "consumer",
+        onboardingComplete: false,
+      })
+      .returning({ id: users.id });
+    ownerId = created.id;
+    needsPassword = true;
+  }
+
+  if (business.ownerId !== ownerId) {
+    await db
+      .update(businesses)
+      .set({ ownerId })
+      .where(eq(businesses.id, business.id));
+  }
+
+  return { ownerId, needsPassword };
+}
+
+async function issueClaimInvite(
+  db: DB,
+  opts: { ownerId: string; contactEmail: string; businessName: string },
+) {
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  await db.insert(passwordResetTokens).values({
+    userId: opts.ownerId,
+    tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+  const setupUrl = `${clientBaseUrl()}/reset-password?token=${rawToken}`;
+  await sendBusinessClaimInviteEmail(opts.contactEmail, opts.businessName, setupUrl);
+}
+
 /** Create (or reuse) a passwordless owner + active business. Optionally email a claim link. */
 async function provisionClaimableBusiness(
   db: DB,
@@ -140,8 +199,12 @@ async function provisionClaimableBusiness(
     if (opts.emailKind === "approval") {
       void sendApplicationApprovedEmail(email, business.name, setupUrl);
     } else {
-      void sendBusinessClaimInviteEmail(email, business.name, setupUrl);
+      await sendBusinessClaimInviteEmail(email, business.name, setupUrl);
     }
+    await db
+      .update(businesses)
+      .set({ claimInviteSentAt: new Date() })
+      .where(eq(businesses.id, business.id));
     inviteSent = true;
   }
 
@@ -323,16 +386,17 @@ export const adminRouter = router({
   // How many seeded profiles are still waiting for a claim invite (and how many
   // have already been sent one). Drives the "send next batch" admin button.
   claimInviteStats: adminProcedure.query(async ({ ctx }) => {
+    // Pending = active profile with a real contact email that has not been invited yet.
+    // Ownership may still be the shared unclaimed placeholder — sendClaimInvites
+    // attaches the contact as owner before emailing.
     const pendingWhere = and(
       eq(businesses.status, "active"),
       isNull(businesses.claimInviteSentAt),
-      sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
-      isNull(users.passwordHash),
+      sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
     );
     const [{ pending }] = await ctx.db
       .select({ pending: count() })
       .from(businesses)
-      .innerJoin(users, eq(businesses.ownerId, users.id))
       .where(pendingWhere);
     const [{ invited }] = await ctx.db
       .select({ invited: count() })
@@ -341,12 +405,23 @@ export const adminRouter = router({
     return { pending, invited };
   }),
 
-  // Send the next batch of claim invites to seeded, still-unclaimed profiles.
-  // Sends sequentially (gentle on the shared sender) and marks each as invited
-  // so the next batch picks up different businesses. Run this ~daily.
+  // Send claim invites to seeded profiles. Attaches each contactEmail as owner
+  // (passwordless user) before emailing a set-password link for THAT user.
+  // Pass businessIds to target specific rows (e.g. test profiles); otherwise
+  // sends the next `limit` by createdAt.
   sendClaimInvites: adminProcedure
-    .input(z.object({ limit: z.number().int().min(1).max(200).default(50) }))
+    .input(z.object({
+      limit: z.number().int().min(1).max(200).default(50),
+      businessIds: z.array(z.string().uuid()).max(50).optional(),
+    }))
     .mutation(async ({ ctx, input }) => {
+      const baseWhere = and(
+        eq(businesses.status, "active"),
+        isNull(businesses.claimInviteSentAt),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        input.businessIds?.length ? inArray(businesses.id, input.businessIds) : undefined,
+      );
+
       const candidates = await ctx.db
         .select({
           id: businesses.id,
@@ -356,36 +431,40 @@ export const adminRouter = router({
           ownerId: businesses.ownerId,
         })
         .from(businesses)
-        .innerJoin(users, eq(businesses.ownerId, users.id))
-        .where(and(
-          eq(businesses.status, "active"),
-          isNull(businesses.claimInviteSentAt),
-          sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
-          isNull(users.passwordHash),
-        ))
+        .where(baseWhere)
         .orderBy(asc(businesses.createdAt))
-        .limit(input.limit);
+        .limit(input.businessIds?.length ? input.businessIds.length : input.limit);
 
-      const sent: { name: string; contactEmail: string }[] = [];
+      const sent: { name: string; contactEmail: string; slug: string }[] = [];
+      const skipped: { name: string; contactEmail: string; reason: string }[] = [];
       const failed: { name: string; contactEmail: string; reason: string }[] = [];
 
       for (const b of candidates) {
         try {
-          const rawToken = crypto.randomBytes(32).toString("hex");
-          await ctx.db.insert(passwordResetTokens).values({
-            userId: b.ownerId,
-            tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          });
-          const setupUrl = `${clientBaseUrl()}/reset-password?token=${rawToken}`;
-          await sendBusinessClaimInviteEmail(b.contactEmail, b.name, setupUrl);
-          // Mark sent only after the send call resolves. If it throws we leave
-          // claimInviteSentAt null so the row is retried in the next batch.
-          await ctx.db
-            .update(businesses)
-            .set({ claimInviteSentAt: new Date() })
-            .where(eq(businesses.id, b.id));
-          sent.push({ name: b.name, contactEmail: b.contactEmail });
+          const { ownerId, needsPassword } = await attachContactOwner(ctx.db, b);
+          if (needsPassword) {
+            await issueClaimInvite(ctx.db, {
+              ownerId,
+              contactEmail: b.contactEmail.toLowerCase(),
+              businessName: b.name,
+            });
+            await ctx.db
+              .update(businesses)
+              .set({ claimInviteSentAt: new Date() })
+              .where(eq(businesses.id, b.id));
+            sent.push({ name: b.name, contactEmail: b.contactEmail, slug: b.slug });
+          } else {
+            // Contact already has an account/password — ownership transferred; no email.
+            await ctx.db
+              .update(businesses)
+              .set({ claimInviteSentAt: new Date() })
+              .where(eq(businesses.id, b.id));
+            skipped.push({
+              name: b.name,
+              contactEmail: b.contactEmail,
+              reason: "Owner already has a password — ownership transferred, no email sent",
+            });
+          }
         } catch (err) {
           failed.push({
             name: b.name,
@@ -398,15 +477,21 @@ export const adminRouter = router({
       const [{ remaining }] = await ctx.db
         .select({ remaining: count() })
         .from(businesses)
-        .innerJoin(users, eq(businesses.ownerId, users.id))
         .where(and(
           eq(businesses.status, "active"),
           isNull(businesses.claimInviteSentAt),
-          sql`${businesses.contactEmail} <> ${UNCLAIMED_OWNER_EMAIL}`,
-          isNull(users.passwordHash),
+          sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
         ));
 
-      return { sentCount: sent.length, failedCount: failed.length, remaining, sent, failed };
+      return {
+        sentCount: sent.length,
+        skippedCount: skipped.length,
+        failedCount: failed.length,
+        remaining,
+        sent,
+        skipped,
+        failed,
+      };
     }),
 
   // Reject application

@@ -147,23 +147,22 @@ export async function sendApplicationApprovedEmail(to: string, businessName: str
   }
 }
 
-/** Invite a business owner to claim a profile seeded by admin (bulk import). */
+/** Invite a business owner to claim a profile seeded by admin (bulk import). Throws on failure. */
 export async function sendBusinessClaimInviteEmail(to: string, businessName: string, setupUrl: string) {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return;
+  if (!key) throw new Error("RESEND_API_KEY is not configured");
 
-  try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Unwrapped <anna@shopunwrapped.com>",
-        to,
-        subject: `Claim your Unwrapped profile — ${businessName}`,
-        html: `
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Unwrapped <anna@shopunwrapped.com>",
+      to,
+      subject: `Claim your Unwrapped profile — ${businessName}`,
+      html: `
           <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
             <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · Claim your profile
@@ -209,10 +208,12 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
             </p>
           </div>
         `,
-      }),
-    });
-  } catch (err) {
-    console.error("[notifications] claim invite email error:", err);
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Resend ${res.status}: ${body.slice(0, 200)}`);
   }
 }
 
