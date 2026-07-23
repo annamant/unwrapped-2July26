@@ -413,6 +413,10 @@ export const adminRouter = router({
     .input(z.object({
       limit: z.number().int().min(1).max(200).default(50),
       businessIds: z.array(z.string().uuid()).max(50).optional(),
+      /** Only profiles whose name starts with "[TEST]" — safe for invite QA. */
+      testOnly: z.boolean().default(false),
+      /** Preview candidates without sending mail or writing claimInviteSentAt. */
+      dryRun: z.boolean().default(false),
     }))
     .mutation(async ({ ctx, input }) => {
       const baseWhere = and(
@@ -420,6 +424,7 @@ export const adminRouter = router({
         isNull(businesses.claimInviteSentAt),
         sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
         input.businessIds?.length ? inArray(businesses.id, input.businessIds) : undefined,
+        input.testOnly ? sql`${businesses.name} like ${"[TEST]%"}` : undefined,
       );
 
       const candidates = await ctx.db
@@ -434,6 +439,30 @@ export const adminRouter = router({
         .where(baseWhere)
         .orderBy(asc(businesses.createdAt))
         .limit(input.businessIds?.length ? input.businessIds.length : input.limit);
+
+      if (input.dryRun) {
+        const preview = candidates.map((b) => ({
+          id: b.id,
+          name: b.name,
+          slug: b.slug,
+          contactEmail: b.contactEmail.toLowerCase(),
+          // What the email template will use — name + sign-in email must match this row.
+          emailSubject: `Claim your Unwrapped profile — ${b.name}`,
+          signInAs: b.contactEmail.toLowerCase(),
+          profileUrl: `${clientBaseUrl()}/business/${b.slug}`,
+        }));
+        return {
+          dryRun: true as const,
+          sentCount: 0,
+          skippedCount: 0,
+          failedCount: 0,
+          remaining: preview.length,
+          sent: [],
+          skipped: [],
+          failed: [],
+          preview,
+        };
+      }
 
       const sent: { name: string; contactEmail: string; slug: string }[] = [];
       const skipped: { name: string; contactEmail: string; reason: string }[] = [];
@@ -484,6 +513,7 @@ export const adminRouter = router({
         ));
 
       return {
+        dryRun: false as const,
         sentCount: sent.length,
         skippedCount: skipped.length,
         failedCount: failed.length,
@@ -491,6 +521,15 @@ export const adminRouter = router({
         sent,
         skipped,
         failed,
+        preview: [] as {
+          id: string;
+          name: string;
+          slug: string;
+          contactEmail: string;
+          emailSubject: string;
+          signInAs: string;
+          profileUrl: string;
+        }[],
       };
     }),
 

@@ -84,8 +84,20 @@ export default function AdminBusinesses() {
     failedCount: number;
     remaining: number;
   } | null>(null);
+  const [invitePreview, setInvitePreview] = useState<{
+    name: string;
+    contactEmail: string;
+    emailSubject: string;
+    signInAs: string;
+    profileUrl: string;
+  }[] | null>(null);
   const sendInvites = trpc.admin.sendClaimInvites.useMutation({
     onSuccess: (data) => {
+      if (data.dryRun) {
+        setInvitePreview(data.preview);
+        return;
+      }
+      setInvitePreview(null);
       setInviteResult({
         sentCount: data.sentCount,
         failedCount: data.failedCount,
@@ -174,26 +186,76 @@ export default function AdminBusinesses() {
                 {sendInvites.error.message}
               </div>
             )}
+            {invitePreview && invitePreview.length > 0 && (
+              <div style={{ marginTop: 12, borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 8 }}>
+                  PREVIEW (not sent) — check name ↔ email match
+                </div>
+                {invitePreview.map((p) => (
+                  <div key={p.contactEmail + p.name} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 8, lineHeight: 1.45 }}>
+                    <div><strong>{p.name}</strong></div>
+                    <div style={{ color: MUTED_FG }}>To: {p.contactEmail}</div>
+                    <div style={{ color: MUTED_FG }}>Subject: {p.emailSubject}</div>
+                    <div style={{ color: MUTED_FG }}>Sign in as: {p.signInAs}</div>
+                    <a href={p.profileUrl} style={{ color: MUTED_FG }}>{p.profileUrl}</a>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm("Send the next 50 claim invites now?")) {
-                sendInvites.mutate({ limit: 50 });
-              }
-            }}
-            disabled={sendInvites.isPending || !claimStats?.pending}
-            style={{
-              fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
-              padding: "12px 18px",
-              background: (sendInvites.isPending || !claimStats?.pending) ? BORDER : FG,
-              color: BG, border: "none",
-              cursor: (sendInvites.isPending || !claimStats?.pending) ? "not-allowed" : "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {sendInvites.isPending ? "SENDING…" : "SEND NEXT 50 INVITES"}
-          </button>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => sendInvites.mutate({ limit: 5, dryRun: true })}
+              disabled={sendInvites.isPending || !claimStats?.pending}
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                padding: "12px 18px",
+                background: BG, color: FG, border: `1px solid ${BORDER}`,
+                cursor: (sendInvites.isPending || !claimStats?.pending) ? "not-allowed" : "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              PREVIEW NEXT 5
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm("Send claim invites only to [TEST] profiles? (safe — not the real directory)")) {
+                  sendInvites.mutate({ limit: 20, testOnly: true });
+                }
+              }}
+              disabled={sendInvites.isPending}
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                padding: "12px 18px",
+                background: BG, color: FG, border: `1px solid ${FG}`,
+                cursor: sendInvites.isPending ? "not-allowed" : "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {sendInvites.isPending ? "SENDING…" : "SEND [TEST] ONLY"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm("Send the next 50 claim invites to REAL businesses now?")) {
+                  sendInvites.mutate({ limit: 50 });
+                }
+              }}
+              disabled={sendInvites.isPending || !claimStats?.pending}
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                padding: "12px 18px",
+                background: (sendInvites.isPending || !claimStats?.pending) ? BORDER : FG,
+                color: BG, border: "none",
+                cursor: (sendInvites.isPending || !claimStats?.pending) ? "not-allowed" : "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {sendInvites.isPending ? "SENDING…" : "SEND NEXT 50 INVITES"}
+            </button>
+          </div>
         </div>
 
         {showImport && (
