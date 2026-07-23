@@ -206,6 +206,9 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
               Thoughts, questions, or feedback on the idea itself? Just reply — or email
               <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a>. We read everything.
             </p>
+            <p style="font-family:monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-top:20px">
+              <a href="https://shopunwrapped.com/instagram" style="color:#7a7a7a;text-decoration:none">Instagram</a>
+            </p>
           </div>
         `,
     }),
