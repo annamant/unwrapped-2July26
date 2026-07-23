@@ -147,6 +147,9 @@ export async function sendApplicationApprovedEmail(to: string, businessName: str
   }
 }
 
+/** Resend template alias for claim invites (must be published). */
+const CLAIM_PROFILE_TEMPLATE = "claim-profile";
+
 /** Invite a business owner to claim a profile seeded by admin (bulk import). Throws on failure. */
 export async function sendBusinessClaimInviteEmail(to: string, businessName: string, setupUrl: string) {
   const key = process.env.RESEND_API_KEY;
@@ -161,56 +164,15 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
     body: JSON.stringify({
       from: "Unwrapped <anna@shopunwrapped.com>",
       to,
-      subject: `Claim your Unwrapped profile — ${businessName}`,
-      html: `
-          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
-              Unwrapped · Claim your profile
-            </p>
-            <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">Help us pilot something for local shops</h1>
-            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We're running a small pilot for independent shops, cafés, studios and makers. It's called
-              <a href="https://shopunwrapped.com" style="color:#141210">Unwrapped</a>, and it is built by local
-              people who want neighbourhoods to do more than find businesses on a map.
-            </p>
-            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              Unwrapped gives businesses a way to tell nearby people when something is happening — a new product,
-              a discount, a deal, a launch or a one-off. You post a short <em>drop</em>; nearby shoppers get an
-              alert and can claim a QR ticket. It isn't for listing your whole menu or catalogue — it's for the
-              moments worth sharing.
-            </p>
-            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We've made a free profile for <strong>${esc(businessName)}</strong> using publicly available business
-              information, such as your Google Maps listing or website. We'll only add or change information if you
-              choose to provide it. Have a look:
-              <a href="https://shopunwrapped.com" style="color:#141210">shopunwrapped.com</a>
-            </p>
-            <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
-              We're testing this with a small group first, and we don't have it all figured out yet. We want your
-              feedback: what's useful, what's missing, and what would make you want to post a drop. If you join,
-              you're helping shape what it becomes.
-            </p>
-            <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
-              When you're ready, claim your profile — set a password (link valid for 7 days), then sign in with
-              ${esc(to)} to edit your page and post your first drop.
-            </p>
-            <a href="${setupUrl}"
-               style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
-                      font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">
-              CLAIM YOUR PROFILE
-            </a>
-            <p style="font-size:12px;color:#b0a89e;margin-top:32px">
-              Not interested? You can ignore this email — nothing goes live from your side until you claim.
-              Don't want a profile at all? Reply "REMOVE" and we'll delete it and won't email again.
-              Link expired? Use "Forgot your password?" at shopunwrapped.com/reset-password with this email.
-              Thoughts, questions, or feedback on the idea itself? Just reply — or email
-              <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a>. We read everything.
-            </p>
-            <p style="font-family:monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-top:20px">
-              <a href="https://shopunwrapped.com/instagram" style="color:#7a7a7a;text-decoration:none">Instagram</a>
-            </p>
-          </div>
-        `,
+      // Subject comes from the published Resend template (includes BUSINESS_NAME).
+      template: {
+        id: CLAIM_PROFILE_TEMPLATE,
+        variables: {
+          BUSINESS_NAME: businessName,
+          SIGN_IN_EMAIL: to,
+          SETUP_URL: setupUrl,
+        },
+      },
     }),
   });
 
