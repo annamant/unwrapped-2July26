@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import crypto from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const csvPath = path.join(__dirname, "unwrapped_import_streatham_westnorwood.csv");
+const csvPath = path.join(__dirname, "../../business_emails_mapped.csv");
 const UNCLAIMED_EMAIL = "unclaimed-directory@shopunwrapped.com";
 
 function parseCsv(text) {
