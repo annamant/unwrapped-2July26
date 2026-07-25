@@ -104,12 +104,23 @@ export default function Landing() {
           </span>
         </a>
 
-        <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: isMobile ? 14 : 24, alignItems: "center" }}>
+          <a
+            href="https://www.instagram.com/shopunwrapped/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: MUTED_FG, textDecoration: "none",
+            }}
+          >
+            Instagram
+          </a>
           <a href="/business-apply" style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 13,
             color: MUTED_FG, textDecoration: "none",
           }}>
-            List your business
+            {isMobile ? "Business" : "List your business"}
           </a>
           <a href="/signin" style={{
             fontFamily: "'Space Mono', monospace", fontSize: 10,
@@ -564,16 +575,22 @@ export default function Landing() {
             Unwrapped
           </span>
         </div>
-        <div style={{ display: "flex", gap: 24 }}>
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
           {[
+            { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             { label: "Privacy", href: "/privacy" },
             { label: "Terms", href: "/terms" },
             { label: "Contact", href: "mailto:anna@shopunwrapped.com" },
-          ].map(({ label, href }) => (
-            <a key={label} href={href} style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12, color: MUTED_FG, textDecoration: "none",
-            }}>
+          ].map(({ label, href, external }) => (
+            <a
+              key={label}
+              href={href}
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 12, color: MUTED_FG, textDecoration: "none",
+              }}
+            >
               {label}
             </a>
           ))}
