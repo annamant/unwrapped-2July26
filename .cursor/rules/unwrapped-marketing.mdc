@@ -1,0 +1,14 @@
+---
+description: Unwrapped social/CMO work — load marketing skill and brand system
+globs: marketing/**/*
+alwaysApply: false
+---
+
+# Unwrapped marketing work
+
+When editing or creating files under `marketing/`:
+
+1. Read and follow the project skill **unwrapped-cmo** (`.cursor/skills/unwrapped-cmo/SKILL.md`).
+2. Obey `brand-bible.md` voice + visual tokens — no off-brand templates.
+3. Keep `marketing/instagram/CONTENT_CALENDAR.md` current when planning or producing posts.
+4. Default to drafts / scheduled — do not publish without explicit user approval.
