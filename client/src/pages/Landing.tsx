@@ -1,8 +1,5 @@
-import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { trpc } from "../trpc";
 import { format } from "date-fns";
-import DropMap, { toDropPin } from "../components/DropMap";
 import useIsMobile from "../hooks/useIsMobile";
 
 // Design tokens — Unwrapped Design System
@@ -13,28 +10,56 @@ const MUTED = "#F5F4F0";
 const MUTED_FG = "#7A7A7A";
 const V = "#E8341C";
 
+/** Flip to false when real drops go live and the landing should show the live feed again. */
+const PRE_LAUNCH = true;
+
+type SampleDrop = {
+  category: string;
+  neighbourhood: string;
+  title: string;
+  business: string;
+  price: string;
+  window: string;
+  left: string;
+  accent: string;
+};
+
+const SAMPLE_DROPS: SampleDrop[] = [
+  {
+    category: "Food & Drink",
+    neighbourhood: "Hackney",
+    title: "Saturday sourdough — six loaves",
+    business: "River Oven Bakery",
+    price: "£4.50",
+    window: "Collect Sat 9–11am",
+    left: "6 available",
+    accent: "#C4B8A5",
+  },
+  {
+    category: "Beauty & Wellness",
+    neighbourhood: "Clapham",
+    title: "Express blow-dry — walk-in window",
+    business: "Marlow Hair Studio",
+    price: "£28.00",
+    window: "Session today 4–7pm",
+    left: "4 spots",
+    accent: "#C9B4B0",
+  },
+  {
+    category: "Beauty & Wellness",
+    neighbourhood: "Islington",
+    title: "45-min personal training session",
+    business: "Jordan Ellis PT",
+    price: "£35.00",
+    window: "Session Tue 6–8pm",
+    left: "3 spots",
+    accent: "#A8B5A0",
+  },
+];
+
 export default function Landing() {
   const [, navigate] = useLocation();
   const isMobile = useIsMobile();
-
-  const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
-
-  const liveDrops = drops?.filter(({ drop }) => {
-    const now = new Date();
-    return new Date(drop.collectionStart) <= now && new Date(drop.collectionEnd) >= now;
-  }) ?? [];
-
-  const endingSoon = liveDrops
-    .filter(({ drop }) => drop.availableQuantity > 0)
-    .sort((a, b) => new Date(a.drop.collectionEnd).getTime() - new Date(b.drop.collectionEnd).getTime())
-    .slice(0, 1)[0];
-
-  const dropCount = liveDrops.length;
-  const endingInHour = liveDrops.filter(({ drop }) => {
-    const end = new Date(drop.collectionEnd);
-    return end.getTime() - Date.now() < 60 * 60 * 1000;
-  }).length;
-
   const today = format(new Date(), "EEE d MMM yyyy").toUpperCase();
 
   return (
@@ -81,225 +106,242 @@ export default function Landing() {
 
       {/* ── Hero ── */}
       <section style={{
-        padding: isMobile ? "40px 20px 0" : "56px 40px 0",
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 380px",
-          gap: isMobile ? 32 : 48, alignItems: isMobile ? "stretch" : "end",
+        padding: isMobile ? "48px 20px 40px" : "72px 40px 56px",
+        borderBottom: `1px solid ${BORDER}`,
       }}>
-        <div>
-          <div style={{
-            fontFamily: "'Space Mono', monospace",
-            fontSize: "clamp(56px, 12vw, 108px)",
-            fontWeight: 700, color: FG,
-            lineHeight: 1, letterSpacing: "-5px", marginBottom: 8,
-          }}>
-            {dropCount || "—"}
-          </div>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 10,
+          color: V, letterSpacing: "0.14em", marginBottom: 20,
+        }}>
+          GETTING READY TO LAUNCH · LONDON
+        </div>
 
-          <div style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(20px, 2.5vw, 28px)",
-            fontStyle: "italic", color: FG,
-            lineHeight: 1.35, marginBottom: 28, maxWidth: 440,
-          }}>
-            things dropping near you right now.<br />
-            <span style={{ fontSize: "0.75em", color: MUTED_FG }}>Limited. Local. Gone when they're gone.</span>
-          </div>
+        <h1 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(36px, 6vw, 64px)",
+          fontWeight: 700, color: FG,
+          lineHeight: 1.05, letterSpacing: "-1.5px",
+          marginBottom: 20, maxWidth: 720,
+        }}>
+          Limited local drops.<br />
+          <em style={{ fontStyle: "italic", fontWeight: 400 }}>Reserved in seconds.</em>
+        </h1>
 
-          {endingInHour > 0 && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 36 }}>
-              <span style={{
-                width: 6, height: 6, borderRadius: "50%",
-                background: V, display: "inline-block",
-              }} />
-              <span style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                color: V, letterSpacing: "0.1em",
-              }}>
-                {endingInHour} ending in the next hour
-              </span>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
+          color: MUTED_FG, lineHeight: 1.6,
+          marginBottom: 36, maxWidth: 520,
+        }}>
+          Unwrapped is the place to discover time-limited drops from local businesses near you —
+          reserve your spot, then collect with a QR code.
+        </p>
+
+        {/* Pre-launch status */}
+        {PRE_LAUNCH && (
+          <div style={{
+            border: `1px solid ${BORDER}`,
+            background: MUTED,
+            padding: isMobile ? "24px 20px" : "28px 32px",
+            marginBottom: 36,
+            maxWidth: 640,
+          }}>
+            <div style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 9,
+              color: MUTED_FG, letterSpacing: "0.14em", marginBottom: 14,
+            }}>
+              WHERE WE ARE NOW
             </div>
-          )}
-
-          <div style={{
-            display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
-            marginTop: endingInHour > 0 ? 0 : 36,
-          }}>
-            <button
-              onClick={() => navigate("/signin")}
-              style={{
-                background: FG, color: BG,
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                letterSpacing: "0.1em", padding: "13px 28px",
-                border: "none", cursor: "pointer",
-              }}
-            >
-              SEE ALL DROPS
-            </button>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG }}>
-              Free to browse. Sign up for drop alerts.
-            </span>
+            <p style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: isMobile ? 20 : 24,
+              color: FG, lineHeight: 1.35, marginBottom: 16,
+            }}>
+              We're onboarding businesses, building our community, and getting ready to launch.
+            </p>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+              color: MUTED_FG, lineHeight: 1.65,
+            }}>
+              There are no live drops yet. Join early as a shopper, or apply to list your business —
+              you'll be first in line when neighbourhoods go live.
+            </p>
           </div>
-        </div>
-
-        {/* Featured card */}
-        {endingSoon ? (
-          <FeaturedDropCard
-            drop={endingSoon.drop}
-            business={endingSoon.business}
-            location={endingSoon.location}
-            onClick={() => navigate(`/drop/${endingSoon.drop.id}`)}
-          />
-        ) : (
-          <PlaceholderFeaturedCard />
         )}
-      </section>
-
-      {/* ── Drop grid ── */}
-      <section style={{ marginTop: 56 }}>
-        <div style={{
-          padding: isMobile ? "0 20px 20px" : "0 40px 20px",
-          borderBottom: `1px solid ${BORDER}`,
-        }}>
-          <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.15em",
-          }}>
-            TODAY'S DROPS
-          </span>
-        </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap: 1, background: BORDER,
-          borderTop: `1px solid ${BORDER}`,
-          borderBottom: `1px solid ${BORDER}`,
+          display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
         }}>
-          {dropsLoading
-            ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
-            : drops && drops.length > 0
-            ? drops.slice(0, 3).map(({ drop, business, location }) => (
-                <GridDropCard
-                  key={drop.id}
-                  drop={drop}
-                  business={business}
-                  location={location}
-                  onClick={() => navigate(`/drop/${drop.id}`)}
-                />
-              ))
-            : (
-              <div style={{ gridColumn: "1 / -1", background: BG, padding: "56px 40px", textAlign: "center" }}>
-                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, color: MUTED_FG, marginBottom: 8 }}>
-                  Nothing dropping right now
-                </p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG }}>
-                  Check back soon — drops appear daily.
-                </p>
-              </div>
-            )
-          }
-        </div>
-
-        <div style={{ padding: isMobile ? "20px" : "20px 40px", borderBottom: `1px solid ${BORDER}` }}>
           <button
             onClick={() => navigate("/signin")}
             style={{
-              background: "none", border: "none", cursor: "pointer",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG,
-              padding: 0, borderBottom: `1px solid ${FG}`, paddingBottom: 1,
+              background: FG, color: BG,
+              fontFamily: "'Space Mono', monospace", fontSize: 10,
+              letterSpacing: "0.1em", padding: "13px 28px",
+              border: "none", cursor: "pointer",
             }}
           >
-            {drops && drops.length > 3 ? `${drops.length - 3} more drops today →` : "Browse all drops →"}
+            JOIN THE COMMUNITY
           </button>
-        </div>
-      </section>
-
-      {/* ── Map section ── */}
-      <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
-
-      {/* ── Business pitch — all warm cream ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "72px 40px",
-        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-        gap: isMobile ? 40 : 80, alignItems: "center",
-        borderBottom: `1px solid ${BORDER}`,
-      }}>
-        <div>
-          <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 20,
-          }}>
-            FOR BUSINESSES
-          </div>
-
-          <h2 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(28px, 3.5vw, 40px)",
-            fontWeight: 700, color: FG,
-            lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 20,
-          }}>
-            Create a moment.<br />
-            <em style={{ fontStyle: "italic" }}>We bring</em>{" "}
-            <em style={{ fontStyle: "italic", color: V }}>your neighbourhood to you.</em>
-          </h2>
-
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.7,
-            marginBottom: 36, maxWidth: 360,
-          }}>
-            Publish a drop in minutes. Unwrapped notifies the right people — those in your
-            area who already love what you do. They reserve. They show up. You build a following
-            that comes back.
-          </p>
-
           <a
             href="/business-apply"
             style={{
               border: `1px solid ${FG}`, color: FG,
               fontFamily: "'Space Mono', monospace", fontSize: 10,
-              letterSpacing: "0.1em", padding: "13px 24px",
+              letterSpacing: "0.1em", padding: "12px 24px",
               textDecoration: "none", display: "inline-block",
             }}
           >
-            APPLY TO LIST YOUR BUSINESS
+            LIST YOUR BUSINESS
           </a>
         </div>
+      </section>
 
-        {/* Business value props — editorial, no financials */}
-        <div style={{ border: `1px solid ${BORDER}` }}>
+      {/* ── Sample drops ── */}
+      <section style={{ marginTop: 0 }}>
+        <div style={{
+          padding: isMobile ? "28px 20px 20px" : "36px 40px 20px",
+          borderBottom: `1px solid ${BORDER}`,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "baseline", justifyContent: "space-between",
+            flexWrap: "wrap", gap: 12, marginBottom: 12,
+          }}>
+            <span style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 9,
+              color: MUTED_FG, letterSpacing: "0.15em",
+            }}>
+              WHAT A DROP LOOKS LIKE
+            </span>
+            <span style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 9,
+              color: V, letterSpacing: "0.12em",
+            }}>
+              SAMPLE · NOT LIVE
+            </span>
+          </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+            color: MUTED_FG, lineHeight: 1.6, maxWidth: 520,
+          }}>
+            These are examples only — fictional shops and drops, so you can see how Unwrapped will feel.
+            Real drops will appear here once we launch.
+          </p>
+        </div>
+
+        <div style={{
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gap: 1, background: BORDER,
+          borderBottom: `1px solid ${BORDER}`,
+        }}>
+          {SAMPLE_DROPS.map((sample) => (
+            <SampleDropCard key={sample.title} sample={sample} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Mission / why ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "72px 40px",
+        borderBottom: `1px solid ${BORDER}`,
+      }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 9,
+          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 20,
+        }}>
+          WHY WE'RE DOING THIS
+        </div>
+
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(28px, 3.5vw, 42px)",
+          fontWeight: 700, color: FG,
+          lineHeight: 1.15, letterSpacing: "-1px",
+          marginBottom: 24, maxWidth: 640,
+        }}>
+          Because the best things happen{" "}
+          <em style={{ fontStyle: "italic", color: V }}>on your street</em> —
+          not in another endless feed.
+        </h2>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? 24 : 48,
+          maxWidth: 860,
+        }}>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.75,
+          }}>
+            Local people deserve a simple way to find what's on offer nearby —
+            a morning special, a spare salon slot, a trainer with three openings
+            this week — before it disappears.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.75,
+          }}>
+            The businesses on your street — shops, salons, cafés, freelancers,
+            franchisees running a local branch — are run by real people. Unwrapped
+            helps them show you what they have to offer, when they have something
+            to share. Neighbourhood businesses. Real people. Limited drops.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Building now ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "64px 40px",
+        borderBottom: `1px solid ${BORDER}`,
+      }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 9,
+          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 40,
+        }}>
+          WHAT WE'RE BUILDING
+        </div>
+
+        <div style={{
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gap: 1, background: BORDER,
+        }}>
           {[
             {
-              label: "Notify the right people",
-              body: "We match your drop to shoppers in your area who already care about what you offer. They get an alert. You get a queue.",
-              shade: BG,
+              n: "01",
+              title: "Onboarding businesses",
+              body: "Local shops, cafés, salons, studios and neighbourhood businesses across London are applying to list — including people running a local branch. We're onboarding partners ready to run real drops.",
             },
             {
-              label: "Build a loyal following",
-              body: "Every person who reserves becomes someone who knows your name. Follow your business. Come back next time.",
-              shade: MUTED,
+              n: "02",
+              title: "Building the community",
+              body: "Shoppers who sign up early get drop alerts when neighbourhoods go live — so the first releases reach people who already care.",
             },
             {
-              label: "Your drop, your terms",
-              body: "You set the window, the quantity, the experience. Unwrapped handles the rest — reservations, QR check-in, payouts.",
-              shade: MUTED,
+              n: "03",
+              title: "Getting ready to launch",
+              body: "When we open, you'll browse what's dropping near you, reserve in seconds, and collect with a QR code. Limited. Local. Gone when they're gone.",
             },
-          ].map(({ label, body, shade }, i) => (
-            <div
-              key={label}
-              style={{
-                padding: "24px 28px", background: shade,
-                borderBottom: i < 2 ? `1px solid ${BORDER}` : "none",
-              }}
-            >
+          ].map(({ n, title, body }) => (
+            <div key={n} style={{ background: BG, padding: isMobile ? "28px 24px" : "36px 32px" }}>
               <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 16, fontWeight: 600, color: FG, marginBottom: 8,
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 11, color: V, letterSpacing: "0.1em", marginBottom: 16,
               }}>
-                {label}
+                {n}
               </div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.6 }}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 20, fontWeight: 600, color: FG,
+                marginBottom: 12, lineHeight: 1.25,
+              }}>
+                {title}
+              </h3>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14, color: MUTED_FG, lineHeight: 1.65,
+              }}>
                 {body}
-              </div>
+              </p>
             </div>
           ))}
         </div>
@@ -322,7 +364,7 @@ export default function Landing() {
             {
               n: "01",
               title: "Discover what's dropping",
-              body: "Browse time-limited drops from independent shops, cafés, studios, and makers near you. Updated constantly. Each one is unique to that moment.",
+              body: "Browse time-limited drops from local businesses near you — shops, salons, cafés, freelancers and more. Each one is unique to that moment.",
             },
             {
               n: "02",
@@ -335,7 +377,7 @@ export default function Landing() {
               body: "Arrive in the collection window. The business scans your code. The drop is yours.",
             },
           ].map(({ n, title, body }) => (
-            <div key={n} style={{ background: BG, padding: "36px 32px" }}>
+            <div key={n} style={{ background: BG, padding: isMobile ? "28px 24px" : "36px 32px" }}>
               <div style={{
                 fontFamily: "'Space Mono', monospace",
                 fontSize: 11, color: V, letterSpacing: "0.1em", marginBottom: 16,
@@ -355,6 +397,94 @@ export default function Landing() {
               }}>
                 {body}
               </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Business pitch ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "72px 40px",
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+        gap: isMobile ? 40 : 80, alignItems: "center",
+        borderBottom: `1px solid ${BORDER}`,
+      }}>
+        <div>
+          <div style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 20,
+          }}>
+            FOR BUSINESSES
+          </div>
+
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(28px, 3.5vw, 40px)",
+            fontWeight: 700, color: FG,
+            lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 20,
+          }}>
+            Drop when you want.<br />
+            <em style={{ fontStyle: "italic" }}>We bring</em>{" "}
+            <em style={{ fontStyle: "italic", color: V }}>the street to you.</em>
+          </h2>
+
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.7,
+            marginBottom: 36, maxWidth: 400,
+          }}>
+            No schedule to keep. No endless promo. When it's convenient — a quiet afternoon,
+            a special, something you're proud of — publish a drop in minutes. We help you market
+            the fantastic things you already do, and fill the blanks when the diary is empty.
+          </p>
+
+          <a
+            href="/business-apply"
+            style={{
+              border: `1px solid ${FG}`, color: FG,
+              fontFamily: "'Space Mono', monospace", fontSize: 10,
+              letterSpacing: "0.1em", padding: "13px 24px",
+              textDecoration: "none", display: "inline-block",
+            }}
+          >
+            APPLY TO LIST YOUR BUSINESS
+          </a>
+        </div>
+
+        <div style={{ border: `1px solid ${BORDER}` }}>
+          {[
+            {
+              label: "On your terms",
+              body: "You drop when you want — when it's convenient, when you have something to say. No pressure to post every day. Your window, your quantity, your call.",
+              shade: BG,
+            },
+            {
+              label: "We bring the street to you",
+              body: "We help you market the fantastic things you do to people nearby who already care. They get an alert. They reserve. They show up.",
+              shade: MUTED,
+            },
+            {
+              label: "Fill your blanks",
+              body: "Quiet slots, spare capacity, a last-minute special — turn empty time into reserved demand without chasing walk-ins.",
+              shade: MUTED,
+            },
+          ].map(({ label, body, shade }, i) => (
+            <div
+              key={label}
+              style={{
+                padding: "24px 28px", background: shade,
+                borderBottom: i < 2 ? `1px solid ${BORDER}` : "none",
+              }}
+            >
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 16, fontWeight: 600, color: FG, marginBottom: 8,
+              }}>
+                {label}
+              </div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.6 }}>
+                {body}
+              </div>
             </div>
           ))}
         </div>
@@ -391,239 +521,78 @@ export default function Landing() {
   );
 }
 
-/* ─── Sub-components ─── */
-
-function FeaturedDropCard({ drop, business, location, onClick }: {
-  drop: any; business: any; location: any; onClick: () => void;
-}) {
-  const end = new Date(drop.collectionEnd);
-  const total = drop.totalQuantity || 1;
-  const pct = Math.round(((total - drop.availableQuantity) / total) * 100);
-
+function SampleDropCard({ sample }: { sample: SampleDrop }) {
   return (
     <div
-      onClick={onClick}
-      style={{ border: `1px solid ${BORDER}`, background: MUTED, padding: 20, cursor: "pointer" }}
-    >
-      <div style={{
-        fontFamily: "'Space Mono', monospace", fontSize: 9,
-        color: V, letterSpacing: "0.15em", marginBottom: 12,
-      }}>
-        ENDING SOONEST
-      </div>
-
-      <div style={{
-        height: 140, marginBottom: 14,
-        background: drop.imageUrl ? `url(${drop.imageUrl}) center/cover` : BORDER,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        overflow: "hidden",
-      }}>
-        {!drop.imageUrl && (
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 11, color: MUTED_FG, fontStyle: "italic" }}>
-            {business.name}
-          </span>
-        )}
-      </div>
-
-      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, color: FG, marginBottom: 4, lineHeight: 1.3 }}>
-        {drop.title}
-      </div>
-      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginBottom: 14 }}>
-        {business.name} · until {format(end, "h:mm a")}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 15, fontWeight: 700, color: FG }}>
-          £{(drop.price / 100).toFixed(2)}
-        </span>
-        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: drop.availableQuantity <= 3 ? V : MUTED_FG }}>
-          {drop.availableQuantity <= 3 ? `${drop.availableQuantity} left` : `${drop.availableQuantity} available`}
-        </span>
-      </div>
-
-      <div style={{ height: 2, background: BORDER }}>
-        <div style={{ height: "100%", width: `${pct}%`, background: pct > 80 ? V : FG }} />
-      </div>
-    </div>
-  );
-}
-
-function PlaceholderFeaturedCard() {
-  return (
-    <div style={{ border: `1px solid ${BORDER}`, background: MUTED, padding: 20 }}>
-      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12 }}>
-        ENDING SOONEST
-      </div>
-      <div style={{ background: BORDER, height: 140, marginBottom: 14 }} />
-      <div style={{ background: BORDER, height: 16, width: "70%", marginBottom: 8 }} />
-      <div style={{ background: BORDER, height: 12, width: "45%", marginBottom: 14 }} />
-      <div style={{ background: BORDER, height: 2 }} />
-    </div>
-  );
-}
-
-function GridDropCard({ drop, business, location, onClick }: {
-  drop: any; business: any; location: any; onClick: () => void;
-}) {
-  const now = new Date();
-  const start = new Date(drop.collectionStart);
-  const end = new Date(drop.collectionEnd);
-  const isLive = now >= start && now <= end;
-  const total = drop.totalQuantity || 1;
-  const pct = Math.round(((total - drop.availableQuantity) / total) * 100);
-
-  return (
-    <div
-      onClick={onClick}
-      style={{ background: BG, padding: 20, cursor: "pointer", transition: "background 0.15s" }}
-      onMouseEnter={e => (e.currentTarget.style.background = MUTED)}
-      onMouseLeave={e => (e.currentTarget.style.background = BG)}
+      style={{
+        background: BG,
+        padding: 20,
+        position: "relative",
+        opacity: 0.95,
+      }}
+      aria-label={`Sample drop: ${sample.title}. Not live.`}
     >
       <div style={{
         height: 160, marginBottom: 14, position: "relative",
-        background: drop.imageUrl ? `url(${drop.imageUrl}) center/cover` : MUTED,
+        background: `linear-gradient(145deg, ${sample.accent} 0%, ${MUTED} 100%)`,
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "hidden",
       }}>
-        {!drop.imageUrl && (
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 11, color: MUTED_FG, fontStyle: "italic" }}>
-            {business.name}
-          </span>
-        )}
-        {isLive && (
-          <div style={{
-            position: "absolute", top: 10, right: 10,
-            display: "flex", alignItems: "center", gap: 5,
-            background: BG, padding: "3px 7px", border: `1px solid ${BORDER}`,
+        <span style={{
+          fontFamily: "'Playfair Display', serif", fontSize: 13,
+          color: FG, fontStyle: "italic", opacity: 0.55,
+        }}>
+          {sample.business}
+        </span>
+        <div style={{
+          position: "absolute", top: 10, left: 10,
+          background: BG, padding: "4px 8px",
+          border: `1px solid ${BORDER}`,
+        }}>
+          <span style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: V, letterSpacing: "0.1em",
           }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#22C55E", display: "inline-block" }} />
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: FG, letterSpacing: 1 }}>LIVE</span>
-          </div>
-        )}
+            SAMPLE
+          </span>
+        </div>
       </div>
 
-      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase" }}>
-        {drop.category} · {location.address.split(",")[0]}
+      <div style={{
+        fontFamily: "'Space Mono', monospace", fontSize: 9,
+        color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase",
+      }}>
+        {sample.category} · {sample.neighbourhood}
       </div>
 
-      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 16, fontWeight: 600, color: FG, marginBottom: 10, lineHeight: 1.3 }}>
-        {drop.title}
+      <h3 style={{
+        fontFamily: "'Playfair Display', serif", fontSize: 16,
+        fontWeight: 600, color: FG, marginBottom: 10, lineHeight: 1.3,
+      }}>
+        {sample.title}
       </h3>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8,
+      }}>
         <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 14, fontWeight: 700, color: FG }}>
-          £{(drop.price / 100).toFixed(2)}
+          {sample.price}
+        </span>
+        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
+          {sample.left}
         </span>
       </div>
 
-      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: pct > 80 ? V : MUTED_FG, marginBottom: 4 }}>
-        {drop.availableQuantity === 0
-          ? "Sold out"
-          : isLive
-          ? `Until ${format(end, "h:mm a")} · ${drop.availableQuantity} left`
-          : format(start, "EEE d MMM, h:mm a")
-        }
+      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, marginBottom: 10 }}>
+        {sample.window}
       </div>
 
-      <div style={{ height: 2, background: BORDER }}>
-        <div style={{ height: "100%", width: `${pct}%`, background: pct > 80 ? V : FG }} />
-      </div>
-    </div>
-  );
-}
-
-function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: string) => void }) {
-  const isMobile = useIsMobile();
-  const [search, setSearch] = useState("");
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
-
-  const pins = useMemo(() => drops.map(toDropPin), [drops]);
-
-  async function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (!search.trim()) return;
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
-        { headers: { "Accept-Language": "en" } }
-      );
-      const data = await resp.json();
-      if (data[0]) {
-        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-      }
-    } catch {
-      // silently ignore network errors
-    }
-  }
-
-  return (
-    <section style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-      {/* Header + search */}
       <div style={{
-        padding: isMobile ? "20px" : "24px 40px",
-        display: "flex", justifyContent: "space-between",
-        alignItems: "center", borderBottom: `1px solid ${BORDER}`,
-        flexWrap: "wrap", gap: 16,
+        fontFamily: "'Space Mono', monospace", fontSize: 9,
+        color: MUTED_FG, letterSpacing: "0.08em",
       }}>
-        <div>
-          <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.15em",
-          }}>
-            DROPS ON THE MAP
-          </span>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-            color: MUTED_FG, marginTop: 4,
-          }}>
-            {pins.length} drops visible · click a pin to preview
-          </p>
-        </div>
-
-        <form onSubmit={handleSearch} style={{ display: "flex", gap: 0, width: isMobile ? "100%" : "auto" }}>
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search an area or postcode…"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              padding: "10px 16px", border: `1px solid ${BORDER}`,
-              borderRight: "none", background: BG, color: FG,
-              outline: "none", width: isMobile ? "100%" : 260, minWidth: 0, flex: isMobile ? 1 : "none",
-            }}
-          />
-          <button type="submit" style={{
-            background: FG, color: BG,
-            fontFamily: "'Space Mono', monospace", fontSize: 10,
-            letterSpacing: "0.08em", padding: "10px 20px",
-            border: "none", cursor: "pointer",
-          }}>
-            GO
-          </button>
-        </form>
+        Not a real listing · example only
       </div>
-
-      <DropMap
-        drops={pins}
-        onDropClick={onDropClick}
-        defaultLat={mapCenter.lat}
-        defaultLng={mapCenter.lng}
-        zoom={13}
-        height={isMobile ? "340px" : "480px"}
-      />
-    </section>
-  );
-}
-
-function SkeletonCard() {
-  return (
-    <div style={{ background: BG, padding: 20 }}>
-      <div style={{ background: MUTED, height: 160, marginBottom: 14 }} />
-      <div style={{ background: MUTED, height: 10, width: "40%", marginBottom: 8 }} />
-      <div style={{ background: MUTED, height: 16, width: "75%", marginBottom: 10 }} />
-      <div style={{ background: MUTED, height: 12, width: "30%", marginBottom: 8 }} />
-      <div style={{ background: MUTED, height: 2 }} />
     </div>
   );
 }
