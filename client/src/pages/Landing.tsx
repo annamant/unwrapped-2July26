@@ -210,10 +210,10 @@ export default function Landing() {
         )}
 
         <div style={{
-          display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start",
+          display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start",
         }}>
           <div style={{
-            display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+            display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap",
           }}>
             <button
               onClick={() => navigate("/signin")}
@@ -237,13 +237,36 @@ export default function Landing() {
             >
               LIST YOUR BUSINESS
             </a>
+            <a
+              href="https://www.instagram.com/shopunwrapped/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                border: `1px solid ${BORDER}`, color: FG,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                letterSpacing: "0.1em", padding: "12px 24px",
+                textDecoration: "none", display: "inline-block",
+                background: BG,
+              }}
+            >
+              FOLLOW ON INSTAGRAM
+            </a>
           </div>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-            color: MUTED_FG, lineHeight: 1.55, maxWidth: 420,
+            color: MUTED_FG, lineHeight: 1.55, maxWidth: 480,
           }}>
             Sign up to stay up to date — we'll keep you posted on every development.
-            Be part of this from the start.
+            Or follow{" "}
+            <a
+              href="https://www.instagram.com/shopunwrapped/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: V, textDecoration: "none", borderBottom: `1px solid ${V}` }}
+            >
+              @shopunwrapped
+            </a>
+            {" "}for what's happening as we get ready.
           </p>
         </div>
       </section>
