@@ -8,6 +8,9 @@ Living calendar. The CMO agent updates this every run. Status: `idea` → `draft
 | 2026-07-25 | 11:31 | Launch | Feed 4:5 | "Limited local drops." | In-page generated Instagram canvas | posted | Generated and posted via hidden file input workflow |
 | 2026-07-25 | 11:34 | How it works | Feed 1:1 | "A drop is simple." | In-page generated Instagram canvas | posted | Square grid-safe explainer post |
 | 2026-07-25 | 11:44 | Storytelling | Feed 1:1 | "Made by local people." | In-page generated Instagram canvas | corrected | Reposted as a clean single-image story post without the 01/03 marker; confusing original was deleted |
+| 2026-07-25 | 12:06 | Culture / neighbourhood | Feed 1:1 | "Your neighbourhood is worth finding." | In-page generated Instagram canvas | posted | London map visual — neighbourhood impact, why shoppers should sign up |
+| 2026-07-25 | 13:14 | Storytelling / Culture | Feed 1:1 | "She stopped searching. It found her." | In-page generated Instagram canvas | posted | Emotional shopper story — ceramic mug, shop down the road, reserved in seconds. Posted via canvas-to-File workflow |
+| 2026-07-25 | 13:19 | Business / supply | Feed 1:1 | "You made it. They just haven't found it yet." | In-page generated Instagram canvas | posted | Emotional pitch to independents — shops, cafés, restaurants, freelancers, studios, trainers. CTA → shopunwrapped.com/business-apply |
 | TBD | TBD | Live drops | Feed 1:1 or 4:5 | "[Shop] just dropped. Limited." | — | idea | First real drop on site |
 
 ## Posted archive
@@ -18,6 +21,9 @@ Living calendar. The CMO agent updates this every run. Status: `idea` → `draft
 | 2026-07-25 | Limited local drops | @shopunwrapped | Generated in-browser from brand tokens and posted through Instagram web |
 | 2026-07-25 | A drop is simple | @shopunwrapped | Square grid-safe explainer: find live drops, reserve, collect with QR |
 | 2026-07-25 | Made by local people | @shopunwrapped | Red-led storytelling post. Corrected to a single clean image after the intended carousel published only slide 1 |
+| 2026-07-25 | Your neighbourhood is worth finding | @shopunwrapped | London map visual with Dalston/Hackney/Shoreditch/Peckham. Neighbourhood impact + why shoppers should sign up |
+| 2026-07-25 | She stopped searching. It found her. | @shopunwrapped | Emotional shopper story — ceramic mug from her nan, shop two streets away, reserved in seconds. Drives `shopunwrapped.com` |
+| 2026-07-25 | You made it. They just haven't found it yet. | @shopunwrapped | Emotional pitch to independents — you do the work, we tell the people around you. CTA → `shopunwrapped.com/business-apply` |
 
 ## Backlog ideas
 
