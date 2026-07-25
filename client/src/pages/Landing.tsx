@@ -1,5 +1,8 @@
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { format } from "date-fns";
+import { trpc } from "../trpc";
+import DropMap, { toDropPin } from "../components/DropMap";
 import useIsMobile from "../hooks/useIsMobile";
 
 // Design tokens — Unwrapped Design System
@@ -21,7 +24,7 @@ type SampleDrop = {
   price: string;
   window: string;
   left: string;
-  accent: string;
+  imageUrl: string;
 };
 
 const SAMPLE_DROPS: SampleDrop[] = [
@@ -33,7 +36,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
     price: "£4.50",
     window: "Collect Sat 9–11am",
     left: "6 available",
-    accent: "#C4B8A5",
+    imageUrl: "/samples/sourdough.jpg",
   },
   {
     category: "Beauty & Wellness",
@@ -43,7 +46,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
     price: "£28.00",
     window: "Session today 4–7pm",
     left: "4 spots",
-    accent: "#C9B4B0",
+    imageUrl: "/samples/blowdry.jpg",
   },
   {
     category: "Beauty & Wellness",
@@ -53,7 +56,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
     price: "£35.00",
     window: "Session Tue 6–8pm",
     left: "3 spots",
-    accent: "#A8B5A0",
+    imageUrl: "/samples/pt.jpg",
   },
 ];
 
@@ -61,6 +64,9 @@ export default function Landing() {
   const [, navigate] = useLocation();
   const isMobile = useIsMobile();
   const today = format(new Date(), "EEE d MMM yyyy").toUpperCase();
+
+  // Keep fetching drops so the London map shows real pins as soon as partners go live.
+  const { data: drops } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
 
   return (
     <div style={{ background: BG, color: FG, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif" }}>
@@ -145,66 +151,89 @@ export default function Landing() {
           marginBottom: 36, maxWidth: 520,
         }}>
           Unwrapped is the place to discover time-limited drops from local businesses near you —
-          reserve your spot, then collect with a QR code.
+          reserve your item or your spot, then collect with a QR code.
         </p>
 
-        {/* Pre-launch status */}
+        {/* Mission invite — pre-launch */}
         {PRE_LAUNCH && (
           <div style={{
-            border: `1px solid ${BORDER}`,
+            border: `1px solid ${FG}`,
+            borderLeft: `4px solid ${V}`,
             background: MUTED,
-            padding: isMobile ? "24px 20px" : "28px 32px",
+            padding: isMobile ? "28px 22px" : "36px 40px",
             marginBottom: 36,
-            maxWidth: 640,
+            maxWidth: 720,
           }}>
             <div style={{
               fontFamily: "'Space Mono', monospace", fontSize: 9,
-              color: MUTED_FG, letterSpacing: "0.14em", marginBottom: 14,
+              color: V, letterSpacing: "0.14em", marginBottom: 16,
             }}>
-              WHERE WE ARE NOW
+              BE PART OF THIS · LONDON
             </div>
             <p style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: isMobile ? 20 : 24,
-              color: FG, lineHeight: 1.35, marginBottom: 16,
+              fontSize: isMobile ? 26 : 34,
+              fontWeight: 700, color: FG, lineHeight: 1.2,
+              letterSpacing: "-0.5px", marginBottom: 16,
             }}>
-              We're onboarding businesses, building our community, and getting ready to launch.
+              We're not live yet — and that's exactly why{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>you</em> matter.
+            </p>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+              color: FG, lineHeight: 1.7, marginBottom: 20, maxWidth: 560,
+            }}>
+              Unwrapped only works if neighbourhood businesses and local people build it together.
+              The businesses boarding now aren't unlocking a finished product — they're making
+              the drops happen. Shoppers who sign up now aren't waiting on the sidelines —
+              they're the first ones we'll keep posted as London gets ready.
             </p>
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-              color: MUTED_FG, lineHeight: 1.65,
+              color: MUTED_FG, lineHeight: 1.65, maxWidth: 560,
             }}>
-              There are no live drops yet. Join early as a shopper, or apply to list your business —
-              you'll be first in line when neighbourhoods go live.
+              We need you. We want to hear what you have to say. This only becomes real if
+              you're in it with us.
             </p>
           </div>
         )}
 
         <div style={{
-          display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+          display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start",
         }}>
-          <button
-            onClick={() => navigate("/signin")}
-            style={{
-              background: FG, color: BG,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              letterSpacing: "0.1em", padding: "13px 28px",
-              border: "none", cursor: "pointer",
-            }}
-          >
-            JOIN THE COMMUNITY
-          </button>
-          <a
-            href="/business-apply"
-            style={{
-              border: `1px solid ${FG}`, color: FG,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              letterSpacing: "0.1em", padding: "12px 24px",
-              textDecoration: "none", display: "inline-block",
-            }}
-          >
-            LIST YOUR BUSINESS
-          </a>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+          }}>
+            <button
+              onClick={() => navigate("/signin")}
+              style={{
+                background: FG, color: BG,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                letterSpacing: "0.1em", padding: "13px 28px",
+                border: "none", cursor: "pointer",
+              }}
+            >
+              SIGN UP
+            </button>
+            <a
+              href="/business-apply"
+              style={{
+                border: `1px solid ${FG}`, color: FG,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                letterSpacing: "0.1em", padding: "12px 24px",
+                textDecoration: "none", display: "inline-block",
+              }}
+            >
+              LIST YOUR BUSINESS
+            </a>
+          </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+            color: MUTED_FG, lineHeight: 1.55, maxWidth: 420,
+          }}>
+            Sign up to stay up to date — we'll keep you posted on every development.
+            Be part of this from the start.
+          </p>
         </div>
       </section>
 
@@ -250,6 +279,12 @@ export default function Landing() {
           ))}
         </div>
       </section>
+
+      {/* ── London map — stays live so real drops appear as pins when partners launch ── */}
+      <MapSection
+        drops={drops ?? []}
+        onDropClick={(id) => navigate(`/drop/${id}`)}
+      />
 
       {/* ── Mission / why ── */}
       <section style={{
@@ -320,18 +355,18 @@ export default function Landing() {
           {[
             {
               n: "01",
-              title: "Onboarding businesses",
-              body: "Local shops, cafés, salons, studios and neighbourhood businesses across London are applying to list — including people running a local branch. We're onboarding partners ready to run real drops.",
+              title: "Businesses making this happen",
+              body: "The businesses boarding now aren't unlocking a finished product — they're helping build Unwrapped with us. Local shops, salons, cafés, freelancers, franchisees. We need you. We want to hear what you have to say. We're in this together.",
             },
             {
               n: "02",
-              title: "Building the community",
-              body: "Shoppers who sign up early get drop alerts when neighbourhoods go live — so the first releases reach people who already care.",
+              title: "Shoppers signing up",
+              body: "Sign up as a shopper and we'll keep you posted on every development — so when neighbourhoods go live, you're already part of it.",
             },
             {
               n: "03",
               title: "Getting ready to launch",
-              body: "When we open, you'll browse what's dropping near you, reserve in seconds, and collect with a QR code. Limited. Local. Gone when they're gone.",
+              body: "We're not live yet. When we open, you'll browse what's dropping near you, reserve in seconds, and collect with a QR code. Limited. Local. Gone when they're gone.",
             },
           ].map(({ n, title, body }) => (
             <div key={n} style={{ background: BG, padding: isMobile ? "28px 24px" : "36px 32px" }}>
@@ -381,7 +416,7 @@ export default function Landing() {
             {
               n: "02",
               title: "Reserve before it's gone",
-              body: "Tap to claim your spot. Your ticket is issued instantly — only as many as the business decides to release.",
+              body: "Tap to reserve. Your ticket is issued instantly — only as many as the business decides to release.",
             },
             {
               n: "03",
@@ -443,6 +478,15 @@ export default function Landing() {
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.7,
+            marginBottom: 20, maxWidth: 420,
+          }}>
+            If you're boarding now, you're not accessing something finished — you're making
+            this happen. We need neighbourhood businesses. We want to hear what you have to say.
+            We're building this together.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.7,
             marginBottom: 36, maxWidth: 400,
           }}>
             No schedule to keep. No endless promo. When it's convenient — a quiet afternoon,
@@ -466,18 +510,18 @@ export default function Landing() {
         <div style={{ border: `1px solid ${BORDER}` }}>
           {[
             {
-              label: "On your terms",
-              body: "You drop when you want — when it's convenient, when you have something to say. No pressure to post every day. Your window, your quantity, your call.",
+              label: "Built with you",
+              body: "Early businesses aren't customers of a finished product — you're partners. We need you. Tell us what works. We're in this together.",
               shade: BG,
             },
             {
-              label: "We bring the street to you",
-              body: "We help you market the fantastic things you do to people nearby who already care. They get an alert. They reserve. They show up.",
+              label: "On your terms",
+              body: "You drop when you want — when it's convenient, when you have something to say. No pressure to post every day. Your window, your quantity, your call.",
               shade: MUTED,
             },
             {
-              label: "Fill your blanks",
-              body: "Quiet slots, spare capacity, a last-minute special — turn empty time into reserved demand without chasing walk-ins.",
+              label: "We bring the street to you",
+              body: "We help you market the fantastic things you do to people nearby who already care — and fill the blanks when the diary is empty.",
               shade: MUTED,
             },
           ].map(({ label, body, shade }, i) => (
@@ -542,6 +586,91 @@ export default function Landing() {
   );
 }
 
+function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: string) => void }) {
+  const isMobile = useIsMobile();
+  const [search, setSearch] = useState("");
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
+
+  const pins = useMemo(() => drops.map(toDropPin), [drops]);
+
+  async function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (!search.trim()) return;
+    try {
+      const resp = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
+        { headers: { "Accept-Language": "en" } }
+      );
+      const data = await resp.json();
+      if (data[0]) {
+        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+      }
+    } catch {
+      // silently ignore network errors
+    }
+  }
+
+  return (
+    <section style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <div style={{
+        padding: isMobile ? "20px" : "24px 40px",
+        display: "flex", justifyContent: "space-between",
+        alignItems: "center", borderBottom: `1px solid ${BORDER}`,
+        flexWrap: "wrap", gap: 16,
+      }}>
+        <div>
+          <span style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: MUTED_FG, letterSpacing: "0.15em",
+          }}>
+            DROPS ON THE MAP
+          </span>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+            color: MUTED_FG, marginTop: 4,
+          }}>
+            {pins.length === 0
+              ? "London is getting ready — no live drops yet. When neighbourhood businesses launch, their pins will show up here."
+              : `${pins.length} drops visible · click a pin to preview`}
+          </p>
+        </div>
+
+        <form onSubmit={handleSearch} style={{ display: "flex", gap: 0, width: isMobile ? "100%" : "auto" }}>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search an area or postcode…"
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              padding: "10px 16px", border: `1px solid ${BORDER}`,
+              borderRight: "none", background: BG, color: FG,
+              outline: "none", width: isMobile ? "100%" : 260, minWidth: 0, flex: isMobile ? 1 : "none",
+            }}
+          />
+          <button type="submit" style={{
+            background: FG, color: BG,
+            fontFamily: "'Space Mono', monospace", fontSize: 10,
+            letterSpacing: "0.08em", padding: "10px 20px",
+            border: "none", cursor: "pointer",
+          }}>
+            GO
+          </button>
+        </form>
+      </div>
+
+      <DropMap
+        drops={pins}
+        onDropClick={onDropClick}
+        defaultLat={mapCenter.lat}
+        defaultLng={mapCenter.lng}
+        zoom={13}
+        height={isMobile ? "340px" : "480px"}
+      />
+    </section>
+  );
+}
+
 function SampleDropCard({ sample }: { sample: SampleDrop }) {
   return (
     <div
@@ -555,16 +684,9 @@ function SampleDropCard({ sample }: { sample: SampleDrop }) {
     >
       <div style={{
         height: 160, marginBottom: 14, position: "relative",
-        background: `linear-gradient(145deg, ${sample.accent} 0%, ${MUTED} 100%)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
+        background: `${MUTED} url(${sample.imageUrl}) center/cover no-repeat`,
         overflow: "hidden",
       }}>
-        <span style={{
-          fontFamily: "'Playfair Display', serif", fontSize: 13,
-          color: FG, fontStyle: "italic", opacity: 0.55,
-        }}>
-          {sample.business}
-        </span>
         <div style={{
           position: "absolute", top: 10, left: 10,
           background: BG, padding: "4px 8px",
