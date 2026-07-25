@@ -182,6 +182,275 @@ export async function sendBusinessClaimInviteEmail(to: string, businessName: str
   }
 }
 
+/**
+ * Follow-up to a business that was sent a claim invite but didn't act on it
+ * before the 7-day link expired. Shorter than the original invite — assumes
+ * they already saw (or at least received) the first email. Sends a fresh
+ * password-setup link (caller is responsible for issuing a new token).
+ * Inline HTML rather than a Resend template, so no publish step required.
+ */
+export async function sendBusinessClaimFollowUpEmail(to: string, businessName: string, setupUrl: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) throw new Error("RESEND_API_KEY is not configured");
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Unwrapped <anna@shopunwrapped.com>",
+      to,
+      subject: `Still want to claim ${businessName} on Unwrapped?`,
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /></head>
+        <body style="margin:0;padding:0;background-color:#E8E7E2;-webkit-text-size-adjust:100%;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#E8E7E2;">
+            <tr>
+              <td align="center" style="padding:40px 16px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FAFAF8;border:1px solid #E0DFD9;">
+                  <tr>
+                    <td style="padding:28px 32px 24px;border-bottom:3px solid #E8341C;">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                          <td width="52" valign="middle" style="padding-right:14px;">
+                            <img src="https://shopunwrapped.com/icon-192.png" width="48" height="48" alt="Unwrapped" style="display:block;border:0;border-radius:4px;" />
+                          </td>
+                          <td valign="middle">
+                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#141210;line-height:1.1;letter-spacing:-0.02em;">
+                              Unwrapped
+                            </div>
+                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
+                              Limited · Local · Worth sharing
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:28px 32px 0;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        Hi — I emailed recently about a free profile I made for <strong>${esc(businessName)}</strong> on
+                        Unwrapped. The original claim link has expired, so here's a fresh one in case you missed it.
+                      </p>
+                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        It takes about a minute: set a password, sign in as
+                        <strong>${esc(to)}</strong>, and post your first drop whenever something's happening
+                        — a new product, a discount, a one-off. Nothing goes live from your side until you do.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:24px 32px 28px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                          <td style="background-color:#141210;border-radius:0;">
+                            <a href="${setupUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FAFAF8;">
+                              Claim your profile
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 32px 32px;border-top:1px solid #E0DFD9;">
+                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7A7A7A;">
+                        Not interested? Ignore this — nothing goes live until you claim. Don't want a profile at all?
+                        Reply "REMOVE" and I'll delete it. Questions? Just reply, or email
+                        <a href="mailto:anna@shopunwrapped.com" style="color:#7A7A7A;">anna@shopunwrapped.com</a>.
+                      </p>
+                      <p style="margin:12px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:#ABABAB;letter-spacing:0.1em;text-transform:uppercase;">
+                        © Unwrapped · shopunwrapped.com
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Resend ${res.status}: ${body.slice(0, 200)}`);
+  }
+}
+
+/**
+ * "Thank you / what's next" email sent to a business owner after they've
+ * claimed their profile and set a password. Inline HTML (no Resend template
+ * publish step required). Sent only to owners who actually completed the
+ * claim flow (password_hash IS NOT NULL).
+ */
+export async function sendBusinessClaimThankYouEmail(to: string, businessName: string, businessSlug: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) throw new Error("RESEND_API_KEY is not configured");
+
+  const profileUrl = `https://shopunwrapped.com/business/${businessSlug}`;
+  const dashboardUrl = "https://shopunwrapped.com/business";
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Anna at Unwrapped <anna@shopunwrapped.com>",
+      to,
+      subject: `Welcome to Unwrapped — what happens next for ${businessName}`,
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /></head>
+        <body style="margin:0;padding:0;background-color:#E8E7E2;-webkit-text-size-adjust:100%;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#E8E7E2;">
+            <tr>
+              <td align="center" style="padding:40px 16px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FAFAF8;border:1px solid #E0DFD9;">
+                  <tr>
+                    <td style="padding:28px 32px 24px;border-bottom:3px solid #E8341C;">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                          <td width="52" valign="middle" style="padding-right:14px;">
+                            <img src="https://shopunwrapped.com/icon-192.png" width="48" height="48" alt="Unwrapped" style="display:block;border:0;border-radius:4px;" />
+                          </td>
+                          <td valign="middle">
+                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#141210;line-height:1.1;letter-spacing:-0.02em;">
+                              Unwrapped
+                            </div>
+                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
+                              Limited · Local · Worth sharing
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:28px 32px 0;">
+                      <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;">
+                        Thank you
+                      </p>
+                      <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;line-height:1.2;color:#141210;">
+                        You're in — here's what happens next
+                      </h1>
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        Hi, Anna here — I run Unwrapped. Thanks for claiming <strong>${esc(businessName)}</strong>.
+                        You're one of the first businesses on the platform, which means you're helping shape what
+                        this becomes. I really appreciate that.
+                      </p>
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        Here's the short version of what to do next:
+                      </p>
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        <strong style="font-family:'Courier New',monospace;font-size:13px;">1.</strong>
+                        Sign in at
+                        <a href="${dashboardUrl}" style="color:#141210;font-weight:500;">${dashboardUrl}</a>
+                        with this email address (${esc(to)}) and the password you just set.
+                      </p>
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        <strong style="font-family:'Courier New',monospace;font-size:13px;">2.</strong>
+                        Tidy up your profile — add a logo, a cover photo, your Instagram handle, and a one-line
+                        description so nearby shoppers recognise you. Your public page is
+                        <a href="${profileUrl}" style="color:#141210;font-weight:500;">${profileUrl}</a>.
+                      </p>
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        <strong style="font-family:'Courier New',monospace;font-size:13px;">3.</strong>
+                        Post your first <em>drop</em> — a new product, a discount, a one-off, a launch. Shoppers
+                        within a couple of kilometres get an alert and can claim a QR ticket. That's the whole
+                        point of Unwrapped: telling the neighbourhood when something's happening. You're welcome
+                        to post one now, or just get your profile looking right first — entirely up to you.
+                      </p>
+                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                        A few honest things, since you're one of the first:
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 32px 0;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                        — <strong>This is a pilot, and we're still signing up businesses like you.</strong> So I want
+                        to be straight with you: if you post a drop today, it won't reach a flood of shoppers
+                        tomorrow. The shopper side grows once there's a critical mass of interesting local
+                        businesses on the map — that's the part we're building right now, and you're helping build it.
+                      </p>
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                        — We're not relying on the internet to do the work. We're planning a proper local campaign —
+                        door-to-door, postcards, talking to people on the high street — to make sure the
+                        neighbourhoods around your shops actually know about Unwrapped. That takes a little time,
+                        and it's coming.
+                      </p>
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                        — So please be patient with us. You're not just joining an app — you're helping build
+                        something that doesn't quite exist yet. Your feedback in these early weeks genuinely
+                        shapes what it becomes. Reply to this email with what's useful, what's missing, what's
+                        confusing.
+                      </p>
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                        — There's no cost to you during the pilot. We'll figure out pricing together later;
+                        nothing changes without you saying yes.
+                      </p>
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                        — Your public profile is live now at
+                        <a href="${profileUrl}" style="color:#141210;font-weight:500;">${profileUrl}</a>.
+                        Shoppers can already follow you there.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:24px 32px 28px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                          <td style="background-color:#141210;border-radius:0;">
+                            <a href="${dashboardUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FAFAF8;">
+                              Sign in to your dashboard
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 32px 32px;border-top:1px solid #E0DFD9;">
+                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#7A7A7A;">
+                        Thanks again for being one of the first — it genuinely matters.<br/>
+                        Anna
+                      </p>
+                      <p style="margin:16px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7A7A7A;">
+                        Questions? Just reply to this email, or write to
+                        <a href="mailto:anna@shopunwrapped.com" style="color:#7A7A7A;">anna@shopunwrapped.com</a>.
+                      </p>
+                      <p style="margin:12px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:#ABABAB;letter-spacing:0.1em;text-transform:uppercase;">
+                        © Unwrapped · shopunwrapped.com
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Resend ${res.status}: ${body.slice(0, 200)}`);
+  }
+}
+
 export async function sendApplicationRejectedEmail(to: string, businessName: string, reason?: string | null) {
     const key = process.env.RESEND_API_KEY;
     if (!key) return;

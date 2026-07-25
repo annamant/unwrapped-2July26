@@ -108,6 +108,38 @@ export default function AdminBusinesses() {
     },
   });
 
+  const [followUpResult, setFollowUpResult] = useState<{
+    sentCount: number;
+    failedCount: number;
+  } | null>(null);
+  const sendFollowUps = trpc.admin.sendClaimFollowUps.useMutation({
+    onSuccess: (data) => {
+      if (data.dryRun) return;
+      setFollowUpResult({
+        sentCount: data.sentCount,
+        failedCount: data.failedCount,
+      });
+      utils.admin.claimInviteStats.invalidate();
+    },
+  });
+
+  const { data: claimedBusinesses } = trpc.admin.claimedBusinesses.useQuery();
+  const [thankYouResult, setThankYouResult] = useState<{
+    sentCount: number;
+    failedCount: number;
+  } | null>(null);
+  const sendThankYous = trpc.admin.sendClaimThankYous.useMutation({
+    onSuccess: (data) => {
+      if (data.dryRun) return;
+      setThankYouResult({
+        sentCount: data.sentCount,
+        failedCount: data.failedCount,
+      });
+      utils.admin.claimedBusinesses.invalidate();
+      utils.admin.claimInviteStats.invalidate();
+    },
+  });
+
   const FILTERS: { key: StatusFilter; label: string }[] = [
     { key: "all", label: "All" },
     { key: "active", label: "Active" },
@@ -171,7 +203,7 @@ export default function AdminBusinesses() {
             </div>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>
               {claimStats
-                ? `${claimStats.pending} unclaimed profile${claimStats.pending === 1 ? "" : "s"} awaiting an invite · ${claimStats.invited} already sent`
+                ? `${claimStats.pending} unclaimed profile${claimStats.pending === 1 ? "" : "s"} awaiting an invite · ${claimStats.invited} already sent · ${claimStats.claimed} claimed${claimStats.followUpDue ? ` · ${claimStats.followUpDue} follow-up due` : ""}`
                 : "Loading…"}
             </div>
             {inviteResult && (
@@ -179,6 +211,17 @@ export default function AdminBusinesses() {
                 Sent {inviteResult.sentCount}
                 {inviteResult.failedCount ? ` · ${inviteResult.failedCount} failed` : ""}
                 {" "}· {inviteResult.remaining} remaining
+              </div>
+            )}
+            {followUpResult && (
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: followUpResult.failedCount ? V : "#15803D", marginTop: 6 }}>
+                Follow-ups sent {followUpResult.sentCount}
+                {followUpResult.failedCount ? ` · ${followUpResult.failedCount} failed` : ""}
+              </div>
+            )}
+            {sendFollowUps.isError && (
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 6 }}>
+                {sendFollowUps.error.message}
               </div>
             )}
             {sendInvites.isError && (
@@ -255,7 +298,146 @@ export default function AdminBusinesses() {
             >
               {sendInvites.isPending ? "SENDING…" : "SEND NEXT 50 INVITES"}
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm(`Send follow-up emails to the next 50 businesses whose claim link expired?`)) {
+                  sendFollowUps.mutate({ limit: 50 });
+                }
+              }}
+              disabled={sendFollowUps.isPending || !claimStats?.followUpDue}
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                padding: "12px 18px",
+                background: (sendFollowUps.isPending || !claimStats?.followUpDue) ? BORDER : V,
+                color: BG, border: "none",
+                cursor: (sendFollowUps.isPending || !claimStats?.followUpDue) ? "not-allowed" : "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {sendFollowUps.isPending ? "SENDING…" : `SEND FOLLOW-UPS${claimStats?.followUpDue ? ` (${claimStats.followUpDue})` : ""}`}
+            </button>
           </div>
+        </div>
+
+        {/* Claimed businesses — who actually signed in, and thank-you status */}
+        <div style={{
+          border: `1px solid ${BORDER}`, padding: isMobile ? 16 : 20, marginBottom: 32, background: MUTED,
+        }}>
+          <div style={{
+            display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16,
+            justifyContent: "space-between", marginBottom: 16,
+          }}>
+            <div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 6 }}>
+                CLAIMED BUSINESSES
+              </div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>
+                {claimedBusinesses === undefined
+                  ? "Loading…"
+                  : `${claimedBusinesses.length} business${claimedBusinesses.length === 1 ? "" : "es"} claimed so far`}
+              </div>
+              {thankYouResult && (
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: thankYouResult.failedCount ? V : "#15803D", marginTop: 6 }}>
+                  Thank-yous sent {thankYouResult.sentCount}
+                  {thankYouResult.failedCount ? ` · ${thankYouResult.failedCount} failed` : ""}
+                </div>
+              )}
+              {sendThankYous.isError && (
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 6 }}>
+                  {sendThankYous.error.message}
+                </div>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const unthanked = (claimedBusinesses ?? []).filter((b) => !b.thankYouSentAt);
+                if (unthanked.length === 0) {
+                  window.alert("All claimed businesses have already been sent a thank-you.");
+                  return;
+                }
+                if (window.confirm(`Send thank-you emails to ${unthanked.length} claimed business${unthanked.length === 1 ? "" : "es"}?`)) {
+                  sendThankYous.mutate({ businessIds: unthanked.map((b) => b.id) });
+                }
+              }}
+              disabled={sendThankYous.isPending || !claimedBusinesses?.some((b) => !b.thankYouSentAt)}
+              style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                padding: "12px 18px",
+                background: (sendThankYous.isPending || !claimedBusinesses?.some((b) => !b.thankYouSentAt)) ? BORDER : FG,
+                color: BG, border: "none",
+                cursor: (sendThankYous.isPending || !claimedBusinesses?.some((b) => !b.thankYouSentAt)) ? "not-allowed" : "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {sendThankYous.isPending ? "SENDING…" : "SEND ALL THANK-YOUS"}
+            </button>
+          </div>
+
+          {claimedBusinesses && claimedBusinesses.length > 0 && (
+            <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
+              {claimedBusinesses.map((b) => {
+                const isTest = b.name.startsWith("[TEST]") ||
+                  /mantova\.a@gmail\.com|mantova\.a2@gmail\.com|@pulkra\.com/i.test(b.ownerEmail);
+                return (
+                  <div key={b.id} style={{
+                    display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12,
+                    justifyContent: "space-between",
+                    padding: "12px 0", borderBottom: `1px solid ${BORDER}`,
+                  }}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, fontWeight: 500 }}>
+                        {b.name}
+                        {isTest && (
+                          <span style={{
+                            fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG,
+                            letterSpacing: "0.1em", marginLeft: 8, border: `1px solid ${BORDER}`, padding: "2px 6px",
+                          }}>
+                            TEST
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 2 }}>
+                        {b.city ?? "—"} · {b.ownerEmail} · claimed {b.ownerCreatedAt ? new Date(b.ownerCreatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "—"}
+                      </div>
+                      <div style={{ marginTop: 4 }}>
+                        <a href={`https://shopunwrapped.com/business/${b.slug}`} target="_blank" rel="noreferrer"
+                           style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: "0.08em" }}>
+                          VIEW PROFILE
+                        </a>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      {b.thankYouSentAt ? (
+                        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#15803D", letterSpacing: "0.1em" }}>
+                          ✓ THANKED {new Date(b.thankYouSentAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm(`Send a thank-you email to ${b.name} (${b.ownerEmail})?`)) {
+                              sendThankYous.mutate({ businessIds: [b.id] });
+                            }
+                          }}
+                          disabled={sendThankYous.isPending}
+                          style={{
+                            fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.1em",
+                            padding: "8px 14px", background: BG, color: FG,
+                            border: `1px solid ${FG}`, cursor: sendThankYous.isPending ? "not-allowed" : "pointer",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          SEND THANK-YOU
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {showImport && (

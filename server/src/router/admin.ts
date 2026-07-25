@@ -7,6 +7,8 @@ import {
   sendApplicationApprovedEmail,
   sendApplicationRejectedEmail,
   sendBusinessClaimInviteEmail,
+  sendBusinessClaimFollowUpEmail,
+  sendBusinessClaimThankYouEmail,
 } from "../notifications/dispatch";
 import crypto from "crypto";
 import type { DB } from "../db";
@@ -385,6 +387,10 @@ export const adminRouter = router({
 
   // How many seeded profiles are still waiting for a claim invite (and how many
   // have already been sent one). Drives the "send next batch" admin button.
+  // Also exposes the *real* claim count — businesses whose owner has actually
+  // set a password (not just been pre-attached as a passwordless owner by
+  // sendClaimInvites), and the follow-up-eligible cohort (invited but not
+  // claimed, with the original 7-day link now expired).
   claimInviteStats: adminProcedure.query(async ({ ctx }) => {
     // Pending = active profile with a real contact email that has not been invited yet.
     // Ownership may still be the shared unclaimed placeholder — sendClaimInvites
@@ -402,7 +408,64 @@ export const adminRouter = router({
       .select({ invited: count() })
       .from(businesses)
       .where(isNotNull(businesses.claimInviteSentAt));
-    return { pending, invited };
+
+    // Claimed = active business whose owner has a password set (i.e. a human
+    // signed in). Excludes the shared unclaimed-directory placeholder.
+    const [{ claimed }] = await ctx.db
+      .select({ claimed: count() })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`${users.passwordHash} IS NOT NULL`,
+      ));
+
+    // Follow-up due = invited but not claimed, and the invite was sent >7 days
+    // ago (so the original link has expired). These are the businesses worth
+    // re-emailing with a fresh link via sendClaimFollowUps.
+    const [{ followUpDue }] = await ctx.db
+      .select({ followUpDue: count() })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        isNotNull(businesses.claimInviteSentAt),
+        sql`${businesses.claimInviteSentAt} < NOW() - INTERVAL '7 days'`,
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`${users.passwordHash} IS NULL`,
+      ));
+
+    return { pending, invited, claimed, followUpDue };
+  }),
+
+  // List businesses that have actually been claimed — i.e. the owner has set
+  // a password (a human signed in). Excludes the shared unclaimed-directory
+  // placeholder. Used by the admin dashboard to show who's real and to drive
+  // the "send thank-you" action.
+  claimedBusinesses: adminProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db
+      .select({
+        id: businesses.id,
+        name: businesses.name,
+        slug: businesses.slug,
+        city: businesses.city,
+        contactEmail: businesses.contactEmail,
+        ownerEmail: users.email,
+        ownerName: users.name,
+        ownerCreatedAt: users.createdAt,
+        claimInviteSentAt: businesses.claimInviteSentAt,
+        thankYouSentAt: businesses.thankYouSentAt,
+      })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`${users.passwordHash} IS NOT NULL`,
+      ))
+      .orderBy(desc(users.createdAt));
+    return rows;
   }),
 
   // Send claim invites to seeded profiles. Attaches each contactEmail as owner
@@ -530,6 +593,174 @@ export const adminRouter = router({
           signInAs: string;
           profileUrl: string;
         }[],
+      };
+    }),
+
+  // Re-email businesses that were sent a claim invite >7 days ago but never
+  // claimed (owner still has no password). Issues a fresh password-setup token
+  // and sends the shorter follow-up template. Does NOT touch
+  // claimInviteSentAt — that stays as the original invite date so the cohort
+  // query (invited >7 days ago, no password) keeps working until they actually
+  // set a password.
+  sendClaimFollowUps: adminProcedure
+    .input(z.object({
+      limit: z.number().int().min(1).max(200).default(50),
+      businessIds: z.array(z.string().uuid()).max(50).optional(),
+      dryRun: z.boolean().default(false),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const where = and(
+        eq(businesses.status, "active"),
+        isNotNull(businesses.claimInviteSentAt),
+        sql`${businesses.claimInviteSentAt} < NOW() - INTERVAL '7 days'`,
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`EXISTS (SELECT 1 FROM users u WHERE u.id = ${businesses.ownerId} AND u.password_hash IS NULL)`,
+        input.businessIds?.length ? inArray(businesses.id, input.businessIds) : undefined,
+      );
+
+      const candidates = await ctx.db
+        .select({
+          id: businesses.id,
+          name: businesses.name,
+          slug: businesses.slug,
+          contactEmail: businesses.contactEmail,
+          ownerId: businesses.ownerId,
+          claimInviteSentAt: businesses.claimInviteSentAt,
+        })
+        .from(businesses)
+        .where(where)
+        .orderBy(asc(businesses.claimInviteSentAt))
+        .limit(input.businessIds?.length ? input.businessIds.length : input.limit);
+
+      if (input.dryRun) {
+        return {
+          dryRun: true as const,
+          sentCount: 0,
+          failedCount: 0,
+          remaining: candidates.length,
+          sent: [] as { name: string; contactEmail: string; slug: string }[],
+          failed: [] as { name: string; contactEmail: string; reason: string }[],
+          preview: candidates.map((b) => ({
+            id: b.id,
+            name: b.name,
+            slug: b.slug,
+            contactEmail: b.contactEmail.toLowerCase(),
+            originalInviteSentAt: b.claimInviteSentAt,
+          })),
+        };
+      }
+
+      const sent: { name: string; contactEmail: string; slug: string }[] = [];
+      const failed: { name: string; contactEmail: string; reason: string }[] = [];
+
+      for (const b of candidates) {
+        try {
+          // Issue a fresh 7-day token and email the shorter follow-up.
+          const rawToken = crypto.randomBytes(32).toString("hex");
+          await ctx.db.insert(passwordResetTokens).values({
+            userId: b.ownerId,
+            tokenHash: crypto.createHash("sha256").update(rawToken).digest("hex"),
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          });
+          const setupUrl = `${clientBaseUrl()}/reset-password?token=${rawToken}`;
+          await sendBusinessClaimFollowUpEmail(
+            b.contactEmail.toLowerCase(),
+            b.name,
+            setupUrl,
+          );
+          sent.push({ name: b.name, contactEmail: b.contactEmail, slug: b.slug });
+        } catch (err) {
+          failed.push({
+            name: b.name,
+            contactEmail: b.contactEmail,
+            reason: err instanceof Error ? err.message : "Failed to send",
+          });
+        }
+      }
+
+      return {
+        dryRun: false as const,
+        sentCount: sent.length,
+        failedCount: failed.length,
+        sent,
+        failed,
+      };
+    }),
+
+  // Send a "thank you / what's next" email to businesses that have claimed
+  // their profile (owner has a password) but haven't been thanked yet. Stamps
+  // thankYouSentAt so repeat runs don't double-email. Pass businessIds to
+  // target specific rows (e.g. a single business from the claimed list).
+  sendClaimThankYous: adminProcedure
+    .input(z.object({
+      businessIds: z.array(z.string().uuid()).max(200).optional(),
+      dryRun: z.boolean().default(false),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const where = and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`EXISTS (SELECT 1 FROM users u WHERE u.id = ${businesses.ownerId} AND u.password_hash IS NOT NULL)`,
+        isNull(businesses.thankYouSentAt),
+        input.businessIds?.length ? inArray(businesses.id, input.businessIds) : undefined,
+      );
+
+      const candidates = await ctx.db
+        .select({
+          id: businesses.id,
+          name: businesses.name,
+          slug: businesses.slug,
+          contactEmail: businesses.contactEmail,
+        })
+        .from(businesses)
+        .where(where)
+        .orderBy(asc(businesses.createdAt))
+        .limit(input.businessIds?.length ? input.businessIds.length : 200);
+
+      if (input.dryRun) {
+        return {
+          dryRun: true as const,
+          sentCount: 0,
+          failedCount: 0,
+          preview: candidates.map((b) => ({
+            id: b.id,
+            name: b.name,
+            slug: b.slug,
+            contactEmail: b.contactEmail.toLowerCase(),
+          })),
+        };
+      }
+
+      const sent: { name: string; contactEmail: string; slug: string }[] = [];
+      const failed: { name: string; contactEmail: string; reason: string }[] = [];
+
+      for (const b of candidates) {
+        try {
+          await sendBusinessClaimThankYouEmail(
+            b.contactEmail.toLowerCase(),
+            b.name,
+            b.slug,
+          );
+          await ctx.db
+            .update(businesses)
+            .set({ thankYouSentAt: new Date() })
+            .where(eq(businesses.id, b.id));
+          sent.push({ name: b.name, contactEmail: b.contactEmail, slug: b.slug });
+        } catch (err) {
+          failed.push({
+            name: b.name,
+            contactEmail: b.contactEmail,
+            reason: err instanceof Error ? err.message : "Failed to send",
+          });
+        }
+      }
+
+      return {
+        dryRun: false as const,
+        sentCount: sent.length,
+        failedCount: failed.length,
+        sent,
+        failed,
       };
     }),
 
