@@ -79,12 +79,24 @@ export default function Landing() {
           </span>
         )}
 
-        <span style={{
-          fontFamily: "'Playfair Display', serif", fontSize: 22,
-          fontWeight: 700, color: FG, letterSpacing: "-0.5px",
+        <a href="/" style={{
+          display: "flex", alignItems: "center", gap: 10,
+          textDecoration: "none", color: FG,
         }}>
-          Unwrapped
-        </span>
+          <img
+            src="/logo-mark.svg"
+            alt=""
+            width={28}
+            height={28}
+            style={{ display: "block", flexShrink: 0 }}
+          />
+          <span style={{
+            fontFamily: "'Playfair Display', serif", fontSize: 22,
+            fontWeight: 700, letterSpacing: "-0.5px",
+          }}>
+            Unwrapped
+          </span>
+        </a>
 
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
           <a href="/business-apply" style={{
@@ -496,9 +508,18 @@ export default function Landing() {
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: 12,
       }}>
-        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: FG }}>
-          Unwrapped
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <img
+            src="/logo-mark.svg"
+            alt=""
+            width={22}
+            height={22}
+            style={{ display: "block", flexShrink: 0 }}
+          />
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: FG }}>
+            Unwrapped
+          </span>
+        </div>
         <div style={{ display: "flex", gap: 24 }}>
           {[
             { label: "Privacy", href: "/privacy" },
