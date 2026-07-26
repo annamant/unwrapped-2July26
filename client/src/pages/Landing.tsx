@@ -266,137 +266,184 @@ export default function Landing() {
 
         <div style={{
           position: "relative",
-          padding: isMobile ? "44px 20px 36px" : "64px 40px 52px",
-          maxWidth: 680,
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1.05fr) minmax(300px, 0.7fr)",
+          gap: isMobile ? 24 : 16,
+          alignItems: "end",
+          padding: isMobile ? "44px 20px 36px" : "56px 40px 52px",
         }}>
-          <div
-            className="uw-fade-1"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 10,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              color: V, letterSpacing: "0.14em", marginBottom: 18,
-            }}
-          >
-            <span
-              className="uw-pulse-dot"
-              style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
-            />
-            LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
+          <div>
+            <div
+              className="uw-fade-1"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                color: V, letterSpacing: "0.14em", marginBottom: 20,
+              }}
+            >
+              <span
+                className="uw-pulse-dot"
+                style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
+              />
+              LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
+            </div>
+
+            <h1
+              className="uw-fade-2"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(40px, 6.5vw, 78px)",
+                fontWeight: 700, color: FG,
+                lineHeight: 1.02, letterSpacing: "-2px",
+                marginBottom: 20,
+              }}
+            >
+              Limited local drops.
+              <br />
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>Reserved in seconds.</em>
+            </h1>
+
+            <p
+              className="uw-fade-3"
+              style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 17,
+                color: FG, lineHeight: 1.55, marginBottom: 28, fontWeight: 400,
+                maxWidth: 520,
+              }}
+            >
+              Unwrapped is where neighbourhood businesses — shops, salons, cafés,
+              freelancers, accountants, and{" "}
+              <em style={{ fontStyle: "italic" }}>charity shops</em>
+              {" "}(we love them) — release time-limited drops. You reserve, then collect with a QR code.
+            </p>
+
+            <div
+              className="uw-fade-4"
+              style={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                gap: 12,
+                maxWidth: isMobile ? "100%" : 560,
+              }}
+            >
+              <div style={{
+                flex: 1,
+                border: `1px solid ${FG}`,
+                background: FG,
+                color: BG,
+                padding: "18px 18px 20px",
+              }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 9,
+                  letterSpacing: "0.12em", color: "rgba(250,250,248,0.5)", marginBottom: 8,
+                }}>
+                  FOR SHOPPERS
+                </div>
+                <div style={{
+                  fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
+                  marginBottom: 14, lineHeight: 1.25,
+                }}>
+                  Be ready when drops start
+                </div>
+                <button
+                  onClick={() => navigate("/signin")}
+                  className="uw-btn-primary"
+                  style={{
+                    background: V, color: BG,
+                    fontFamily: "'Space Mono', monospace", fontSize: 10,
+                    letterSpacing: "0.1em", padding: "12px 18px",
+                    border: "none", cursor: "pointer", width: "100%",
+                  }}
+                >
+                  SIGN UP — BE READY
+                </button>
+              </div>
+
+              <div style={{
+                flex: 1,
+                border: `1px solid ${BORDER}`,
+                background: BG,
+                padding: "18px 18px 20px",
+              }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 9,
+                  letterSpacing: "0.12em", color: V, marginBottom: 8,
+                }}>
+                  FOR BUSINESSES
+                </div>
+                <div style={{
+                  fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
+                  color: FG, marginBottom: 14, lineHeight: 1.25,
+                }}>
+                  Get on the map
+                </div>
+                <a
+                  href="/business-apply"
+                  className="uw-btn-ghost"
+                  style={{
+                    border: `1px solid ${FG}`, color: FG,
+                    fontFamily: "'Space Mono', monospace", fontSize: 10,
+                    letterSpacing: "0.1em", padding: "11px 18px",
+                    textDecoration: "none", display: "block", textAlign: "center",
+                    background: "transparent",
+                  }}
+                >
+                  LIST YOUR BUSINESS
+                </a>
+              </div>
+            </div>
           </div>
 
-          <h1
-            className="uw-fade-2"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(38px, 5.8vw, 64px)",
-              fontWeight: 700, color: FG,
-              lineHeight: 1.04, letterSpacing: "-1.8px",
-              marginBottom: 18,
-            }}
-          >
-            Limited local drops.
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 400 }}>Reserved in seconds.</em>
-          </h1>
-
-          <p
-            className="uw-fade-3"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
-              color: FG, lineHeight: 1.55, marginBottom: 28, fontWeight: 400, maxWidth: 520,
-            }}
-          >
-            Unwrapped is where neighbourhood businesses — shops, salons, cafés,
-            freelancers, accountants, and{" "}
-            <em style={{ fontStyle: "italic" }}>charity shops</em>
-            {" "}(we love them) — release time-limited drops. You reserve, then collect with a QR code.
-          </p>
-
-          {/* Dual conversion paths */}
+          {/* Tiny mock London map — fades into space */}
           <div
-            className="uw-fade-4"
+            className="uw-fade-3"
+            aria-hidden
             style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-              gap: 12,
-              maxWidth: 560,
+              position: "relative",
+              overflow: "hidden",
+              height: isMobile ? 220 : 340,
+              marginRight: isMobile ? 0 : -12,
+              maskImage: "radial-gradient(ellipse 95% 88% at 42% 50%, black 42%, transparent 82%)",
+              WebkitMaskImage: "radial-gradient(ellipse 95% 88% at 42% 50%, black 42%, transparent 82%)",
             }}
           >
-            <div style={{
-              border: `1px solid ${FG}`,
-              background: FG,
-              color: BG,
-              padding: isMobile ? "20px 18px" : "22px 20px",
-            }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 9,
-                letterSpacing: "0.12em", color: "rgba(250,250,248,0.5)", marginBottom: 8,
-              }}>
-                FOR SHOPPERS
-              </div>
-              <div style={{
-                fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 600,
-                marginBottom: 8, lineHeight: 1.25,
-              }}>
-                Be ready when drops start
-              </div>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                color: "rgba(250,250,248,0.62)", lineHeight: 1.5, marginBottom: 16,
-              }}>
-                Sign up now. We'll keep you posted so you're first when your street goes live.
-              </p>
-              <button
-                onClick={() => navigate("/signin")}
-                className="uw-btn-primary"
+            <img
+              src="/email-london-map.jpg"
+              alt=""
+              style={{
+                display: "block",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "35% 45%",
+                opacity: 0.95,
+                filter: "grayscale(0.05) contrast(1.02) brightness(1.02)",
+                transform: "scale(1.08)",
+              }}
+            />
+            {[
+              { top: "26%", left: "32%" },
+              { top: "40%", left: "46%" },
+              { top: "54%", left: "56%" },
+              { top: "34%", left: "62%" },
+            ].map((pos, i) => (
+              <span
+                key={i}
+                className="uw-pulse-dot"
                 style={{
-                  background: V, color: BG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "12px 20px",
-                  border: "none", cursor: "pointer", width: "100%",
+                  position: "absolute",
+                  top: pos.top,
+                  left: pos.left,
+                  width: 9,
+                  height: 9,
+                  borderRadius: "50%",
+                  background: V,
+                  border: `2px solid ${BG}`,
+                  boxShadow: "0 2px 6px rgba(20,18,16,0.2)",
+                  animationDelay: `${i * 0.35}s`,
                 }}
-              >
-                SIGN UP — BE READY
-              </button>
-            </div>
-
-            <div style={{
-              border: `1px solid ${BORDER}`,
-              background: BG,
-              padding: isMobile ? "20px 18px" : "22px 20px",
-            }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 9,
-                letterSpacing: "0.12em", color: V, marginBottom: 8,
-              }}>
-                FOR BUSINESSES
-              </div>
-              <div style={{
-                fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 600,
-                color: FG, marginBottom: 8, lineHeight: 1.25,
-              }}>
-                Get on the map
-              </div>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                color: MUTED_FG, lineHeight: 1.5, marginBottom: 16,
-              }}>
-                We're boarding every day — shops, salons, cafés, charity shops and more.
-              </p>
-              <a
-                href="/business-apply"
-                className="uw-btn-ghost"
-                style={{
-                  border: `1px solid ${FG}`, color: FG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "11px 20px",
-                  textDecoration: "none", display: "block", textAlign: "center",
-                  background: "transparent",
-                }}
-              >
-                LIST YOUR BUSINESS
-              </a>
-            </div>
+              />
+            ))}
           </div>
         </div>
 
