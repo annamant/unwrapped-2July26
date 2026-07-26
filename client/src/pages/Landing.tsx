@@ -31,31 +31,31 @@ const SAMPLE_DROPS: SampleDrop[] = [
   {
     category: "Food & Drink",
     neighbourhood: "Hackney",
-    title: "Saturday sourdough — six loaves",
+    title: "Morning bake — six country loaves",
     business: "River Oven Bakery",
     price: "£4.50",
-    window: "Collect Sat 9–11am",
-    left: "6 available",
+    window: "Example window · Sat morning",
+    left: "e.g. 6 loaves",
     imageUrl: "/samples/sourdough.jpg",
   },
   {
     category: "Beauty & Wellness",
     neighbourhood: "Clapham",
-    title: "Express blow-dry — walk-in window",
+    title: "Express blow-dry — afternoon slots",
     business: "Marlow Hair Studio",
     price: "£28.00",
-    window: "Session today 4–7pm",
-    left: "4 spots",
+    window: "Example window · same day",
+    left: "e.g. 4 spots",
     imageUrl: "/samples/blowdry.jpg",
   },
   {
     category: "Beauty & Wellness",
     neighbourhood: "Islington",
-    title: "45-min personal training session",
+    title: "45-min personal training",
     business: "Jordan Ellis PT",
     price: "£35.00",
-    window: "Session Tue 6–8pm",
-    left: "3 spots",
+    window: "Example window · weekday evening",
+    left: "e.g. 3 spots",
     imageUrl: "/samples/pt.jpg",
   },
 ];
@@ -580,30 +580,31 @@ export default function Landing() {
                 fontFamily: "'Space Mono', monospace", fontSize: 9,
                 color: V, letterSpacing: "0.15em", marginBottom: 12,
               }}>
-                THE FEELING · BEFORE IT'S LIVE
+                EXAMPLE DROPS · ILLUSTRATIVE
               </div>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: isMobile ? 28 : 36,
                 fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-                lineHeight: 1.15, maxWidth: 480,
+                lineHeight: 1.15, maxWidth: 520,
               }}>
                 This is what a drop will look like.
               </h2>
             </div>
             <span style={{
               fontFamily: "'Space Mono', monospace", fontSize: 9,
-              color: V, letterSpacing: "0.12em",
-              border: `1px solid ${V}`, padding: "8px 12px",
+              color: MUTED_FG, letterSpacing: "0.12em",
+              border: `1px solid ${BORDER}`, padding: "8px 12px",
             }}>
-              SAMPLE · NOT LIVE
+              NOT LIVE YET
             </span>
           </div>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.65, maxWidth: 520,
+            color: MUTED_FG, lineHeight: 1.65, maxWidth: 540,
           }}>
-            Not real listings — just the feeling. When London goes live, this is the shape of it.
+            Mock listings only — fictional shops, so you can see the product.
+            Nothing here can be reserved yet.
           </p>
         </div>
 
@@ -1105,9 +1106,9 @@ function SampleDropCard({ sample }: { sample: SampleDrop }) {
         }}>
           <span style={{
             fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.1em",
+            color: MUTED_FG, letterSpacing: "0.1em",
           }}>
-            SAMPLE
+            EXAMPLE
           </span>
         </div>
       </div>
@@ -1141,13 +1142,19 @@ function SampleDropCard({ sample }: { sample: SampleDrop }) {
           <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 15, fontWeight: 700, color: FG }}>
             {sample.price}
           </span>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V }}>
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
             {sample.left}
           </span>
         </div>
 
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
+        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, marginBottom: 10 }}>
           {sample.window}
+        </div>
+        <div style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+          color: MUTED_FG, fontStyle: "italic", lineHeight: 1.4,
+        }}>
+          Illustrative only — cannot be reserved
         </div>
       </div>
     </div>
