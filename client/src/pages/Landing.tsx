@@ -60,6 +60,19 @@ const SAMPLE_DROPS: SampleDrop[] = [
   },
 ];
 
+const BUSINESS_TYPES = [
+  "Charity shops",
+  "Salons",
+  "Cafés",
+  "Bakeries",
+  "Freelancers",
+  "Accountants",
+  "Trainers",
+  "Boutiques",
+  "Studios",
+  "Florists",
+];
+
 const LANDING_CSS = `
 @keyframes uw-fade-up {
   from { opacity: 0; transform: translateY(18px); }
@@ -78,12 +91,37 @@ const LANDING_CSS = `
   50% { transform: scale(1.12) translate(-1.2%, -0.6%); }
   100% { transform: scale(1.08) translate(0, 0); }
 }
+@keyframes uw-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes uw-float-a {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+@keyframes uw-float-b {
+  0%, 100% { transform: translateY(0) rotate(2.5deg); }
+  50% { transform: translateY(12px) rotate(1.5deg); }
+}
+@keyframes uw-float-c {
+  0%, 100% { transform: translateY(0) rotate(1deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
 .uw-fade-1 { animation: uw-fade-up 0.7s ease both; }
 .uw-fade-2 { animation: uw-fade-up 0.7s ease 0.12s both; }
 .uw-fade-3 { animation: uw-fade-up 0.7s ease 0.24s both; }
 .uw-fade-4 { animation: uw-fade-up 0.7s ease 0.36s both; }
 .uw-hero-map { animation: uw-map-drift 28s ease-in-out infinite; }
 .uw-pulse-dot { animation: uw-pulse-dot 2.2s ease-in-out infinite; }
+.uw-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: uw-marquee 28s linear infinite;
+}
+.uw-marquee-track:hover { animation-play-state: paused; }
+.uw-float-a { animation: uw-float-a 5.5s ease-in-out infinite; }
+.uw-float-b { animation: uw-float-b 6.5s ease-in-out infinite 0.4s; }
+.uw-float-c { animation: uw-float-c 7s ease-in-out infinite 0.8s; }
 .uw-btn-primary {
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -120,7 +158,8 @@ const LANDING_CSS = `
 .uw-step:hover { background: ${MUTED} !important; }
 @media (prefers-reduced-motion: reduce) {
   .uw-fade-1, .uw-fade-2, .uw-fade-3, .uw-fade-4,
-  .uw-hero-map, .uw-pulse-dot { animation: none !important; }
+  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track,
+  .uw-float-a, .uw-float-b, .uw-float-c { animation: none !important; }
   .uw-sample-img, .uw-btn-primary, .uw-btn-ghost { transition: none !important; }
 }
 `;
@@ -229,10 +268,6 @@ export default function Landing() {
       {/* ── Hero ── */}
       <section style={{
         position: "relative",
-        minHeight: isMobile ? "auto" : "calc(100vh - 64px)",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
         overflow: "hidden",
         borderBottom: `1px solid ${BORDER}`,
       }}>
@@ -251,127 +286,190 @@ export default function Landing() {
               backgroundImage: "url(/email-london-map.jpg)",
               backgroundSize: "cover",
               backgroundPosition: "center 42%",
-              opacity: 0.38,
+              opacity: 0.32,
               filter: "grayscale(0.15) contrast(1.05)",
             }}
           />
           <div style={{
             position: "absolute", inset: 0,
             background: `
-              linear-gradient(180deg, ${BG} 0%, rgba(250,250,248,0.55) 28%, rgba(250,250,248,0.82) 62%, ${BG} 100%),
-              radial-gradient(ellipse 70% 55% at 78% 35%, rgba(232,52,28,0.07), transparent 60%)
+              linear-gradient(180deg, ${BG} 0%, rgba(250,250,248,0.5) 35%, rgba(250,250,248,0.88) 78%, ${BG} 100%),
+              radial-gradient(ellipse 55% 50% at 85% 40%, rgba(232,52,28,0.09), transparent 60%)
             `,
           }} />
         </div>
 
         <div style={{
           position: "relative",
-          padding: isMobile ? "56px 20px 48px" : "80px 40px 72px",
-          maxWidth: 920,
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1.05fr 0.95fr",
+          gap: isMobile ? 36 : 48,
+          alignItems: "center",
+          padding: isMobile ? "48px 20px 0" : "64px 40px 0",
+          minHeight: isMobile ? "auto" : "calc(100vh - 120px)",
         }}>
-          <div
-            className="uw-fade-1"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 10,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              color: V, letterSpacing: "0.14em", marginBottom: 28,
-            }}
-          >
-            <span
-              className="uw-pulse-dot"
+          {/* Copy column */}
+          <div style={{ maxWidth: 560, paddingBottom: isMobile ? 0 : 56 }}>
+            <div
+              className="uw-fade-1"
               style={{
-                width: 7, height: 7, borderRadius: "50%",
-                background: V, display: "inline-block", flexShrink: 0,
+                display: "inline-flex", alignItems: "center", gap: 10,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                color: V, letterSpacing: "0.14em", marginBottom: 20,
               }}
-            />
-            GETTING READY TO LAUNCH · LONDON
+            >
+              <span
+                className="uw-pulse-dot"
+                style={{
+                  width: 7, height: 7, borderRadius: "50%",
+                  background: V, display: "inline-block", flexShrink: 0,
+                }}
+              />
+              LIVE RIGHT NOW · SIGNING UP BUSINESSES ACROSS LONDON
+            </div>
+
+            <h1
+              className="uw-fade-2"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(40px, 6.2vw, 68px)",
+                fontWeight: 700, color: FG,
+                lineHeight: 1.02, letterSpacing: "-2px",
+                marginBottom: 20,
+              }}
+            >
+              Limited local drops.
+              <br />
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>We're building the street.</em>
+            </h1>
+
+            <p
+              className="uw-fade-3"
+              style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
+                color: FG, lineHeight: 1.6,
+                marginBottom: 14, fontWeight: 400,
+              }}
+            >
+              Unwrapped is where you discover time-limited drops from local businesses
+              near you — reserve in seconds, collect with a QR code.
+            </p>
+
+            <p
+              className="uw-fade-3"
+              style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 14 : 15,
+                color: MUTED_FG, lineHeight: 1.65,
+                marginBottom: 28, fontWeight: 300,
+              }}
+            >
+              Sign up now — be ready the moment things start to drop.
+              We're boarding shops, salons, cafés, freelancers, accountants, and{" "}
+              <em style={{ fontStyle: "italic", color: FG, fontWeight: 400 }}>charity shops</em>
+              {" "}(we love charity shops) every day.
+            </p>
+
+            <div className="uw-fade-4" style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <button
+                  onClick={() => navigate("/signin")}
+                  className="uw-btn-primary"
+                  style={{
+                    background: FG, color: BG,
+                    fontFamily: "'Space Mono', monospace", fontSize: 10,
+                    letterSpacing: "0.1em", padding: "15px 30px",
+                    border: "none", cursor: "pointer",
+                  }}
+                >
+                  SIGN UP — BE READY
+                </button>
+                <a
+                  href="/business-apply"
+                  className="uw-btn-ghost"
+                  style={{
+                    border: `1px solid ${FG}`, color: FG,
+                    fontFamily: "'Space Mono', monospace", fontSize: 10,
+                    letterSpacing: "0.1em", padding: "14px 26px",
+                    textDecoration: "none", display: "inline-block",
+                    background: "transparent",
+                  }}
+                >
+                  LIST YOUR BUSINESS
+                </a>
+              </div>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                color: MUTED_FG, lineHeight: 1.55, maxWidth: 420,
+              }}>
+                Follow the build on{" "}
+                <a
+                  href="https://www.instagram.com/shopunwrapped/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: V, textDecoration: "none", borderBottom: `1px solid ${V}` }}
+                >
+                  @shopunwrapped
+                </a>
+                .
+              </p>
+            </div>
           </div>
 
-          <h1
-            className="uw-fade-2"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(42px, 7vw, 78px)",
-              fontWeight: 700, color: FG,
-              lineHeight: 1.02, letterSpacing: "-2px",
-              marginBottom: 24, maxWidth: 780,
-            }}
-          >
-            Limited local drops.
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 400 }}>Reserved in seconds.</em>
-          </h1>
+          {/* Visual column */}
+          <div className="uw-fade-3" style={{ position: "relative", minHeight: isMobile ? 320 : 520 }}>
+            <HeroVisual isMobile={isMobile} />
+          </div>
+        </div>
 
-          <p
-            className="uw-fade-3"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 19,
-              color: MUTED_FG, lineHeight: 1.65,
-              marginBottom: 40, maxWidth: 480, fontWeight: 300,
-            }}
-          >
-            Time-limited offers from neighbourhood businesses near you —
-            reserve, then collect with a QR code.
-          </p>
-
-          <div className="uw-fade-4" style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "flex-start" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-              <button
-                onClick={() => navigate("/signin")}
-                className="uw-btn-primary"
+        {/* Scrolling business types */}
+        <div
+          className="uw-fade-4"
+          style={{
+            position: "relative",
+            borderTop: `1px solid ${BORDER}`,
+            background: "rgba(250,250,248,0.85)",
+            overflow: "hidden",
+            marginTop: isMobile ? 8 : 0,
+          }}
+        >
+          <div style={{
+            position: "absolute", left: 0, top: 0, bottom: 0, width: 48, zIndex: 1,
+            background: `linear-gradient(90deg, ${BG}, transparent)`,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", right: 0, top: 0, bottom: 0, width: 48, zIndex: 1,
+            background: `linear-gradient(270deg, ${BG}, transparent)`,
+            pointerEvents: "none",
+          }} />
+          <div className="uw-marquee-track" aria-hidden>
+            {[...BUSINESS_TYPES, ...BUSINESS_TYPES].map((type, i) => (
+              <div
+                key={`${type}-${i}`}
                 style={{
-                  background: FG, color: BG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "15px 30px",
-                  border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", gap: 16,
+                  padding: "16px 28px",
+                  whiteSpace: "nowrap",
+                  borderRight: `1px solid ${BORDER}`,
                 }}
               >
-                SIGN UP
-              </button>
-              <a
-                href="/business-apply"
-                className="uw-btn-ghost"
-                style={{
-                  border: `1px solid ${FG}`, color: FG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "14px 26px",
-                  textDecoration: "none", display: "inline-block",
-                  background: "transparent",
-                }}
-              >
-                LIST YOUR BUSINESS
-              </a>
-              <a
-                href="https://www.instagram.com/shopunwrapped/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="uw-btn-ghost"
-                style={{
-                  border: `1px solid ${BORDER}`, color: FG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "14px 26px",
-                  textDecoration: "none", display: "inline-block",
-                  background: "rgba(250,250,248,0.7)",
-                }}
-              >
-                FOLLOW ON INSTAGRAM
-              </a>
-            </div>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: MUTED_FG, lineHeight: 1.55, maxWidth: 440,
-            }}>
-              Stay posted as London gets ready — or follow{" "}
-              <a
-                href="https://www.instagram.com/shopunwrapped/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: V, textDecoration: "none", borderBottom: `1px solid ${V}` }}
-              >
-                @shopunwrapped
-              </a>
-              .
-            </p>
+                <span style={{
+                  width: 6, height: 6, borderRadius: "50%",
+                  background: type === "Charity shops" ? V : FG,
+                  display: "inline-block", flexShrink: 0,
+                }} />
+                <span style={{
+                  fontFamily: type === "Charity shops" ? "'Playfair Display', serif" : "'Space Mono', monospace",
+                  fontSize: type === "Charity shops" ? 15 : 11,
+                  fontStyle: type === "Charity shops" ? "italic" : "normal",
+                  fontWeight: type === "Charity shops" ? 600 : 400,
+                  color: type === "Charity shops" ? V : FG,
+                  letterSpacing: type === "Charity shops" ? "0" : "0.08em",
+                }}>
+                  {type === "Charity shops" ? "Charity shops — we love them" : type.toUpperCase()}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1024,6 +1122,170 @@ export default function Landing() {
           </span>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function HeroVisual({ isMobile }: { isMobile: boolean }) {
+  const cards = [
+    {
+      src: SAMPLE_DROPS[0].imageUrl,
+      label: "Bakery · Hackney",
+      title: "Saturday sourdough",
+      price: "£4.50",
+      className: "uw-float-a",
+      style: isMobile
+        ? { left: "0%", top: 20, width: "58%", zIndex: 2 }
+        : { left: "2%", top: "8%", width: "58%", zIndex: 2 },
+    },
+    {
+      src: SAMPLE_DROPS[1].imageUrl,
+      label: "Salon · Clapham",
+      title: "Express blow-dry",
+      price: "£28",
+      className: "uw-float-b",
+      style: isMobile
+        ? { right: "0%", top: 0, width: "52%", zIndex: 3 }
+        : { right: "0%", top: "0%", width: "52%", zIndex: 3 },
+    },
+    {
+      src: SAMPLE_DROPS[2].imageUrl,
+      label: "Trainer · Islington",
+      title: "45-min session",
+      price: "£35",
+      className: "uw-float-c",
+      style: isMobile
+        ? { left: "18%", bottom: 8, width: "64%", zIndex: 1 }
+        : { left: "18%", bottom: "4%", width: "62%", zIndex: 1 },
+    },
+  ] as const;
+
+  return (
+    <div
+      aria-hidden
+      style={{
+        position: "relative",
+        width: "100%",
+        height: isMobile ? 340 : 520,
+      }}
+    >
+      {/* Accent frame */}
+      <div style={{
+        position: "absolute",
+        right: isMobile ? 12 : 24,
+        top: isMobile ? 28 : 48,
+        bottom: isMobile ? 28 : 48,
+        left: isMobile ? 12 : 40,
+        border: `1px solid ${BORDER}`,
+        background: MUTED,
+        opacity: 0.7,
+      }} />
+
+      {/* Live boarding chip */}
+      <div style={{
+        position: "absolute",
+        top: isMobile ? 12 : 24,
+        left: isMobile ? 8 : 16,
+        zIndex: 5,
+        background: FG,
+        color: BG,
+        padding: "10px 14px",
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        boxShadow: `4px 4px 0 ${V}`,
+      }}>
+        <span
+          className="uw-pulse-dot"
+          style={{
+            width: 7, height: 7, borderRadius: "50%",
+            background: V, display: "inline-block",
+          }}
+        />
+        <div>
+          <div style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 8,
+            letterSpacing: "0.12em", color: "rgba(250,250,248,0.55)", marginBottom: 2,
+          }}>
+            BOARDING NOW
+          </div>
+          <div style={{
+            fontFamily: "'Playfair Display', serif", fontSize: 14, fontWeight: 600,
+          }}>
+            Businesses joining daily
+          </div>
+        </div>
+      </div>
+
+      {cards.map((card) => (
+        <div
+          key={card.title}
+          className={card.className}
+          style={{
+            position: "absolute",
+            ...card.style,
+            background: BG,
+            border: `1px solid ${BORDER}`,
+            boxShadow: "0 18px 40px rgba(20,18,16,0.08)",
+            overflow: "hidden",
+          }}
+        >
+          <div style={{
+            height: isMobile ? 110 : 160,
+            background: `${MUTED} url(${card.src}) center/cover no-repeat`,
+          }} />
+          <div style={{ padding: isMobile ? "10px 12px 12px" : "12px 14px 14px" }}>
+            <div style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 8,
+              color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 4,
+              textTransform: "uppercase",
+            }}>
+              {card.label}
+            </div>
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8,
+            }}>
+              <span style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: isMobile ? 13 : 15, fontWeight: 600, color: FG, lineHeight: 1.2,
+              }}>
+                {card.title}
+              </span>
+              <span style={{
+                fontFamily: "'Space Mono', monospace", fontSize: 11, fontWeight: 700, color: V,
+              }}>
+                {card.price}
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Charity shop callout */}
+      <div style={{
+        position: "absolute",
+        right: isMobile ? 8 : 8,
+        bottom: isMobile ? 0 : 20,
+        zIndex: 6,
+        background: BG,
+        border: `1px solid ${FG}`,
+        borderLeft: `3px solid ${V}`,
+        padding: isMobile ? "10px 12px" : "12px 16px",
+        maxWidth: isMobile ? 160 : 190,
+      }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 8,
+          color: V, letterSpacing: "0.12em", marginBottom: 4,
+        }}>
+          FAVOURITES
+        </div>
+        <div style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: isMobile ? 14 : 16, fontWeight: 600, fontStyle: "italic", color: FG, lineHeight: 1.25,
+        }}>
+          Charity shops welcome
+        </div>
+      </div>
     </div>
   );
 }
