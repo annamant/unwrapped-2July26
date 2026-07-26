@@ -24,4 +24,4 @@ Sells Unwrapped to **people** and **shops** in one piece. No pricing. CTA: shopu
 
 ## On the website
 
-Live downloads: `/resources` (files mirrored in `client/public/kit/print/`).
+Live downloads: `/resources` (files mirrored in `client/public/resources/print/`).

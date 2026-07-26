@@ -1,6 +1,6 @@
 # Public marketing resources
 
-Files served at `https://shopunwrapped.com/resources/...` and listed on `/resources`.
+Listed on the website at `/resources`. Downloadable files live here and are served as `/resources/print/...`, `/resources/social/...`, `/resources/brand/...`.
 
 | Folder | Contents |
 |--------|----------|
