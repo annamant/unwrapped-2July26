@@ -233,7 +233,7 @@ export const reservationsRouter = router({
         .orderBy(desc(reservations.createdAt));
     }),
 
-  // Cancel a reservation (shopper, >24h before collection)
+  // Cancel a reservation (shopper, any time before collection window opens)
   cancel: protectedProcedure
     .input(z.object({ reservationId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
@@ -250,12 +250,11 @@ export const reservationsRouter = router({
       }
 
       const now = new Date();
-      const twentyFourHoursBeforeWindow = new Date(res.drop.collectionStart.getTime() - 24 * 60 * 60 * 1000);
 
-      if (now >= twentyFourHoursBeforeWindow) {
+      if (now >= res.drop.collectionStart) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Cannot cancel within 24 hours of collection. Contact anna@shopunwrapped.com for help.",
+          message: "Cannot cancel after the collection window has opened. Contact anna@shopunwrapped.com for help.",
         });
       }
 

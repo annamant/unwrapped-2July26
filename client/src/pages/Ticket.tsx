@@ -46,8 +46,7 @@ export default function Ticket() {
   const start = new Date(drop.collectionStart);
   const end = new Date(drop.collectionEnd);
   const isLive = now >= start && now <= end;
-  const cancelDeadline = new Date(start.getTime() - 24 * 60 * 60 * 1000);
-  const canCancel = reservation.status === "active" && now < cancelDeadline;
+  const canCancel = reservation.status === "active" && now < start;
 
   const statusLabel: Record<string, string> = {
     active: "Reserved",
@@ -190,7 +189,7 @@ export default function Ticket() {
 
           {!canCancel && reservation.status === "active" && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textAlign: "center" }}>
-              Cancellations close 24 hours before the collection window.
+              Cancellations close when the collection window opens.
             </p>
           )}
         </div>
