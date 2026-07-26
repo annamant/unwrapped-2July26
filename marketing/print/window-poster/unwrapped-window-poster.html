@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unwrapped — Window Poster</title>
+  <title>Unwrapped — Window Poster Export</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -16,62 +15,15 @@
       --muted-fg: #7A7A7A;
       --border: #E0DFD9;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html, body {
-      background: #d8d6cf;
-      color: var(--ink);
-      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      width: 210mm;
+      height: 297mm;
+      overflow: hidden;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      padding: 32px 16px 48px;
-    }
-
-    .toolbar {
-      width: 210mm;
-      max-width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-
-    .toolbar p { color: var(--muted-fg); letter-spacing: 0.04em; text-transform: none; font-family: 'DM Sans', system-ui, sans-serif; font-size: 13px; max-width: 42ch; }
-
-    .toolbar button {
-      appearance: none;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: var(--bg);
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 12px 16px;
-      cursor: pointer;
-    }
-
-    .toolbar button.secondary {
-      background: transparent;
-      color: var(--ink);
-    }
-
-    /* A4 portrait canvas */
     .poster {
       width: 210mm;
       height: 297mm;
@@ -79,400 +31,335 @@
       color: var(--ink);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 18px 50px rgba(20, 18, 16, 0.18);
       display: flex;
       flex-direction: column;
-      padding: 18mm 16mm 14mm;
+      font-family: 'DM Sans', system-ui, sans-serif;
     }
 
-    .poster::before {
-      content: "";
-      position: absolute;
-      inset: 8mm;
-      border: 1px solid var(--border);
-      pointer-events: none;
+    /* ── VERMILLION HERO — street-stopper ── */
+    .hero {
+      background: var(--vermillion);
+      color: var(--bg);
+      padding: 8mm 11mm 8mm;
+      flex-shrink: 0;
+      position: relative;
     }
-
-    .top {
+    .hero-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      position: relative;
-      z-index: 1;
+      margin-bottom: 7mm;
     }
-
-    .lockup {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
+    .lockup { display: flex; align-items: center; gap: 10px; }
     .mark {
-      width: 42px;
-      height: 42px;
-      background: var(--ink);
-      position: relative;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
+      width: 34px; height: 34px; background: var(--ink);
+      position: relative; display: grid; place-items: center; flex-shrink: 0;
     }
-
     .mark span {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700;
-      font-size: 28px;
-      line-height: 1;
-      color: var(--bg);
-      transform: translateY(1px);
+      font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
+      font-size: 22px; color: var(--bg); line-height: 1; transform: translateY(1px);
     }
-
     .mark i {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--vermillion);
+      position: absolute; top: 4px; right: 4px; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--vermillion);
     }
-
     .wordmark {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700;
-      font-size: 34px;
-      letter-spacing: -0.02em;
-      line-height: 1;
+      font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
+      font-size: 26px; letter-spacing: -0.02em; line-height: 1; color: var(--bg);
     }
-
-    .loc {
+    .live {
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted-fg);
-      text-align: right;
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 7px; color: var(--bg); font-weight: 700;
     }
-
+    .live::before {
+      content: ""; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--bg);
+    }
     .eyebrow {
-      margin-top: 18mm;
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--vermillion);
-      position: relative;
-      z-index: 1;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--bg); opacity: 0.9; margin-bottom: 3.5mm; font-weight: 700;
     }
-
-    .hero {
-      margin-top: 8mm;
+    .hero h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
-      font-size: 42px;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-      max-width: 16ch;
-      position: relative;
-      z-index: 1;
+      font-weight: 700; font-size: 36px; line-height: 1.02;
+      letter-spacing: -0.035em; max-width: 14ch; margin-bottom: 4mm;
     }
-
-    .hero em {
-      font-style: italic;
-      font-weight: 400;
-    }
-
+    .hero h1 em { font-style: italic; font-weight: 400; }
     .lede {
-      margin-top: 7mm;
-      font-size: 16px;
-      line-height: 1.45;
-      font-weight: 400;
-      max-width: 38ch;
-      color: var(--ink);
-      position: relative;
-      z-index: 1;
+      font-size: 13.5px; line-height: 1.45; max-width: 48ch;
+      color: var(--bg); opacity: 0.95;
     }
 
-    .rule {
-      margin: 11mm 0 0;
-      height: 1px;
-      background: var(--border);
+    /* ── MAP full bleed ── */
+    .map-wrap {
+      height: 30mm;
+      flex-shrink: 0;
       position: relative;
-      z-index: 1;
+      background: var(--muted);
+      overflow: hidden;
+      border-top: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
     }
-
-    .section-label {
-      margin-top: 7mm;
+    .map-label {
+      position: absolute; top: 3mm; left: 4mm; z-index: 2;
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted-fg);
-      position: relative;
-      z-index: 1;
+      font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink); background: var(--bg); padding: 4px 7px; font-weight: 700;
+    }
+    .map-photo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: 40% 45%; display: block;
+      filter: grayscale(0.05) contrast(1.05) brightness(1.02);
+    }
+    .map-tag {
+      position: absolute; bottom: 3mm; right: 4mm; z-index: 2;
+      background: var(--ink); color: var(--bg);
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 5px 8px; font-weight: 700;
     }
 
+    /* ── HOW — big numbers ── */
+    .how {
+      padding: 5mm 10mm 0;
+      flex-shrink: 0;
+    }
+    .section-label {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--vermillion); margin-bottom: 3mm; font-weight: 700;
+    }
     .steps {
-      margin-top: 5mm;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      position: relative;
-      z-index: 1;
+      gap: 0;
+      border: 2px solid var(--ink);
     }
-
     .step {
-      background: var(--muted);
-      padding: 14px 12px 16px;
-      min-height: 92px;
+      background: var(--bg);
+      padding: 4mm 3.5mm 4.5mm;
+      border-right: 2px solid var(--ink);
+      position: relative;
     }
-
+    .step:last-child { border-right: none; }
     .step-num {
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--vermillion);
-      margin-bottom: 10px;
+      font-size: 22px; letter-spacing: -0.02em; color: var(--vermillion);
+      font-weight: 700; line-height: 1; margin-bottom: 2.5mm;
     }
-
     .step h3 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
+      font-weight: 700; font-size: 15px; line-height: 1.15;
+      letter-spacing: -0.02em; margin-bottom: 1.5mm;
     }
-
     .step p {
-      margin-top: 6px;
-      font-size: 12.5px;
-      line-height: 1.35;
-      color: var(--muted-fg);
+      font-size: 11px; line-height: 1.35; color: var(--muted-fg);
     }
 
-    .audiences {
-      margin-top: 8mm;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    /* ── WHY — ink slab ── */
+    .why {
+      margin: 4.5mm 0 0;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 5.5mm 10mm;
+      flex-shrink: 0;
       position: relative;
-      z-index: 1;
-      flex: 1;
     }
-
-    .audience {
-      border: 1px solid var(--border);
-      padding: 16px 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .audience .who {
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--vermillion);
-    }
-
-    .audience h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
-      font-size: 22px;
-      line-height: 1.15;
-      letter-spacing: -0.015em;
-    }
-
-    .audience p {
-      font-size: 13.5px;
-      line-height: 1.4;
-      color: var(--ink);
-    }
-
-    .audience ul {
-      list-style: none;
-      margin-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .audience li {
-      font-size: 13px;
-      line-height: 1.35;
-      padding-left: 14px;
-      position: relative;
-      color: var(--ink);
-    }
-
-    .audience li::before {
+    .why::before {
       content: "";
       position: absolute;
-      left: 0;
-      top: 0.55em;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
+      top: 0; left: 0;
+      width: 5mm; height: 100%;
       background: var(--vermillion);
     }
-
-    .footer {
-      margin-top: auto;
-      padding-top: 8mm;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding-top: 6mm;
+    .why .section-label { color: var(--vermillion); margin-bottom: 2.5mm; }
+    .why h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600; font-size: 20px; line-height: 1.18;
+      letter-spacing: -0.025em; margin-bottom: 2.5mm; max-width: 28ch;
+    }
+    .why h2 em {
+      font-style: italic; font-weight: 400; color: var(--vermillion);
+    }
+    .why p {
+      font-size: 12.5px; line-height: 1.45; opacity: 0.88; max-width: 54ch;
     }
 
-    .cta {
+    /* ── BUILD — high-contrast split ── */
+    .build {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+    .build-card {
+      padding: 5mm 6mm 5.5mm;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2mm;
     }
-
-    .cta .label {
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted-fg);
-    }
-
-    .cta .url {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 600;
-      font-size: 26px;
-      letter-spacing: -0.02em;
-      line-height: 1;
-    }
-
-    .promise {
-      text-align: right;
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .build-local {
+      background: var(--bg);
       color: var(--ink);
-      line-height: 1.55;
+      border-right: 2px solid var(--ink);
     }
-
-    .promise strong {
-      color: var(--vermillion);
+    .build-biz {
+      background: var(--vermillion);
+      color: var(--bg);
+    }
+    .build-card .who {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
       font-weight: 700;
     }
-
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
-      html, body {
-        background: var(--bg);
-        padding: 0;
-        margin: 0;
-        width: 210mm;
-        height: 297mm;
-      }
-      .toolbar { display: none !important; }
-      .poster {
-        box-shadow: none;
-        margin: 0;
-        page-break-after: avoid;
-        page-break-inside: avoid;
-      }
+    .build-local .who { color: var(--vermillion); }
+    .build-biz .who { color: var(--bg); opacity: 0.85; }
+    .build-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700; font-size: 18px; line-height: 1.15;
+      letter-spacing: -0.02em;
     }
+    .build-card p {
+      font-size: 12px; line-height: 1.4; flex: 1;
+    }
+    .build-local p { color: var(--ink); }
+    .build-biz p { color: var(--bg); opacity: 0.95; }
+    .build-card .ask {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 700; margin-top: 2mm;
+      padding-top: 2.5mm;
+    }
+    .build-local .ask {
+      border-top: 2px solid var(--ink);
+      color: var(--ink);
+    }
+    .build-biz .ask {
+      border-top: 2px solid rgba(250,250,248,0.45);
+      color: var(--bg);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 5mm 10mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .cta-label {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--vermillion); margin-bottom: 1.5mm; font-weight: 700;
+    }
+    .cta-url {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700; font-size: 28px; letter-spacing: -0.03em; line-height: 1;
+      color: var(--bg);
+    }
+    .promise {
+      background: var(--vermillion);
+      color: var(--bg);
+      text-align: center;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      line-height: 1.4; font-weight: 700;
+      padding: 3.5mm 4mm;
+      max-width: 22ch;
+    }
+
+    @page { size: A4 portrait; margin: 0; }
   </style>
 </head>
 <body>
-  <div class="toolbar">
-    <div>
-      <strong>Unwrapped window poster · A4</strong>
-      <p>Open in Chrome → Print → Save as PDF (or print). Destined for shop windows &amp; neighbourhood flyering.</p>
-    </div>
-    <div style="display:flex; gap:8px;">
-      <button class="secondary" type="button" onclick="window.print()">Print / PDF</button>
-    </div>
-  </div>
+  <article class="poster">
 
-  <article class="poster" aria-label="Unwrapped neighbourhood window poster">
-    <header class="top">
-      <div class="lockup">
-        <div class="mark" aria-hidden="true"><span>U</span><i></i></div>
-        <div class="wordmark">Unwrapped</div>
+    <header class="hero">
+      <div class="hero-top">
+        <div class="lockup">
+          <div class="mark" aria-hidden="true"><span>U</span><i></i></div>
+          <div class="wordmark">Unwrapped</div>
+        </div>
+        <div class="live">London</div>
       </div>
-      <div class="loc">London<br />neighbourhoods</div>
+      <p class="eyebrow">Limited · Local · Gone when they’re gone</p>
+      <h1>Limited local drops from businesses &amp; freelancers <em>near you.</em></h1>
+      <p class="lede">
+        Shops, salons, cafés, freelancers, solo traders, charity shops —
+        short windows of what’s special. Reserve in seconds. Collect with QR.
+        Not delivery. Not endless scroll. Real finds from your street.
+      </p>
     </header>
 
-    <p class="eyebrow">Limited · Local · Gone when they’re gone</p>
-
-    <h1 class="hero">
-      Limited local drops<br />
-      from independent shops<br />
-      <em>near you.</em>
-    </h1>
-
-    <p class="lede">
-      Independent shops publish short windows of what’s special.
-      You reserve in seconds. Collect in person with a QR code.
-      Real neighbourhood finds — not endless scroll, not delivery apps.
-    </p>
-
-    <div class="rule" aria-hidden="true"></div>
-
-    <p class="section-label">How it works</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h3>Spot a drop</h3>
-        <p>What’s live near you — bakery, vinyl, flowers, the real stuff.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h3>Reserve in seconds</h3>
-        <p>Claim yours before the window closes.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h3>Collect with QR</h3>
-        <p>Walk in. Show your ticket. Take it home.</p>
-      </div>
+    <div class="map-wrap">
+      <div class="map-label">Across London</div>
+      <img class="map-photo" src="email-london-map.jpg" alt="" />
+      <div class="map-tag">London-wide</div>
     </div>
 
-    <div class="audiences">
-      <section class="audience">
-        <p class="who">For people</p>
-        <h3>Discover what’s dropping on your street.</h3>
-        <ul>
-          <li>Find limited finds from shops around you</li>
-          <li>Reserve fast — no queue guessing</li>
-          <li>Collect in person. Meet the neighbourhood</li>
-        </ul>
-      </section>
-      <section class="audience">
-        <p class="who">For shops</p>
-        <h3>Turn quiet hours into reserved demand.</h3>
-        <ul>
-          <li>List a time-limited drop</li>
-          <li>Fill the window without endless promo noise</li>
-          <li>Welcome reserved customers through the door</li>
-        </ul>
-      </section>
-    </div>
+    <section class="how">
+      <p class="section-label">How it works</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Spot a drop</h3>
+          <p>See what’s live near you from local businesses.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Reserve in seconds</h3>
+          <p>Claim yours on your phone before it goes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Collect with QR</h3>
+          <p>Walk in, show your ticket, take it home.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="why">
+      <p class="section-label">Why we’re doing this</p>
+      <h2>Local businesses, freelancers and solo traders deserve to be <em>found</em>, to <em>thrive</em>, and to <em>connect</em> with people.</h2>
+      <p>
+        We’re building Unwrapped so neighbours and neighbourhood businesses meet over short, special windows —
+        not delivery apps, not infinite stock. It only works if we build it together.
+      </p>
+    </section>
+
+    <section class="build">
+      <div class="build-card build-local">
+        <p class="who">If you’re local</p>
+        <h3>Sign up as a shopper.</h3>
+        <p>
+          You’re first to know when drops go live near you.
+          Be on the list. Make the neighbourhood real.
+        </p>
+        <p class="ask">→ Join at shopunwrapped.com</p>
+      </div>
+      <div class="build-card build-biz">
+        <p class="who">If you run a local business</p>
+        <h3>Get on the map.</h3>
+        <p>
+          You’re making the drops happen.
+          List a window. Fill a quiet hour. Welcome people through the door.
+        </p>
+        <p class="ask">→ Apply at shopunwrapped.com</p>
+      </div>
+    </section>
 
     <footer class="footer">
-      <div class="cta">
-        <span class="label">Start here</span>
-        <span class="url">shopunwrapped.com</span>
+      <div>
+        <div class="cta-label">We need you · start here</div>
+        <div class="cta-url">shopunwrapped.com</div>
       </div>
       <div class="promise">
-        Limited. Local.<br />
-        <strong>Gone when they’re gone.</strong>
+        This only becomes real<br />if you’re in it with us.
       </div>
     </footer>
   </article>
