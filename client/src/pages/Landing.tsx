@@ -96,16 +96,16 @@ const LANDING_CSS = `
   to { transform: translateX(-50%); }
 }
 @keyframes uw-float-a {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-10px) rotate(-1deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 @keyframes uw-float-b {
-  0%, 100% { transform: translateY(0) rotate(2.5deg); }
-  50% { transform: translateY(12px) rotate(1.5deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
 }
 @keyframes uw-float-c {
-  0%, 100% { transform: translateY(0) rotate(1deg); }
-  50% { transform: translateY(-8px) rotate(2deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 .uw-fade-1 { animation: uw-fade-up 0.7s ease both; }
 .uw-fade-2 { animation: uw-fade-up 0.7s ease 0.12s both; }
@@ -286,15 +286,15 @@ export default function Landing() {
               backgroundImage: "url(/email-london-map.jpg)",
               backgroundSize: "cover",
               backgroundPosition: "center 42%",
-              opacity: 0.32,
-              filter: "grayscale(0.15) contrast(1.05)",
+              opacity: 0.22,
+              filter: "grayscale(0.35) contrast(0.95) brightness(1.08)",
             }}
           />
           <div style={{
             position: "absolute", inset: 0,
             background: `
-              linear-gradient(180deg, ${BG} 0%, rgba(250,250,248,0.5) 35%, rgba(250,250,248,0.88) 78%, ${BG} 100%),
-              radial-gradient(ellipse 55% 50% at 85% 40%, rgba(232,52,28,0.09), transparent 60%)
+              linear-gradient(180deg, ${BG} 0%, rgba(250,250,248,0.72) 28%, rgba(250,250,248,0.92) 70%, ${BG} 100%),
+              radial-gradient(ellipse 50% 45% at 88% 38%, rgba(232,52,28,0.06), transparent 55%)
             `,
           }} />
         </div>
@@ -302,20 +302,19 @@ export default function Landing() {
         <div style={{
           position: "relative",
           display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1.05fr 0.95fr",
-          gap: isMobile ? 36 : 48,
-          alignItems: "center",
-          padding: isMobile ? "48px 20px 0" : "64px 40px 0",
-          minHeight: isMobile ? "auto" : "calc(100vh - 120px)",
+          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1.05fr) minmax(0, 0.95fr)",
+          gap: isMobile ? 28 : 40,
+          alignItems: "start",
+          padding: isMobile ? "36px 20px 28px" : "48px 40px 40px",
         }}>
           {/* Copy column */}
-          <div style={{ maxWidth: 560, paddingBottom: isMobile ? 0 : 56 }}>
+          <div style={{ maxWidth: 560 }}>
             <div
               className="uw-fade-1"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
                 fontFamily: "'Space Mono', monospace", fontSize: 10,
-                color: V, letterSpacing: "0.14em", marginBottom: 20,
+                color: V, letterSpacing: "0.14em", marginBottom: 16,
               }}
             >
               <span
@@ -332,10 +331,10 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(40px, 6.2vw, 68px)",
+                fontSize: "clamp(36px, 5.5vw, 62px)",
                 fontWeight: 700, color: FG,
-                lineHeight: 1.02, letterSpacing: "-2px",
-                marginBottom: 20,
+                lineHeight: 1.05, letterSpacing: "-1.5px",
+                marginBottom: 16,
               }}
             >
               Limited local drops.
@@ -346,9 +345,9 @@ export default function Landing() {
             <p
               className="uw-fade-3"
               style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
-                color: FG, lineHeight: 1.6,
-                marginBottom: 14, fontWeight: 400,
+                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
+                color: FG, lineHeight: 1.55,
+                marginBottom: 12, fontWeight: 400,
               }}
             >
               Unwrapped is where you discover time-limited drops from local businesses
@@ -359,8 +358,8 @@ export default function Landing() {
               className="uw-fade-3"
               style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 14 : 15,
-                color: MUTED_FG, lineHeight: 1.65,
-                marginBottom: 28, fontWeight: 300,
+                color: MUTED_FG, lineHeight: 1.6,
+                marginBottom: 24, fontWeight: 300,
               }}
             >
               Sign up now — be ready the moment things start to drop.
@@ -416,7 +415,7 @@ export default function Landing() {
           </div>
 
           {/* Visual column */}
-          <div className="uw-fade-3" style={{ position: "relative", minHeight: isMobile ? 320 : 520 }}>
+          <div className="uw-fade-3">
             <HeroVisual isMobile={isMobile} />
           </div>
         </div>
@@ -427,9 +426,8 @@ export default function Landing() {
           style={{
             position: "relative",
             borderTop: `1px solid ${BORDER}`,
-            background: "rgba(250,250,248,0.85)",
+            background: "rgba(250,250,248,0.92)",
             overflow: "hidden",
-            marginTop: isMobile ? 8 : 0,
           }}
         >
           <div style={{
@@ -477,7 +475,7 @@ export default function Landing() {
       {/* ── Mission invite — pre-launch ── */}
       {PRE_LAUNCH && (
         <section style={{
-          padding: isMobile ? "48px 20px" : "72px 40px",
+          padding: isMobile ? "40px 20px" : "56px 40px",
           borderBottom: `1px solid ${BORDER}`,
           background: `
             linear-gradient(135deg, ${MUTED} 0%, ${BG} 48%, rgba(232,52,28,0.04) 100%)
@@ -1134,9 +1132,6 @@ function HeroVisual({ isMobile }: { isMobile: boolean }) {
       title: "Saturday sourdough",
       price: "£4.50",
       className: "uw-float-a",
-      style: isMobile
-        ? { left: "0%", top: 20, width: "58%", zIndex: 2 }
-        : { left: "2%", top: "8%", width: "58%", zIndex: 2 },
     },
     {
       src: SAMPLE_DROPS[1].imageUrl,
@@ -1144,9 +1139,6 @@ function HeroVisual({ isMobile }: { isMobile: boolean }) {
       title: "Express blow-dry",
       price: "£28",
       className: "uw-float-b",
-      style: isMobile
-        ? { right: "0%", top: 0, width: "52%", zIndex: 3 }
-        : { right: "0%", top: "0%", width: "52%", zIndex: 3 },
     },
     {
       src: SAMPLE_DROPS[2].imageUrl,
@@ -1154,137 +1146,130 @@ function HeroVisual({ isMobile }: { isMobile: boolean }) {
       title: "45-min session",
       price: "£35",
       className: "uw-float-c",
-      style: isMobile
-        ? { left: "18%", bottom: 8, width: "64%", zIndex: 1 }
-        : { left: "18%", bottom: "4%", width: "62%", zIndex: 1 },
     },
   ] as const;
 
   return (
-    <div
-      aria-hidden
-      style={{
-        position: "relative",
-        width: "100%",
-        height: isMobile ? 340 : 520,
-      }}
-    >
-      {/* Accent frame */}
+    <div aria-hidden style={{ width: "100%" }}>
+      {/* Status bar */}
       <div style={{
-        position: "absolute",
-        right: isMobile ? 12 : 24,
-        top: isMobile ? 28 : 48,
-        bottom: isMobile ? 28 : 48,
-        left: isMobile ? 12 : 40,
-        border: `1px solid ${BORDER}`,
-        background: MUTED,
-        opacity: 0.7,
-      }} />
-
-      {/* Live boarding chip */}
-      <div style={{
-        position: "absolute",
-        top: isMobile ? 12 : 24,
-        left: isMobile ? 8 : 16,
-        zIndex: 5,
-        background: FG,
-        color: BG,
-        padding: "10px 14px",
         display: "flex",
-        alignItems: "center",
-        gap: 10,
-        boxShadow: `4px 4px 0 ${V}`,
+        alignItems: "stretch",
+        gap: 1,
+        background: BORDER,
+        border: `1px solid ${BORDER}`,
+        marginBottom: 12,
       }}>
-        <span
-          className="uw-pulse-dot"
-          style={{
-            width: 7, height: 7, borderRadius: "50%",
-            background: V, display: "inline-block",
-          }}
-        />
-        <div>
+        <div style={{
+          flex: 1,
+          background: FG,
+          color: BG,
+          padding: isMobile ? "12px 14px" : "14px 16px",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+        }}>
+          <span
+            className="uw-pulse-dot"
+            style={{
+              width: 7, height: 7, borderRadius: "50%",
+              background: V, display: "inline-block", flexShrink: 0,
+            }}
+          />
+          <div>
+            <div style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 8,
+              letterSpacing: "0.12em", color: "rgba(250,250,248,0.55)", marginBottom: 2,
+            }}>
+              BOARDING NOW
+            </div>
+            <div style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: isMobile ? 14 : 16, fontWeight: 600, lineHeight: 1.2,
+            }}>
+              Businesses joining daily
+            </div>
+          </div>
+        </div>
+        <div style={{
+          flex: isMobile ? "0 0 auto" : "0 0 42%",
+          background: BG,
+          padding: isMobile ? "12px 14px" : "14px 16px",
+          borderLeft: `3px solid ${V}`,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          minWidth: isMobile ? 120 : 0,
+        }}>
           <div style={{
             fontFamily: "'Space Mono', monospace", fontSize: 8,
-            letterSpacing: "0.12em", color: "rgba(250,250,248,0.55)", marginBottom: 2,
+            color: V, letterSpacing: "0.12em", marginBottom: 4,
           }}>
-            BOARDING NOW
+            FAVOURITES
           </div>
           <div style={{
-            fontFamily: "'Playfair Display', serif", fontSize: 14, fontWeight: 600,
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 13 : 15, fontWeight: 600, fontStyle: "italic",
+            color: FG, lineHeight: 1.25,
           }}>
-            Businesses joining daily
+            Charity shops welcome
           </div>
         </div>
       </div>
 
-      {cards.map((card) => (
-        <div
-          key={card.title}
-          className={card.className}
-          style={{
-            position: "absolute",
-            ...card.style,
-            background: BG,
-            border: `1px solid ${BORDER}`,
-            boxShadow: "0 18px 40px rgba(20,18,16,0.08)",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{
-            height: isMobile ? 110 : 160,
-            background: `${MUTED} url(${card.src}) center/cover no-repeat`,
-          }} />
-          <div style={{ padding: isMobile ? "10px 12px 12px" : "12px 14px 14px" }}>
+      {/* Card mosaic — grid, not free-floating overlaps */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gridTemplateRows: isMobile ? "auto auto" : "auto auto",
+        gap: 10,
+      }}>
+        {cards.map((card, i) => (
+          <div
+            key={card.title}
+            className={card.className}
+            style={{
+              background: BG,
+              border: `1px solid ${BORDER}`,
+              overflow: "hidden",
+              gridColumn: i === 2 ? "1 / -1" : "auto",
+            }}
+          >
             <div style={{
-              fontFamily: "'Space Mono', monospace", fontSize: 8,
-              color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 4,
-              textTransform: "uppercase",
-            }}>
-              {card.label}
-            </div>
+              height: i === 2 ? (isMobile ? 120 : 150) : (isMobile ? 110 : 140),
+              background: `${MUTED} url(${card.src}) center/cover no-repeat`,
+            }} />
             <div style={{
-              display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8,
+              padding: isMobile ? "10px 12px 12px" : "12px 14px 14px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 10,
             }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 8,
+                  color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 4,
+                  textTransform: "uppercase",
+                }}>
+                  {card.label}
+                </div>
+                <div style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: isMobile ? 14 : 16, fontWeight: 600, color: FG, lineHeight: 1.25,
+                }}>
+                  {card.title}
+                </div>
+              </div>
               <span style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: isMobile ? 13 : 15, fontWeight: 600, color: FG, lineHeight: 1.2,
-              }}>
-                {card.title}
-              </span>
-              <span style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 11, fontWeight: 700, color: V,
+                fontFamily: "'Space Mono', monospace", fontSize: 12, fontWeight: 700, color: V,
+                flexShrink: 0,
               }}>
                 {card.price}
               </span>
             </div>
           </div>
-        </div>
-      ))}
-
-      {/* Charity shop callout */}
-      <div style={{
-        position: "absolute",
-        right: isMobile ? 8 : 8,
-        bottom: isMobile ? 0 : 20,
-        zIndex: 6,
-        background: BG,
-        border: `1px solid ${FG}`,
-        borderLeft: `3px solid ${V}`,
-        padding: isMobile ? "10px 12px" : "12px 16px",
-        maxWidth: isMobile ? 160 : 190,
-      }}>
-        <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 8,
-          color: V, letterSpacing: "0.12em", marginBottom: 4,
-        }}>
-          FAVOURITES
-        </div>
-        <div style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: isMobile ? 14 : 16, fontWeight: 600, fontStyle: "italic", color: FG, lineHeight: 1.25,
-        }}>
-          Charity shops welcome
-        </div>
+        ))}
       </div>
     </div>
   );
