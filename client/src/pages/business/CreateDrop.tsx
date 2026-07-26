@@ -4,7 +4,7 @@ import { trpc } from "../../trpc";
 import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import ImageUpload from "../../components/ImageUpload";
-import { checkoutFromReceive, formatPounds } from "../../lib/fees";
+import { checkoutFromList, receiveFromList, formatPounds } from "../../lib/fees";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -46,10 +46,14 @@ export default function CreateDrop() {
       setForm(prev => ({ ...prev, [k]: e.target.value }));
   }
 
-  const receivePence = form.price === "" ? null : Math.round(parseFloat(form.price) * 100);
+  const listPence = form.price === "" ? null : Math.round(parseFloat(form.price) * 100);
   const shopperPricePreview =
-    receivePence != null && !isNaN(receivePence) && receivePence >= 0
-      ? checkoutFromReceive(receivePence)
+    listPence != null && !isNaN(listPence) && listPence >= 0
+      ? checkoutFromList(listPence)
+      : null;
+  const youReceivePreview =
+    listPence != null && !isNaN(listPence) && listPence >= 0
+      ? receiveFromList(listPence)
       : null;
 
   function handleSubmit() {
@@ -58,8 +62,8 @@ export default function CreateDrop() {
       setError("Please fill in all required fields.");
       return;
     }
-    const sellerReceivePence = Math.round(parseFloat(form.price) * 100);
-    if (isNaN(sellerReceivePence) || sellerReceivePence < 0) { setError("Invalid amount."); return; }
+    const listPricePence = Math.round(parseFloat(form.price) * 100);
+    if (isNaN(listPricePence) || listPricePence < 0) { setError("Invalid amount."); return; }
     const qty = parseInt(form.totalQuantity);
     if (isNaN(qty) || qty < 1) { setError("Quantity must be at least 1."); return; }
     if (new Date(form.collectionEnd) <= new Date(form.collectionStart)) {
@@ -73,7 +77,7 @@ export default function CreateDrop() {
       imageUrl: form.imageUrl || undefined,
       category: form.category,
       format: form.format as "limited_item" | "clearance_discount" | "bundle" | "service_window",
-      sellerReceive: sellerReceivePence,
+      listPrice: listPricePence,
       totalQuantity: qty,
       collectionStart: new Date(form.collectionStart).toISOString(),
       collectionEnd: new Date(form.collectionEnd).toISOString(),
@@ -142,7 +146,7 @@ export default function CreateDrop() {
           {/* ── Pricing + stock ── */}
           <Section label="PRICE & STOCK">
             <div style={twoCol}>
-              <Field label="You receive (£) *">
+              <Field label="Your price (£) *">
                 <input
                   value={form.price} onChange={set("price")}
                   type="number" min="0" step="0.01" placeholder="0.00"
@@ -157,23 +161,26 @@ export default function CreateDrop() {
                 />
               </Field>
             </div>
-            {shopperPricePreview != null && (
+            {shopperPricePreview != null && youReceivePreview != null && (
               <div style={{
                 marginTop: 12, padding: "14px 16px", background: MUTED,
                 border: `1px solid ${BORDER}`,
               }}>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 4 }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 6 }}>
                   Shoppers will pay <strong>{formatPounds(shopperPricePreview)}</strong>
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 6 }}>
+                  You receive <strong>{formatPounds(youReceivePreview)}</strong>
                 </div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, margin: 0, lineHeight: 1.5 }}>
                   {shopperPricePreview === 0
                     ? "Free drop — no payment at reserve."
-                    : "That’s the price shown on the drop. Shoppers only see one price — Unwrapped’s fee is built in, not listed separately. You receive exactly the amount you entered above."}
+                    : "Shoppers only see one price — no separate fee line. Unwrapped’s fee (15% of your price) is split: half in the shopper price, half from your payout."}
                 </p>
               </div>
             )}
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
-              Enter what you want to be paid per item. Set to 0 for a free drop. Quantity controls scarcity — keep it honest.
+              Enter the price of your goods. You’ll see exactly what shoppers pay and what you receive before you publish. Set to 0 for a free drop.
             </p>
           </Section>
 

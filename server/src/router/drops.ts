@@ -5,7 +5,7 @@ import { drops, businesses, locations, reservations, waitlist } from "../db/sche
 import { TRPCError } from "@trpc/server";
 import { dispatchDropNotifications } from "../notifications/dispatch";
 import { stripeEnabled, refundPaymentIntent } from "../payments/stripe";
-import { checkoutFromReceive } from "../payments/fees";
+import { checkoutFromList, receiveFromList } from "../payments/fees";
 import { geocodeAddress, haversineKm } from "../geo";
 
 const CATEGORIES = [
@@ -110,8 +110,8 @@ export const dropsRouter = router({
       title: z.string().min(1).max(100),
       description: z.string().max(1000).optional(),
       imageUrl: z.string().url().optional(),
-      /** Amount the business wants to receive per unit (pence). 0 = free. */
-      sellerReceive: z.number().int().min(0),
+      /** Business list price per unit (pence) — what they're selling at. 0 = free. */
+      listPrice: z.number().int().min(0),
       totalQuantity: z.number().int().positive().max(999),
       collectionStart: z.string().datetime(),
       collectionEnd: z.string().datetime(),
@@ -179,8 +179,9 @@ export const dropsRouter = router({
 
       if (!loc) throw new TRPCError({ code: "FORBIDDEN", message: "Location not found" });
 
-      const sellerReceive = input.sellerReceive;
-      const price = checkoutFromReceive(sellerReceive);
+      const listPrice = input.listPrice;
+      const price = checkoutFromList(listPrice);
+      const sellerReceive = receiveFromList(listPrice);
 
       const [drop] = await ctx.db
         .insert(drops)
