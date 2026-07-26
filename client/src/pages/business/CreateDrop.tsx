@@ -4,7 +4,7 @@ import { trpc } from "../../trpc";
 import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import ImageUpload from "../../components/ImageUpload";
-import { checkoutFromList, receiveFromList, formatPounds } from "../../lib/fees";
+import { receiveFromList, formatPounds } from "../../lib/fees";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -47,10 +47,6 @@ export default function CreateDrop() {
   }
 
   const listPence = form.price === "" ? null : Math.round(parseFloat(form.price) * 100);
-  const shopperPricePreview =
-    listPence != null && !isNaN(listPence) && listPence >= 0
-      ? checkoutFromList(listPence)
-      : null;
   const youReceivePreview =
     listPence != null && !isNaN(listPence) && listPence >= 0
       ? receiveFromList(listPence)
@@ -161,26 +157,18 @@ export default function CreateDrop() {
                 />
               </Field>
             </div>
-            {shopperPricePreview != null && youReceivePreview != null && (
+            {youReceivePreview != null && (
               <div style={{
                 marginTop: 12, padding: "14px 16px", background: MUTED,
                 border: `1px solid ${BORDER}`,
               }}>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 6 }}>
-                  Shoppers will pay <strong>{formatPounds(shopperPricePreview)}</strong>
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginBottom: 6 }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG }}>
                   You receive <strong>{formatPounds(youReceivePreview)}</strong>
                 </div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, margin: 0, lineHeight: 1.5 }}>
-                  {shopperPricePreview === 0
-                    ? "Free drop — no payment at reserve."
-                    : "Shoppers only see one price — no separate fee line. Unwrapped’s fee (15% of your price) is split: half in the shopper price, half from your payout."}
-                </p>
               </div>
             )}
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
-              Enter the price of your goods. You’ll see exactly what shoppers pay and what you receive before you publish. Set to 0 for a free drop.
+              Enter the price of your goods. You’ll see what you receive before you publish. Set to 0 for a free drop.
             </p>
           </Section>
 
