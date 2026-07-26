@@ -31,11 +31,11 @@ const SAMPLE_DROPS: SampleDrop[] = [
   {
     category: "Food & Drink",
     neighbourhood: "Hackney",
-    title: "Morning bake — six country loaves",
+    title: "Morning bake — country loaf",
     business: "River Oven Bakery",
     price: "£4.50",
     window: "Example window · Sat morning",
-    left: "e.g. 6 loaves",
+    left: "e.g. 6 available",
     imageUrl: "/samples/sourdough.jpg",
   },
   {
