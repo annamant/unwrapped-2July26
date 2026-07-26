@@ -3,6 +3,7 @@ import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } 
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, users, drops, reservations, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
+import { effectiveReceive, platformFeePence } from "../payments/fees";
 import {
   sendApplicationApprovedEmail,
   sendApplicationRejectedEmail,
@@ -858,15 +859,18 @@ export const adminRouter = router({
     const [fulfilledToday] = await ctx.db.select({ count: count() }).from(reservations)
       .where(and(eq(reservations.status, "fulfilled"), gte(reservations.fulfilledAt, todayStart), lte(reservations.fulfilledAt, todayEnd)));
 
-    // Gross revenue = sum of fulfilled reservation prices
+    // Gross revenue = sum of fulfilled reservation checkout prices
     const fulfilledRes = await ctx.db
-      .select({ price: drops.price })
+      .select({ price: drops.price, sellerReceive: drops.sellerReceive })
       .from(reservations)
       .innerJoin(drops, eq(reservations.dropId, drops.id))
       .where(eq(reservations.status, "fulfilled"));
 
     const grossRevenue = fulfilledRes.reduce((sum, r) => sum + r.price, 0);
-    const platformRevenue = Math.floor(grossRevenue * 0.15);
+    const platformRevenue = fulfilledRes.reduce(
+      (sum, r) => sum + platformFeePence(r.price, effectiveReceive(r.price, r.sellerReceive)),
+      0,
+    );
 
     return {
       totalUsers: userCount.count,

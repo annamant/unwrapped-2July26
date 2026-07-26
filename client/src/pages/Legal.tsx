@@ -112,7 +112,7 @@ export function Terms() {
 
       <H>6. Price and payment</H>
       <P>
-        Prices are shown in pounds sterling (GBP) as listed by the Business. Where VAT or other tax applies and is included, it will form part of the price shown unless we state otherwise. Some drops may be free; free drops do not require payment.
+        Prices are shown in pounds sterling (GBP) as the all-in amount due at reservation. Where VAT or other tax applies and is included, it will form part of the price shown unless we state otherwise. Some drops may be free; free drops do not require payment.
       </P>
       <P>
         Payments are processed by Stripe. Card details go to Stripe and are not stored on our servers. We may store a payment reference needed to operate the Platform (for example refunds). Completing a paid reservation authorises us to charge the listed price through Stripe.
@@ -162,7 +162,7 @@ export function Terms() {
         Businesses join by application and are approved at our discretion. Businesses are responsible for the accuracy of their listings; the quality, safety, and legality of what they offer; honouring every valid reservation during the stated window; and complying with applicable law (including food safety and consumer protection rules where relevant).
       </P>
       <P>
-        Unwrapped retains a platform fee on successful paid reservations. Fee and payout terms are agreed with each Business at onboarding (or as updated in writing). We may suspend listings or Business accounts that breach these Terms or applicable law. Detailed commercial terms for Businesses may be set out separately; if there is a conflict on fees or payout, those commercial terms prevail for that subject.
+        Unwrapped retains a platform fee on successful paid reservations. The fee is included in the price shown to shoppers (not itemised as a separate checkout charge). Fee and payout terms are agreed with each Business at onboarding (or as updated in writing). We may suspend listings or Business accounts that breach these Terms or applicable law. Detailed commercial terms for Businesses may be set out separately; if there is a conflict on fees or payout, those commercial terms prevail for that subject.
       </P>
 
       <H>11. Privacy</H>

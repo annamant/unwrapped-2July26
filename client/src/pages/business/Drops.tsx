@@ -167,7 +167,8 @@ export default function Drops() {
                   <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
                     <Meta label="Date" value={format(new Date(drop.collectionStart), "d MMM yyyy")} />
                     <Meta label="Window" value={`${format(new Date(drop.collectionStart), "h:mm a")} – ${format(new Date(drop.collectionEnd), "h:mm a")}`} />
-                    <Meta label="Price" value={`£${(drop.price / 100).toFixed(2)}`} />
+                    <Meta label="You receive" value={drop.sellerReceive != null ? `£${(drop.sellerReceive / 100).toFixed(2)}` : `£${(drop.price / 100).toFixed(2)}`} />
+                    <Meta label="Shoppers pay" value={`£${(drop.price / 100).toFixed(2)}`} />
                     <Meta label="Stock" value={`${drop.availableQuantity} / ${drop.totalQuantity} remaining`} />
                     <Meta label="Reservations" value={`${drop.totalQuantity - drop.availableQuantity}`} />
                   </div>

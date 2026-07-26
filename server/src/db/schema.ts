@@ -146,7 +146,9 @@ export const drops = pgTable("drops", {
   title: text("title").notNull(),
   description: text("description"),
   imageUrl: text("image_url"),
-  price: integer("price").notNull(), // in pence
+  price: integer("price").notNull(), // in pence — what shoppers pay (all-in checkout)
+  /** What the business wants to receive per unit (pence). Null on legacy drops. */
+  sellerReceive: integer("seller_receive"),
   originalPrice: integer("original_price"), // for clearance/discount drops
   totalQuantity: integer("total_quantity").notNull(),
   availableQuantity: integer("available_quantity").notNull(),

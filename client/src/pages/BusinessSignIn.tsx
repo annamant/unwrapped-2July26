@@ -62,7 +62,7 @@ export default function BusinessSignIn() {
           )}
         </div>
         <div style={{ display: "flex", gap: isMobile ? 24 : 32, flexWrap: "wrap" }}>
-          {[["85%", "You keep"], ["0", "Monthly fees"], ["2 min", "To publish"]].map(([val, label]) => (
+          {[["You set", "Your payout"], ["0", "Monthly fees"], ["2 min", "To publish"]].map(([val, label]) => (
             <div key={label}>
               <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#FCFCFC" }}>{val}</div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#666" }}>{label}</div>

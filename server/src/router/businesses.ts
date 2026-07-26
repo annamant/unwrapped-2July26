@@ -3,6 +3,7 @@ import { and, eq, desc, count, gte, lte, inArray } from "drizzle-orm";
 import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, adminProcedure } from "../trpc";
 import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations } from "../db/schema";
 import { TRPCError } from "@trpc/server";
+import { effectiveReceive } from "../payments/fees";
 
 function generateSlug(name: string): string {
   return name
@@ -294,7 +295,7 @@ export const businessesRouter = router({
       const allReservations = await ctx.db
         .select({
           status: reservations.status,
-          drop: { price: drops.price },
+          drop: { price: drops.price, sellerReceive: drops.sellerReceive },
         })
         .from(reservations)
         .innerJoin(drops, eq(reservations.dropId, drops.id))
@@ -304,7 +305,10 @@ export const businessesRouter = router({
         ));
 
       const fulfilled = allReservations.filter(r => r.status === "fulfilled");
-      const totalRevenuePence = fulfilled.reduce((sum, r) => sum + Math.floor(r.drop.price * 0.85), 0);
+      const totalRevenuePence = fulfilled.reduce(
+        (sum, r) => sum + effectiveReceive(r.drop.price, r.drop.sellerReceive),
+        0,
+      );
 
       return {
         totalReservations: allReservations.length,
