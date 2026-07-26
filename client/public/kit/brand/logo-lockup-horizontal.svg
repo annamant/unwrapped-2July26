@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 120" fill="none">
+  <rect x="0" y="8" width="104" height="104" rx="0" fill="#141210"/>
+  <text x="52" y="88" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="68" fill="#FAFAF8">U</text>
+  <circle cx="88" cy="24" r="12" fill="#E8341C"/>
+  <text x="128" y="92" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="96" fill="#141210" letter-spacing="-2">Unwrapped</text>
+</svg>
