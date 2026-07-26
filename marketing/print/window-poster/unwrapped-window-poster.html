@@ -40,7 +40,7 @@
     .hero {
       background: var(--vermillion);
       color: var(--bg);
-      padding: 8mm 11mm 8mm;
+      padding: 7mm 10mm 7mm;
       flex-shrink: 0;
       position: relative;
     }
@@ -48,29 +48,31 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 7mm;
+      margin-bottom: 6mm;
     }
-    .lockup { display: flex; align-items: center; gap: 10px; }
+    .lockup { display: flex; align-items: center; gap: 16px; }
     .mark {
-      width: 34px; height: 34px; background: var(--ink);
+      width: 72px; height: 72px; background: var(--ink);
       position: relative; display: grid; place-items: center; flex-shrink: 0;
     }
     .mark span {
       font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
-      font-size: 22px; color: var(--bg); line-height: 1; transform: translateY(1px);
+      font-size: 50px; color: var(--bg); line-height: 1; transform: translateY(2px);
     }
     .mark i {
-      position: absolute; top: 4px; right: 4px; width: 6px; height: 6px;
+      position: absolute; top: 8px; right: 8px; width: 12px; height: 12px;
       border-radius: 50%; background: var(--vermillion);
     }
     .wordmark {
       font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
-      font-size: 26px; letter-spacing: -0.02em; line-height: 1; color: var(--bg);
+      font-size: 62px; letter-spacing: -0.035em; line-height: 0.95; color: var(--bg);
     }
     .live {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
       display: flex; align-items: center; gap: 7px; color: var(--bg); font-weight: 700;
+      align-self: flex-start;
+      margin-top: 4mm;
     }
     .live::before {
       content: ""; width: 8px; height: 8px; border-radius: 50%;
@@ -83,8 +85,8 @@
     }
     .hero h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700; font-size: 36px; line-height: 1.02;
-      letter-spacing: -0.035em; max-width: 14ch; margin-bottom: 4mm;
+      font-weight: 700; font-size: 32px; line-height: 1.04;
+      letter-spacing: -0.03em; max-width: 15ch; margin-bottom: 3.5mm;
     }
     .hero h1 em { font-style: italic; font-weight: 400; }
     .lede {
@@ -92,33 +94,54 @@
       color: var(--bg); opacity: 0.95;
     }
 
-    /* ── MAP full bleed ── */
-    .map-wrap {
-      height: 30mm;
+    /* ── PLACE STRIP — brand-native, no photo map ── */
+    .place-strip {
+      background: var(--ink);
+      color: var(--bg);
       flex-shrink: 0;
-      position: relative;
-      background: var(--muted);
+      padding: 4.5mm 0;
+      border-top: 3px solid var(--vermillion);
+      border-bottom: 3px solid var(--vermillion);
       overflow: hidden;
-      border-top: 3px solid var(--ink);
-      border-bottom: 3px solid var(--ink);
     }
-    .map-label {
-      position: absolute; top: 3mm; left: 4mm; z-index: 2;
+    .place-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2.5mm 0;
+      padding: 0 6mm;
+      row-gap: 2.5mm;
+    }
+    .place {
+      display: inline-flex;
+      align-items: center;
+      gap: 2.5mm;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      padding: 0 3mm;
+    }
+    .place::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--vermillion);
+      flex-shrink: 0;
+    }
+    .place-label {
+      width: 100%;
+      text-align: center;
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--ink); background: var(--bg); padding: 4px 7px; font-weight: 700;
-    }
-    .map-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: 40% 45%; display: block;
-      filter: grayscale(0.05) contrast(1.05) brightness(1.02);
-    }
-    .map-tag {
-      position: absolute; bottom: 3mm; right: 4mm; z-index: 2;
-      background: var(--ink); color: var(--bg);
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 5px 8px; font-weight: 700;
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      font-weight: 700;
+      margin-bottom: 1mm;
     }
 
     /* ── HOW — big numbers ── */
@@ -296,10 +319,20 @@
       </p>
     </header>
 
-    <div class="map-wrap">
-      <div class="map-label">Across London</div>
-      <img class="map-photo" src="email-london-map.jpg" alt="" />
-      <div class="map-tag">London-wide</div>
+    <div class="place-strip">
+      <div class="place-label">London-wide · neighbourhood by neighbourhood</div>
+      <div class="place-inner">
+        <span class="place">Hackney</span>
+        <span class="place">Brixton</span>
+        <span class="place">Camden</span>
+        <span class="place">Peckham</span>
+        <span class="place">Shoreditch</span>
+        <span class="place">Clapham</span>
+        <span class="place">Islington</span>
+        <span class="place">Notting Hill</span>
+        <span class="place">Dalston</span>
+        <span class="place">Greenwich</span>
+      </div>
     </div>
 
     <section class="how">
