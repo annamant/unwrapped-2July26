@@ -66,6 +66,20 @@ const SECTIONS: ResourceSection[] = [
     ],
   },
   {
+    id: "social",
+    label: "Social shareables",
+    intro: "Assets live on @shopunwrapped — ready to reshare or pass to partner shops.",
+    items: [
+      {
+        title: "Limited · Local · Gone",
+        description: "Launch brand promise — live on Instagram.",
+        href: "/resources/social/limited-local-gone.png",
+        preview: "/resources/social/limited-local-gone.png",
+        format: "PNG · 1:1",
+      },
+    ],
+  },
+  {
     id: "brand",
     label: "Brand",
     intro: "Official logos for press and partners. Don’t recolour or stretch.",
@@ -189,7 +203,7 @@ export default function Resources() {
             fontWeight: 300,
           }}
         >
-          Print posters and logos for local businesses, press, and the neighbourhood.
+          Print posters, live Instagram shareables, and logos for local businesses, press, and the neighbourhood.
           Free to download and use for Unwrapped. Questions:{" "}
           <a href="mailto:anna@shopunwrapped.com" style={{ color: V, textDecoration: "none" }}>
             anna@shopunwrapped.com
