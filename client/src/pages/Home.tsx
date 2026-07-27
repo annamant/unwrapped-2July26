@@ -3,6 +3,8 @@ import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import DropMap, { toDropPin } from "../components/DropMap";
+import DropPrice from "../components/DropPrice";
+import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 
@@ -249,6 +251,8 @@ function DropCard({ drop, business, location, onClick }: {
   const total = drop.totalQuantity || 1;
   const pct = Math.round(((total - drop.availableQuantity) / total) * 100);
   const scarce = drop.availableQuantity > 0 && drop.availableQuantity <= 3;
+  const hasDiscount = drop.originalPrice != null && checkoutFromList(drop.originalPrice) > drop.price;
+  const discountPct = hasDiscount ? discountPercent(drop.originalPrice!, drop.price) : null;
 
   return (
     <div
@@ -276,6 +280,16 @@ function DropCard({ drop, business, location, onClick }: {
             letterSpacing: "0.15em", padding: "4px 8px",
           }}>
             FEATURED
+          </div>
+        )}
+        {hasDiscount && discountPct != null && discountPct > 0 && (
+          <div style={{
+            position: "absolute", bottom: 12, left: 12,
+            background: V, color: BG,
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            letterSpacing: "0.12em", padding: "4px 8px",
+          }}>
+            {discountPct}% OFF
           </div>
         )}
         {isLive && (
@@ -306,9 +320,7 @@ function DropCard({ drop, business, location, onClick }: {
         </h3>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 16, fontWeight: 700, color: FG }}>
-            £{(drop.price / 100).toFixed(2)}
-          </span>
+          <DropPrice price={drop.price} originalPrice={drop.originalPrice} size="md" />
           <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: scarce ? V : MUTED_FG }}>
             {drop.availableQuantity === 0
               ? "Sold out"

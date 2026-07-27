@@ -19,3 +19,16 @@ export function receiveFromList(listPence: number): number {
 export function formatPounds(pence: number): string {
   return `£${(pence / 100).toFixed(2)}`;
 }
+
+/** Approximate list price from stored seller receive amount (legacy drops may differ by 1p). */
+export function listFromReceive(receivePence: number): number {
+  if (receivePence <= 0) return 0;
+  return Math.round(receivePence / (1 - SELLER_FEE_RATE));
+}
+
+export function discountPercent(originalListPence: number, saleCheckoutPence: number): number | null {
+  if (originalListPence <= 0 || saleCheckoutPence <= 0) return null;
+  const originalCheckout = checkoutFromList(originalListPence);
+  if (originalCheckout <= saleCheckoutPence) return null;
+  return Math.round((1 - saleCheckoutPence / originalCheckout) * 100);
+}

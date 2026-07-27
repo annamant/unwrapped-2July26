@@ -5,6 +5,7 @@ import Nav from "../components/Nav";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
 import useIsMobile from "../hooks/useIsMobile";
+import DropPrice from "../components/DropPrice";
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -274,9 +275,7 @@ function DropCard({ drop }: { drop: any }) {
           {drop.title}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: FG }}>
-            £{(drop.price / 100).toFixed(2)}
-          </div>
+          <DropPrice price={drop.price} originalPrice={drop.originalPrice} size="sm" />
           {scarce ? (
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: V, letterSpacing: "0.05em" }}>
               {drop.availableQuantity} LEFT

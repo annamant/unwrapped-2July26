@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { checkoutFromList } from "../lib/fees";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface DropPin {
   id: string;
   title: string;
-  price: number; // in pence
+  price: number; // checkout price in pence
+  originalPrice?: number | null; // original list price in pence
   lat: number;
   lng: number;
   availableQuantity: number;
@@ -70,6 +72,16 @@ function esc(s: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function formatPopupPrice(drop: DropPin): string {
+  const price = `£${(drop.price / 100).toFixed(2)}`;
+  if (drop.originalPrice && checkoutFromList(drop.originalPrice) > drop.price) {
+    const was = `£${(checkoutFromList(drop.originalPrice) / 100).toFixed(2)}`;
+    const pct = Math.round((1 - drop.price / checkoutFromList(drop.originalPrice)) * 100);
+    return `${price} <span style="text-decoration:line-through;color:#7A7A7A;font-weight:400">${was}</span> <span style="color:#E8341C;font-size:10px">${pct}% off</span>`;
+  }
+  return price;
+}
+
 function makePopupHTML(drop: DropPin): string {
   const end = new Date(drop.collectionEnd);
   const endStr = end.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -88,7 +100,7 @@ function makePopupHTML(drop: DropPin): string {
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#141210">
-          £${(drop.price / 100).toFixed(2)}
+          ${formatPopupPrice(drop)}
         </span>
         ${availBadge}
       </div>
@@ -261,6 +273,7 @@ export function toDropPin(item: { drop: any; business: any; location: any }): Dr
     id: item.drop.id,
     title: item.drop.title,
     price: item.drop.price,
+    originalPrice: item.drop.originalPrice,
     lat: item.location.latitude,
     lng: item.location.longitude,
     availableQuantity: item.drop.availableQuantity,

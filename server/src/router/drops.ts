@@ -112,6 +112,8 @@ export const dropsRouter = router({
       imageUrl: z.string().url().optional(),
       /** Business list price per unit (pence) — what they're selling at. 0 = free. */
       listPrice: z.number().int().min(0),
+      /** Original list price (pence) — required for clearance/discount drops. */
+      originalListPrice: z.number().int().positive().optional(),
       totalQuantity: z.number().int().positive().max(999),
       collectionStart: z.string().datetime(),
       collectionEnd: z.string().datetime(),
@@ -126,6 +128,17 @@ export const dropsRouter = router({
       }
       if (windowEnd <= new Date()) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Collection window is entirely in the past" });
+      }
+
+      if (input.format === "clearance_discount") {
+        if (input.originalListPrice == null) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Enter the original price for discount drops" });
+        }
+        if (input.originalListPrice <= input.listPrice) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "The sale price must be lower than the original price" });
+        }
+      } else if (input.originalListPrice != null) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Original price only applies to clearance / discount drops" });
       }
 
       let loc: typeof locations.$inferSelect | undefined;
@@ -195,6 +208,7 @@ export const dropsRouter = router({
           imageUrl: input.imageUrl,
           price,
           sellerReceive,
+          originalPrice: input.originalListPrice ?? null,
           totalQuantity: input.totalQuantity,
           availableQuantity: input.totalQuantity,
           collectionStart: new Date(input.collectionStart),
@@ -211,6 +225,7 @@ export const dropsRouter = router({
         businessName: ctx.business.name,
         category: drop.category,
         price: drop.price,
+        originalPrice: drop.originalPrice,
         availableQuantity: drop.availableQuantity,
         collectionEnd: drop.collectionEnd.toISOString(),
         locationLat: loc.latitude,

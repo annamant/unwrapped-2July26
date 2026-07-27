@@ -40,6 +40,27 @@ if (VAPID_PUBLIC && VAPID_PRIVATE) {
 }
 
 import { haversineKm } from "../geo";
+import { checkoutFromList } from "../payments/fees";
+
+function formatDropPriceText(drop: DropPayload): string {
+  const price = `£${(drop.price / 100).toFixed(2)}`;
+  if (drop.originalPrice && checkoutFromList(drop.originalPrice) > drop.price) {
+    const was = `£${(checkoutFromList(drop.originalPrice) / 100).toFixed(2)}`;
+    const pct = Math.round((1 - drop.price / checkoutFromList(drop.originalPrice)) * 100);
+    return `${price} (${pct}% off, was ${was})`;
+  }
+  return price;
+}
+
+function formatDropPriceHtml(drop: DropPayload): string {
+  const price = `£${(drop.price / 100).toFixed(2)}`;
+  if (drop.originalPrice && checkoutFromList(drop.originalPrice) > drop.price) {
+    const was = `£${(checkoutFromList(drop.originalPrice) / 100).toFixed(2)}`;
+    const pct = Math.round((1 - drop.price / checkoutFromList(drop.originalPrice)) * 100);
+    return `<strong style="font-family:monospace">${price}</strong> <span style="text-decoration:line-through;color:#7a7a7a">${was}</span> <span style="color:#E8341C">${pct}% off</span>`;
+  }
+  return `<strong style="font-family:monospace">${price}</strong>`;
+}
 
 // ─── Current hour check (respects quiet hours) ────────────────────────────────
 
@@ -79,7 +100,7 @@ async function sendDropEmail(to: string, drop: DropPayload) {
             <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:8px">${esc(drop.title)}</h1>
             <p style="font-size:14px;color:#7a7a7a;margin-bottom:20px">${esc(drop.businessName)}</p>
             <p style="font-size:15px;color:#141210;margin-bottom:24px">
-              <strong style="font-family:monospace">£${(drop.price / 100).toFixed(2)}</strong>
+              ${formatDropPriceHtml(drop)}
               &nbsp;·&nbsp; Collect until ${endStr}
               &nbsp;·&nbsp; <span style="color:#E8341C">${drop.availableQuantity} available</span>
             </p>
@@ -505,7 +526,7 @@ async function sendPushNotification(
       },
       JSON.stringify({
         title: `New drop: ${drop.title}`,
-        body: `${drop.businessName} · £${(drop.price / 100).toFixed(2)} · ${drop.availableQuantity} available`,
+        body: `${drop.businessName} · ${formatDropPriceText(drop)} · ${drop.availableQuantity} available`,
         icon: "/icon-192.png",
         badge: "/badge-72.png",
         data: { url: `/drop/${drop.id}` },
@@ -530,6 +551,8 @@ export interface DropPayload {
   businessName: string;
   category: string;
   price: number;
+  /** Original list price in pence — shown for discount drops. */
+  originalPrice?: number | null;
   availableQuantity: number;
   collectionEnd: string;
   locationLat: number;

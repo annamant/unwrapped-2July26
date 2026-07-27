@@ -6,6 +6,7 @@ import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
+import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
 
 const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
@@ -215,12 +216,12 @@ export default function DropDetail() {
           <div style={isMobile ? {} : { position: "sticky", top: 88 }}>
             {/* Price */}
             <div style={{ borderBottom: `1px solid ${BORDER}`, paddingBottom: 20, marginBottom: 20 }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: 36, fontWeight: 700, color: FG, marginBottom: 4,
-              }}>
-                £{(drop.price / 100).toFixed(2)}
-              </div>
+              <DropPrice
+                price={drop.price}
+                originalPrice={drop.originalPrice}
+                size="lg"
+                layout="stacked"
+              />
               {scarce && (
                 <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: V, letterSpacing: "0.05em" }}>
                   Only {drop.availableQuantity} left
@@ -274,7 +275,7 @@ export default function DropDetail() {
               <div>
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                   <CheckoutForm
-                    amountLabel={`£${(drop.price / 100).toFixed(2)}`}
+                    amountLabel={formatDropPriceLabel(drop.price, drop.originalPrice)}
                     onPaid={(piId) => reserve.mutate({ dropId: id, stripePaymentIntentId: piId })}
                     onCancel={() => { setClientSecret(null); setPaymentIntentId(null); setReserveError(""); }}
                     finalizing={reserve.isPending}
@@ -304,7 +305,7 @@ export default function DropDetail() {
                     ? "PROCESSING…"
                     : drop.price === 0
                     ? "RESERVE — FREE"
-                    : `RESERVE — £${(drop.price / 100).toFixed(2)}`}
+                    : `RESERVE — ${formatDropPriceLabel(drop.price, drop.originalPrice)}`}
                 </button>
                 {reserveError && (
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, lineHeight: 1.5 }}>

@@ -4,7 +4,8 @@ import { trpc } from "../../trpc";
 import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import ImageUpload from "../../components/ImageUpload";
-import { receiveFromList, formatPounds } from "../../lib/fees";
+import { receiveFromList, formatPounds, checkoutFromList, discountPercent } from "../../lib/fees";
+import DropPrice from "../../components/DropPrice";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -26,7 +27,7 @@ export default function CreateDrop() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "", description: "", imageUrl: "", category: "", format: "limited_item",
-    price: "", totalQuantity: "",
+    price: "", originalPrice: "", totalQuantity: "",
     collectionStart: "", collectionEnd: "",
     locationAddress: "", locationCity: "", locationPostcode: "",
     locationLat: "", locationLng: "",
@@ -47,6 +48,13 @@ export default function CreateDrop() {
   }
 
   const listPence = form.price === "" ? null : Math.round(parseFloat(form.price) * 100);
+  const originalListPence = form.originalPrice === "" ? null : Math.round(parseFloat(form.originalPrice) * 100);
+  const isDiscount = form.format === "clearance_discount";
+  const checkoutPreview = listPence != null && !isNaN(listPence) && listPence >= 0 ? checkoutFromList(listPence) : null;
+  const discountPreview =
+    isDiscount && originalListPence != null && checkoutPreview != null && !isNaN(originalListPence)
+      ? discountPercent(originalListPence, checkoutPreview)
+      : null;
   const youReceivePreview =
     listPence != null && !isNaN(listPence) && listPence >= 0
       ? receiveFromList(listPence)
@@ -54,12 +62,19 @@ export default function CreateDrop() {
 
   function handleSubmit() {
     setError("");
-    if (!form.title || !form.category || !form.price || !form.totalQuantity || !form.collectionStart || !form.collectionEnd || !form.locationAddress) {
+    if (!form.title || !form.category || !form.price || !form.totalQuantity || !form.collectionStart || !form.collectionEnd || !form.locationAddress || (form.format === "clearance_discount" && !form.originalPrice)) {
       setError("Please fill in all required fields.");
       return;
     }
     const listPricePence = Math.round(parseFloat(form.price) * 100);
     if (isNaN(listPricePence) || listPricePence < 0) { setError("Invalid amount."); return; }
+    let originalListPrice: number | undefined;
+    if (form.format === "clearance_discount") {
+      if (!form.originalPrice) { setError("Enter the original price for discount drops."); return; }
+      originalListPrice = Math.round(parseFloat(form.originalPrice) * 100);
+      if (isNaN(originalListPrice) || originalListPrice <= 0) { setError("Invalid original price."); return; }
+      if (originalListPrice <= listPricePence) { setError("The sale price must be lower than the original price."); return; }
+    }
     const qty = parseInt(form.totalQuantity);
     if (isNaN(qty) || qty < 1) { setError("Quantity must be at least 1."); return; }
     if (new Date(form.collectionEnd) <= new Date(form.collectionStart)) {
@@ -74,6 +89,7 @@ export default function CreateDrop() {
       category: form.category,
       format: form.format as "limited_item" | "clearance_discount" | "bundle" | "service_window",
       listPrice: listPricePence,
+      originalListPrice,
       totalQuantity: qty,
       collectionStart: new Date(form.collectionStart).toISOString(),
       collectionEnd: new Date(form.collectionEnd).toISOString(),
@@ -141,22 +157,69 @@ export default function CreateDrop() {
 
           {/* ── Pricing + stock ── */}
           <Section label="PRICE & STOCK">
-            <div style={twoCol}>
-              <Field label="Your price (£) *">
-                <input
-                  value={form.price} onChange={set("price")}
-                  type="number" min="0" step="0.01" placeholder="0.00"
-                  style={inputStyle}
+            {isDiscount ? (
+              <div style={twoCol}>
+                <Field label="Original price (£) *">
+                  <input
+                    value={form.originalPrice} onChange={set("originalPrice")}
+                    type="number" min="0" step="0.01" placeholder="20.00"
+                    style={inputStyle}
+                  />
+                </Field>
+                <Field label="Sale price (£) *">
+                  <input
+                    value={form.price} onChange={set("price")}
+                    type="number" min="0" step="0.01" placeholder="10.00"
+                    style={inputStyle}
+                  />
+                </Field>
+              </div>
+            ) : (
+              <div style={twoCol}>
+                <Field label="Your price (£) *">
+                  <input
+                    value={form.price} onChange={set("price")}
+                    type="number" min="0" step="0.01" placeholder="0.00"
+                    style={inputStyle}
+                  />
+                </Field>
+                <Field label="Total quantity *">
+                  <input
+                    value={form.totalQuantity} onChange={set("totalQuantity")}
+                    type="number" min="1" placeholder="10"
+                    style={inputStyle}
+                  />
+                </Field>
+              </div>
+            )}
+            {isDiscount && (
+              <div style={twoCol}>
+                <Field label="Total quantity *">
+                  <input
+                    value={form.totalQuantity} onChange={set("totalQuantity")}
+                    type="number" min="1" placeholder="10"
+                    style={inputStyle}
+                  />
+                </Field>
+                <div />
+              </div>
+            )}
+            {checkoutPreview != null && isDiscount && originalListPence != null && originalListPence > 0 && (
+              <div style={{
+                marginTop: 12, padding: "14px 16px", background: MUTED,
+                border: `1px solid ${BORDER}`,
+              }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginBottom: 8 }}>
+                  Shoppers will see
+                </div>
+                <DropPrice
+                  price={checkoutPreview}
+                  originalPrice={originalListPence}
+                  size="md"
+                  layout="stacked"
                 />
-              </Field>
-              <Field label="Total quantity *">
-                <input
-                  value={form.totalQuantity} onChange={set("totalQuantity")}
-                  type="number" min="1" placeholder="10"
-                  style={inputStyle}
-                />
-              </Field>
-            </div>
+              </div>
+            )}
             {youReceivePreview != null && (
               <div style={{
                 marginTop: 12, padding: "14px 16px", background: MUTED,
@@ -164,11 +227,16 @@ export default function CreateDrop() {
               }}>
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG }}>
                   You receive <strong>{formatPounds(youReceivePreview)}</strong>
+                  {discountPreview != null && discountPreview > 0 && (
+                    <span style={{ color: V, marginLeft: 8 }}>{discountPreview}% off</span>
+                  )}
                 </div>
               </div>
             )}
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
-              Enter the price of your goods. You’ll see what you receive before you publish. Set to 0 for a free drop.
+              {isDiscount
+                ? "Enter what the item normally costs and what you're offering it for in this drop. Shoppers see the discounted checkout price."
+                : "Enter the price of your goods. You'll see what you receive before you publish. Set to 0 for a free drop."}
             </p>
           </Section>
 
