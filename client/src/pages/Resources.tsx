@@ -46,6 +46,23 @@ const SECTIONS: ResourceSection[] = [
         format: "PNG",
         downloadName: "Unwrapped-Window-Poster-A4.png",
       },
+      {
+        title: "Charity shop poster — A4",
+        description:
+          "Customer-facing for charity shop windows and till — follow special finds, reserve on phone, collect here.",
+        href: "/resources/print/Unwrapped-Charity-Poster-A4.pdf",
+        preview: "/resources/print/Unwrapped-Charity-Poster-A4.png",
+        format: "PDF · A4",
+        downloadName: "Unwrapped-Charity-Poster-A4.pdf",
+      },
+      {
+        title: "Charity shop poster — PNG",
+        description: "Same customer-facing charity poster as a high-res image for email or digital screens.",
+        href: "/resources/print/Unwrapped-Charity-Poster-A4.png",
+        preview: "/resources/print/Unwrapped-Charity-Poster-A4.png",
+        format: "PNG",
+        downloadName: "Unwrapped-Charity-Poster-A4.png",
+      },
     ],
   },
   {
