@@ -3,7 +3,9 @@ import { useLocation } from "wouter";
 import { format } from "date-fns";
 import { trpc } from "../trpc";
 import DropMap, { toDropPin } from "../components/DropMap";
+import DropPrice from "../components/DropPrice";
 import useIsMobile from "../hooks/useIsMobile";
+import { checkoutFromList, discountPercent } from "../lib/fees";
 
 // Design tokens — Unwrapped Design System
 const BG = "#FAFAF8";
@@ -21,7 +23,10 @@ type SampleDrop = {
   neighbourhood: string;
   title: string;
   business: string;
-  price: string;
+  /** Checkout price in pence (what shoppers pay). */
+  pricePence: number;
+  /** Original list price in pence, for bundle / discount examples. */
+  originalPricePence?: number;
   window: string;
   left: string;
   imageUrl: string;
@@ -33,17 +38,39 @@ const SAMPLE_DROPS: SampleDrop[] = [
     neighbourhood: "Hackney",
     title: "Morning bake — country loaf",
     business: "River Oven Bakery",
-    price: "£4.50",
+    pricePence: 450,
     window: "Example window · Sat morning",
     left: "e.g. 6 available",
     imageUrl: "/samples/sourdough.jpg",
+  },
+  {
+    category: "Fashion & Retail",
+    neighbourhood: "Shoreditch",
+    title: "Weekend edit — 3-piece clothing bundle",
+    business: "North Lane Boutique",
+    pricePence: checkoutFromList(10800),
+    originalPricePence: 12000,
+    window: "Example window · Sat–Sun",
+    left: "e.g. 8 bundles",
+    imageUrl: "/samples/clothing.jpg",
+  },
+  {
+    category: "Food & Drink",
+    neighbourhood: "Bermondsey",
+    title: "Early supper — two courses + drink",
+    business: "Fig & Thyme Kitchen",
+    pricePence: checkoutFromList(6800),
+    originalPricePence: 8000,
+    window: "Example window · Tue–Thu 5–7pm",
+    left: "e.g. 12 covers",
+    imageUrl: "/samples/restaurant.jpg",
   },
   {
     category: "Beauty & Wellness",
     neighbourhood: "Clapham",
     title: "Express blow-dry — afternoon slots",
     business: "Marlow Hair Studio",
-    price: "£28.00",
+    pricePence: 2800,
     window: "Example window · same day",
     left: "e.g. 4 spots",
     imageUrl: "/samples/blowdry.jpg",
@@ -53,7 +80,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
     neighbourhood: "Islington",
     title: "45-min personal training",
     business: "Jordan Ellis PT",
-    price: "£35.00",
+    pricePence: 3500,
     window: "Example window · weekday evening",
     left: "e.g. 3 spots",
     imageUrl: "/samples/pt.jpg",
@@ -602,21 +629,23 @@ export default function Landing() {
           </div>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.65, maxWidth: 540,
+            color: MUTED_FG, lineHeight: 1.65, maxWidth: 620,
           }}>
             Mock listings only — fictional shops, so you can see the product.
+            Services, bundles, and discounted drops all work the same way.
             Nothing here can be reserved yet.
           </p>
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(220px, 1fr))",
           gap: 1, background: BORDER,
           borderTop: `1px solid ${BORDER}`,
           borderBottom: `1px solid ${BORDER}`,
         }}>
           {SAMPLE_DROPS.map((sample) => (
-            <SampleDropCard key={sample.title} sample={sample} />
+            <SampleDropCard key={sample.title} sample={sample} compact={!isMobile} />
           ))}
         </div>
       </section>
@@ -1087,14 +1116,24 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
   );
 }
 
-function SampleDropCard({ sample }: { sample: SampleDrop }) {
+function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compact?: boolean }) {
+  const hasDiscount =
+    sample.originalPricePence != null &&
+    checkoutFromList(sample.originalPricePence) > sample.pricePence;
+  const discountPct = hasDiscount
+    ? discountPercent(sample.originalPricePence!, sample.pricePence)
+    : null;
+
   return (
     <div
       className="uw-sample-card"
       style={{ background: BG, padding: 0, position: "relative" }}
       aria-label={`Sample drop: ${sample.title}. Not live.`}
     >
-      <div style={{ height: 200, position: "relative", overflow: "hidden", background: MUTED }}>
+      <div style={{
+        height: compact ? 148 : 180,
+        position: "relative", overflow: "hidden", background: MUTED,
+      }}>
         <div
           className="uw-sample-img"
           style={{
@@ -1103,57 +1142,75 @@ function SampleDropCard({ sample }: { sample: SampleDrop }) {
           }}
         />
         <div style={{
-          position: "absolute", top: 14, left: 14,
-          background: BG, padding: "5px 9px", border: `1px solid ${BORDER}`,
+          position: "absolute", top: 10, left: 10,
+          background: BG, padding: "4px 8px", border: `1px solid ${BORDER}`,
         }}>
           <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            fontFamily: "'Space Mono', monospace", fontSize: 8,
             color: MUTED_FG, letterSpacing: "0.1em",
           }}>
             EXAMPLE
           </span>
         </div>
+        {hasDiscount && discountPct != null && discountPct > 0 && (
+          <div style={{
+            position: "absolute", bottom: 10, left: 10,
+            background: V, color: BG,
+            fontFamily: "'Space Mono', monospace", fontSize: 8,
+            letterSpacing: "0.12em", padding: "4px 7px",
+          }}>
+            {discountPct}% OFF
+          </div>
+        )}
       </div>
 
-      <div style={{ padding: "22px 22px 26px" }}>
+      <div style={{ padding: compact ? "14px 14px 18px" : "18px 18px 22px" }}>
         <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 9,
-          color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 8, textTransform: "uppercase",
+          fontFamily: "'Space Mono', monospace", fontSize: 8,
+          color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase",
         }}>
           {sample.category} · {sample.neighbourhood}
         </div>
 
         <h3 style={{
-          fontFamily: "'Playfair Display', serif", fontSize: 18,
-          fontWeight: 600, color: FG, marginBottom: 6, lineHeight: 1.3,
+          fontFamily: "'Playfair Display', serif", fontSize: compact ? 15 : 17,
+          fontWeight: 600, color: FG, marginBottom: 4, lineHeight: 1.3,
         }}>
           {sample.title}
         </h3>
 
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-          color: MUTED_FG, marginBottom: 16, fontWeight: 300,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+          color: MUTED_FG, marginBottom: 12, fontWeight: 300,
         }}>
           {sample.business}
         </div>
 
         <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "baseline",
-          marginBottom: 8, paddingTop: 14, borderTop: `1px solid ${BORDER}`,
+          display: "flex", justifyContent: "space-between", alignItems: "flex-end",
+          gap: 8, marginBottom: 6, paddingTop: 10, borderTop: `1px solid ${BORDER}`,
         }}>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 15, fontWeight: 700, color: FG }}>
-            {sample.price}
-          </span>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
+          <DropPrice
+            price={sample.pricePence}
+            originalPrice={sample.originalPricePence}
+            size="sm"
+            layout={hasDiscount ? "stacked" : "inline"}
+          />
+          <span style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG,
+            textAlign: "right", flexShrink: 0,
+          }}>
             {sample.left}
           </span>
         </div>
 
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, marginBottom: 10 }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, marginBottom: 8,
+        }}>
           {sample.window}
         </div>
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 11,
           color: MUTED_FG, fontStyle: "italic", lineHeight: 1.4,
         }}>
           Illustrative only — cannot be reserved
