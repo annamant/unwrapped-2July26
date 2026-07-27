@@ -14,12 +14,13 @@ Print-ready neighbourhood poster for shop windows and local flyering.
 
 ## Strategy
 
-One job from the street: **stop → understand → scan**.
+One job from the street: **understand → want in → scan**.
 
-- Brand + one-liner first (readable at window distance)
-- How it works as three words only — no paragraphs
-- Primary CTA: QR + `shopunwrapped.com` for shoppers
-- Business ask: one quiet footer line (not a second equal campaign)
+- Plain English first (no “drops” jargon in the hero)
+- Proof chips: Beauty · Clothes · Food · Cafés · Charities · Freelancers · Services
+- How it works in three concrete steps
+- Primary CTA: **Sign up** (vermillion band + QR)
+- Business ask: one quiet footer line only
 
 ## Print tips
 

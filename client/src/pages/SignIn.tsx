@@ -63,7 +63,7 @@ export default function SignIn() {
           </h1>
           {!isMobile && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-              Reserve local drops from independent shops, cafés, and studios near you. Your ticket, your QR code, your pick-up.
+              Reserve local drops from people and places near you — shops, restaurants, salons, freelancers, services and charities. Your ticket, your QR code, your pick-up.
             </p>
           )}
         </div>

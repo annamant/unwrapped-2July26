@@ -114,8 +114,9 @@ LinkedIn / X / TikTok only after a playbook exists for that channel (create when
 
 ## Hard rules
 
-- Voice: local, urgent, independent — never corporate SaaS or hype-bro
+- Voice: local, urgent, independent (as in neighbourhood independents — shops, freelancers, services, charities) — never corporate SaaS or hype-bro
 - Market: **London** · links: shopunwrapped.com / shopunwrapped.com/instagram
+- Framing: **people and places near you** (umbrella) + proof set (shops, restaurants, freelancers, services, charities…) — never “shops only” or bare “local businesses”; see brand-bible.md
 - Support when needed: anna@shopunwrapped.com
 - No invented metrics, partner names, or live counts — use `[VERIFY]` or check the site
 - No auto-publish; no secrets in the repo

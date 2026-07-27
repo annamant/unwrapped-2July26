@@ -66,136 +66,158 @@
       flex-direction: column;
       box-shadow: 0 12px 40px rgba(20, 18, 16, 0.18);
     }
-
     .top {
-      padding: 9mm 12mm 0;
+      padding: 8mm 11mm 0;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       flex-shrink: 0;
     }
-    .lockup { display: flex; align-items: center; gap: 14px; }
+    .lockup { display: flex; align-items: center; gap: 12px; }
     .mark {
-      width: 56px; height: 56px; background: var(--ink);
+      width: 48px; height: 48px; background: var(--ink);
       position: relative; display: grid; place-items: center; flex-shrink: 0;
     }
     .mark span {
       font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
-      font-size: 38px; color: var(--bg); line-height: 1; transform: translateY(1px);
+      font-size: 32px; color: var(--bg); line-height: 1; transform: translateY(1px);
     }
     .mark i {
-      position: absolute; top: 6px; right: 6px; width: 10px; height: 10px;
+      position: absolute; top: 5px; right: 5px; width: 9px; height: 9px;
       border-radius: 50%; background: var(--vermillion);
     }
     .wordmark {
       font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
-      font-size: 42px; letter-spacing: -0.035em; line-height: 0.95; color: var(--ink);
+      font-size: 36px; letter-spacing: -0.035em; line-height: 0.95; color: var(--ink);
     }
     .meta {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
       font-weight: 700; color: var(--ink);
       display: flex; align-items: center; gap: 7px;
-      margin-top: 3mm;
+      margin-top: 2.5mm;
     }
     .meta::before {
       content: ""; width: 8px; height: 8px; border-radius: 50%;
       background: var(--vermillion); flex-shrink: 0;
     }
-
     .hero {
-      padding: 14mm 12mm 0;
+      padding: 9mm 11mm 0;
       flex-shrink: 0;
     }
     .promise {
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--vermillion); font-weight: 700;
-      margin-bottom: 5mm;
+      margin-bottom: 4mm;
     }
     .hero h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700; font-size: 48px; line-height: 0.98;
-      letter-spacing: -0.035em; max-width: 12ch;
-      margin-bottom: 6mm;
+      font-weight: 700; font-size: 40px; line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin-bottom: 4mm;
+      max-width: 16ch;
     }
     .hero h1 em { font-style: italic; font-weight: 400; }
-    .lede {
-      font-size: 16px; line-height: 1.35; max-width: 28ch;
-      color: var(--ink);
+    .what {
+      font-size: 15px; line-height: 1.4;
+      max-width: 42ch;
+      margin-bottom: 5mm;
     }
-
+    .proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2mm;
+      margin-bottom: 2mm;
+    }
+    .proof span {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 700;
+      border: 1.5px solid var(--ink);
+      padding: 2mm 2.8mm;
+      line-height: 1;
+    }
     .rule {
       height: 3mm;
       background: var(--vermillion);
-      margin: 10mm 0 0;
+      margin: 7mm 0 0;
       flex-shrink: 0;
     }
-
     .how {
       background: var(--ink);
       color: var(--bg);
-      padding: 8mm 12mm;
+      padding: 7mm 11mm;
       flex-shrink: 0;
     }
     .how-label {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--vermillion); font-weight: 700;
-      margin-bottom: 5mm;
+      margin-bottom: 4.5mm;
     }
     .steps {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 6mm;
+      gap: 5mm;
     }
     .step-num {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 11px; letter-spacing: 0.08em;
       color: var(--vermillion); font-weight: 700;
-      margin-bottom: 2.5mm;
+      margin-bottom: 2mm;
     }
     .step h3 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700; font-size: 22px; line-height: 1.05;
-      letter-spacing: -0.03em;
+      font-weight: 700; font-size: 18px; line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5mm;
     }
-    .step h3 span {
-      display: block;
-      font-style: italic; font-weight: 400;
-      font-size: 18px; opacity: 0.85;
-      margin-top: 1mm;
+    .step p {
+      font-size: 12px; line-height: 1.3;
+      opacity: 0.82;
     }
-
     .cta {
       flex: 1;
       min-height: 0;
-      padding: 9mm 12mm 0;
+      margin: 0;
+      background: var(--vermillion);
+      color: var(--bg);
+      padding: 8mm 11mm;
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 8mm;
+      gap: 7mm;
       align-items: center;
     }
     .cta-copy .label {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--vermillion); font-weight: 700;
-      margin-bottom: 3mm;
+      font-weight: 700;
+      opacity: 0.9;
+      margin-bottom: 2.5mm;
+    }
+    .cta-copy .ask {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700; font-size: 28px; letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 2.5mm;
     }
     .cta-copy .url {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 700; font-size: 38px; letter-spacing: -0.03em;
-      line-height: 1; margin-bottom: 3.5mm;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 13px; letter-spacing: 0.04em;
+      font-weight: 700;
+      margin-bottom: 2mm;
     }
     .cta-copy .hint {
-      font-size: 14px; line-height: 1.35; color: var(--muted-fg);
-      max-width: 26ch;
+      font-size: 13px; line-height: 1.35;
+      opacity: 0.92;
+      max-width: 28ch;
     }
     .qr-wrap {
-      width: 48mm; height: 48mm;
+      width: 46mm; height: 46mm;
       background: var(--bg);
       border: 2.5px solid var(--ink);
-      padding: 3mm;
+      padding: 2.5mm;
       display: grid; place-items: center;
       flex-shrink: 0;
     }
@@ -204,11 +226,10 @@
       display: block;
       image-rendering: pixelated;
     }
-
     .footer {
-      margin-top: auto;
-      border-top: 1.5px solid var(--border);
-      padding: 5mm 12mm 7mm;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 4.5mm 11mm;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -217,11 +238,15 @@
     }
     .footer p {
       font-family: 'Space Mono', ui-monospace, monospace;
-      font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--muted-fg); font-weight: 700; line-height: 1.45;
+      font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 700; line-height: 1.4;
+      opacity: 0.75;
     }
-    .footer strong { color: var(--ink); font-weight: 700; }
-
+    .footer strong {
+      color: var(--bg);
+      font-weight: 700;
+      opacity: 1;
+    }
     @page { size: A4 portrait; margin: 0; }
     @media print {
       html, body {
@@ -255,8 +280,20 @@
 
     <header class="hero">
       <p class="promise">Limited · Local · Gone when they’re gone</p>
-      <h1>Limited local drops from independent shops <em>near you.</em></h1>
-      <p class="lede">Reserve in seconds. Collect with QR. Real finds from your street.</p>
+      <h1>Nearby places put something special on — <em>for a short time.</em></h1>
+      <p class="what">
+        You reserve on your phone. You walk in and collect.
+        Hair, clothes, food, charity finds, freelancers — if it’s local and limited, it’s here.
+      </p>
+      <div class="proof" aria-label="Examples">
+        <span>Beauty</span>
+        <span>Clothes</span>
+        <span>Food</span>
+        <span>Cafés</span>
+        <span>Charities</span>
+        <span>Freelancers</span>
+        <span>Services</span>
+      </div>
     </header>
 
     <div class="rule" aria-hidden="true"></div>
@@ -266,24 +303,28 @@
       <div class="steps">
         <div class="step">
           <div class="step-num">01</div>
-          <h3>Spot<span>a drop</span></h3>
+          <h3>See what’s on</h3>
+          <p>Browse short windows from nearby.</p>
         </div>
         <div class="step">
           <div class="step-num">02</div>
-          <h3>Reserve<span>in seconds</span></h3>
+          <h3>Reserve it</h3>
+          <p>Claim yours on your phone in seconds.</p>
         </div>
         <div class="step">
           <div class="step-num">03</div>
-          <h3>Collect<span>with QR</span></h3>
+          <h3>Collect it</h3>
+          <p>Show your QR. Take it home.</p>
         </div>
       </div>
     </section>
 
     <section class="cta">
       <div class="cta-copy">
-        <p class="label">Scan or visit</p>
+        <p class="label">Free · takes a minute</p>
+        <p class="ask">Sign up. Be first when something goes live near you.</p>
         <p class="url">shopunwrapped.com</p>
-        <p class="hint">Be first when a drop goes live near you.</p>
+        <p class="hint">Scan the code — or type the site.</p>
       </div>
       <div class="qr-wrap">
         <img src="qr-shopunwrapped.png" width="512" height="512" alt="QR code to shopunwrapped.com" />
@@ -291,8 +332,8 @@
     </section>
 
     <footer class="footer">
-      <p>Run a local business? <strong>Apply on the site.</strong></p>
-      <p>Not delivery. Not endless scroll.</p>
+      <p>Run a local place? <strong>Apply on the site.</strong></p>
+      <p>Not delivery. You go there.</p>
     </footer>
 
   </article>

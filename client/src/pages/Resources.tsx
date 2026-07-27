@@ -249,7 +249,7 @@ export default function Resources() {
             fontWeight: 300,
           }}
         >
-          Print posters, social shareables, and brand assets for shops and the neighbourhood.
+          Print posters, social shareables, and brand assets for local businesses and the neighbourhood.
           Free to download and use for Unwrapped. Questions:{" "}
           <a href="mailto:anna@shopunwrapped.com" style={{ color: V, textDecoration: "none" }}>
             anna@shopunwrapped.com

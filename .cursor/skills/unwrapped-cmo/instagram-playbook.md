@@ -29,13 +29,13 @@ Use Gamma when the human explicitly asks for Gamma, when making decks/presentati
 
 ## Gamma prompts (seed, when using Gamma)
 
-Always inject brand tokens and "editorial London indie retail, cream paper #FAFAF8, ink #141210, vermillion #E8341C accent, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
+Always inject brand tokens and "editorial London local businesses, cream paper #FAFAF8, ink #141210, vermillion #E8341C accent, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
 
 **Drop alert (1:1)**  
 Big Space-Mono number or LIVE mark; Playfair italic subline; vermillion live dot; "Reserve in seconds".
 
-**Shop spotlight (4:5)**  
-Shop name as hero; neighbourhood label in mono; quiet cream field; single CTA.
+**Business spotlight (4:5)**  
+Business name as hero; neighbourhood label in mono; quiet cream field; single CTA.
 
 **How it works carousel**  
 3 cards: Find a drop → Reserve → Collect with QR. One action per card. Use Gamma/Meta/manual export for true carousel publishing; do not use direct-web multi-file canvas upload.

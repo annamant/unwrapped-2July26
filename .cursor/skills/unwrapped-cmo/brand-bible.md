@@ -4,11 +4,36 @@ Source of truth for marketing agents. Product site: https://shopunwrapped.com
 
 ## What Unwrapped is
 
-Local drop discovery and reservation. Independent shops publish **time-limited drops**; shoppers **reserve in seconds** and **collect with a QR code**.
+Local drop discovery and reservation. **Neighbourhood people and places** publish **time-limited drops**; shoppers **reserve in seconds** and **collect with a QR code**.
 
-One-liner: **Limited local drops from independent shops near you.**
+One-liner: **Limited local drops from people and places near you.**
 
 SEO / masthead line: **limited local drops, reserved in seconds.**
+
+### Who it’s for (framing — non-negotiable)
+
+**Problem:** “Independent shops” is too narrow. “Local businesses” is too vague — restaurants, freelancers, services and charities disappear inside it.
+
+**Solution — two layers, never one word alone:**
+
+| Layer | Use when | Line |
+|-------|----------|------|
+| **1. Umbrella** | Headlines, posters, bio, OG — must stay short | **people and places near you** |
+| **2. Proof set** | Body copy, landing, apply pages, emails — when there’s room | Concrete types (below) |
+| **3. Eligibility** | Business pitch / apply — the real filter | **If people can collect from you in person during a window, you can list a drop.** |
+
+**Proof set** (rotate; don’t dump all in a headline):  
+shops · restaurants · cafés · salons · freelancers · services · charities  
+(+ accountants, trainers, studios, makers when useful)
+
+**Product truth:** Unwrapped is not retail-only and not “any company.” It’s for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
+
+**Do say:** people and places · neighbourhood · from your street · collect in person  
+**Don’t say as the whole story:** independent shops · local businesses (alone) · marketplace for SMEs
+
+**Example — short:** Limited local drops from people and places near you.  
+**Example — with proof:** Shops, restaurants, freelancers, services, charities — if they can hand it over in person, they can drop.  
+**Example — business CTA:** Got a door people can walk to? List a drop.
 
 ## Positioning
 
@@ -16,23 +41,24 @@ SEO / masthead line: **limited local drops, reserved in seconds.**
 |--|--|
 | **Category** | Local commerce / drop marketplace |
 | **For** | Londoners who want scarce, real neighbourhood finds |
-| **Also for** | Independent shops that want demand without endless promo noise |
+| **Also for** | Neighbourhood people and places that want demand without endless promo noise |
 | **Against** | Generic delivery apps, endless scroll deals, "everything always available" |
 | **Promise** | Limited. Local. Gone when they're gone. |
 
 ## Audiences
 
 1. **Shoppers** — FOMO + neighbourhood discovery; speed and simplicity
-2. **Businesses** — fill quiet windows, turn walk-ins into reserved demand (apply at `/business-apply`)
+2. **Supply side** — shops, restaurants, cafés, salons, freelancers, services, charities, and anyone else with an in-person collection point; fill quiet windows, turn walk-ins into reserved demand (apply at `/business-apply`)
 
 Social primary channel (phase 1): **shopper Instagram**. Business content is secondary (highlights, occasional carousels, LinkedIn later).
 
 ## Voice
 
 - Editorial, not startup-pitchy
-- Sparse sentences. Short hooks. Concrete nouns (bakery, vinyl, flowers) over abstractions
+- Sparse sentences. Short hooks. Concrete nouns (bakery, restaurant, salon, florist, trainer) over abstractions
 - Urgency without fake scarcity language ("ending soon" only when true)
-- Local colour: London neighbourhoods, independent shops — never generic "your city"
+- Local colour: London neighbourhoods, people and places — never generic "your city"
+- Never default to "independent shops" or bare "local businesses" — use the umbrella + proof set above
 
 **Sounds like:** "three drops ending before lunch." / "reserve in seconds. collect with QR."
 
@@ -129,13 +155,13 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 ## Instagram profile (canonical)
 
 ```
-Limited local drops from independent shops near you.
+Limited local drops from people and places near you.
 Reserve in seconds · Collect with QR
 London
 shopunwrapped.com/instagram
 ```
 
-Highlights: Drops · How it works · Shops · For business  
+Highlights: Drops · How it works · Businesses · For business  
 (covers in `brand/svg/story-highlight-*.svg`)
 
 ## Asset library
@@ -143,7 +169,7 @@ Highlights: Drops · How it works · Shops · For business
 See `brand/README.md` and `brand/preview.html` for PNG export of:
 
 - Profile picture, logos
-- Post templates: drop alert, shop spotlight, stat
+- Post templates: drop alert, business spotlight, stat
 - Story template: ending soon
 - OG image
 

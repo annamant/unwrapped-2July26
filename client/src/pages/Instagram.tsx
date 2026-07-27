@@ -79,7 +79,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Limited local drops from independent shops near you.
+          Limited local drops from people and places near you.
         </p>
 
         <p style={{

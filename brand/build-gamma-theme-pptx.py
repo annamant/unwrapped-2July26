@@ -55,7 +55,7 @@ def main() -> None:
     if LOGO.exists():
         s1.shapes.add_picture(str(LOGO), Inches(0.8), Inches(0.6), height=Inches(1.1))
     add_textbox(s1, Inches(0.8), Inches(2.0), Inches(11), Inches(1.2), "Unwrapped", font=FONT_DISPLAY, size=54, color=INK, bold=True)
-    add_textbox(s1, Inches(0.8), Inches(3.2), Inches(11), Inches(0.8), "Limited local drops from independent shops near you.", font=FONT_BODY, size=22, color=INK)
+    add_textbox(s1, Inches(0.8), Inches(3.2), Inches(11), Inches(0.8), "Limited local drops from people and places near you.", font=FONT_BODY, size=22, color=INK)
     add_textbox(s1, Inches(0.8), Inches(4.2), Inches(11), Inches(0.5), "LONDON · shopunwrapped.com", font=FONT_LABEL, size=14, color=MUTED)
 
     # Slide 2 — typography hierarchy

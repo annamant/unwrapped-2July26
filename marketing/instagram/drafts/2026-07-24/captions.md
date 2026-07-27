@@ -79,7 +79,7 @@ This isn't about discounts.
 
 It's about moments — the croissant batch that sells out by 9am. The vinyl that won't be restocked. The flowers cut this morning.
 
-Limited local drops from independent shops near you.
+Limited local drops from people and places near you.
 
 Link in bio.
 

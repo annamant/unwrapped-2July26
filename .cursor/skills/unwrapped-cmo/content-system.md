@@ -4,7 +4,7 @@
 
 1. Drive installs / visits → reserve a drop (`shopunwrapped.com`)
 2. Build "local FOMO" habit — check what's dropping near you
-3. Attract independent shops to apply (`/business-apply`)
+3. Attract neighbourhood people and places to apply (`/business-apply`) — shops, restaurants, freelancers, services, charities; anyone with in-person collection
 
 ## Content pillars (Instagram mix)
 
@@ -14,8 +14,8 @@ Aim ~ weekly mix:
 |--------|---|-----|---------------|
 | **Live drops** | 35% | Convert now | "Live near you." / "[VERIFY] ending in the next hour" |
 | **How it works** | 15% | Reduce friction | "Reserve → QR → collect." |
-| **Shop spotlight** | 20% | Trust + local colour | Named indie shop + neighbourhood |
-| **Culture / neighbourhood** | 15% | Brand feel | London mornings, independent retail love |
+| **Business spotlight** | 20% | Trust + local colour | Named local business + neighbourhood |
+| **Culture / neighbourhood** | 15% | Brand feel | London mornings, neighbourhood trade love |
 | **Business / supply** | 10% | Acquisition | "List a drop. Fill a quiet hour." |
 | **Social proof / stats** | 5% | Credibility | Real counts only — mark `[VERIFY]` if unsure |
 
@@ -24,7 +24,7 @@ Aim ~ weekly mix:
 | Format | Size | Best for |
 |--------|------|----------|
 | Feed square | 1080×1080 | Drop alert, stat, announcement |
-| Feed portrait | 1080×1350 | Shop spotlight, editorial |
+| Feed portrait | 1080×1350 | Business spotlight, editorial |
 | Carousel (3–5) | 1080×1350 | How it works, business pitch. Do not publish via the direct canvas-to-File Instagram web path until a true carousel workflow is proven |
 | Story / Reel cover | 1080×1920 | Ending soon, behind-the-scenes |
 | Reel (later) | 9:16 video | Process, neighbourhood energy |
@@ -35,7 +35,7 @@ Templates: `brand/svg/post-template-*.svg`, `story-template-ending-soon.svg`.
 
 1. **Number + place + urgency** — "4 live drops · Hackney · before 2pm"
 2. **Mechanism** — "Reserve in seconds. Collect with QR."
-3. **Indie name-drop** — "[Shop] just dropped. Limited."
+3. **Name-drop** — "[Business] just dropped. Limited."
 4. **Contrast** — "Not delivery. Not endless stock. A real window."
 5. **Instruction** — "Open the map. Pick one. Go."
 

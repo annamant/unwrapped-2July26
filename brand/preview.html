@@ -147,7 +147,7 @@
   <section>
     <h2>INSTAGRAM BIO (COPY/PASTE)</h2>
     <div class="bio-box">
-      <strong>Unwrapped</strong>Limited local drops from independent shops near you.
+      <strong>Unwrapped</strong>Limited local drops from people and places near you.
 Reserve in seconds · Collect with QR
 London
 shopunwrapped.com/instagram
@@ -175,7 +175,7 @@ shopunwrapped.com/instagram
       { id: "highlight-shops", label: "Story highlight — Shops", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "SHOPS", "shop") },
       { id: "highlight-business", label: "Story highlight — For business", w: 1080, h: 1080, render: (c, w, h) => renderHighlight(c, w, h, "FOR\nBUSINESS", "business") },
       { id: "post-drop-alert", label: "Post template — Drop alert", w: 1080, h: 1080, render: renderDropAlert },
-      { id: "post-shop-spotlight", label: "Post template — Shop spotlight", w: 1080, h: 1350, render: renderShopSpotlight },
+      { id: "post-shop-spotlight", label: "Post template — Business spotlight", w: 1080, h: 1350, render: renderShopSpotlight },
       { id: "post-stat", label: "Post template — Stat", w: 1080, h: 1080, render: renderStatPost },
       { id: "story-ending-soon", label: "Story template — Ending soon", w: 1080, h: 1920, render: renderStoryEnding },
     ];
@@ -345,7 +345,7 @@ shopunwrapped.com/instagram
       c.textBaseline = "top";
       c.fillStyle = V;
       setFont(c, "'Space Mono', monospace", 24, "400");
-      c.fillText("SHOP SPOTLIGHT", 80, 780);
+      c.fillText("BUSINESS SPOTLIGHT", 80, 780);
 
       c.fillStyle = BG;
       setFont(c, "'Playfair Display', Georgia, serif", 64, "700");

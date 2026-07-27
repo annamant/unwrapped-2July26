@@ -23,14 +23,14 @@ Designed for circular crop — keep icons/text centered.
 
 - `story-highlight-drops.svg` — Live drops
 - `story-highlight-how-it-works.svg` — How it works
-- `story-highlight-shops.svg` — Shop spotlights
+- `story-highlight-shops.svg` — Business spotlights (legacy filename)
 - `story-highlight-businesses.svg` — For businesses
 
 ### Post templates
 | File | Size | Use |
 |------|------|-----|
 | `post-template-drop-alert.svg` | 1080×1080 | "Live now" drop posts |
-| `post-template-shop-spotlight.svg` | 1080×1350 | Business profiles |
+| `post-template-shop-spotlight.svg` | 1080×1350 | Business profiles (legacy filename) |
 | `post-template-stat.svg` | 1080×1080 | "X drops near you" stats |
 | `story-template-ending-soon.svg` | 1080×1920 | Urgency stories |
 
@@ -56,7 +56,7 @@ Designed for circular crop — keep icons/text centered.
 
 **Bio:**
 ```
-Limited local drops from independent shops near you.
+Limited local drops from people and places near you.
 Reserve in seconds · Collect with QR
 London
 shopunwrapped.com/instagram

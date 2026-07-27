@@ -62,6 +62,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
 
 const BUSINESS_TYPES = [
   "Charity shops",
+  "Restaurants",
   "Salons",
   "Cafés",
   "Bakeries",
@@ -311,9 +312,9 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Unwrapped is where neighbourhood businesses — shops, salons, cafés,
-              freelancers, accountants, and{" "}
-              <em style={{ fontStyle: "italic" }}>charity shops</em>
+              Unwrapped is where neighbourhood people and places — shops, restaurants, cafés,
+              salons, freelancers, services, and{" "}
+              <em style={{ fontStyle: "italic" }}>charities</em>
               {" "}(we love them) — release time-limited drops. You reserve, then collect with a QR code.
             </p>
 
@@ -901,7 +902,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Limited local drops from neighbourhood businesses. Reserve in seconds. Collect with QR.
+            Limited local drops from people and places near you. Reserve in seconds. Collect with QR.
           </p>
         </div>
 
