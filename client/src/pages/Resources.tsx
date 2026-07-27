@@ -66,72 +66,9 @@ const SECTIONS: ResourceSection[] = [
     ],
   },
   {
-    id: "social",
-    label: "Social shareables",
-    intro: "Ready-to-post images for Instagram and Stories. Use as-is or share with partner shops.",
-    items: [
-      {
-        title: "Limited · Local · Gone",
-        description: "Brand promise square for feed posts.",
-        href: "/resources/social/limited-local-gone.png",
-        preview: "/resources/social/limited-local-gone.png",
-        format: "PNG · 1:1",
-      },
-      {
-        title: "How it works",
-        description: "Reserve → QR → collect, in one frame.",
-        href: "/resources/social/how-it-works-square.png",
-        preview: "/resources/social/how-it-works-square.png",
-        format: "PNG · 1:1",
-      },
-      {
-        title: "Moments, not discounts",
-        description: "Editorial line for neighbourhood culture posts.",
-        href: "/resources/social/moments-not-discounts.png",
-        preview: "/resources/social/moments-not-discounts.png",
-        format: "PNG · 1:1",
-      },
-      {
-        title: "Carousel 01 — Limited local drops",
-        description: "Slide 1 of the launch explainer carousel.",
-        href: "/resources/social/01-limited-local-drops.png",
-        preview: "/resources/social/01-limited-local-drops.png",
-        format: "PNG",
-      },
-      {
-        title: "Carousel 02 — What is a drop",
-        description: "Slide 2 of the launch explainer carousel.",
-        href: "/resources/social/02-what-is-a-drop.png",
-        preview: "/resources/social/02-what-is-a-drop.png",
-        format: "PNG",
-      },
-      {
-        title: "Carousel 03 — How it works",
-        description: "Slide 3 of the launch explainer carousel.",
-        href: "/resources/social/03-how-it-works.png",
-        preview: "/resources/social/03-how-it-works.png",
-        format: "PNG",
-      },
-      {
-        title: "Carousel 04 — Not delivery",
-        description: "Slide 4 of the launch explainer carousel.",
-        href: "/resources/social/04-not-delivery.png",
-        preview: "/resources/social/04-not-delivery.png",
-        format: "PNG",
-      },
-      {
-        title: "Carousel 05 — Start here",
-        description: "Slide 5 of the launch explainer carousel.",
-        href: "/resources/social/05-start-here.png",
-        preview: "/resources/social/05-start-here.png",
-        format: "PNG",
-      },
-    ],
-  },
-  {
     id: "brand",
     label: "Brand",
-    intro: "Official logos and link-preview art. Don’t recolour or stretch.",
+    intro: "Official logos for press and partners. Don’t recolour or stretch.",
     items: [
       {
         title: "Logo mark",
@@ -142,24 +79,10 @@ const SECTIONS: ResourceSection[] = [
       },
       {
         title: "Logo lockup",
-        description: "Mark + wordmark side by side.",
+        description: "Mark + wordmark side by side — best for magazine features and partner mentions.",
         href: "/resources/brand/logo-lockup-horizontal.svg",
         preview: "/resources/brand/logo-lockup-horizontal.svg",
         format: "SVG",
-      },
-      {
-        title: "Wordmark",
-        description: "“Unwrapped” text only.",
-        href: "/resources/brand/logo-wordmark.svg",
-        preview: "/resources/brand/logo-wordmark.svg",
-        format: "SVG",
-      },
-      {
-        title: "Share card",
-        description: "Open Graph / link preview image for social and messaging.",
-        href: "/resources/brand/Unwrapped-share-card.png",
-        preview: "/resources/brand/Unwrapped-share-card.png",
-        format: "PNG · 1200×630",
       },
     ],
   },
@@ -266,7 +189,7 @@ export default function Resources() {
             fontWeight: 300,
           }}
         >
-          Print posters, social shareables, and brand assets for local businesses and the neighbourhood.
+          Print posters and logos for local businesses, press, and the neighbourhood.
           Free to download and use for Unwrapped. Questions:{" "}
           <a href="mailto:anna@shopunwrapped.com" style={{ color: V, textDecoration: "none" }}>
             anna@shopunwrapped.com
