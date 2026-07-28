@@ -18,13 +18,19 @@ Company page for **supply-side** and London neighbourhood operators (shops, rest
 | **Cover** | Cream editorial — lockup + one-liner; avoid purple/startup templates |
 | **Support** | anna@shopunwrapped.com |
 
+## Definition (lock — same everywhere)
+
+**Limited local drops from people and places near you.**
+
+Do not split posts into “for people / for businesses / for Londoners.” One product sentence. Proof set and CTAs can follow, but the definition does not change.
+
 ## About (paste)
 
-Unwrapped is local drop discovery for London.
+Limited local drops from people and places near you.
 
-Neighbourhood people and places publish time-limited drops. Shoppers reserve in seconds and collect in person with a QR code.
+Neighbourhood people and places publish time-limited drops. Reserve in seconds. Collect in person with a QR code.
 
-Shops, restaurants, cafés, salons, freelancers, services, charities — if people can collect from you during a window, you can list a drop.
+Shops, restaurants, cafés, salons, freelancers, services, charities — if they can hand it over in person, they can drop.
 
 Limited. Local. Gone when they're gone.
 
@@ -33,8 +39,8 @@ shopunwrapped.com
 ## Voice on LinkedIn
 
 - Same brand bible: editorial, sparse, concrete — not SaaS pitch
-- Audience skew: operators / founders of neighbourhood places, not FOMO shoppers
-- CTAs: Apply to list a drop · shopunwrapped.com/business-apply · anna@shopunwrapped.com
+- Lead with the locked one-liner; never “for shoppers / for businesses” as the definition
+- CTAs can still point both ways: shopunwrapped.com · shopunwrapped.com/business-apply
 - Do not invent metrics, partner names, or live drop counts
 
 ## Login & posting
