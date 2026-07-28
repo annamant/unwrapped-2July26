@@ -11,7 +11,7 @@ Living calendar. The CMO agent updates this every run. Status: `idea` → `draft
 | 2026-07-25 | 12:06 | Culture / neighbourhood | Feed 1:1 | "Your neighbourhood is worth finding." | In-page generated Instagram canvas | posted | London map visual — neighbourhood impact, why shoppers should sign up |
 | 2026-07-25 | 13:14 | Storytelling / Culture | Feed 1:1 | "She stopped searching. It found her." | In-page generated Instagram canvas | posted | Emotional shopper story — ceramic mug, shop down the road, reserved in seconds. Posted via canvas-to-File workflow |
 | 2026-07-25 | 13:19 | Business / supply | Feed 1:1 | "You made it. They just haven't found it yet." | In-page generated Instagram canvas | posted | Emotional pitch to independents — shops, cafés, restaurants, freelancers, studios, trainers. CTA → shopunwrapped.com/business-apply |
-| 2026-07-28 | 17:21 | Culture / neighbourhood | Feed 1:1 | "Which shop would you love on Unwrapped?" | In-page generated Instagram canvas · `marketing/instagram/drafts/2026-07-28/` | posted | Nominate / recommend ask — comments + CTA → shopunwrapped.com/business-apply |
+| 2026-07-28 | 22:08 | Culture / neighbourhood | Feed 1:1 | "Which shop would you love on Unwrapped?" | In-page generated Instagram canvas · `marketing/instagram/drafts/2026-07-28/` | corrected | Reposted with CTA → `shopunwrapped.com/recommend` (image + caption). Wrong `/business-apply` original deleted |
 | TBD | TBD | Live drops | Feed 1:1 or 4:5 | "[Shop] just dropped. Limited." | — | idea | First real drop on site |
 
 ## Posted archive
@@ -25,7 +25,7 @@ Living calendar. The CMO agent updates this every run. Status: `idea` → `draft
 | 2026-07-25 | Your neighbourhood is worth finding | @shopunwrapped | London map visual with Dalston/Hackney/Shoreditch/Peckham. Neighbourhood impact + why shoppers should sign up |
 | 2026-07-25 | She stopped searching. It found her. | @shopunwrapped | Emotional shopper story — ceramic mug from her nan, shop two streets away, reserved in seconds. Drives `shopunwrapped.com` |
 | 2026-07-25 | You made it. They just haven't found it yet. | @shopunwrapped | Emotional pitch to independents — you do the work, we tell the people around you. CTA → `shopunwrapped.com/business-apply` |
-| 2026-07-28 | Which shop would you love on Unwrapped? | @shopunwrapped | Nominate ask — drop a name in comments or recommend via `shopunwrapped.com/business-apply` |
+| 2026-07-28 | Which shop would you love on Unwrapped? | @shopunwrapped · https://www.instagram.com/p/DbWeDuxDPGM/ | Corrected nominate ask → `shopunwrapped.com/recommend`. Original `/business-apply` version deleted |
 
 ## Backlog ideas
 

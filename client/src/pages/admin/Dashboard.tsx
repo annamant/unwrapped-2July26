@@ -22,6 +22,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     { href: "/admin/drops", label: "Drops" },
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
+    { href: "/admin/recommendations", label: "Recommendations" },
   ];
 
   if (isMobile) {
@@ -141,6 +142,7 @@ export default function AdminDashboard() {
             { label: "Total businesses", value: stats?.totalBusinesses, href: "/admin/businesses" },
             { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
             { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
+            { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },
             { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
             { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
             { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
@@ -172,10 +174,25 @@ export default function AdminDashboard() {
           })}
         </div>
 
-        {/* Pending applications shortcut */}
+        {/* Pending applications / recommendations shortcuts */}
         {(stats?.pendingApplications ?? 0) > 0 && (
           <a
             href="/admin/applications"
+            style={{
+              display: "block", padding: "16px 20px",
+              border: `1px solid ${V}`,
+              marginBottom: (stats?.pendingRecommendations ?? 0) > 0 ? 12 : 32,
+              textDecoration: "none",
+            }}
+          >
+            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
+              {stats!.pendingApplications} APPLICATION{stats!.pendingApplications !== 1 ? "S" : ""} AWAITING REVIEW →
+            </span>
+          </a>
+        )}
+        {(stats?.pendingRecommendations ?? 0) > 0 && (
+          <a
+            href="/admin/recommendations"
             style={{
               display: "block", padding: "16px 20px",
               border: `1px solid ${V}`, marginBottom: 32,
@@ -183,7 +200,7 @@ export default function AdminDashboard() {
             }}
           >
             <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
-              {stats!.pendingApplications} APPLICATION{stats!.pendingApplications !== 1 ? "S" : ""} AWAITING REVIEW →
+              {stats!.pendingRecommendations} RECOMMENDATION{stats!.pendingRecommendations !== 1 ? "S" : ""} TO FOLLOW UP →
             </span>
           </a>
         )}

@@ -11,6 +11,7 @@ import DropDetail from "./pages/DropDetail";
 import Ticket from "./pages/Ticket";
 import Profile from "./pages/Profile";
 import BusinessApply from "./pages/BusinessApply";
+import Recommend from "./pages/Recommend";
 import BusinessProfile from "./pages/BusinessProfile";
 import BusinessDashboard from "./pages/business/Dashboard";
 import BusinessCreateDrop from "./pages/business/CreateDrop";
@@ -19,6 +20,7 @@ import BusinessScanner from "./pages/business/Scanner";
 import BusinessSettings from "./pages/business/Settings";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminApplications from "./pages/admin/Applications";
+import AdminRecommendations from "./pages/admin/Recommendations";
 import AdminUsers from "./pages/admin/Users";
 import AdminBusinesses from "./pages/admin/Businesses";
 import AdminDrops from "./pages/admin/Drops";
@@ -53,6 +55,7 @@ export default function App() {
       <Route path="/signin" component={() => user ? <Redirect to={postLoginPath} /> : <SignIn />} />
       <Route path="/business/signin" component={() => user?.hasBusiness ? <Redirect to="/dashboard" /> : <BusinessSignIn />} />
       <Route path="/business-apply" component={BusinessApply} />
+      <Route path="/recommend" component={Recommend} />
       <Route path="/instagram" component={Instagram} />
       <Route path="/resources" component={Resources} />
       <Route path="/reset-password" component={ResetPassword} />
@@ -81,6 +84,7 @@ export default function App() {
       <Route path="/admin/drops" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminDrops />} />
       <Route path="/admin/reservations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminReservations />} />
       <Route path="/admin/applications" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApplications />} />
+      <Route path="/admin/recommendations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminRecommendations />} />
 
       {/* 404 */}
       <Route>

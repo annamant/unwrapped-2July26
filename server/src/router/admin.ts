@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
-import { businesses, businessApplications, users, drops, reservations, passwordResetTokens } from "../db/schema";
+import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive, platformFeePence } from "../payments/fees";
 import {
@@ -239,6 +239,48 @@ export const adminRouter = router({
 
       if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
       return app;
+    }),
+
+  // ── Shop recommendations (public nominations) ───────────────────────────────
+
+  listRecommendations: adminProcedure
+    .input(z.object({
+      status: z.enum(["pending", "contacted", "listed", "dismissed"]).optional(),
+    }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db
+        .select()
+        .from(shopRecommendations)
+        .where(input.status ? eq(shopRecommendations.status, input.status) : undefined)
+        .orderBy(desc(shopRecommendations.createdAt));
+    }),
+
+  updateRecommendationStatus: adminProcedure
+    .input(z.object({
+      recommendationId: z.string().uuid(),
+      status: z.enum(["pending", "contacted", "listed", "dismissed"]),
+      adminNotes: z.string().max(1000).optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const [row] = await ctx.db
+        .select({ id: shopRecommendations.id })
+        .from(shopRecommendations)
+        .where(eq(shopRecommendations.id, input.recommendationId))
+        .limit(1);
+
+      if (!row) throw new TRPCError({ code: "NOT_FOUND", message: "Recommendation not found" });
+
+      const [updated] = await ctx.db
+        .update(shopRecommendations)
+        .set({
+          status: input.status,
+          reviewedAt: new Date(),
+          ...(input.adminNotes !== undefined ? { adminNotes: input.adminNotes || null } : {}),
+        })
+        .where(eq(shopRecommendations.id, input.recommendationId))
+        .returning();
+
+      return updated;
     }),
 
   // Approve application — creates a business record and links to applicant (by contactEmail)
@@ -854,6 +896,7 @@ export const adminRouter = router({
     const [userCount] = await ctx.db.select({ count: count() }).from(users);
     const [bizCount] = await ctx.db.select({ count: count() }).from(businesses).where(eq(businesses.status, "active"));
     const [pendingApps] = await ctx.db.select({ count: count() }).from(businessApplications).where(eq(businessApplications.status, "pending"));
+    const [pendingRecs] = await ctx.db.select({ count: count() }).from(shopRecommendations).where(eq(shopRecommendations.status, "pending"));
     const [dropCount] = await ctx.db.select({ count: count() }).from(drops).where(eq(drops.status, "active"));
     const [resCount] = await ctx.db.select({ count: count() }).from(reservations);
     const [fulfilledToday] = await ctx.db.select({ count: count() }).from(reservations)
@@ -876,6 +919,7 @@ export const adminRouter = router({
       totalUsers: userCount.count,
       totalBusinesses: bizCount.count,
       pendingApplications: pendingApps.count,
+      pendingRecommendations: pendingRecs.count,
       activeDrops: dropCount.count,
       totalReservations: resCount.count,
       fulfillmentsToday: fulfilledToday.count,

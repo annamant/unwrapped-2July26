@@ -111,6 +111,25 @@ export const businessApplications = pgTable("business_applications", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// ─── Shop recommendations (public nominations — not business self-apply) ──────
+
+export const shopRecommendations = pgTable("shop_recommendations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  businessName: text("business_name").notNull(),
+  neighbourhood: text("neighbourhood").notNull(),
+  category: text("category"),
+  businessInstagram: text("business_instagram"),
+  businessWebsite: text("business_website"),
+  businessAddress: text("business_address"),
+  note: text("note"),
+  recommenderName: text("recommender_name"),
+  recommenderEmail: text("recommender_email"),
+  status: text("status").default("pending").notNull(), // pending, contacted, listed, dismissed
+  adminNotes: text("admin_notes"),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // ─── Staff Roles ──────────────────────────────────────────────────────────────
 
 export const staffRoles = pgTable("staff_roles", {

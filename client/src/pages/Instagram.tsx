@@ -113,6 +113,9 @@ export default function Instagram() {
           <a href="/signin" style={linkBtn}>
             {user ? "MY ACCOUNT" : "SIGN UP · FREE"}
           </a>
+          <a href="/recommend" style={linkBtn}>
+            RECOMMEND A SHOP
+          </a>
           <a href="/business-apply" style={linkBtn}>
             LIST YOUR BUSINESS
           </a>

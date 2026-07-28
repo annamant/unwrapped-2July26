@@ -251,6 +251,13 @@ export default function Landing() {
             {isMobile ? "Business" : "List your business"}
           </a>
           <a
+            href="/recommend"
+            className="uw-link"
+            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}
+          >
+            {isMobile ? "Recommend" : "Recommend a shop"}
+          </a>
+          <a
             href="/signin"
             className="uw-btn-ghost"
             style={{
@@ -817,20 +824,63 @@ export default function Landing() {
               }}>
                 0{i + 1}
               </div>
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 17, fontWeight: 600, color: FG, marginBottom: 8,
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif", fontSize: 20,
+                fontWeight: 700, color: FG, marginBottom: 8, letterSpacing: "-0.3px",
               }}>
                 {label}
-              </div>
-              <div style={{
+              </h3>
+              <p style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: MUTED_FG, lineHeight: 1.6, fontWeight: 300,
+                color: MUTED_FG, lineHeight: 1.65, fontWeight: 300, margin: 0,
               }}>
                 {body}
-              </div>
+              </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── 5b. RECOMMEND A SHOP — neighbourhood nominations ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "64px 40px",
+        borderBottom: `1px solid ${BORDER}`,
+        background: MUTED,
+      }}>
+        <div style={{ maxWidth: 720 }}>
+          <div style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: V, letterSpacing: "0.15em", marginBottom: 16,
+          }}>
+            FOR NEIGHBOURS · NOMINATE
+          </div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(26px, 3.4vw, 38px)",
+            fontWeight: 700, color: FG,
+            lineHeight: 1.15, letterSpacing: "-0.8px", marginBottom: 16,
+          }}>
+            Know a shop you'd really love on Unwrapped?
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 16,
+            color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
+          }}>
+            Recommend a café, salon, florist, restaurant, or neighbourhood spot.
+            We'll reach out and let them know someone selected them — you don't need to own the business to nominate it.
+          </p>
+          <a
+            href="/recommend"
+            className="uw-btn-primary"
+            style={{
+              background: FG, color: BG,
+              fontFamily: "'Space Mono', monospace", fontSize: 10,
+              letterSpacing: "0.1em", padding: "15px 28px",
+              textDecoration: "none", display: "inline-block", border: "none",
+            }}
+          >
+            RECOMMEND A SHOP
+          </a>
         </div>
       </section>
 
@@ -946,6 +996,7 @@ export default function Landing() {
             {[
               { label: "Sign in", href: "/signin" },
               { label: "List your business", href: "/business-apply" },
+              { label: "Recommend a shop", href: "/recommend" },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (
