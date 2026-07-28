@@ -339,10 +339,10 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Unwrapped is where neighbourhood people and places — shops, restaurants, cafés,
+              Unwrapped is where shops, restaurants, cafés,
               salons, freelancers, services, and{" "}
               <em style={{ fontStyle: "italic" }}>charities</em>
-              {" "}(we love them) — release time-limited drops. You reserve, then collect with a QR code.
+              {" "}(we love them) release time-limited drops. You reserve, then collect with a QR code.
             </p>
 
             <div
@@ -553,7 +553,7 @@ export default function Landing() {
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
               color: FG, lineHeight: 1.7, marginBottom: 16, maxWidth: 580, fontWeight: 300,
             }}>
-              Unwrapped only works if local people and neighbourhood businesses build it together.
+              Unwrapped only works if shoppers and neighbourhood businesses build it together.
               Shoppers who sign up now aren't waiting on the sidelines — you're the first we'll tell
               when drops go live. Businesses boarding now aren't buying a finished product —
               you're making the drops happen.
@@ -931,7 +931,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Limited local drops from people and places near you. Reserve in seconds. Collect with QR.
+            Limited local drops, reserved in seconds. Collect with QR.
           </p>
         </div>
 

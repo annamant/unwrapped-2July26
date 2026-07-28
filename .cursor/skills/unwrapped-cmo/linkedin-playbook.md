@@ -9,7 +9,7 @@ Company page for **supply-side** and London neighbourhood operators (shops, rest
 | **Name** | Unwrapped |
 | **Public URL** | Prefer `linkedin.com/company/shopunwrapped` (fallback: `unwrapped-london`) |
 | **Website** | https://shopunwrapped.com |
-| **Tagline** | Limited local drops from people and places near you. |
+| **Tagline** | Limited local drops, reserved in seconds. |
 | **Industry** | Technology, Information and Internet (or closest: Internet Marketplace Platforms) |
 | **Company size** | 0–1 employees / 1–10 |
 | **Type** | Privately Held |
@@ -20,17 +20,17 @@ Company page for **supply-side** and London neighbourhood operators (shops, rest
 
 ## Definition (lock — same everywhere)
 
-**Limited local drops from people and places near you.**
+**Limited local drops, reserved in seconds.**
 
-Do not split posts into “for people / for businesses / for Londoners.” One product sentence. Proof set and CTAs can follow, but the definition does not change.
+Do not split posts into “for people / for businesses / for Londoners.” One product sentence. Proof set and CTAs can follow, but the definition does not change. Do not use “people and places.”
 
 ## About (paste)
 
-Limited local drops from people and places near you.
-
-Neighbourhood people and places publish time-limited drops. Reserve in seconds. Collect in person with a QR code.
+Limited local drops, reserved in seconds.
 
 Shops, restaurants, cafés, salons, freelancers, services, charities — if they can hand it over in person, they can drop.
+
+Collect in person with a QR code.
 
 Limited. Local. Gone when they're gone.
 
@@ -54,6 +54,6 @@ Operate via the human’s browser session. Never store passwords.
 
 ## First post (launch)
 
-Hook: We’re live in London — limited local drops, reserve in seconds, collect with QR.
+Hook: We’re live in London — limited local drops, reserved in seconds, collect with QR.
 
-Body: Who it’s for (umbrella + proof set). Soft CTA to site / business apply.
+Body: Who lists (proof set + eligibility). Soft CTA to site / business apply.

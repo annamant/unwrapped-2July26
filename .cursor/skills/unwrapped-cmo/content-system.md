@@ -4,7 +4,7 @@
 
 1. Drive installs / visits → reserve a drop (`shopunwrapped.com`)
 2. Build "local FOMO" habit — check what's dropping near you
-3. Attract neighbourhood people and places to apply (`/business-apply`) — shops, restaurants, freelancers, services, charities; anyone with in-person collection
+3. Attract neighbourhood operators to apply (`/business-apply`) — shops, restaurants, freelancers, services, charities; anyone with in-person collection
 
 ## Content pillars (Instagram mix)
 

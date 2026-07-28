@@ -19,27 +19,31 @@ Admin: Anna Mantova (personal account as Super Admin)
 | Name | Unwrapped |
 | Public URL | shopunwrapped (`linkedin.com/company/unwrapped` was taken) |
 | Website | https://shopunwrapped.com |
-| Tagline | Limited local drops from people and places near you. |
+| Tagline | Limited local drops, reserved in seconds. |
 | Industry | Internet Marketplace Platforms |
 | Size | 0–1 employees |
 | Type | Privately held |
-| Logo | Still placeholder — add via Edit Page using `client/public/icon-512.png` |
-| About | Saved on Details → Overview (2026-07-28) |
+| Logo | Unwrapped U mark (uploaded) |
+| About | Locked one-liner + proof set (Details → Overview) |
+
+## Locked definition
+
+**Limited local drops, reserved in seconds.**
+
+Do not use “people and places.” Do not redefine as “for people / for businesses / for Londoners.” CTAs can still point both ways after that sentence.
 
 ## Launch post — 2026-07-28
 
-Status: **posted** (as Unwrapped Company Page) · edited 2026-07-28 to add shopper CTA
+Status: **posted** (as Unwrapped Company Page) · rewritten for locked one-liner (no “people and places”)
 
 ```
-Limited local drops from people and places near you.
+Limited local drops, reserved in seconds.
 
-For Londoners: find scarce neighbourhood finds, reserve in seconds, and collect in person with a QR code.
-
-For neighbourhood shops, restaurants, freelancers, services, charities — if people can walk to your door, you can list a drop.
+Shops, restaurants, freelancers, services, charities publish time-limited drops. Reserve in seconds. Collect in person with a QR code.
 
 No endless scroll. No delivery apps. Just real things, nearby, while they last.
 
-Shoppers — sign up & reserve: https://shopunwrapped.com
+Reserve: https://shopunwrapped.com
 List a drop: https://shopunwrapped.com/business-apply
 ```
 

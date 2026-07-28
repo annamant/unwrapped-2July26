@@ -4,21 +4,22 @@ Source of truth for marketing agents. Product site: https://shopunwrapped.com
 
 ## What Unwrapped is
 
-Local drop discovery and reservation. **Neighbourhood people and places** publish **time-limited drops**; shoppers **reserve in seconds** and **collect with a QR code**.
+Local drop discovery and reservation. Neighbourhood operators publish **time-limited drops**; shoppers **reserve in seconds** and **collect with a QR code**.
 
-One-liner: **Limited local drops from people and places near you.**
+**Locked one-liner (use everywhere — tagline, bio, OG, LinkedIn, posts):**  
+**Limited local drops, reserved in seconds.**
 
-SEO / masthead line: **limited local drops, reserved in seconds.**
+Do **not** use “people and places” as the product definition or umbrella. That phrase is retired.
 
-### Who it’s for (framing — non-negotiable)
+### Who lists drops (framing — non-negotiable)
 
 **Problem:** “Independent shops” is too narrow. “Local businesses” is too vague — restaurants, freelancers, services and charities disappear inside it.
 
-**Solution — two layers, never one word alone:**
+**Solution — three layers; the one-liner stays product-first:**
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. Umbrella** | Headlines, posters, bio, OG — must stay short | **people and places near you** |
+| **1. One-liner** | Headlines, posters, bio, OG, LinkedIn tagline — must stay short | **Limited local drops, reserved in seconds.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails — when there’s room | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply — the real filter | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -28,10 +29,10 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Product truth:** Unwrapped is not retail-only and not “any company.” It’s for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** people and places · neighbourhood · from your street · collect in person  
-**Don’t say as the whole story:** independent shops · local businesses (alone) · marketplace for SMEs
+**Do say:** limited local drops · reserved in seconds · neighbourhood · from your street · collect in person · proof set nouns  
+**Don’t say:** people and places (retired) · independent shops (alone) · local businesses (alone) · marketplace for SMEs
 
-**Example — short:** Limited local drops from people and places near you.  
+**Example — short:** Limited local drops, reserved in seconds.  
 **Example — with proof:** Shops, restaurants, freelancers, services, charities — if they can hand it over in person, they can drop.  
 **Example — business CTA:** Got a door people can walk to? List a drop.
 
@@ -41,7 +42,7 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 |--|--|
 | **Category** | Local commerce / drop marketplace |
 | **For** | Londoners who want scarce, real neighbourhood finds |
-| **Also for** | Neighbourhood people and places that want demand without endless promo noise |
+| **Also for** | Neighbourhood operators (proof set) that want demand without endless promo noise |
 | **Against** | Generic delivery apps, endless scroll deals, "everything always available" |
 | **Promise** | Limited. Local. Gone when they're gone. |
 
@@ -57,8 +58,9 @@ Social primary channel (phase 1): **shopper Instagram**. Business content is sec
 - Editorial, not startup-pitchy
 - Sparse sentences. Short hooks. Concrete nouns (bakery, restaurant, salon, florist, trainer) over abstractions
 - Urgency without fake scarcity language ("ending soon" only when true)
-- Local colour: London neighbourhoods, people and places — never generic "your city"
-- Never default to "independent shops" or bare "local businesses" — use the umbrella + proof set above
+- Local colour: London neighbourhoods, streets, concrete venues — never generic "your city"
+- Never default to "independent shops" or bare "local businesses" — use the locked one-liner + proof set above
+- Never reopen “people and places” as the brand definition
 
 **Sounds like:** "three drops ending before lunch." / "reserve in seconds. collect with QR."
 
@@ -155,9 +157,8 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 ## Instagram profile (canonical)
 
 ```
-Limited local drops from people and places near you.
-Reserve in seconds · Collect with QR
-London
+Limited local drops, reserved in seconds.
+Collect with QR · London
 shopunwrapped.com/instagram
 ```
 

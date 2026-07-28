@@ -56,7 +56,7 @@ Designed for circular crop — keep icons/text centered.
 
 **Bio:**
 ```
-Limited local drops from people and places near you.
+Limited local drops, reserved in seconds.
 Reserve in seconds · Collect with QR
 London
 shopunwrapped.com/instagram
