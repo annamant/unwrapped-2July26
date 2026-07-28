@@ -24,6 +24,7 @@ Admin: Anna Mantova (personal account as Super Admin)
 | Size | 0–1 employees |
 | Type | Privately held |
 | Logo | Unwrapped U mark (uploaded) |
+| Banner | New editorial cover ready: `Unwrapped-LinkedIn-Banner-1584x396.png` (also on Desktop). Upload via Edit Page → Edit background → Change image. |
 | About | Locked one-liner + proof set (Details → Overview) |
 
 ## Locked definition

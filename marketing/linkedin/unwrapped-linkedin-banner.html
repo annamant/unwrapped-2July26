@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Unwrapped — LinkedIn Banner 1584×396 v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FAFAF8;
+      --ink: #141210;
+      --v: #E8341C;
+      --muted: #7A7A7A;
+      --surface: #F5F4F0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #cfcfc8;
+      min-height: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 48px;
+      gap: 16px;
+    }
+    .toolbar {
+      width: 1584px;
+      max-width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .toolbar p {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    /*
+      LinkedIn company cover 1584×396
+      Real-world crops (from live page check):
+      - Profile logo covers ~left 0–420px and bottom band
+      - Top ~40px and bottom ~40px often clipped
+      Keep ALL type inside the center-right safe rectangle.
+    */
+    .banner {
+      width: 1584px;
+      height: 396px;
+      background: var(--bg);
+      color: var(--ink);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 16px 48px rgba(20, 18, 16, 0.18);
+    }
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 80% at 88% 50%, rgba(232, 52, 28, 0.07), transparent 60%),
+        linear-gradient(100deg, var(--bg) 0%, var(--bg) 48%, var(--surface) 72%, var(--surface) 100%);
+      pointer-events: none;
+    }
+    /* Dead zone under profile logo — atmosphere only */
+    .dead {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 420px;
+      height: 240px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .dead::after {
+      content: "";
+      position: absolute;
+      left: 72px;
+      top: 28px;
+      width: 3px;
+      height: 72px;
+      background: var(--v);
+      opacity: 0.85;
+    }
+    .safe {
+      position: absolute;
+      left: 460px;
+      right: 88px;
+      top: 72px;
+      bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .live {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--v);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(232, 52, 28, 0.14);
+    }
+    .eyebrow span {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: 52px;
+      line-height: 1.02;
+      letter-spacing: -0.028em;
+      max-width: 900px;
+      margin: 0;
+    }
+    h1 em {
+      font-style: italic;
+      font-weight: 400;
+    }
+    .row {
+      margin-top: 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .sub {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .url {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    /* Debug overlays */
+    .logo-safe, .crop-safe {
+      display: none;
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .logo-safe {
+      left: 48px;
+      bottom: 24px;
+      width: 360px;
+      height: 220px;
+      border: 2px dashed rgba(232, 52, 28, 0.55);
+      border-radius: 12px;
+    }
+    .crop-safe {
+      left: 0; right: 0;
+      top: 40px; bottom: 40px;
+      border-top: 2px dashed rgba(20, 18, 16, 0.25);
+      border-bottom: 2px dashed rgba(20, 18, 16, 0.25);
+    }
+    body.debug .logo-safe,
+    body.debug .crop-safe { display: block; }
+    @media print {
+      body { background: white; padding: 0; }
+      .toolbar { display: none !important; }
+      .banner { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <p>v2 · LinkedIn cover · copy clear of logo + vertical crop</p>
+    <button type="button" onclick="window.print()">Print / Save PDF</button>
+  </div>
+
+  <div class="banner" id="banner" role="img" aria-label="Unwrapped LinkedIn banner: Limited local drops, reserved in seconds.">
+    <div class="logo-safe" title="Profile logo overlay"></div>
+    <div class="crop-safe" title="Vertical crop band"></div>
+    <div class="dead" aria-hidden="true"></div>
+
+    <div class="safe">
+      <div class="eyebrow">
+        <span class="live" aria-hidden="true"></span>
+        <span>London · Limited local drops</span>
+      </div>
+      <h1>Limited local drops,<br /><em>reserved in seconds.</em></h1>
+      <div class="row">
+        <p class="sub">Collect in person with a QR code.</p>
+        <p class="url">shopunwrapped.com</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (new URLSearchParams(location.search).has('debug')) {
+      document.body.classList.add('debug');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!-- saved from url=(0098)file:///Users/annamantova/CODE/unwrapped-2July26/marketing/linkedin/unwrapped-linkedin-banner.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Unwrapped — LinkedIn Banner 1584×396</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./Unwrapped — LinkedIn Banner 1584×396_files/css2" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAF8;
+      --ink: #141210;
+      --v: #E8341C;
+      --muted: #7A7A7A;
+      --surface: #F5F4F0;
+      --border: #E0DFD9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #cfcfc8;
+      min-height: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 48px;
+      gap: 16px;
+    }
+    .toolbar {
+      width: 1584px;
+      max-width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .toolbar p {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .toolbar button {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: var(--v);
+      color: var(--bg);
+      border: none;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    /* LinkedIn company cover — upload at 1584×396.
+       Profile photo covers bottom-left (~200×200 scaled). Keep safe zone clear. */
+    .banner {
+      width: 1584px;
+      height: 396px;
+      background: var(--bg);
+      color: var(--ink);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 16px 48px rgba(20, 18, 16, 0.18);
+    }
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 90% at 92% 40%, rgba(232, 52, 28, 0.06), transparent 55%),
+        linear-gradient(105deg, transparent 58%, var(--surface) 58%, var(--surface) 100%);
+      pointer-events: none;
+    }
+    .rule {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: var(--v);
+    }
+    .safe {
+      /* Clear of logo overlay on public LinkedIn company pages */
+      position: absolute;
+      left: 280px;
+      right: 72px;
+      top: 56px;
+      bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .live {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--v);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(232, 52, 28, 0.14);
+    }
+    .eyebrow span {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: 64px;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      max-width: 920px;
+      margin: 0;
+    }
+    h1 em {
+      font-style: italic;
+      font-weight: 400;
+    }
+    .sub {
+      margin-top: 18px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+      max-width: 680px;
+    }
+    .right-mark {
+      position: absolute;
+      right: 64px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 168px;
+      height: 168px;
+      background: var(--ink);
+      z-index: 2;
+      display: grid;
+      place-items: center;
+    }
+    .right-mark span {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: 118px;
+      color: var(--bg);
+      line-height: 1;
+      margin-top: -6px;
+    }
+    .right-mark .dot {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--v);
+    }
+    .url {
+      position: absolute;
+      right: 64px;
+      bottom: 28px;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 2;
+    }
+    /* Debug overlay — toggle with ?debug=1 */
+    .logo-safe {
+      display: none;
+      position: absolute;
+      left: 36px;
+      bottom: 18px;
+      width: 200px;
+      height: 200px;
+      border: 2px dashed rgba(232, 52, 28, 0.45);
+      border-radius: 8px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    body.debug .logo-safe { display: block; }
+    @media print {
+      body { background: white; padding: 0; }
+      .toolbar { display: none !important; }
+      .banner { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <p>LinkedIn cover · 1584×396 · safe zone clear of profile photo</p>
+    <button type="button" onclick="window.print()">Print / Save PDF</button>
+  </div>
+
+  <div class="banner" id="banner" role="img" aria-label="Unwrapped LinkedIn banner: Limited local drops, reserved in seconds.">
+    <div class="rule"></div>
+    <div class="logo-safe" title="LinkedIn profile photo overlay zone"></div>
+
+    <div class="safe">
+      <div class="eyebrow">
+        <span class="live" aria-hidden="true"></span>
+        <span>London · Limited local drops</span>
+      </div>
+      <h1>Limited local drops,<br><em>reserved in seconds.</em></h1>
+      <p class="sub">Collect in person with a QR code.</p>
+    </div>
+
+    <div class="right-mark" aria-hidden="true">
+      <span>U</span>
+      <i class="dot"></i>
+    </div>
+    <div class="url">shopunwrapped.com</div>
+  </div>
+
+  <script>
+    if (new URLSearchParams(location.search).has('debug')) {
+      document.body.classList.add('debug');
+    }
+  </script>
+
+
+</body></html>

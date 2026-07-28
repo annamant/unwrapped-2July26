@@ -15,7 +15,7 @@ Company page for **supply-side** and London neighbourhood operators (shops, rest
 | **Type** | Privately Held |
 | **HQ** | London, England, United Kingdom |
 | **Logo** | `brand/svg/profile-picture.svg` → PNG via `brand/preview.html` (or `client/public/icon-512.png`) |
-| **Cover** | Cream editorial — lockup + one-liner; avoid purple/startup templates |
+| **Cover** | `marketing/linkedin/Unwrapped-LinkedIn-Banner-1584x396.png` — cream editorial, locked one-liner + U mark (not wordmark-only). Safe zone clears profile photo. |
 | **Support** | anna@shopunwrapped.com |
 
 ## Definition (lock — same everywhere)
