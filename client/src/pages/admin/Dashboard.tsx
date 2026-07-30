@@ -139,7 +139,7 @@ export default function AdminDashboard() {
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
           {[
             { label: "Total users", value: stats?.totalUsers, href: "/admin/users" },
-            { label: "Total businesses", value: stats?.totalBusinesses, href: "/admin/businesses" },
+            { label: "Listed profiles", value: stats?.totalBusinesses, href: "/admin/businesses" },
             { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
             { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
             { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },

@@ -18,6 +18,7 @@ const CATEGORIES = [
 ] as const;
 
 type StatusFilter = "active" | "pending" | "suspended" | "all";
+type ClaimFilter = "all" | "claimed" | "invite_sent" | "awaiting_invite" | "no_email";
 
 type ImportRow = {
   name: string;
@@ -47,6 +48,7 @@ const SAMPLE_CSV = [
 export default function AdminBusinesses() {
   const isMobile = useIsMobile(768);
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [claimFilter, setClaimFilter] = useState<ClaimFilter>("all");
   const [showImport, setShowImport] = useState(false);
   const [csvText, setCsvText] = useState("");
   const [sendInviteEmails, setSendInviteEmails] = useState(true);
@@ -62,6 +64,7 @@ export default function AdminBusinesses() {
 
   const { data: businesses, isLoading } = trpc.admin.listBusinesses.useQuery({
     status: filter === "all" ? undefined : filter,
+    claimStatus: claimFilter === "all" ? undefined : claimFilter,
   });
   const utils = trpc.useUtils();
   const setStatus = trpc.admin.setBusinessStatus.useMutation({
@@ -140,11 +143,19 @@ export default function AdminBusinesses() {
     },
   });
 
-  const FILTERS: { key: StatusFilter; label: string }[] = [
+  const LISTING_FILTERS: { key: StatusFilter; label: string }[] = [
     { key: "all", label: "All" },
-    { key: "active", label: "Active" },
+    { key: "active", label: "Listed" },
     { key: "pending", label: "Pending" },
     { key: "suspended", label: "Suspended" },
+  ];
+
+  const CLAIM_FILTERS: { key: ClaimFilter; label: string }[] = [
+    { key: "all", label: "All claims" },
+    { key: "claimed", label: "Claimed" },
+    { key: "invite_sent", label: "Invite sent" },
+    { key: "awaiting_invite", label: "Awaiting invite" },
+    { key: "no_email", label: "No email" },
   ];
 
   function handleParse(text: string) {
@@ -178,9 +189,14 @@ export default function AdminBusinesses() {
           gap: 16,
           marginBottom: 32,
         }}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, margin: 0 }}>
-            Businesses
-          </h1>
+          <div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, margin: 0 }}>
+              Businesses
+            </h1>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, margin: "8px 0 0", maxWidth: 520, lineHeight: 1.5 }}>
+              Listed = profile is live on the site. Claimed = the owner set a password and can sign in.
+            </p>
+          </div>
           <button
             onClick={() => setShowImport(v => !v)}
             style={{
@@ -597,36 +613,69 @@ export default function AdminBusinesses() {
           </div>
         )}
 
-        <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 24, overflowX: "auto", scrollbarWidth: "none" }}>
-          {FILTERS.map(f => (
-            <button
-              key={f.key}
-              onClick={() => setFilter(f.key)}
-              style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                padding: "10px 20px", background: "none", border: "none",
-                borderBottom: filter === f.key ? `2px solid ${FG}` : "2px solid transparent",
-                color: filter === f.key ? FG : MUTED_FG,
-                cursor: "pointer", marginBottom: -1,
-              }}
-            >
-              {f.label}
-            </button>
-          ))}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 8 }}>
+            LISTING STATUS
+          </div>
+          <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 16, overflowX: "auto", scrollbarWidth: "none" }}>
+            {LISTING_FILTERS.map(f => (
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                  padding: "10px 20px", background: "none", border: "none",
+                  borderBottom: filter === f.key ? `2px solid ${FG}` : "2px solid transparent",
+                  color: filter === f.key ? FG : MUTED_FG,
+                  cursor: "pointer", marginBottom: -1, whiteSpace: "nowrap",
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 8 }}>
+            OWNER CLAIM
+          </div>
+          <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, overflowX: "auto", scrollbarWidth: "none" }}>
+            {CLAIM_FILTERS.map(f => (
+              <button
+                key={f.key}
+                onClick={() => setClaimFilter(f.key)}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                  padding: "10px 20px", background: "none", border: "none",
+                  borderBottom: claimFilter === f.key ? `2px solid ${FG}` : "2px solid transparent",
+                  color: claimFilter === f.key ? FG : MUTED_FG,
+                  cursor: "pointer", marginBottom: -1, whiteSpace: "nowrap",
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {isLoading ? (
           <LoadingState />
         ) : !businesses?.length ? (
-          <EmptyState label={`No ${filter !== "all" ? filter : ""} businesses.`} />
+          <EmptyState label="No businesses match these filters." />
         ) : (
           <div style={{ border: `1px solid ${BORDER}` }}>
-            {businesses.map((biz, i) => (
+            <div style={{
+              fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG,
+              letterSpacing: "0.1em", padding: "10px 20px", borderBottom: `1px solid ${BORDER}`, background: MUTED,
+            }}>
+              {businesses.length} PROFILE{businesses.length === 1 ? "" : "S"}
+            </div>
+            {businesses.map((biz, i) => {
+              const displayEmail = isPlaceholderEmail(biz.contactEmail) ? "no email" : biz.contactEmail;
+              return (
               <div
                 key={biz.id}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: isMobile ? "1fr" : "1fr 120px 100px 100px auto",
+                  gridTemplateColumns: isMobile ? "1fr" : "1fr 120px 100px 110px 100px auto",
                   gap: isMobile ? 8 : 16,
                   alignItems: "center",
                   padding: isMobile ? "16px" : "16px 20px",
@@ -640,13 +689,20 @@ export default function AdminBusinesses() {
                     </a>
                   </div>
                   <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                    {biz.contactEmail}{biz.city ? ` · ${biz.city}` : ""}
+                    {displayEmail}{biz.city ? ` · ${biz.city}` : ""}
                   </div>
+                  {isMobile && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
+                      <ListingBadge status={biz.status} />
+                      <ClaimBadge status={biz.claimStatus} />
+                    </div>
+                  )}
                 </div>
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
                   {biz.category}
                 </div>
-                <StatusBadge status={biz.status} />
+                {!isMobile && <ListingBadge status={biz.status} />}
+                {!isMobile && <ClaimBadge status={biz.claimStatus} />}
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
                   {format(new Date(biz.createdAt), "d MMM yyyy")}
                 </div>
@@ -665,11 +721,12 @@ export default function AdminBusinesses() {
                       cursor: "pointer", whiteSpace: "nowrap",
                     }}
                   >
-                    {biz.status === "active" ? "SUSPEND" : "ACTIVATE"}
+                    {biz.status === "active" ? "SUSPEND" : "LIST"}
                   </button>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -781,20 +838,43 @@ function splitCsvLine(line: string): string[] {
   return out;
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, { bg: string; text: string }> = {
-    active: { bg: "#F0FDF4", text: "#15803D" },
-    pending: { bg: "#FEF3C7", text: "#92400E" },
-    suspended: { bg: "#FEF2F2", text: V },
+function isPlaceholderEmail(email: string | null | undefined): boolean {
+  return !email || email.toLowerCase() === "unclaimed-directory@shopunwrapped.com";
+}
+
+function ListingBadge({ status }: { status: string }) {
+  const colors: Record<string, { bg: string; text: string; label: string }> = {
+    active: { bg: "#F0FDF4", text: "#15803D", label: "LISTED" },
+    pending: { bg: "#FEF3C7", text: "#92400E", label: "PENDING" },
+    suspended: { bg: "#FEF2F2", text: V, label: "SUSPENDED" },
   };
-  const c = colors[status] ?? { bg: MUTED, text: MUTED_FG };
+  const c = colors[status] ?? { bg: MUTED, text: MUTED_FG, label: status.toUpperCase() };
   return (
     <span style={{
       fontFamily: "'Space Mono', monospace", fontSize: 8,
       letterSpacing: "0.1em", padding: "3px 8px",
       background: c.bg, color: c.text, display: "inline-block", width: "fit-content",
     }}>
-      {status.toUpperCase()}
+      {c.label}
+    </span>
+  );
+}
+
+function ClaimBadge({ status }: { status: string }) {
+  const colors: Record<string, { bg: string; text: string; label: string }> = {
+    claimed: { bg: "#F0FDF4", text: "#15803D", label: "CLAIMED" },
+    invite_sent: { bg: "#EFF6FF", text: "#1D4ED8", label: "INVITE SENT" },
+    awaiting_invite: { bg: "#FEF3C7", text: "#92400E", label: "AWAITING INVITE" },
+    no_email: { bg: MUTED, text: MUTED_FG, label: "NO EMAIL" },
+  };
+  const c = colors[status] ?? { bg: MUTED, text: MUTED_FG, label: status.toUpperCase() };
+  return (
+    <span style={{
+      fontFamily: "'Space Mono', monospace", fontSize: 8,
+      letterSpacing: "0.1em", padding: "3px 8px",
+      background: c.bg, color: c.text, display: "inline-block", width: "fit-content",
+    }}>
+      {c.label}
     </span>
   );
 }

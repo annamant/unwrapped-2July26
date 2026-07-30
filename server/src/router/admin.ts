@@ -835,14 +835,54 @@ export const adminRouter = router({
 
   // List all businesses (with status filter)
   listBusinesses: adminProcedure
-    .input(z.object({ status: z.enum(["pending", "active", "suspended"]).optional() }))
+    .input(z.object({
+      status: z.enum(["pending", "active", "suspended"]).optional(),
+      /** Owner onboarding stage — independent of listing status (active/suspended). */
+      claimStatus: z.enum(["claimed", "invite_sent", "awaiting_invite", "no_email"]).optional(),
+    }))
     .query(async ({ ctx, input }) => {
-      const conditions = input.status ? [eq(businesses.status, input.status)] : [];
-      return ctx.db
-        .select()
+      const rows = await ctx.db
+        .select({
+          id: businesses.id,
+          ownerId: businesses.ownerId,
+          name: businesses.name,
+          slug: businesses.slug,
+          description: businesses.description,
+          category: businesses.category,
+          city: businesses.city,
+          address: businesses.address,
+          postcode: businesses.postcode,
+          contactEmail: businesses.contactEmail,
+          website: businesses.website,
+          instagramHandle: businesses.instagramHandle,
+          logoUrl: businesses.logoUrl,
+          coverUrl: businesses.coverUrl,
+          status: businesses.status,
+          approvedAt: businesses.approvedAt,
+          claimInviteSentAt: businesses.claimInviteSentAt,
+          thankYouSentAt: businesses.thankYouSentAt,
+          createdAt: businesses.createdAt,
+          ownerHasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
+        })
         .from(businesses)
-        .where(conditions.length ? and(...conditions) : undefined)
+        .leftJoin(users, eq(businesses.ownerId, users.id))
+        .where(input.status ? eq(businesses.status, input.status) : undefined)
         .orderBy(desc(businesses.createdAt));
+
+      const withClaim = rows.map((row) => {
+        const email = (row.contactEmail ?? "").toLowerCase();
+        const noEmail = !email || email === UNCLAIMED_OWNER_EMAIL;
+        let claimStatus: "claimed" | "invite_sent" | "awaiting_invite" | "no_email";
+        if (row.ownerHasPassword) claimStatus = "claimed";
+        else if (row.claimInviteSentAt) claimStatus = "invite_sent";
+        else if (noEmail) claimStatus = "no_email";
+        else claimStatus = "awaiting_invite";
+        const { ownerHasPassword: _, ...rest } = row;
+        return { ...rest, claimStatus };
+      });
+
+      if (!input.claimStatus) return withClaim;
+      return withClaim.filter((r) => r.claimStatus === input.claimStatus);
     }),
 
   // Suspend / unsuspend a business
