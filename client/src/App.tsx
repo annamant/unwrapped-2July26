@@ -25,6 +25,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminBusinesses from "./pages/admin/Businesses";
 import AdminDrops from "./pages/admin/Drops";
 import AdminReservations from "./pages/admin/Reservations";
+import AdminApparelMap from "./pages/admin/ApparelMap";
 import ResetPassword from "./pages/ResetPassword";
 import Instagram from "./pages/Instagram";
 import Resources from "./pages/Resources";
@@ -85,6 +86,7 @@ export default function App() {
       <Route path="/admin/reservations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminReservations />} />
       <Route path="/admin/applications" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApplications />} />
       <Route path="/admin/recommendations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminRecommendations />} />
+      <Route path="/admin/apparel-map" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApparelMap />} />
 
       {/* 404 */}
       <Route>

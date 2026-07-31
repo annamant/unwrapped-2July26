@@ -23,6 +23,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
     { href: "/admin/recommendations", label: "Recommendations" },
+    { href: "/admin/apparel-map", label: "Apparel map" },
   ];
 
   if (isMobile) {
@@ -134,6 +135,28 @@ export default function AdminDashboard() {
             {format(new Date(), "EEEE d MMMM yyyy")}
           </p>
         </div>
+
+        <a
+          href="/admin/apparel-map"
+          style={{
+            display: "block",
+            border: `1px solid ${BORDER}`,
+            padding: isMobile ? 16 : 20,
+            marginBottom: 32,
+            textDecoration: "none",
+            background: MUTED,
+          }}
+        >
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 6 }}>
+            OUTREACH
+          </div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, marginBottom: 4 }}>
+            Lambeth apparel map →
+          </div>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
+            High-street map of clothing &amp; shoes. Select shops, export websites for email scrape.
+          </div>
+        </a>
 
         {/* Stats grid */}
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
