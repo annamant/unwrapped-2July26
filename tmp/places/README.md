@@ -1,10 +1,10 @@
-# Lambeth Google Places scrape
+# London borough Google Places scrapes
 
-## Status (31 Jul 2026)
+## Permanent rule
 
-- Hit **daily** `SearchTextRequest` quota after ~95 requests (~50 Fashion jobs).
-- Fashion & Apparel largely complete: **672 raw → 299 cleaned** (chains/charity/junk/closed dropped).
-- Remaining: 9 categories × postcodes (resume via progress file). Quota typically resets **00:00 Pacific**.
+**Every borough scrape must use the full category query lists** (same set as Lambeth: multiple queries per Unwrapped category). Never run a “lean” 1-query-per-category pass for a borough.
+
+Categories / queries live in each `scrape_*.mjs` and must stay in sync across boroughs.
 
 ## What Google returns
 
@@ -17,22 +17,22 @@
 | Email | **No** — Outscraper later |
 | Dedicated social fields | **No** |
 
-## Commands
+## Boroughs
 
+### Lambeth
 ```bash
-# Resume (skips done jobs in lambeth_progress.json)
 node tmp/places/scrape_lambeth.mjs
-
-# Rebuild CSV + client/src/pages/admin/apparelMapData.ts from raw
 node tmp/places/process_lambeth.mjs
 ```
+Outputs: `lambeth_places_list.csv` (+ raw/cleaned/progress)
 
-## Outputs
+### Wandsworth
+```bash
+node tmp/places/scrape_wandsworth.mjs
+```
+Postcodes: SW11, SW12, SW15, SW17, SW18, SW19  
+Outputs: `wandsworth_places_list.csv` (+ raw/cleaned/progress)
 
-- `lambeth_places_raw.json` — all unique place IDs
-- `lambeth_places_cleaned.json` / `lambeth_places_list.csv` — filtered list
-- `lambeth_progress.json` — resume state
+## Admin map
 
-## Raise daily quota (optional)
-
-Google Cloud Console → project **UNWRAPPED** → Google Maps Platform → Quotas → Places API → `SearchTextRequest` per day → Edit / increase.
+Admin `/admin/apparel-map` shows **claimed Unwrapped businesses only**. Outreach CSVs stay in `tmp/places/` — do not load scrape lists into the client bundle.

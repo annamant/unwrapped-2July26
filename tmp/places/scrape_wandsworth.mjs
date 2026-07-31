@@ -1,6 +1,6 @@
 /**
- * Wandsworth Google Places scrape — LEAN (1 query/category) to fit remaining
- * July free Text Search allowance after Lambeth (~846 used).
+ * Wandsworth Google Places scrape — FULL category coverage (same query set as Lambeth).
+ * RULE: every London borough scrape must use the full CATEGORIES query lists — never lean.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -22,18 +22,48 @@ const DISTRICT_AREA = {
   SW19: "Wimbledon / Southfields edge",
 };
 
-/** One query per category — ~60 requests total. */
+/** Full Unwrapped category queries — do not shrink for “lean” borough passes. */
 const CATEGORIES = [
-  { name: "Fashion & Apparel", queries: ["clothing store"] },
-  { name: "Food & Drink", queries: ["restaurant"] },
-  { name: "Beauty & Wellness", queries: ["beauty salon"] },
-  { name: "Home & Living", queries: ["home goods store"] },
-  { name: "Art & Culture", queries: ["art gallery"] },
-  { name: "Books & Music", queries: ["bookstore"] },
-  { name: "Sports & Outdoor", queries: ["sporting goods store"] },
-  { name: "Tech & Gadgets", queries: ["electronics store"] },
-  { name: "Kids & Family", queries: ["toy store"] },
-  { name: "Services & Experiences", queries: ["yoga studio"] },
+  {
+    name: "Fashion & Apparel",
+    queries: ["clothing store", "vintage clothing", "shoe store", "fashion boutique"],
+  },
+  {
+    name: "Food & Drink",
+    queries: ["restaurant", "cafe", "bakery", "coffee shop"],
+  },
+  {
+    name: "Beauty & Wellness",
+    queries: ["beauty salon", "hair salon", "spa", "nail salon"],
+  },
+  {
+    name: "Home & Living",
+    queries: ["home goods store", "furniture store", "gift shop", "florist"],
+  },
+  {
+    name: "Art & Culture",
+    queries: ["art gallery", "craft store", "museum"],
+  },
+  {
+    name: "Books & Music",
+    queries: ["bookstore", "record store", "music store"],
+  },
+  {
+    name: "Sports & Outdoor",
+    queries: ["sporting goods store", "bike shop", "outdoor store"],
+  },
+  {
+    name: "Tech & Gadgets",
+    queries: ["electronics store", "mobile phone shop", "computer store"],
+  },
+  {
+    name: "Kids & Family",
+    queries: ["toy store", "children's clothing", "baby store"],
+  },
+  {
+    name: "Services & Experiences",
+    queries: ["photography studio", "yoga studio", "dance studio", "barbershop"],
+  },
 ];
 
 const FIELD_MASK = [
@@ -46,9 +76,9 @@ const FIELD_MASK = [
   "nextPageToken",
 ].join(",");
 
-const MAX_PAGES = 1;
+const MAX_PAGES = 2;
 const PAGE_SIZE = 20;
-const SLEEP_MS = 80;
+const SLEEP_MS = 100;
 
 const CHARITY_NAME_RE =
   /\b(oxfam|british heart foundation|bhf|cancer research|scope|shelter|marie curie|barnardo|salvation army|red cross|traid|fara|sue ryder|age uk|hospice|charity shop)\b/i;
@@ -216,34 +246,47 @@ async function main() {
     } catch { /* ignore */ }
   }
 
-  console.log(`Wandsworth lean jobs: ${allJobs.length}; done: ${Object.keys(progress.done).length}; cached: ${byId.size}`);
+  console.log(`Wandsworth FULL jobs: ${allJobs.length}; done: ${Object.keys(progress.done).length}; cached: ${byId.size}`);
 
   let i = 0;
   for (const job of allJobs) {
     i += 1;
     if (progress.done[job.key]) continue;
 
-    await sleep(SLEEP_MS);
-    const result = await searchText(apiKey, job.textQuery);
-    progress.requestCount += 1;
-    for (const raw of result.places || []) {
-      const norm = normalizePlace(raw, job.category, job.textQuery, job.postcode);
-      if (!norm.placeId) continue;
-      const existing = byId.get(norm.placeId);
-      if (existing) {
-        if (existing.category !== norm.category) {
-          existing.categories = [...new Set([...(existing.categories || [existing.category]), norm.category])];
+    let pageToken = undefined;
+    let totalForJob = 0;
+    let pages = 0;
+    for (let page = 0; page < MAX_PAGES; page++) {
+      if (page > 0 && !pageToken) break;
+      if (page > 0) await sleep(2000);
+      else await sleep(SLEEP_MS);
+
+      const result = await searchText(apiKey, job.textQuery, pageToken);
+      progress.requestCount += 1;
+      pages += 1;
+      for (const raw of result.places || []) {
+        const norm = normalizePlace(raw, job.category, job.textQuery, job.postcode);
+        if (!norm.placeId) continue;
+        const existing = byId.get(norm.placeId);
+        if (existing) {
+          if (existing.category !== norm.category) {
+            existing.categories = [...new Set([...(existing.categories || [existing.category]), norm.category])];
+          }
+          if (!existing.website && norm.website) existing.website = norm.website;
+          if (!existing.phone && norm.phone) existing.phone = norm.phone;
+        } else {
+          byId.set(norm.placeId, { ...norm, categories: [norm.category] });
         }
-        if (!existing.website && norm.website) existing.website = norm.website;
-        if (!existing.phone && norm.phone) existing.phone = norm.phone;
-      } else {
-        byId.set(norm.placeId, { ...norm, categories: [norm.category] });
+        totalForJob += 1;
       }
+      pageToken = result.nextPageToken;
+      if (!pageToken) break;
     }
 
     progress.done[job.key] = {
       at: new Date().toISOString(),
-      count: result.places?.length || 0,
+      pages,
+      count: totalForJob,
     };
 
     if (i % 10 === 0 || i === allJobs.length) {
@@ -251,7 +294,7 @@ async function main() {
       fs.writeFileSync(rawPath, JSON.stringify({
         scrapedAt: new Date().toISOString(),
         borough: "Wandsworth",
-        mode: "lean",
+        mode: "full",
         requestCount: progress.requestCount,
         placeCount: byId.size,
         places: [...byId.values()],
@@ -276,12 +319,12 @@ async function main() {
   fs.writeFileSync(cleanedPath, JSON.stringify({
     scrapedAt: new Date().toISOString(),
     borough: "Wandsworth",
-    mode: "lean-1query-per-category",
+    mode: "full-all-category-queries",
     requestCount: progress.requestCount,
     rawCount: all.length,
     cleanedCount: kept.length,
     dropped: all.length - kept.length,
-    note: "Lean pass for free-tier. No emails from Google.",
+    note: "Full category query set (same as Lambeth). No emails from Google.",
     places: kept,
   }, null, 2));
 
@@ -302,7 +345,7 @@ async function main() {
 
   const byCat = {};
   for (const p of kept) byCat[p.category] = (byCat[p.category] || 0) + 1;
-  console.log("\nDone Wandsworth lean.");
+  console.log("\nDone Wandsworth FULL.");
   console.log(`Requests: ${progress.requestCount}`);
   console.log(`Raw ${all.length} → cleaned ${kept.length}`);
   console.log(`website=${kept.filter((p) => p.website).length} phone=${kept.filter((p) => p.phone).length}`);

@@ -239,8 +239,758 @@
     "Services & Experiences::yoga studio::SW19": {
       "at": "2026-07-31T22:46:37.289Z",
       "count": 20
+    },
+    "Fashion & Apparel::vintage clothing::SW11": {
+      "at": "2026-07-31T22:48:59.709Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Fashion & Apparel::vintage clothing::SW12": {
+      "at": "2026-07-31T22:49:00.083Z",
+      "pages": 1,
+      "count": 17
+    },
+    "Fashion & Apparel::vintage clothing::SW15": {
+      "at": "2026-07-31T22:49:02.848Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SW17": {
+      "at": "2026-07-31T22:49:03.180Z",
+      "pages": 1,
+      "count": 7
+    },
+    "Fashion & Apparel::vintage clothing::SW18": {
+      "at": "2026-07-31T22:49:05.796Z",
+      "pages": 2,
+      "count": 33
+    },
+    "Fashion & Apparel::vintage clothing::SW19": {
+      "at": "2026-07-31T22:49:06.148Z",
+      "pages": 1,
+      "count": 10
+    },
+    "Fashion & Apparel::shoe store::SW11": {
+      "at": "2026-07-31T22:49:09.075Z",
+      "pages": 2,
+      "count": 24
+    },
+    "Fashion & Apparel::shoe store::SW12": {
+      "at": "2026-07-31T22:49:12.060Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW15": {
+      "at": "2026-07-31T22:49:12.605Z",
+      "pages": 1,
+      "count": 15
+    },
+    "Fashion & Apparel::shoe store::SW17": {
+      "at": "2026-07-31T22:49:13.006Z",
+      "pages": 1,
+      "count": 6
+    },
+    "Fashion & Apparel::shoe store::SW18": {
+      "at": "2026-07-31T22:49:13.355Z",
+      "pages": 1,
+      "count": 18
+    },
+    "Fashion & Apparel::shoe store::SW19": {
+      "at": "2026-07-31T22:49:16.090Z",
+      "pages": 2,
+      "count": 20
+    },
+    "Fashion & Apparel::fashion boutique::SW11": {
+      "at": "2026-07-31T22:49:18.816Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SW12": {
+      "at": "2026-07-31T22:49:21.555Z",
+      "pages": 2,
+      "count": 30
+    },
+    "Fashion & Apparel::fashion boutique::SW15": {
+      "at": "2026-07-31T22:49:24.242Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SW17": {
+      "at": "2026-07-31T22:49:26.927Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Fashion & Apparel::fashion boutique::SW18": {
+      "at": "2026-07-31T22:49:29.658Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SW19": {
+      "at": "2026-07-31T22:49:32.357Z",
+      "pages": 2,
+      "count": 30
+    },
+    "Food & Drink::cafe::SW11": {
+      "at": "2026-07-31T22:49:35.049Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::cafe::SW12": {
+      "at": "2026-07-31T22:49:37.894Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::cafe::SW15": {
+      "at": "2026-07-31T22:49:40.630Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::cafe::SW17": {
+      "at": "2026-07-31T22:49:43.398Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::cafe::SW18": {
+      "at": "2026-07-31T22:49:46.163Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::cafe::SW19": {
+      "at": "2026-07-31T22:49:48.835Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::bakery::SW11": {
+      "at": "2026-07-31T22:49:51.515Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::bakery::SW12": {
+      "at": "2026-07-31T22:49:54.251Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Food & Drink::bakery::SW15": {
+      "at": "2026-07-31T22:49:57.081Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::bakery::SW17": {
+      "at": "2026-07-31T22:49:59.689Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::bakery::SW18": {
+      "at": "2026-07-31T22:50:02.354Z",
+      "pages": 2,
+      "count": 36
+    },
+    "Food & Drink::bakery::SW19": {
+      "at": "2026-07-31T22:50:05.163Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW11": {
+      "at": "2026-07-31T22:50:07.839Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW12": {
+      "at": "2026-07-31T22:50:10.485Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW15": {
+      "at": "2026-07-31T22:50:13.504Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW17": {
+      "at": "2026-07-31T22:50:16.314Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW18": {
+      "at": "2026-07-31T22:50:19.031Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Food & Drink::coffee shop::SW19": {
+      "at": "2026-07-31T22:50:21.931Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW11": {
+      "at": "2026-07-31T22:50:24.868Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW12": {
+      "at": "2026-07-31T22:50:27.501Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW15": {
+      "at": "2026-07-31T22:50:30.397Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW17": {
+      "at": "2026-07-31T22:50:33.297Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW18": {
+      "at": "2026-07-31T22:50:35.979Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::hair salon::SW19": {
+      "at": "2026-07-31T22:50:38.867Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::spa::SW11": {
+      "at": "2026-07-31T22:50:41.592Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::spa::SW12": {
+      "at": "2026-07-31T22:50:44.199Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Beauty & Wellness::spa::SW15": {
+      "at": "2026-07-31T22:50:46.882Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::spa::SW17": {
+      "at": "2026-07-31T22:50:49.493Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::spa::SW18": {
+      "at": "2026-07-31T22:50:52.091Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Beauty & Wellness::spa::SW19": {
+      "at": "2026-07-31T22:50:54.718Z",
+      "pages": 2,
+      "count": 23
+    },
+    "Beauty & Wellness::nail salon::SW11": {
+      "at": "2026-07-31T22:50:57.394Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::nail salon::SW12": {
+      "at": "2026-07-31T22:50:57.757Z",
+      "pages": 1,
+      "count": 20
+    },
+    "Beauty & Wellness::nail salon::SW15": {
+      "at": "2026-07-31T22:51:00.810Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::nail salon::SW17": {
+      "at": "2026-07-31T22:51:03.714Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::nail salon::SW18": {
+      "at": "2026-07-31T22:51:06.364Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Beauty & Wellness::nail salon::SW19": {
+      "at": "2026-07-31T22:51:09.104Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::furniture store::SW11": {
+      "at": "2026-07-31T22:51:11.850Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::furniture store::SW12": {
+      "at": "2026-07-31T22:51:14.782Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Home & Living::furniture store::SW15": {
+      "at": "2026-07-31T22:51:17.706Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::furniture store::SW17": {
+      "at": "2026-07-31T22:51:20.623Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::furniture store::SW18": {
+      "at": "2026-07-31T22:51:23.412Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::furniture store::SW19": {
+      "at": "2026-07-31T22:51:26.207Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::gift shop::SW11": {
+      "at": "2026-07-31T22:51:29.203Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::gift shop::SW12": {
+      "at": "2026-07-31T22:51:29.688Z",
+      "pages": 1,
+      "count": 11
+    },
+    "Home & Living::gift shop::SW15": {
+      "at": "2026-07-31T22:51:30.147Z",
+      "pages": 1,
+      "count": 4
+    },
+    "Home & Living::gift shop::SW17": {
+      "at": "2026-07-31T22:51:32.915Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Home & Living::gift shop::SW18": {
+      "at": "2026-07-31T22:51:35.726Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::gift shop::SW19": {
+      "at": "2026-07-31T22:51:38.780Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::florist::SW11": {
+      "at": "2026-07-31T22:51:41.668Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Home & Living::florist::SW12": {
+      "at": "2026-07-31T22:51:44.243Z",
+      "pages": 2,
+      "count": 31
+    },
+    "Home & Living::florist::SW15": {
+      "at": "2026-07-31T22:51:46.852Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Home & Living::florist::SW17": {
+      "at": "2026-07-31T22:51:49.507Z",
+      "pages": 2,
+      "count": 35
+    },
+    "Home & Living::florist::SW18": {
+      "at": "2026-07-31T22:51:52.092Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Home & Living::florist::SW19": {
+      "at": "2026-07-31T22:51:54.682Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::craft store::SW11": {
+      "at": "2026-07-31T22:51:57.515Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::craft store::SW12": {
+      "at": "2026-07-31T22:52:00.094Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::craft store::SW15": {
+      "at": "2026-07-31T22:52:00.505Z",
+      "pages": 1,
+      "count": 3
+    },
+    "Art & Culture::craft store::SW17": {
+      "at": "2026-07-31T22:52:01.331Z",
+      "pages": 1,
+      "count": 14
+    },
+    "Art & Culture::craft store::SW18": {
+      "at": "2026-07-31T22:52:04.274Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::craft store::SW19": {
+      "at": "2026-07-31T22:52:04.708Z",
+      "pages": 1,
+      "count": 16
+    },
+    "Art & Culture::museum::SW11": {
+      "at": "2026-07-31T22:52:07.473Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::museum::SW12": {
+      "at": "2026-07-31T22:52:10.126Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::museum::SW15": {
+      "at": "2026-07-31T22:52:12.802Z",
+      "pages": 2,
+      "count": 31
+    },
+    "Art & Culture::museum::SW17": {
+      "at": "2026-07-31T22:52:15.640Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::museum::SW18": {
+      "at": "2026-07-31T22:52:18.357Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Art & Culture::museum::SW19": {
+      "at": "2026-07-31T22:52:18.707Z",
+      "pages": 1,
+      "count": 12
+    },
+    "Books & Music::record store::SW11": {
+      "at": "2026-07-31T22:52:21.608Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Books & Music::record store::SW12": {
+      "at": "2026-07-31T22:52:24.163Z",
+      "pages": 2,
+      "count": 23
+    },
+    "Books & Music::record store::SW15": {
+      "at": "2026-07-31T22:52:24.465Z",
+      "pages": 1,
+      "count": 1
+    },
+    "Books & Music::record store::SW17": {
+      "at": "2026-07-31T22:52:24.981Z",
+      "pages": 1,
+      "count": 2
+    },
+    "Books & Music::record store::SW18": {
+      "at": "2026-07-31T22:52:27.796Z",
+      "pages": 2,
+      "count": 22
+    },
+    "Books & Music::record store::SW19": {
+      "at": "2026-07-31T22:52:28.206Z",
+      "pages": 1,
+      "count": 8
+    },
+    "Books & Music::music store::SW11": {
+      "at": "2026-07-31T22:52:31.129Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Books & Music::music store::SW12": {
+      "at": "2026-07-31T22:52:33.993Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Books & Music::music store::SW15": {
+      "at": "2026-07-31T22:52:34.387Z",
+      "pages": 1,
+      "count": 2
+    },
+    "Books & Music::music store::SW17": {
+      "at": "2026-07-31T22:52:34.811Z",
+      "pages": 1,
+      "count": 3
+    },
+    "Books & Music::music store::SW18": {
+      "at": "2026-07-31T22:52:37.579Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Books & Music::music store::SW19": {
+      "at": "2026-07-31T22:52:40.329Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Sports & Outdoor::bike shop::SW11": {
+      "at": "2026-07-31T22:52:40.958Z",
+      "pages": 1,
+      "count": 18
+    },
+    "Sports & Outdoor::bike shop::SW12": {
+      "at": "2026-07-31T22:52:43.685Z",
+      "pages": 2,
+      "count": 37
+    },
+    "Sports & Outdoor::bike shop::SW15": {
+      "at": "2026-07-31T22:52:46.488Z",
+      "pages": 2,
+      "count": 24
+    },
+    "Sports & Outdoor::bike shop::SW17": {
+      "at": "2026-07-31T22:52:49.485Z",
+      "pages": 2,
+      "count": 31
+    },
+    "Sports & Outdoor::bike shop::SW18": {
+      "at": "2026-07-31T22:52:52.132Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Sports & Outdoor::bike shop::SW19": {
+      "at": "2026-07-31T22:52:55.088Z",
+      "pages": 2,
+      "count": 32
+    },
+    "Sports & Outdoor::outdoor store::SW11": {
+      "at": "2026-07-31T22:52:58.162Z",
+      "pages": 2,
+      "count": 35
+    },
+    "Sports & Outdoor::outdoor store::SW12": {
+      "at": "2026-07-31T22:52:58.491Z",
+      "pages": 1,
+      "count": 6
+    },
+    "Sports & Outdoor::outdoor store::SW15": {
+      "at": "2026-07-31T22:52:59.016Z",
+      "pages": 1,
+      "count": 2
+    },
+    "Sports & Outdoor::outdoor store::SW17": {
+      "at": "2026-07-31T22:53:02.155Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Sports & Outdoor::outdoor store::SW18": {
+      "at": "2026-07-31T22:53:02.768Z",
+      "pages": 1,
+      "count": 6
+    },
+    "Sports & Outdoor::outdoor store::SW19": {
+      "at": "2026-07-31T22:53:05.573Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::mobile phone shop::SW11": {
+      "at": "2026-07-31T22:53:08.440Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::mobile phone shop::SW12": {
+      "at": "2026-07-31T22:53:11.254Z",
+      "pages": 2,
+      "count": 24
+    },
+    "Tech & Gadgets::mobile phone shop::SW15": {
+      "at": "2026-07-31T22:53:11.922Z",
+      "pages": 1,
+      "count": 17
+    },
+    "Tech & Gadgets::mobile phone shop::SW17": {
+      "at": "2026-07-31T22:53:14.517Z",
+      "pages": 2,
+      "count": 25
+    },
+    "Tech & Gadgets::mobile phone shop::SW18": {
+      "at": "2026-07-31T22:53:17.321Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::mobile phone shop::SW19": {
+      "at": "2026-07-31T22:53:20.257Z",
+      "pages": 2,
+      "count": 31
+    },
+    "Tech & Gadgets::computer store::SW11": {
+      "at": "2026-07-31T22:53:23.047Z",
+      "pages": 2,
+      "count": 29
+    },
+    "Tech & Gadgets::computer store::SW12": {
+      "at": "2026-07-31T22:53:25.685Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::computer store::SW15": {
+      "at": "2026-07-31T22:53:28.575Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::computer store::SW17": {
+      "at": "2026-07-31T22:53:31.342Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Tech & Gadgets::computer store::SW18": {
+      "at": "2026-07-31T22:53:33.941Z",
+      "pages": 2,
+      "count": 31
+    },
+    "Tech & Gadgets::computer store::SW19": {
+      "at": "2026-07-31T22:53:36.870Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Kids & Family::children's clothing::SW11": {
+      "at": "2026-07-31T22:53:39.629Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Kids & Family::children's clothing::SW12": {
+      "at": "2026-07-31T22:53:42.399Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Kids & Family::children's clothing::SW15": {
+      "at": "2026-07-31T22:53:43.014Z",
+      "pages": 1,
+      "count": 16
+    },
+    "Kids & Family::children's clothing::SW17": {
+      "at": "2026-07-31T22:53:46.086Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Kids & Family::children's clothing::SW18": {
+      "at": "2026-07-31T22:53:49.041Z",
+      "pages": 2,
+      "count": 30
+    },
+    "Kids & Family::children's clothing::SW19": {
+      "at": "2026-07-31T22:53:52.230Z",
+      "pages": 2,
+      "count": 36
+    },
+    "Kids & Family::baby store::SW11": {
+      "at": "2026-07-31T22:53:55.300Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Kids & Family::baby store::SW12": {
+      "at": "2026-07-31T22:53:55.732Z",
+      "pages": 1,
+      "count": 1
+    },
+    "Kids & Family::baby store::SW15": {
+      "at": "2026-07-31T22:53:58.681Z",
+      "pages": 2,
+      "count": 28
+    },
+    "Kids & Family::baby store::SW17": {
+      "at": "2026-07-31T22:54:01.758Z",
+      "pages": 2,
+      "count": 34
+    },
+    "Kids & Family::baby store::SW18": {
+      "at": "2026-07-31T22:54:04.544Z",
+      "pages": 2,
+      "count": 37
+    },
+    "Kids & Family::baby store::SW19": {
+      "at": "2026-07-31T22:54:07.530Z",
+      "pages": 2,
+      "count": 29
+    },
+    "Services & Experiences::photography studio::SW11": {
+      "at": "2026-07-31T22:54:12.623Z",
+      "pages": 2,
+      "count": 39
+    },
+    "Services & Experiences::photography studio::SW12": {
+      "at": "2026-07-31T22:54:15.440Z",
+      "pages": 2,
+      "count": 36
+    },
+    "Services & Experiences::photography studio::SW15": {
+      "at": "2026-07-31T22:54:15.885Z",
+      "pages": 1,
+      "count": 17
+    },
+    "Services & Experiences::photography studio::SW17": {
+      "at": "2026-07-31T22:54:18.779Z",
+      "pages": 2,
+      "count": 36
+    },
+    "Services & Experiences::photography studio::SW18": {
+      "at": "2026-07-31T22:54:21.722Z",
+      "pages": 2,
+      "count": 32
+    },
+    "Services & Experiences::photography studio::SW19": {
+      "at": "2026-07-31T22:54:24.613Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW11": {
+      "at": "2026-07-31T22:54:27.428Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW12": {
+      "at": "2026-07-31T22:54:30.091Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW15": {
+      "at": "2026-07-31T22:54:33.087Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW17": {
+      "at": "2026-07-31T22:54:35.997Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW18": {
+      "at": "2026-07-31T22:54:38.776Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::dance studio::SW19": {
+      "at": "2026-07-31T22:54:41.483Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Services & Experiences::barbershop::SW11": {
+      "at": "2026-07-31T22:54:44.098Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::barbershop::SW12": {
+      "at": "2026-07-31T22:54:46.734Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::barbershop::SW15": {
+      "at": "2026-07-31T22:54:49.375Z",
+      "pages": 2,
+      "count": 34
+    },
+    "Services & Experiences::barbershop::SW17": {
+      "at": "2026-07-31T22:54:52.441Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::barbershop::SW18": {
+      "at": "2026-07-31T22:54:55.206Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Services & Experiences::barbershop::SW19": {
+      "at": "2026-07-31T22:54:58.277Z",
+      "pages": 2,
+      "count": 40
     }
   },
-  "requestCount": 60,
+  "requestCount": 334,
   "startedAt": "2026-07-31T22:46:11.135Z"
 }
