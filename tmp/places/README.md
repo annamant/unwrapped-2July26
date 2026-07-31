@@ -1,5 +1,8 @@
 # London borough Google Places scrapes
 
+Owned by the **Unwrapped SDR / lead generation** skill: `.cursor/skills/unwrapped-sdr/SKILL.md`.  
+Call it with: “SDR — scrape \<borough\>”, “lead gen — next borough”, etc.
+
 ## Permanent rule
 
 **Every borough scrape must use the full category query lists** (same set as Lambeth: multiple queries per Unwrapped category). Never run a “lean” 1-query-per-category pass for a borough.
