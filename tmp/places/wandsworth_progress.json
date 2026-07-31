@@ -1,0 +1,246 @@
+{
+  "done": {
+    "Fashion & Apparel::clothing store::SW11": {
+      "at": "2026-07-31T22:46:11.756Z",
+      "count": 20
+    },
+    "Fashion & Apparel::clothing store::SW12": {
+      "at": "2026-07-31T22:46:12.195Z",
+      "count": 20
+    },
+    "Fashion & Apparel::clothing store::SW15": {
+      "at": "2026-07-31T22:46:12.617Z",
+      "count": 20
+    },
+    "Fashion & Apparel::clothing store::SW17": {
+      "at": "2026-07-31T22:46:13.074Z",
+      "count": 20
+    },
+    "Fashion & Apparel::clothing store::SW18": {
+      "at": "2026-07-31T22:46:13.429Z",
+      "count": 20
+    },
+    "Fashion & Apparel::clothing store::SW19": {
+      "at": "2026-07-31T22:46:13.823Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW11": {
+      "at": "2026-07-31T22:46:14.329Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW12": {
+      "at": "2026-07-31T22:46:14.683Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW15": {
+      "at": "2026-07-31T22:46:15.081Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW17": {
+      "at": "2026-07-31T22:46:15.419Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW18": {
+      "at": "2026-07-31T22:46:15.996Z",
+      "count": 20
+    },
+    "Food & Drink::restaurant::SW19": {
+      "at": "2026-07-31T22:46:16.572Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW11": {
+      "at": "2026-07-31T22:46:16.925Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW12": {
+      "at": "2026-07-31T22:46:17.277Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW15": {
+      "at": "2026-07-31T22:46:17.877Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW17": {
+      "at": "2026-07-31T22:46:18.221Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW18": {
+      "at": "2026-07-31T22:46:18.800Z",
+      "count": 20
+    },
+    "Beauty & Wellness::beauty salon::SW19": {
+      "at": "2026-07-31T22:46:19.276Z",
+      "count": 20
+    },
+    "Home & Living::home goods store::SW11": {
+      "at": "2026-07-31T22:46:19.704Z",
+      "count": 20
+    },
+    "Home & Living::home goods store::SW12": {
+      "at": "2026-07-31T22:46:20.335Z",
+      "count": 20
+    },
+    "Home & Living::home goods store::SW15": {
+      "at": "2026-07-31T22:46:20.758Z",
+      "count": 15
+    },
+    "Home & Living::home goods store::SW17": {
+      "at": "2026-07-31T22:46:21.258Z",
+      "count": 18
+    },
+    "Home & Living::home goods store::SW18": {
+      "at": "2026-07-31T22:46:21.875Z",
+      "count": 20
+    },
+    "Home & Living::home goods store::SW19": {
+      "at": "2026-07-31T22:46:22.454Z",
+      "count": 20
+    },
+    "Art & Culture::art gallery::SW11": {
+      "at": "2026-07-31T22:46:22.805Z",
+      "count": 20
+    },
+    "Art & Culture::art gallery::SW12": {
+      "at": "2026-07-31T22:46:23.154Z",
+      "count": 15
+    },
+    "Art & Culture::art gallery::SW15": {
+      "at": "2026-07-31T22:46:23.507Z",
+      "count": 3
+    },
+    "Art & Culture::art gallery::SW17": {
+      "at": "2026-07-31T22:46:23.851Z",
+      "count": 9
+    },
+    "Art & Culture::art gallery::SW18": {
+      "at": "2026-07-31T22:46:24.316Z",
+      "count": 20
+    },
+    "Art & Culture::art gallery::SW19": {
+      "at": "2026-07-31T22:46:24.650Z",
+      "count": 20
+    },
+    "Books & Music::bookstore::SW11": {
+      "at": "2026-07-31T22:46:25.031Z",
+      "count": 20
+    },
+    "Books & Music::bookstore::SW12": {
+      "at": "2026-07-31T22:46:25.558Z",
+      "count": 20
+    },
+    "Books & Music::bookstore::SW15": {
+      "at": "2026-07-31T22:46:25.869Z",
+      "count": 1
+    },
+    "Books & Music::bookstore::SW17": {
+      "at": "2026-07-31T22:46:26.480Z",
+      "count": 20
+    },
+    "Books & Music::bookstore::SW18": {
+      "at": "2026-07-31T22:46:26.803Z",
+      "count": 20
+    },
+    "Books & Music::bookstore::SW19": {
+      "at": "2026-07-31T22:46:27.142Z",
+      "count": 20
+    },
+    "Sports & Outdoor::sporting goods store::SW11": {
+      "at": "2026-07-31T22:46:27.560Z",
+      "count": 20
+    },
+    "Sports & Outdoor::sporting goods store::SW12": {
+      "at": "2026-07-31T22:46:28.016Z",
+      "count": 20
+    },
+    "Sports & Outdoor::sporting goods store::SW15": {
+      "at": "2026-07-31T22:46:28.632Z",
+      "count": 20
+    },
+    "Sports & Outdoor::sporting goods store::SW17": {
+      "at": "2026-07-31T22:46:29.029Z",
+      "count": 14
+    },
+    "Sports & Outdoor::sporting goods store::SW18": {
+      "at": "2026-07-31T22:46:29.552Z",
+      "count": 20
+    },
+    "Sports & Outdoor::sporting goods store::SW19": {
+      "at": "2026-07-31T22:46:30.016Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW11": {
+      "at": "2026-07-31T22:46:30.475Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW12": {
+      "at": "2026-07-31T22:46:30.810Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW15": {
+      "at": "2026-07-31T22:46:31.189Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW17": {
+      "at": "2026-07-31T22:46:31.702Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW18": {
+      "at": "2026-07-31T22:46:32.079Z",
+      "count": 20
+    },
+    "Tech & Gadgets::electronics store::SW19": {
+      "at": "2026-07-31T22:46:32.601Z",
+      "count": 20
+    },
+    "Kids & Family::toy store::SW11": {
+      "at": "2026-07-31T22:46:33.045Z",
+      "count": 20
+    },
+    "Kids & Family::toy store::SW12": {
+      "at": "2026-07-31T22:46:33.395Z",
+      "count": 20
+    },
+    "Kids & Family::toy store::SW15": {
+      "at": "2026-07-31T22:46:33.812Z",
+      "count": 3
+    },
+    "Kids & Family::toy store::SW17": {
+      "at": "2026-07-31T22:46:34.196Z",
+      "count": 20
+    },
+    "Kids & Family::toy store::SW18": {
+      "at": "2026-07-31T22:46:34.598Z",
+      "count": 20
+    },
+    "Kids & Family::toy store::SW19": {
+      "at": "2026-07-31T22:46:35.024Z",
+      "count": 20
+    },
+    "Services & Experiences::yoga studio::SW11": {
+      "at": "2026-07-31T22:46:35.395Z",
+      "count": 20
+    },
+    "Services & Experiences::yoga studio::SW12": {
+      "at": "2026-07-31T22:46:35.738Z",
+      "count": 20
+    },
+    "Services & Experiences::yoga studio::SW15": {
+      "at": "2026-07-31T22:46:36.085Z",
+      "count": 18
+    },
+    "Services & Experiences::yoga studio::SW17": {
+      "at": "2026-07-31T22:46:36.434Z",
+      "count": 20
+    },
+    "Services & Experiences::yoga studio::SW18": {
+      "at": "2026-07-31T22:46:36.925Z",
+      "count": 20
+    },
+    "Services & Experiences::yoga studio::SW19": {
+      "at": "2026-07-31T22:46:37.289Z",
+      "count": 20
+    }
+  },
+  "requestCount": 60,
+  "startedAt": "2026-07-31T22:46:11.135Z"
+}
