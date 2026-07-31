@@ -23,7 +23,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
     { href: "/admin/recommendations", label: "Recommendations" },
-    { href: "/admin/apparel-map", label: "Apparel map" },
+    { href: "/admin/apparel-map", label: "Places map" },
   ];
 
   if (isMobile) {
@@ -151,10 +151,10 @@ export default function AdminDashboard() {
             OUTREACH
           </div>
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, marginBottom: 4 }}>
-            Lambeth apparel map →
+            Lambeth places map →
           </div>
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
-            High-street map of clothing &amp; shoes. Select shops, export websites for email scrape.
+            Google Places outreach map. Select shops, export websites for email scrape.
           </div>
         </a>
 

@@ -82,6 +82,11 @@ export default function AdminApparelMap() {
   const layerRef = useRef<LeafletLayerGroup | null>(null);
   const markersRef = useRef<Record<number, LeafletMarker>>({});
 
+  const categories = useMemo(() => {
+    const set = new Set(APPAREL_PLACES.map((p) => p.category || "Uncategorised"));
+    return [...set].sort();
+  }, []);
+
   const corridors = useMemo(() => {
     const set = new Set(APPAREL_PLACES.map((p) => p.corridor));
     return [...set].sort();
@@ -89,10 +94,14 @@ export default function AdminApparelMap() {
 
   const colors = useMemo(() => {
     const m: Record<string, string> = {};
-    corridors.forEach((c, i) => { m[c] = PALETTE[i % PALETTE.length]; });
+    const keys = categories.length > 1 ? categories : corridors;
+    keys.forEach((c, i) => { m[c] = PALETTE[i % PALETTE.length]; });
     return m;
-  }, [corridors]);
+  }, [categories, corridors]);
 
+  const [categoryOn, setCategoryOn] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(categories.map((c) => [c, true])),
+  );
   const [corridorOn, setCorridorOn] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(corridors.map((c) => [c, true])),
   );
@@ -100,12 +109,21 @@ export default function AdminApparelMap() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [mapReady, setMapReady] = useState(false);
 
+  const colorKey = (p: ApparelPlace) =>
+    categories.length > 1 ? (p.category || "Uncategorised") : p.corridor;
+
   const visible = useMemo(
     () => APPAREL_PLACES
       .map((p, i) => ({ p, i }))
-      .filter(({ p }) => corridorOn[p.corridor])
-      .sort((a, b) => a.p.corridor.localeCompare(b.p.corridor) || a.p.name.localeCompare(b.p.name)),
-    [corridorOn],
+      .filter(({ p }) =>
+        categoryOn[p.category || "Uncategorised"] && corridorOn[p.corridor],
+      )
+      .sort((a, b) =>
+        (a.p.category || "").localeCompare(b.p.category || "") ||
+        a.p.corridor.localeCompare(b.p.corridor) ||
+        a.p.name.localeCompare(b.p.name),
+      ),
+    [categoryOn, corridorOn],
   );
 
   const selectedWithWeb = [...selected].filter((i) => APPAREL_PLACES[i]?.website).length;
@@ -122,8 +140,11 @@ export default function AdminApparelMap() {
       const layer = L.layerGroup().addTo(map);
       mapRef.current = map;
       layerRef.current = layer;
-      const bounds = L.latLngBounds(APPAREL_PLACES.map((p) => [p.lat, p.lng]));
-      map.fitBounds(bounds.pad(0.08));
+      const withCoords = APPAREL_PLACES.filter((p) => p.lat != null && p.lng != null);
+      if (withCoords.length) {
+        const bounds = L.latLngBounds(withCoords.map((p) => [p.lat, p.lng]));
+        map.fitBounds(bounds.pad(0.08));
+      }
       setMapReady(true);
     }).catch(() => setMapReady(false));
     return () => {
@@ -146,11 +167,12 @@ export default function AdminApparelMap() {
 
     visible.forEach(({ p, i }) => {
       const isSel = selected.has(i);
+      const ck = colorKey(p);
       const marker = L.circleMarker([p.lat, p.lng], {
         radius: isSel ? 9 : 6,
-        color: isSel ? V : colors[p.corridor],
+        color: isSel ? V : colors[ck],
         weight: isSel ? 2 : 1,
-        fillColor: isSel ? V : colors[p.corridor],
+        fillColor: isSel ? V : colors[ck],
         fillOpacity: isSel ? 0.95 : 0.75,
       });
       marker.bindPopup(() => popupHtml(p, i, selected.has(i)));
@@ -158,7 +180,7 @@ export default function AdminApparelMap() {
       marker.addTo(layer);
       markersRef.current[i] = marker;
     });
-  }, [visible, selected, colors, mapReady]);
+  }, [visible, selected, colors, mapReady, categories.length]);
 
   useEffect(() => {
     (window as unknown as { __apparelToggle?: (i: number) => void }).__apparelToggle = (i: number) => {
@@ -183,7 +205,14 @@ export default function AdminApparelMap() {
     const web = p.website
       ? `<div style="margin-top:4px"><a href="${esc(p.website)}" target="_blank" rel="noreferrer">${esc(p.website)}</a></div>`
       : `<div style="margin-top:4px;color:#b45309">No website</div>`;
-    return `<strong>${esc(p.name)}</strong><br/>${esc(p.type || "")}<br/>${esc(p.address)}<br/>${esc(p.postcode)}${web}
+    const phone = p.phone ? `<div style="margin-top:2px">${esc(p.phone)}</div>` : "";
+    const ig = p.instagram
+      ? `<div style="margin-top:2px"><a href="${esc(p.instagram)}" target="_blank" rel="noreferrer">Instagram</a></div>`
+      : "";
+    const maps = p.googleMapsUri
+      ? `<div style="margin-top:2px"><a href="${esc(p.googleMapsUri)}" target="_blank" rel="noreferrer">Google Maps</a></div>`
+      : "";
+    return `<strong>${esc(p.name)}</strong><br/>${esc(p.category || "")} · ${esc(p.type || "")}<br/>${esc(p.address)}<br/>${esc(p.postcode)}${phone}${web}${ig}${maps}
       <button type="button" onclick="window.__apparelToggle && window.__apparelToggle(${i})"
         style="margin-top:8px;width:100%;padding:8px;font-family:monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid #141210;background:${isSel ? "#FAFAF8" : "#141210"};color:${isSel ? "#141210" : "#FAFAF8"};cursor:pointer">
         ${isSel ? "Deselect" : "Select for email"}
@@ -213,19 +242,31 @@ export default function AdminApparelMap() {
 
   function exportSelected() {
     const rows = [...selected].map((i) => APPAREL_PLACES[i]).filter((p) => p.website);
-    const header = ["name", "website", "type", "city", "address", "postcode", "district", "corridor"] as const;
-    const escCsv = (v: string) => `"${String(v || "").replace(/"/g, '""')}"`;
+    const header = [
+      "name", "website", "category", "type", "city", "address", "postcode", "district",
+      "corridor", "phone", "instagram", "facebook", "email", "googleMapsUri", "placeId",
+    ] as const;
+    const escCsv = (v: string | number | null | undefined) => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const csv = [header.join(",")]
-      .concat(rows.map((r) => header.map((h) => escCsv(r[h] || "")).join(",")))
+      .concat(rows.map((r) => header.map((h) => escCsv(r[h])).join(",")))
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "lambeth_apparel_selected_for_email.csv";
+    a.download = "lambeth_places_selected_for_email.csv";
     a.click();
   }
 
-  const counts = useMemo(() => {
+  const catCounts = useMemo(() => {
+    const m: Record<string, number> = {};
+    APPAREL_PLACES.forEach((p) => {
+      const k = p.category || "Uncategorised";
+      m[k] = (m[k] || 0) + 1;
+    });
+    return m;
+  }, []);
+
+  const corridorCounts = useMemo(() => {
     const m: Record<string, number> = {};
     APPAREL_PLACES.forEach((p) => { m[p.corridor] = (m[p.corridor] || 0) + 1; });
     return m;
@@ -252,10 +293,10 @@ export default function AdminApparelMap() {
         }}>
           <div style={{ padding: "16px 16px 12px", borderBottom: `1px solid ${BORDER}` }}>
             <h1 style={{ margin: "0 0 4px", fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: FG }}>
-              Lambeth apparel
+              Lambeth places
             </h1>
             <p style={{ margin: 0, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, lineHeight: 1.45 }}>
-              Admin-only high-street map. Tick shops with a website, then export for Outscraper email scrape.
+              Google Places discovery. Select shops with a website, export for Outscraper email scrape. No emails from Google.
             </p>
           </div>
 
@@ -269,7 +310,33 @@ export default function AdminApparelMap() {
             <div><span style={{ display: "block", fontFamily: "'Space Mono', monospace", fontSize: 16, color: FG }}>{selectedWithWeb}</span>with website</div>
           </div>
 
+          {categories.length > 0 && (
+            <div style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, maxHeight: 140, overflow: "auto" }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: "0.12em", color: MUTED_FG, marginBottom: 6 }}>
+                CATEGORY
+              </div>
+              {categories.map((c) => (
+                <label key={c} style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12, padding: "3px 0", cursor: "pointer",
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={!!categoryOn[c]}
+                    onChange={(e) => setCategoryOn((prev) => ({ ...prev, [c]: e.target.checked }))}
+                  />
+                  <span style={{ display: "inline-block", width: 8, height: 8, background: colors[c] || V, flexShrink: 0 }} />
+                  {c}
+                  <span style={{ color: MUTED_FG }}>({catCounts[c]})</span>
+                </label>
+              ))}
+            </div>
+          )}
+
           <div style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, maxHeight: 150, overflow: "auto" }}>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, letterSpacing: "0.12em", color: MUTED_FG, marginBottom: 6 }}>
+              AREA
+            </div>
             {corridors.map((c) => (
               <label key={c} style={{
                 display: "flex", alignItems: "center", gap: 8,
@@ -280,9 +347,8 @@ export default function AdminApparelMap() {
                   checked={!!corridorOn[c]}
                   onChange={(e) => setCorridorOn((prev) => ({ ...prev, [c]: e.target.checked }))}
                 />
-                <span style={{ display: "inline-block", width: 8, height: 8, background: colors[c], flexShrink: 0 }} />
                 {c}
-                <span style={{ color: MUTED_FG }}>({counts[c]})</span>
+                <span style={{ color: MUTED_FG }}>({corridorCounts[c]})</span>
               </label>
             ))}
           </div>
@@ -293,7 +359,7 @@ export default function AdminApparelMap() {
               const isActive = activeIdx === i;
               return (
                 <div
-                  key={`${p.name}-${p.postcode}-${i}`}
+                  key={`${p.placeId || p.name}-${p.postcode}-${i}`}
                   onClick={() => focusPlace(i)}
                   style={{
                     display: "grid",
@@ -316,8 +382,13 @@ export default function AdminApparelMap() {
                   <div>
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, color: FG }}>{p.name}</div>
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: MUTED_FG, marginTop: 2, lineHeight: 1.35 }}>
-                      {p.corridor} · {p.postcode} · {p.type || "—"}
+                      {p.category} · {p.corridor} · {p.postcode} · {p.type || "—"}
                     </div>
+                    {p.phone ? (
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: MUTED_FG, marginTop: 2 }}>
+                        {p.phone}
+                      </div>
+                    ) : null}
                     {p.website ? (
                       <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: FG, marginTop: 2, wordBreak: "break-all" }}>
                         {p.website}

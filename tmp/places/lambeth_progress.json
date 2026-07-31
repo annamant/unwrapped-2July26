@@ -1,0 +1,256 @@
+{
+  "done": {
+    "Fashion & Apparel::clothing store::SE1": {
+      "at": "2026-07-31T14:36:07.610Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE5": {
+      "at": "2026-07-31T14:36:10.664Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE11": {
+      "at": "2026-07-31T14:36:13.644Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE19": {
+      "at": "2026-07-31T14:36:16.597Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE21": {
+      "at": "2026-07-31T14:36:19.465Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE24": {
+      "at": "2026-07-31T14:36:22.249Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SE27": {
+      "at": "2026-07-31T14:36:25.088Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW2": {
+      "at": "2026-07-31T14:36:27.872Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW4": {
+      "at": "2026-07-31T14:36:30.677Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW8": {
+      "at": "2026-07-31T14:36:33.533Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW9": {
+      "at": "2026-07-31T14:36:36.510Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW12": {
+      "at": "2026-07-31T14:36:39.438Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::clothing store::SW16": {
+      "at": "2026-07-31T14:36:42.293Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SE1": {
+      "at": "2026-07-31T14:36:44.985Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SE5": {
+      "at": "2026-07-31T14:36:45.399Z",
+      "pages": 1,
+      "count": 14
+    },
+    "Fashion & Apparel::vintage clothing::SE11": {
+      "at": "2026-07-31T14:36:48.071Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SE19": {
+      "at": "2026-07-31T14:36:50.784Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SE21": {
+      "at": "2026-07-31T14:36:53.653Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SE24": {
+      "at": "2026-07-31T14:36:54.105Z",
+      "pages": 1,
+      "count": 6
+    },
+    "Fashion & Apparel::vintage clothing::SE27": {
+      "at": "2026-07-31T14:36:56.781Z",
+      "pages": 2,
+      "count": 24
+    },
+    "Fashion & Apparel::vintage clothing::SW2": {
+      "at": "2026-07-31T14:36:57.147Z",
+      "pages": 1,
+      "count": 15
+    },
+    "Fashion & Apparel::vintage clothing::SW4": {
+      "at": "2026-07-31T14:36:59.867Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SW8": {
+      "at": "2026-07-31T14:37:02.525Z",
+      "pages": 2,
+      "count": 22
+    },
+    "Fashion & Apparel::vintage clothing::SW9": {
+      "at": "2026-07-31T14:37:05.183Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SW12": {
+      "at": "2026-07-31T14:37:07.871Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::vintage clothing::SW16": {
+      "at": "2026-07-31T14:37:10.584Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SE1": {
+      "at": "2026-07-31T14:37:13.433Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SE5": {
+      "at": "2026-07-31T14:37:13.895Z",
+      "pages": 1,
+      "count": 2
+    },
+    "Fashion & Apparel::shoe store::SE11": {
+      "at": "2026-07-31T14:37:16.638Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SE19": {
+      "at": "2026-07-31T14:37:19.503Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SE21": {
+      "at": "2026-07-31T14:37:22.325Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SE24": {
+      "at": "2026-07-31T14:37:25.015Z",
+      "pages": 2,
+      "count": 27
+    },
+    "Fashion & Apparel::shoe store::SE27": {
+      "at": "2026-07-31T14:37:27.913Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW2": {
+      "at": "2026-07-31T14:37:30.644Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW4": {
+      "at": "2026-07-31T14:37:33.491Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW8": {
+      "at": "2026-07-31T14:37:36.466Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW9": {
+      "at": "2026-07-31T14:37:39.489Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW12": {
+      "at": "2026-07-31T14:37:42.467Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::shoe store::SW16": {
+      "at": "2026-07-31T14:37:45.249Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SE1": {
+      "at": "2026-07-31T14:37:48.153Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SE5": {
+      "at": "2026-07-31T14:37:50.949Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Fashion & Apparel::fashion boutique::SE11": {
+      "at": "2026-07-31T14:37:53.743Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SE19": {
+      "at": "2026-07-31T14:37:56.508Z",
+      "pages": 2,
+      "count": 33
+    },
+    "Fashion & Apparel::fashion boutique::SE21": {
+      "at": "2026-07-31T14:37:59.308Z",
+      "pages": 2,
+      "count": 37
+    },
+    "Fashion & Apparel::fashion boutique::SE24": {
+      "at": "2026-07-31T14:37:59.824Z",
+      "pages": 1,
+      "count": 7
+    },
+    "Fashion & Apparel::fashion boutique::SE27": {
+      "at": "2026-07-31T14:38:02.674Z",
+      "pages": 2,
+      "count": 36
+    },
+    "Fashion & Apparel::fashion boutique::SW2": {
+      "at": "2026-07-31T14:38:05.682Z",
+      "pages": 2,
+      "count": 38
+    },
+    "Fashion & Apparel::fashion boutique::SW4": {
+      "at": "2026-07-31T14:38:08.429Z",
+      "pages": 2,
+      "count": 37
+    },
+    "Fashion & Apparel::fashion boutique::SW8": {
+      "at": "2026-07-31T14:38:11.236Z",
+      "pages": 2,
+      "count": 40
+    },
+    "Fashion & Apparel::fashion boutique::SW9": {
+      "at": "2026-07-31T14:38:14.191Z",
+      "pages": 2,
+      "count": 40
+    }
+  },
+  "requestCount": 95,
+  "startedAt": "2026-07-31T14:36:04.502Z"
+}
