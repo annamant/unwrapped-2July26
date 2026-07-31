@@ -23,7 +23,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
     { href: "/admin/recommendations", label: "Recommendations" },
-    { href: "/admin/apparel-map", label: "Places map" },
+    { href: "/admin/apparel-map", label: "Claimed map" },
   ];
 
   if (isMobile) {
@@ -148,13 +148,13 @@ export default function AdminDashboard() {
           }}
         >
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 6 }}>
-            OUTREACH
+            ON PLATFORM
           </div>
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, marginBottom: 4 }}>
-            Lambeth places map →
+            Claimed businesses map →
           </div>
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
-            Google Places outreach map. Select shops, export websites for email scrape.
+            Map of shops whose owners have signed up. Outreach lists stay in tmp/places.
           </div>
         </a>
 

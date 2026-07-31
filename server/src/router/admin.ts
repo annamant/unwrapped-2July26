@@ -492,13 +492,30 @@ export const adminRouter = router({
         id: businesses.id,
         name: businesses.name,
         slug: businesses.slug,
+        category: businesses.category,
         city: businesses.city,
+        address: businesses.address,
+        postcode: businesses.postcode,
+        website: businesses.website,
         contactEmail: businesses.contactEmail,
         ownerEmail: users.email,
         ownerName: users.name,
         ownerCreatedAt: users.createdAt,
         claimInviteSentAt: businesses.claimInviteSentAt,
         thankYouSentAt: businesses.thankYouSentAt,
+        // Pin from most recent drop with coordinates, if any
+        lat: sql<number | null>`(
+          SELECT ${drops.latitude} FROM ${drops}
+          WHERE ${drops.businessId} = ${businesses.id}
+          ORDER BY ${drops.createdAt} DESC
+          LIMIT 1
+        )`,
+        lng: sql<number | null>`(
+          SELECT ${drops.longitude} FROM ${drops}
+          WHERE ${drops.businessId} = ${businesses.id}
+          ORDER BY ${drops.createdAt} DESC
+          LIMIT 1
+        )`,
       })
       .from(businesses)
       .innerJoin(users, eq(businesses.ownerId, users.id))

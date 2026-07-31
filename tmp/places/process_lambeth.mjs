@@ -127,64 +127,14 @@ function main() {
   }
   fs.writeFileSync(path.join(OUT_DIR, "lambeth_places_list.csv"), csvLines.join("\n"));
 
-  // Map data for admin UI
-  const mapPlaces = kept.map((p) => ({
-    placeId: p.placeId,
-    name: p.name,
-    category: p.category,
-    type: p.type || "",
-    city: p.city || "London",
-    address: p.address || p.formattedAddress || "",
-    postcode: p.postcode || "",
-    district: p.district || "",
-    website: p.website || "",
-    phone: p.phone || "",
-    googleMapsUri: p.googleMapsUri || "",
-    email: "",
-    instagram: p.instagram || "",
-    facebook: p.facebook || "",
-    lat: p.lat,
-    lng: p.lng,
-    corridor: p.corridor || p.district || "",
-    rating: p.rating ?? null,
-    reviews: p.reviews ?? null,
-  }));
-
-  const tsPath = path.join(ROOT, "client/src/pages/admin/apparelMapData.ts");
-  const ts = `export type ApparelPlace = {
-  placeId: string;
-  name: string;
-  category: string;
-  type: string;
-  city: string;
-  address: string;
-  postcode: string;
-  district: string;
-  website: string;
-  phone: string;
-  googleMapsUri: string;
-  email: string;
-  instagram: string;
-  facebook: string;
-  lat: number;
-  lng: number;
-  corridor: string;
-  rating: number | null;
-  reviews: number | null;
-};
-
-/** Lambeth Places scrape (Google). Emails are empty — enrich via Outscraper after map select. */
-export const APPAREL_PLACES: ApparelPlace[] = ${JSON.stringify(mapPlaces, null, 2)};
-`;
-  fs.writeFileSync(tsPath, ts);
-
   const byCat = {};
   for (const p of kept) byCat[p.category] = (byCat[p.category] || 0) + 1;
   console.log(`Raw ${all.length} → cleaned ${kept.length} (dropped ${all.length - kept.length})`);
   console.log("By category:", byCat);
   console.log(`website=${kept.filter((p) => p.website).length} phone=${kept.filter((p) => p.phone).length} social=${kept.filter((p) => p.instagram || p.facebook).length}`);
   console.log("Wrote", cleanedPath);
-  console.log("Wrote", tsPath);
+  console.log("Wrote", path.join(OUT_DIR, "lambeth_places_list.csv"));
+  console.log("Note: admin map is claimed-businesses only — does not ingest this scrape.");
 }
 
 main();
