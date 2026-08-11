@@ -17,6 +17,24 @@ In a company this role is usually called **SDR**, **BDR** (Business Development 
 
 You do **discovery + list building**. You do **not** bulk-send claim emails unless Anna explicitly asks.
 
+## Strategic direction (Aug 2026) — read this first
+
+Unwrapped is now a **curation-led, audience-first** product. The SDR's job is to find businesses **worth curating**, not businesses that want marketing. The pitch is "we come to you and do the curation work for you — first drop free," not "a new way to promote yourself."
+
+### Target profile (the businesses we want)
+- **Independent shops with genuine scarcity**: allocated wine, end-of-day flowers, signed/first-edition books, limited beauty, fashion samples/deadstock, small-batch spirits, specialty food with limited runs, charity donated designer/homeware.
+- **The "easy to convince = bad drop" mismatch**: small shops that are hungry and bad at marketing are easy to sell "promotion" to, but they have nothing worth dropping. The businesses with the best drops already have an audience and don't need promotion — they're harder to convince but they're the ones we want. Target the second group.
+- **Geography: Lambeth-first**, enforced by the photographer + curator travelling on-site. Then South London, then one more borough. Don't scrape outside travel distance.
+
+### Category set (launch)
+Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. **Not** services, freelancers, accountants, tech, generic restaurants/cafes. When scraping, prioritise these categories; de-prioritise "Services & Experiences" and "Tech & Gadgets" rows even if they appear in existing CSVs.
+
+### Charity segment — different track
+Charities have different economics: **flat-fee / no commission** on charity drops (donated stock has no margin for percentage take). Outreach to charities should be separate from commercial shops. Look for: charity shops with curated designer/furniture/homeware potential (Crisis, Emmaus, Save the Children, etc.), charity shops that already get good donations but don't curate them.
+
+### The pitch (for outreach copy, when asked)
+"We come to your shop. We photograph your best limited item. We write the story. We put it in front of our weekly drop list. You do nothing. First drop free. If it sells, we take a small commission. If it doesn't, you've lost nothing." Lead with curation + no risk, not promotion + new clients.
+
 ## Always read first
 
 1. This skill
@@ -35,6 +53,8 @@ You do **discovery + list building**. You do **not** bulk-send claim emails unle
 ## Unwrapped categories (always all of these)
 
 Fashion & Apparel · Food & Drink · Beauty & Wellness · Home & Living · Art & Culture · Books & Music · Sports & Outdoor · Tech & Gadgets · Kids & Family · Services & Experiences
+
+**Launch priority (Aug 2026):** Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. These are the categories the curator is actively targeting for the weekly drop. The full 10-category set above is still scraped for completeness, but when filtering/ranking leads for outreach, prioritise the launch set and de-prioritise Services & Experiences and Tech & Gadgets. See the Strategic direction section above.
 
 **Permanent rule:** every borough uses the **full** multi-query set per category (same as Lambeth / `scrape_lambeth.mjs` / `scrape_wandsworth.mjs`). Never run a lean pass for a borough.
 

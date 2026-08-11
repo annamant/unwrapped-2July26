@@ -34,6 +34,28 @@ You already know the brand, the job, and the tools. The human briefs you when th
 
 Repo visuals: `brand/` + `brand/README.md`.
 
+## Strategic direction (Aug 2026) — read this first
+
+Unwrapped is now a **curation-led, audience-first** product, not a marketplace launch. The platform/website stays as-is (marketplace shape), but the first 12–18 months of work happen **off-platform**: one curated drop a week, manually produced, distributed via Instagram and a weekly email.
+
+### The operating model
+- A **photographer + curator** go on-site to the shop and produce the first few drops — photography, copy, story. The business does nothing.
+- **First drop free.** Commission on completed reservations after that: 18% tapering to ~10% at 5+ drops. **Charity drops are flat-fee / no commission** — different economics, different outreach.
+- The **curator picks the item**, not the business. The business has veto power. This editorial act is the curation signal that makes the audience trust the next drop.
+- Cadence is **one drop a week**, set by operational capacity (photographer + curator can do ~1–2 shoots/week), not by ambition.
+- Geography is **Lambeth-first**, enforced by travel distance for on-site shoots. Then South London, then one more borough.
+
+### What this means for marketing
+- **Instagram is the primary channel** for the weekly drop. The drop is announced, teased, and revealed on Instagram; the email is the weekly digest.
+- **Voice = curator voice**, not marketplace voice. Editorial, one item, one story, one reason. Not "browse many drops from many businesses."
+- **Content pillars shift**: the weekly drop is the hero. Story of the drop, the maker/shop, the curator's note, behind-the-scenes from the shoot, the collection moment.
+- **Emails are weekly, not daily.** One drop, one email. Cadence honesty: "we'll only email when a drop matches your taste — usually once a week."
+- **Posters/materials reflect curation**: single item, editorial, story-led. NOT marketplace breadth (many categories, many businesses, "browse drops near you").
+- **The pitch to businesses** (for any business-facing creative) is: "We come to your shop. We photograph your best limited item. We write the story. We put it in front of our weekly drop list. You do nothing. First drop free." Lead with curation + no risk, not promotion + new clients.
+
+### Category set (launch)
+Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. **Not** services, freelancers, accountants, tech, generic restaurants/cafes (TGTG-adjacent). Marketing materials should show this set, not the full 10-category marketplace list.
+
 ## How the human works with you
 
 They do **not** need a fixed schedule. Typical briefs:
@@ -114,9 +136,9 @@ LinkedIn / X / TikTok only after a playbook exists for that channel (create when
 
 ## Hard rules
 
-- Voice: local, urgent, independent (as in neighbourhood independents — shops, freelancers, services, charities) — never corporate SaaS or hype-bro
+- Voice: local, urgent, independent (as in neighbourhood independents — wine merchants, florists, bookshops, beauty, fashion, spirits, specialty food, charities) — never corporate SaaS or hype-bro
 - Market: **London** · links: shopunwrapped.com / shopunwrapped.com/instagram
-- One-liner (locked): **Limited local drops, reserved in seconds.** Never “people and places.” Supply-side body uses proof set (shops, restaurants, freelancers, services, charities…) — never “shops only” or bare “local businesses”; see brand-bible.md
+- One-liner (locked): **Limited local drops, reserved in seconds.** Supply-side body uses the launch category set (wine, flowers, books, beauty, fashion, spirits, specialty food, charity) — **not** services, freelancers, accountants, tech, or generic restaurants/cafes; see brand-bible.md and the Strategic direction section above
 - Support when needed: anna@shopunwrapped.com
 - No invented metrics, partner names, or live counts — use `[VERIFY]` or check the site
 - No auto-publish; no secrets in the repo
