@@ -760,25 +760,23 @@ export default function Landing() {
             fontWeight: 700, color: FG,
             lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 18,
           }}>
-            Drop when you want.
+            We come to your shop.
             <br />
-            <em style={{ fontStyle: "italic", color: V }}>We bring the street to you.</em>
+            <em style={{ fontStyle: "italic", color: V }}>We do the curation for you.</em>
           </h2>
 
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 14, maxWidth: 440, fontWeight: 300,
           }}>
-            Early businesses aren't customers of a finished product — you're partners.
-            Charity shops, salons, cafés, freelancers, accountants: if it's on your street,
-            it belongs here.
+            A curator and photographer visit you, choose one carefully selected item,
+            photograph it, and write its story. We put it in front of our weekly drop list.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 420, fontWeight: 300,
           }}>
-            No daily posting grind. Publish a drop in minutes when you have something to share —
-            a quiet slot, a special, something you're proud of.
+            You do nothing. First drop free.
           </p>
 
           <a
@@ -798,16 +796,16 @@ export default function Landing() {
         <div style={{ border: `1px solid ${BORDER}`, boxShadow: `8px 8px 0 ${MUTED}` }}>
           {[
             {
-              label: "On your terms",
-              body: "Your window, your quantity, your call. Drop when it's convenient.",
+              label: "We photograph it",
+              body: "A photographer comes to your shop and shoots one item — properly, on-site.",
             },
             {
-              label: "Reach people nearby",
-              body: "We help you show what you do to locals who already care — and fill quiet moments.",
+              label: "We write it",
+              body: "A curator writes the story behind the item — why it's worth a drop.",
             },
             {
-              label: "Built with you",
-              body: "Tell us what works. Early partners shape Unwrapped. We're in this together.",
+              label: "We put it in front of our audience",
+              body: "Your drop goes to our weekly drop list. You do nothing. First drop free.",
             },
           ].map(({ label, body }, i) => (
             <div

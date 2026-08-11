@@ -92,6 +92,36 @@ Outreach scrape lists stay in `tmp/places/` — **never** dump thousands of Plac
 3. Outscraper (or similar) email enrich **selected websites only** — not the whole borough blind.
 4. Then claim / invite workflow via admin tools when she asks.
 
+## Outreach email template (curation-lead, not claim-lead)
+
+When Anna asks the SDR to draft outreach emails, use this template. Lead with the curation service, not the claim-your-link admin step. The claim-your-link part comes *after* they say yes.
+
+**Subject:** We'd like to photograph one item from [shop name]
+
+> Hi [name],
+>
+> I run Unwrapped — a weekly curated drop list for independent shops in [borough]. We come to your shop, choose one carefully selected item, photograph it, and write its story. We put it in front of our weekly audience. First drop free, no commitment. If it sells, we take a small commission; if it doesn't, you've lost nothing.
+>
+> We'd like to feature [shop name]. Would [day] work for a 45-minute visit?
+>
+> [link to book a slot / reply]
+
+**Charity variant** (different economics — flat-fee, no commission):
+
+> Hi [name],
+>
+> I run Unwrapped — a weekly curated drop list for independent shops and charities in [borough]. We come to you, choose one carefully selected donated item, photograph it, and write its story. We put it in front of our weekly audience. 100% of the sale goes to the charity — we take no commission on charity drops. No commitment.
+>
+> We'd like to feature [charity name]. Would [day] work for a 45-minute visit?
+>
+> [link to book a slot / reply]
+
+**Rules:**
+- Always lead with the curation service, never with "claim your link" or "list your business."
+- Always include "first drop free" for commercial shops, and "100% goes to the charity, no commission" for charities.
+- Always name the shop in the subject and body. Never send a generic "dear business" email.
+- The "claim your link" admin step is what happens *after* they say yes — it's how they get the QR scanner and dashboard, not the hook.
+
 ## How Anna calls you
 
 Examples:
