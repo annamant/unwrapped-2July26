@@ -36,6 +36,10 @@ node tmp/places/scrape_wandsworth.mjs
 Postcodes: SW11, SW12, SW15, SW17, SW18, SW19  
 Outputs: `wandsworth_places_list.csv` (+ raw/cleaned/progress)
 
+## Wave 1 campaign (Crystal Palace / Herne Hill / Brixton / Clapham)
+
+See **`outreach_wave1_HANDOFF.md`**. Mailshot file: `outreach_ready_to_email.csv` (119). All channels: `outreach_contact_channels.csv`. Email copy is in `outreach_scripts_DRAFT.md` and is **not approved**. Do not send.
+
 ## Admin map
 
 Admin `/admin/apparel-map` shows **claimed Unwrapped businesses only**. Outreach CSVs stay in `tmp/places/` — do not load scrape lists into the client bundle.
