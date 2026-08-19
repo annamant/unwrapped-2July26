@@ -3,9 +3,11 @@ import { useLocation } from "wouter";
 import { format } from "date-fns";
 import { trpc } from "../trpc";
 import DropMap, { toDropPin } from "../components/DropMap";
+import DirectoryMap from "../components/DirectoryMap";
 import DropPrice from "../components/DropPrice";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
+import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 
 // Design tokens — Unwrapped Design System
 const BG = "#FAFAF8";
@@ -279,17 +281,6 @@ export default function Landing() {
         borderBottom: `1px solid ${BORDER}`,
       }}>
         <div aria-hidden style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-          <div
-            className="uw-hero-map"
-            style={{
-              position: "absolute", inset: "-6%",
-              backgroundImage: "url(/email-london-map.jpg)",
-              backgroundSize: "cover",
-              backgroundPosition: "center 42%",
-              opacity: 0.2,
-              filter: "grayscale(0.4) contrast(0.95) brightness(1.08)",
-            }}
-          />
           <div style={{
             position: "absolute", inset: 0,
             background: `
@@ -429,57 +420,7 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Tiny mock London map — fades into space */}
-          <div
-            className="uw-fade-3"
-            aria-hidden
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              height: isMobile ? 220 : 340,
-              marginRight: isMobile ? 0 : -12,
-              maskImage: "radial-gradient(ellipse 95% 88% at 42% 50%, black 42%, transparent 82%)",
-              WebkitMaskImage: "radial-gradient(ellipse 95% 88% at 42% 50%, black 42%, transparent 82%)",
-            }}
-          >
-            <img
-              src="/email-london-map.jpg"
-              alt=""
-              style={{
-                display: "block",
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "35% 45%",
-                opacity: 0.95,
-                filter: "grayscale(0.05) contrast(1.02) brightness(1.02)",
-                transform: "scale(1.08)",
-              }}
-            />
-            {[
-              { top: "26%", left: "32%" },
-              { top: "40%", left: "46%" },
-              { top: "54%", left: "56%" },
-              { top: "34%", left: "62%" },
-            ].map((pos, i) => (
-              <span
-                key={i}
-                className="uw-pulse-dot"
-                style={{
-                  position: "absolute",
-                  top: pos.top,
-                  left: pos.left,
-                  width: 9,
-                  height: 9,
-                  borderRadius: "50%",
-                  background: V,
-                  border: `2px solid ${BG}`,
-                  boxShadow: "0 2px 6px rgba(20,18,16,0.2)",
-                  animationDelay: `${i * 0.35}s`,
-                }}
-              />
-            ))}
-          </div>
+          {/* (Removed) hero mock map image */}
         </div>
 
         <div
@@ -552,26 +493,90 @@ export default function Landing() {
               fontWeight: 700, color: FG, lineHeight: 1.15,
               letterSpacing: "-0.8px", marginBottom: 20, maxWidth: 640,
             }}>
-              We're not live yet — and that's exactly why{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>you</em> matter.
+              We're starting drops — and that's why we need all the help from the{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>community</em>.
             </h2>
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
               color: FG, lineHeight: 1.7, marginBottom: 16, maxWidth: 580, fontWeight: 300,
             }}>
-              Unwrapped only works if shoppers and neighbourhood businesses build it together.
-              Shoppers who sign up now aren't waiting on the sidelines — you're the first we'll tell
-              when drops go live. Businesses boarding now aren't buying a finished product —
-              you're making the drops happen.
+              Unwrapped is starting local. We launch one neighbourhood at a time —
+              and the map becomes real when real shops step in early and shoppers sign up early.
             </p>
 
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-              color: MUTED_FG, lineHeight: 1.65, marginBottom: 28, maxWidth: 540,
-            }}>
-              We need you. This only becomes real if you're in it with us.
-            </p>
+            <div style={{ marginBottom: 28, maxWidth: 540 }}>
+              <div style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 9,
+                color: V,
+                letterSpacing: "0.14em",
+                marginBottom: 12,
+              }}>
+                FOUNDING MEMBER PERKS
+              </div>
+
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+                <div style={{
+                  border: `1px solid ${BORDER}`,
+                  background: BG,
+                  borderRadius: 999,
+                  padding: "10px 14px",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 14,
+                  color: MUTED_FG,
+                  lineHeight: 1.4,
+                }}>
+                  We come to your shop
+                </div>
+                <div style={{
+                  border: `1px solid ${BORDER}`,
+                  background: BG,
+                  borderRadius: 999,
+                  padding: "10px 14px",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 14,
+                  color: MUTED_FG,
+                  lineHeight: 1.4,
+                }}>
+                  Help pick your first limited item
+                </div>
+                <div style={{
+                  border: `1px solid ${BORDER}`,
+                  background: BG,
+                  borderRadius: 999,
+                  padding: "10px 14px",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 14,
+                  color: MUTED_FG,
+                  lineHeight: 1.4,
+                }}>
+                  First drop is free
+                </div>
+                <div style={{
+                  border: `1px solid ${BORDER}`,
+                  background: BG,
+                  borderRadius: 999,
+                  padding: "10px 14px",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 14,
+                  color: MUTED_FG,
+                  lineHeight: 1.4,
+                }}>
+                  Priority when drops roll into your area
+                </div>
+              </div>
+
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 15,
+                color: MUTED_FG,
+                lineHeight: 1.65,
+                margin: 0,
+              }}>
+                Apply as a Founding Member.
+              </p>
+            </div>
 
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <button
@@ -584,7 +589,7 @@ export default function Landing() {
                   border: "none", cursor: "pointer",
                 }}
               >
-                JOIN AS A SHOPPER
+                BECOME A FOUNDING MEMBER — SHOPPER
               </button>
               <a
                 href="/business-apply"
@@ -596,11 +601,18 @@ export default function Landing() {
                   textDecoration: "none", display: "inline-block", background: "transparent",
                 }}
               >
-                JOIN AS A BUSINESS
+                BECOME A FOUNDING MEMBER — BUSINESS
               </a>
             </div>
           </div>
         </section>
+      )}
+
+      {/* ── 2b. MAP — London is real ── */}
+      {PRE_LAUNCH ? (
+        <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS} />
+      ) : (
+        <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
       )}
 
       {/* ── 3. SAMPLES — desire ── */}
@@ -882,12 +894,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 6. MAP — London is real ── */}
-      <MapSection
-        drops={drops ?? []}
-        onDropClick={(id) => navigate(`/drop/${id}`)}
-      />
-
       {/* ── 7. CLOSE — final convert ── */}
       <section style={{
         padding: isMobile ? "56px 20px" : "80px 40px",
@@ -1160,6 +1166,275 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
           zoom={13}
           height={isMobile ? "360px" : "520px"}
         />
+      </div>
+    </section>
+  );
+}
+
+function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) {
+  const isMobile = useIsMobile();
+  const [search, setSearch] = useState("");
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
+  const [focusedId, setFocusedId] = useState<string | undefined>(undefined);
+  const [focusedFromList, setFocusedFromList] = useState(false);
+
+  const normalized = search.trim().toLowerCase();
+  const filteredPins = useMemo(() => {
+    if (!normalized) return pins;
+    return pins.filter((p) => {
+      const hay = `${p.name} ${p.address ?? ""} ${p.postcode ?? ""} ${p.district ?? ""} ${p.track ?? ""} ${p.type ?? ""}`.toLowerCase();
+      return hay.includes(normalized);
+    });
+  }, [pins, normalized]);
+
+  useEffect(() => {
+    if (!focusedId) return;
+    if (!filteredPins.some((p) => p.id === focusedId)) setFocusedId(undefined);
+  }, [filteredPins, focusedId]);
+
+  async function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (!search.trim()) return;
+    try {
+      const resp = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
+        { headers: { "Accept-Language": "en" } }
+      );
+      const data = await resp.json();
+      if (data[0]) {
+        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+      }
+    } catch {
+      // silently ignore network errors
+    }
+  }
+
+  return (
+    <section style={{ borderBottom: `1px solid ${BORDER}` }}>
+      <div style={{
+        padding: isMobile ? "28px 20px" : "40px 40px 28px",
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 0.95fr) minmax(0, 1.05fr)",
+        gap: 20,
+        alignItems: "start",
+      }}>
+        <div>
+          <div style={{
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 9,
+            color: MUTED_FG,
+            letterSpacing: "0.15em",
+            marginBottom: 12,
+          }}>
+            LONDON · GETTING READY
+          </div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 24 : 30,
+            fontWeight: 700,
+            color: FG,
+            letterSpacing: "-0.6px",
+            lineHeight: 1.15,
+            marginBottom: 8,
+          }}>
+            Help build the map
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 14,
+            color: MUTED_FG,
+            lineHeight: 1.6,
+            maxWidth: 520,
+            fontWeight: 300,
+            marginBottom: 12,
+          }}>
+            {filteredPins.length === 0
+              ? "No matches — clear your search to see the full curated board."
+              : "We’re building this map together: shoppers nominate shops and businesses apply to be listed. Click a listing to focus on the map."}
+          </p>
+
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+            <a
+              href="/business-apply"
+              style={{
+                background: FG,
+                color: BG,
+                textDecoration: "none",
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 12,
+                letterSpacing: "0.06em",
+                padding: "12px 18px",
+                border: "none",
+                borderRadius: 12,
+                boxShadow: "0 10px 26px rgba(0,0,0,0.10)",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              LIST YOUR BUSINESS
+            </a>
+            <a
+              href="/recommend"
+              style={{
+                background: "transparent",
+                color: FG,
+                textDecoration: "none",
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 12,
+                letterSpacing: "0.06em",
+                padding: "11px 18px",
+                border: `1px solid ${FG}`,
+                borderRadius: 12,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              NOMINATE A SHOP
+            </a>
+          </div>
+
+          <form
+            onSubmit={handleSearch}
+            style={{
+              display: "flex",
+              gap: 0,
+              width: "100%",
+              boxShadow: "none",
+            }}
+          >
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                padding: "12px 16px",
+                border: `1px solid ${BORDER}`,
+                borderRight: "none",
+                background: BG,
+                color: FG,
+                outline: "none",
+                width: "100%",
+              }}
+              placeholder="Search an area, postcode, or shop name…"
+            />
+            <button
+              type="submit"
+              className="uw-btn-primary"
+              style={{
+                background: FG,
+                color: BG,
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                padding: "12px 22px",
+                border: "none",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              GO
+            </button>
+          </form>
+
+          <div style={{
+            border: `1px solid ${BORDER}`,
+            background: MUTED,
+            marginTop: 16,
+            maxHeight: isMobile ? 360 : 520,
+            overflowY: "auto",
+          }}>
+            {filteredPins.length === 0 ? (
+              <div style={{
+                padding: 20,
+                textAlign: "center",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                color: MUTED_FG,
+              }}>
+                No matches.
+              </div>
+            ) : (
+              filteredPins.map((p) => {
+                const focused = focusedId === p.id;
+                return (
+                  <div
+                    key={p.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => {
+                      setFocusedFromList(true);
+                      setFocusedId(p.id);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        setFocusedFromList(true);
+                        setFocusedId(p.id);
+                      }
+                    }}
+                    style={{
+                      padding: "14px 16px",
+                      borderBottom: `1px solid ${BORDER}`,
+                      cursor: "pointer",
+                      background: focused ? "rgba(232,52,28,0.06)" : MUTED,
+                    }}
+                  >
+                    <div style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 14,
+                      color: FG,
+                      fontWeight: 600,
+                      marginBottom: 4,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 10,
+                    }}>
+                      <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {p.name}
+                      </span>
+                      {focused ? (
+                        <span style={{
+                          fontFamily: "'Space Mono', monospace",
+                          fontSize: 9,
+                          color: V,
+                          letterSpacing: "0.12em",
+                          flexShrink: 0,
+                        }}>
+                          FOCUSED
+                        </span>
+                      ) : null}
+                    </div>
+                    <div style={{
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: 10,
+                      color: MUTED_FG,
+                      letterSpacing: "0.08em",
+                      lineHeight: 1.45,
+                    }}>
+                      {p.postcode ? p.postcode : p.district ?? "—"}
+                      {p.track ? ` · ${p.track}` : ""}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 0 }}>
+          <DirectoryMap
+            pins={filteredPins}
+            defaultLat={mapCenter.lat}
+            defaultLng={mapCenter.lng}
+            zoom={13}
+            height={isMobile ? "360px" : "520px"}
+            focusedId={focusedFromList ? focusedId : focusedId}
+          />
+        </div>
       </div>
     </section>
   );
