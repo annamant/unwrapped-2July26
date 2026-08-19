@@ -324,9 +324,8 @@ export default function Landing() {
                 marginBottom: 20,
               }}
             >
-              Limited local drops.
-              <br />
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>Reserved in seconds.</em>
+              Limited local drops,{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>reserved in seconds.</em>
             </h1>
 
             <p
@@ -337,10 +336,9 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Unwrapped is where shops, restaurants, cafés,
-              salons, freelancers, services, and{" "}
-              <em style={{ fontStyle: "italic" }}>charities</em>
-              {" "}(we love them) release time-limited drops. You reserve, then collect with a QR code.
+              Imagine your favourite high street as a map.
+              Local businesses add something special for a limited window — right where you are.
+              You reserve in seconds, then collect with a QR code.
             </p>
 
             <div
@@ -369,7 +367,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  Be ready when drops start
+                  Get notified first when drops go live
                 </div>
                 <button
                   onClick={() => navigate("/signin")}
@@ -381,7 +379,7 @@ export default function Landing() {
                     border: "none", cursor: "pointer", width: "100%",
                   }}
                 >
-                  SIGN UP — BE READY
+                  SIGN UP — GET NOTIFIED FIRST
                 </button>
               </div>
 
@@ -401,7 +399,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   color: FG, marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  Get on the map
+                  Become a Founding Business
                 </div>
                 <a
                   href="/business-apply"
@@ -414,7 +412,7 @@ export default function Landing() {
                     background: "transparent",
                   }}
                 >
-                  LIST YOUR BUSINESS
+                  BECOME A FOUNDING BUSINESS
                 </a>
               </div>
             </div>
@@ -513,7 +511,7 @@ export default function Landing() {
                 letterSpacing: "0.14em",
                 marginBottom: 12,
               }}>
-                FOUNDING MEMBER PERKS
+                BUSINESS FOUNDING MEMBER PERKS
               </div>
 
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
@@ -567,6 +565,61 @@ export default function Landing() {
                 </div>
               </div>
 
+              <div style={{
+                marginTop: 18,
+                paddingTop: 14,
+                borderTop: `1px solid ${BORDER}`,
+              }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: 9,
+                  color: V,
+                  letterSpacing: "0.14em",
+                  marginBottom: 12,
+                }}>
+                  SHOPPER FOUNDING MEMBER PERKS
+                </div>
+
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+                  <div style={{
+                    border: `1px solid ${BORDER}`,
+                    background: BG,
+                    borderRadius: 999,
+                    padding: "10px 14px",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 14,
+                    color: MUTED_FG,
+                    lineHeight: 1.4,
+                  }}>
+                    Get notified first when drops go live in your area
+                  </div>
+                  <div style={{
+                    border: `1px solid ${BORDER}`,
+                    background: BG,
+                    borderRadius: 999,
+                    padding: "10px 14px",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 14,
+                    color: MUTED_FG,
+                    lineHeight: 1.4,
+                  }}>
+                    Nominate shops on the map
+                  </div>
+                  <div style={{
+                    border: `1px solid ${BORDER}`,
+                    background: BG,
+                    borderRadius: 999,
+                    padding: "10px 14px",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 14,
+                    color: MUTED_FG,
+                    lineHeight: 1.4,
+                  }}>
+                    Be ready to reserve when your neighbourhood drops open
+                  </div>
+                </div>
+              </div>
+
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15,
@@ -574,7 +627,7 @@ export default function Landing() {
                 lineHeight: 1.65,
                 margin: 0,
               }}>
-                Apply as a Founding Member.
+                Choose your role below.
               </p>
             </div>
 
