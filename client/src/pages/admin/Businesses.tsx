@@ -418,7 +418,7 @@ export default function AdminBusinesses() {
                         {b.city ?? "—"} · {b.ownerEmail} · claimed {b.ownerCreatedAt ? new Date(b.ownerCreatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "—"}
                       </div>
                       <div style={{ marginTop: 4 }}>
-                        <a href={`https://shopunwrapped.com/business/${b.slug}`} target="_blank" rel="noreferrer"
+                        <a href={`/business/${b.slug}`} target="_blank" rel="noreferrer"
                            style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: "0.08em" }}>
                           VIEW PROFILE
                         </a>

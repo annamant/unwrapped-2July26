@@ -26,7 +26,8 @@ export const businessesRouter = router({
         .where(eq(businesses.slug, input.slug))
         .limit(1);
 
-      if (!biz || biz.status !== "active") {
+      const isAdminViewer = ctx.user?.role === "admin";
+      if (!biz || (biz.status !== "active" && !isAdminViewer)) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });
       }
 
