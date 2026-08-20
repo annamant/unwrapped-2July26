@@ -183,9 +183,23 @@ const LANDING_CSS = `
   scroll-snap-align: start;
 }
 .uw-step {
-  transition: background 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
-.uw-step:hover { background: ${MUTED} !important; }
+.uw-step:hover {
+  background: ${MUTED} !important;
+  border-color: ${FG} !important;
+  transform: translateY(-2px);
+}
+.uw-step-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${V};
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
 @media (prefers-reduced-motion: reduce) {
   .uw-fade-1, .uw-fade-2, .uw-fade-3, .uw-fade-4,
   .uw-hero-map, .uw-pulse-dot, .uw-marquee-track { animation: none !important; }
@@ -485,96 +499,190 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — look in → see → buy → collect ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "72px 40px",
-        borderBottom: `1px solid ${BORDER}`,
-        background: MUTED,
-      }}>
+      {/* ── 2. HOW IT WORKS — look in → see → claim → collect ── */}
+      <section style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 9,
-          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
+          background: FG,
+          color: BG,
+          padding: isMobile ? "44px 20px 36px" : "56px 40px 48px",
         }}>
-          HOW IT WORKS
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: V, letterSpacing: "0.15em", marginBottom: 16,
+          }}>
+            <span
+              className="uw-pulse-dot"
+              style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
+            />
+            HOW IT WORKS
+          </div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 30 : 44,
+            fontWeight: 700, letterSpacing: "-1px",
+            lineHeight: 1.08, marginBottom: 18, maxWidth: 680,
+          }}>
+            The best of your high street —{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>before it's gone.</em>
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
+            color: "rgba(250,250,248,0.88)", lineHeight: 1.6, maxWidth: 620, fontWeight: 400,
+            marginBottom: 22,
+          }}>
+            That fresh batch. The last salon slot. The piece someone else is already eyeing.
+            Look inside real shops from wherever you are, claim what you want in seconds,
+            and walk over when you're ready — no mystery bag, no wasted trip, no "sorry, we just sold out."
+          </p>
+          <div style={{
+            display: "flex", flexWrap: "wrap", gap: isMobile ? 8 : 12,
+          }}>
+            {[
+              "Limited quantity",
+              "Real photo or clip",
+              "Pay upfront · it's yours",
+              "Collect when you're free",
+            ].map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 9,
+                  letterSpacing: "0.1em", color: BG,
+                  border: "1px solid rgba(250,250,248,0.35)",
+                  padding: "7px 12px",
+                }}
+              >
+                {tag.toUpperCase()}
+              </span>
+            ))}
+          </div>
         </div>
-        <h2 style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: isMobile ? 28 : 36,
-          fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-          lineHeight: 1.15, marginBottom: 12,
-        }}>
-          Your neighbourhood feed.
-        </h2>
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-          color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, marginBottom: 36, fontWeight: 300,
-        }}>
-          On the sofa. At your desk. On the bus home. Open Unwrapped and look inside the shops
-          around you — as if you were standing at the counter. See what's ready, claim it in a tap,
-          then walk over when you're free. Fun. Easy. Local — without the wasted trip.
-        </p>
 
         <div style={{
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
-          gap: isMobile ? 16 : 0,
+          padding: isMobile ? "28px 20px 40px" : "36px 40px 56px",
+          background: BG,
         }}>
-          {[
-            {
-              n: "01",
-              title: "Look in",
-              body: "From the sofa, the desk, or the bus — peek into shops nearby as if you were there.",
-            },
-            {
-              n: "02",
-              title: "See it",
-              body: "A photo or short video of the real thing — not a mystery bag.",
-            },
-            {
-              n: "03",
-              title: "Buy",
-              body: "Claim the drop and pay in the app before it sells out.",
-            },
-            {
-              n: "04",
-              title: "Collect",
-              body: "Walk in. Show your QR. Done — and you're in the shop.",
-            },
-          ].map(({ n, title, body }, i) => (
-            <div
-              key={n}
-              className="uw-step"
+          <div style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: "stretch",
+            gap: isMobile ? 12 : 0,
+          }}>
+            {[
+              {
+                n: "01",
+                title: "Look in",
+                body: "Open the map and peek inside bakeries, boutiques, and salons near you — from the sofa or the bus.",
+              },
+              {
+                n: "02",
+                title: "See it",
+                body: "Every drop is a real photo or short clip of the actual thing. No guessing. No blind bag.",
+              },
+              {
+                n: "03",
+                title: "Claim it",
+                body: "Tap to pay in the app. It's locked in — before the next person gets there first.",
+              },
+              {
+                n: "04",
+                title: "Collect it",
+                body: "Walk in, show your QR, walk out with it. You're already through the door.",
+              },
+            ].flatMap(({ n, title, body }, i, arr) => {
+              const card = (
+                <div
+                  key={n}
+                  className="uw-step"
+                  style={{
+                    flex: 1,
+                    background: BG,
+                    padding: isMobile ? "22px 20px" : "28px 22px",
+                    border: `1px solid ${BORDER}`,
+                    minWidth: 0,
+                  }}
+                >
+                  <div style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 36,
+                    height: 36,
+                    background: V,
+                    color: BG,
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.05em",
+                    marginBottom: 16,
+                  }}>
+                    {n}
+                  </div>
+                  <h3 style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: isMobile ? 22 : 24, fontWeight: 700, color: FG,
+                    marginBottom: 10, lineHeight: 1.2,
+                  }}>
+                    {title}
+                  </h3>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 14, color: FG, lineHeight: 1.6, fontWeight: 400,
+                    margin: 0,
+                  }}>
+                    {body}
+                  </p>
+                </div>
+              );
+              if (isMobile || i === arr.length - 1) return [card];
+              return [
+                card,
+                <div key={`arrow-${n}`} className="uw-step-arrow" aria-hidden="true">→</div>,
+              ];
+            })}
+          </div>
+
+          <div style={{
+            marginTop: isMobile ? 28 : 32,
+            padding: isMobile ? "20px 18px" : "22px 26px",
+            border: `1px solid ${FG}`,
+            background: MUTED,
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: isMobile ? "flex-start" : "center",
+            justifyContent: "space-between",
+            gap: 16,
+          }}>
+            <p style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: isMobile ? 20 : 24,
+              fontWeight: 600,
+              color: FG,
+              lineHeight: 1.3,
+              margin: 0,
+              maxWidth: 520,
+            }}>
+              Drops sell out.{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
+                Don't find out when you're already at the shop.
+              </em>
+            </p>
+            <button
+              onClick={() => navigate("/signin")}
+              className="uw-btn-primary"
               style={{
-                background: BG,
-                padding: isMobile ? "24px 22px" : "32px 24px",
-                border: isMobile ? `1px solid ${BORDER}` : undefined,
-                borderTop: !isMobile ? `1px solid ${BORDER}` : undefined,
-                borderBottom: !isMobile ? `1px solid ${BORDER}` : undefined,
-                borderLeft: !isMobile && i === 0 ? `1px solid ${BORDER}` : undefined,
-                borderRight: !isMobile ? `1px solid ${BORDER}` : undefined,
+                flexShrink: 0,
+                background: V, color: BG,
+                fontFamily: "'Space Mono', monospace", fontSize: 10,
+                letterSpacing: "0.1em", padding: "13px 22px",
+                border: "none", cursor: "pointer",
+                width: isMobile ? "100%" : "auto",
               }}
             >
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 42, fontWeight: 700, color: V,
-                opacity: 0.2, lineHeight: 1, marginBottom: 16, letterSpacing: "-2px",
-              }}>
-                {n}
-              </div>
-              <h3 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 20, fontWeight: 600, color: FG,
-                marginBottom: 10, lineHeight: 1.25,
-              }}>
-                {title}
-              </h3>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 14, color: MUTED_FG, lineHeight: 1.65, fontWeight: 300,
-              }}>
-                {body}
-              </p>
-            </div>
-          ))}
+              JOIN THE WAITLIST
+            </button>
+          </div>
         </div>
       </section>
 
@@ -625,24 +733,34 @@ export default function Landing() {
       {/* ── 4. FOUNDING — belonging + convert ── */}
       {PRE_LAUNCH && (
         <section style={{
-          padding: isMobile ? "44px 20px" : "64px 40px",
+          padding: isMobile ? "40px 20px" : "52px 40px",
           borderBottom: `1px solid ${BORDER}`,
           background: `linear-gradient(135deg, ${MUTED} 0%, ${BG} 55%, rgba(232,52,28,0.03) 100%)`,
         }}>
           <div style={{ maxWidth: 820 }}>
             <div style={{
               fontFamily: "'Space Mono', monospace", fontSize: 9,
-              color: V, letterSpacing: "0.14em", marginBottom: 14,
+              color: V, letterSpacing: "0.14em", marginBottom: 12,
             }}>
               PRE-LAUNCH · FOUNDING MEMBERS
             </div>
-            <div style={{ width: 40, height: 3, background: V, marginBottom: 24 }} />
+            <div style={{ width: 40, height: 3, background: V, marginBottom: 20 }} />
+
+            <div style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 9,
+              color: V,
+              letterSpacing: "0.14em",
+              marginBottom: 12,
+            }}>
+              WHY WE NEED YOU
+            </div>
 
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: isMobile ? 28 : 40,
               fontWeight: 700, color: FG, lineHeight: 1.15,
-              letterSpacing: "-0.8px", marginBottom: 20, maxWidth: 640,
+              letterSpacing: "-0.8px", marginBottom: 16, maxWidth: 640,
             }}>
               Be part of something new —{" "}
               <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>a high street that buzzes again.</em>
@@ -650,54 +768,63 @@ export default function Landing() {
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
-              color: FG, lineHeight: 1.7, marginBottom: 16, maxWidth: 580, fontWeight: 300,
+              color: FG, lineHeight: 1.65, marginBottom: isMobile ? 24 : 28, maxWidth: 620, fontWeight: 300,
             }}>
               When shops get seen and neighbours show up, everyone wins —
               more life on the street, more faces through the door, a local that feels alive.
               Founding members help make that real, neighbourhood by neighbourhood.
             </p>
 
-            <div style={{ marginBottom: 28, maxWidth: 540 }}>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: isMobile ? 22 : 0,
+              marginBottom: 24,
+              maxWidth: 760,
+              border: `1px solid ${BORDER}`,
+              background: BG,
+            }}>
               <div style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: 9,
-                color: V,
-                letterSpacing: "0.14em",
-                marginBottom: 12,
+                padding: isMobile ? "18px 18px 0" : "22px 26px",
+                borderRight: isMobile ? "none" : `1px solid ${BORDER}`,
+                borderBottom: isMobile ? `1px solid ${BORDER}` : "none",
               }}>
-                FOUNDING SHOPS
+                <div style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: 9,
+                  color: V,
+                  letterSpacing: "0.14em",
+                  marginBottom: 12,
+                }}>
+                  FOUNDING SHOPS
+                </div>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+                  {[
+                    "Get seen — first drop free",
+                    "We can shoot your first photo or short clip",
+                    "You set the price — no mystery-bag model",
+                    "Priority on the map as your area opens",
+                  ].map((label) => (
+                    <li
+                      key={label}
+                      style={{
+                        display: "flex",
+                        gap: 10,
+                        alignItems: "flex-start",
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: 14,
+                        color: MUTED_FG,
+                        lineHeight: 1.45,
+                      }}
+                    >
+                      <span style={{ color: V, flexShrink: 0, marginTop: 1 }}>—</span>
+                      <span>{label}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-                {[
-                  "Get seen — first drop free",
-                  "We can shoot your first photo or short clip",
-                  "You set the price — no mystery-bag model",
-                  "Priority on the map as your area opens",
-                ].map((label) => (
-                  <div
-                    key={label}
-                    style={{
-                      border: `1px solid ${BORDER}`,
-                      background: BG,
-                      borderRadius: 999,
-                      padding: "10px 14px",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 14,
-                      color: MUTED_FG,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {label}
-                  </div>
-                ))}
-              </div>
-
-              <div style={{
-                marginTop: 18,
-                paddingTop: 14,
-                borderTop: `1px solid ${BORDER}`,
-              }}>
+              <div style={{ padding: isMobile ? "18px" : "22px 26px" }}>
                 <div style={{
                   fontFamily: "'Space Mono', monospace",
                   fontSize: 9,
@@ -707,42 +834,42 @@ export default function Landing() {
                 }}>
                   FOUNDING SHOPPERS
                 </div>
-
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
                   {[
                     "First look when drops open near you",
                     "See into shops before you walk over",
                     "Nominate the local shops you love",
                   ].map((label) => (
-                    <div
+                    <li
                       key={label}
                       style={{
-                        border: `1px solid ${BORDER}`,
-                        background: BG,
-                        borderRadius: 999,
-                        padding: "10px 14px",
+                        display: "flex",
+                        gap: 10,
+                        alignItems: "flex-start",
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: 14,
                         color: MUTED_FG,
-                        lineHeight: 1.4,
+                        lineHeight: 1.45,
                       }}
                     >
-                      {label}
-                    </div>
+                      <span style={{ color: V, flexShrink: 0, marginTop: 1 }}>—</span>
+                      <span>{label}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
-
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 15,
-                color: MUTED_FG,
-                lineHeight: 1.65,
-                margin: 0,
-              }}>
-                Join as a shopper or partner a shop — both help bring your high street to life.
-              </p>
             </div>
+
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 15,
+              color: MUTED_FG,
+              lineHeight: 1.55,
+              margin: "0 0 18px",
+              maxWidth: 560,
+            }}>
+              Join as a shopper or partner a shop — both help bring your high street to life.
+            </p>
 
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <button
