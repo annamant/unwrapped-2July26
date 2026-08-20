@@ -1224,6 +1224,16 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
   );
 }
 
+function normalizeDirectoryName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
@@ -1231,14 +1241,63 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
   const [focusedId, setFocusedId] = useState<string | undefined>(undefined);
   const [focusedFromList, setFocusedFromList] = useState(false);
 
+  const { data: members } = trpc.businesses.directoryMembers.useQuery();
+
+  const directoryPins = useMemo(() => {
+    const memberRows = members ?? [];
+    const memberByName = new Map(
+      memberRows.map((m) => [normalizeDirectoryName(m.name), m]),
+    );
+    const matchedMemberIds = new Set<string>();
+
+    const curated: PrelaunchDirectoryPin[] = pins.map((p) => {
+      const match = memberByName.get(normalizeDirectoryName(p.name));
+      if (!match) return p;
+      matchedMemberIds.add(match.id);
+      return {
+        ...p,
+        isMember: true,
+        slug: match.slug,
+        category: match.category,
+        // Prefer live business address when we have it
+        address: match.address || p.address,
+        postcode: match.postcode || p.postcode,
+      };
+    });
+
+    const extras: PrelaunchDirectoryPin[] = memberRows
+      .filter((m) => !matchedMemberIds.has(m.id))
+      .map((m) => ({
+        id: `member-${m.id}`,
+        name: m.name,
+        lat: m.lat,
+        lng: m.lng,
+        postcode: m.postcode ?? undefined,
+        address: m.address ?? undefined,
+        district: m.city ?? undefined,
+        type: m.category,
+        category: m.category,
+        isMember: true,
+        slug: m.slug,
+      }));
+
+    // Members first in the list, then curated board
+    return [...extras, ...curated].sort((a, b) => {
+      if (!!a.isMember !== !!b.isMember) return a.isMember ? -1 : 1;
+      return a.name.localeCompare(b.name);
+    });
+  }, [pins, members]);
+
   const normalized = search.trim().toLowerCase();
   const filteredPins = useMemo(() => {
-    if (!normalized) return pins;
-    return pins.filter((p) => {
-      const hay = `${p.name} ${p.address ?? ""} ${p.postcode ?? ""} ${p.district ?? ""} ${p.track ?? ""} ${p.type ?? ""}`.toLowerCase();
+    if (!normalized) return directoryPins;
+    return directoryPins.filter((p) => {
+      const hay = `${p.name} ${p.address ?? ""} ${p.postcode ?? ""} ${p.district ?? ""} ${p.track ?? ""} ${p.type ?? ""} ${p.category ?? ""}`.toLowerCase();
       return hay.includes(normalized);
     });
-  }, [pins, normalized]);
+  }, [directoryPins, normalized]);
+
+  const memberCount = directoryPins.filter((p) => p.isMember).length;
 
   useEffect(() => {
     if (!focusedId) return;
@@ -1299,12 +1358,26 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.6,
             maxWidth: 520,
             fontWeight: 300,
-            marginBottom: 12,
+            marginBottom: 8,
           }}>
             {filteredPins.length === 0
               ? "No matches — clear your search to see the full curated board."
-              : "We’re building this map together: shoppers nominate shops and businesses apply to be listed. Click a listing to focus on the map."}
+              : "We’re building this map together: shoppers nominate shops and businesses apply to be listed. Black pins are Unwrapped members."}
           </p>
+          <div style={{
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 10,
+            color: MUTED_FG,
+            letterSpacing: "0.08em",
+            marginBottom: 14,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 14,
+          }}>
+            <span><span style={{ color: V }}>●</span> Curated board</span>
+            <span><span style={{ color: FG }}>●</span> Members{memberCount ? ` · ${memberCount}` : ""}</span>
+            <span>{filteredPins.length} showing</span>
+          </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
             <a
@@ -1432,7 +1505,9 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       padding: "14px 16px",
                       borderBottom: `1px solid ${BORDER}`,
                       cursor: "pointer",
-                      background: focused ? "rgba(232,52,28,0.06)" : MUTED,
+                      background: focused
+                        ? (p.isMember ? "rgba(20,18,16,0.06)" : "rgba(232,52,28,0.06)")
+                        : MUTED,
                     }}
                   >
                     <div style={{
@@ -1449,17 +1524,30 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {p.name}
                       </span>
-                      {focused ? (
-                        <span style={{
-                          fontFamily: "'Space Mono', monospace",
-                          fontSize: 9,
-                          color: V,
-                          letterSpacing: "0.12em",
-                          flexShrink: 0,
-                        }}>
-                          FOCUSED
-                        </span>
-                      ) : null}
+                      <span style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                        {p.isMember ? (
+                          <span style={{
+                            fontFamily: "'Space Mono', monospace",
+                            fontSize: 8,
+                            color: FG,
+                            letterSpacing: "0.1em",
+                            border: `1px solid ${FG}`,
+                            padding: "2px 6px",
+                          }}>
+                            MEMBER
+                          </span>
+                        ) : null}
+                        {focused ? (
+                          <span style={{
+                            fontFamily: "'Space Mono', monospace",
+                            fontSize: 9,
+                            color: p.isMember ? FG : V,
+                            letterSpacing: "0.12em",
+                          }}>
+                            FOCUSED
+                          </span>
+                        ) : null}
+                      </span>
                     </div>
                     <div style={{
                       fontFamily: "'Space Mono', monospace",
@@ -1469,7 +1557,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       lineHeight: 1.45,
                     }}>
                       {p.postcode ? p.postcode : p.district ?? "—"}
-                      {p.track ? ` · ${p.track}` : ""}
+                      {p.isMember && p.category ? ` · ${p.category}` : p.track ? ` · ${p.track}` : ""}
                     </div>
                   </div>
                 );

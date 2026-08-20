@@ -14,23 +14,29 @@ export interface DirectoryMapProps {
   onPinSelect?: (id: string) => void;
 }
 
-function makePinSVG(): string {
+const CURATED_COLOR = "#E8341C";
+const MEMBER_COLOR = "#141210";
+
+function makePinSVG(color: string): string {
   return [
     '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28">',
-    `<circle cx="14" cy="14" r="12" fill="#E8341C" opacity="0.18">`,
+    `<circle cx="14" cy="14" r="12" fill="${color}" opacity="0.18">`,
     '<animate attributeName="r" from="12" to="17" dur="2.2s" repeatCount="indefinite"/>',
     '<animate attributeName="opacity" from="0.18" to="0" dur="2.2s" repeatCount="indefinite"/>',
     "</circle>",
-    `<circle cx="14" cy="14" r="8" fill="#E8341C" />`,
+    `<circle cx="14" cy="14" r="8" fill="${color}" />`,
+    color === MEMBER_COLOR
+      ? `<circle cx="14" cy="14" r="3.5" fill="#FAFAF8" />`
+      : "",
     "</svg>",
   ].join("");
 }
 
-function makeIcon(): L.DivIcon {
+function makeIcon(isMember: boolean): L.DivIcon {
   const size = 28;
   return L.divIcon({
     className: "",
-    html: makePinSVG(),
+    html: makePinSVG(isMember ? MEMBER_COLOR : CURATED_COLOR),
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2 + 4)],
@@ -53,9 +59,36 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
       ? esc(pin.postcode)
       : "—";
 
-  const trackLine = pin.track ? `<div style="font-size:11px;color:#7A7A7A;margin-top:6px">${esc(pin.track)}</div>` : "";
+  if (pin.isMember && pin.slug) {
+    const categoryLine = pin.category
+      ? `<div style="font-size:11px;color:#7A7A7A;margin-top:6px">${esc(pin.category)}</div>`
+      : "";
+    return `
+      <div style="font-family:'DM Sans',sans-serif;min-width:220px">
+        <div style="font-size:10px;color:#141210;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
+          UNWRAPPED MEMBER
+        </div>
+        <div style="font-size:15px;font-weight:700;color:#141210;line-height:1.2;margin-bottom:8px">
+          ${esc(pin.name)}
+        </div>
+        <div style="font-size:13px;color:#141210;margin-bottom:10px;line-height:1.5">
+          ${addressLine}
+        </div>
+        ${categoryLine}
+        <a href="/business/${esc(pin.slug)}"
+           style="display:block;margin-top:12px;background:#141210;color:#FAFAF8;
+                  text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
+                  letter-spacing:0.1em;padding:10px 0;text-align:center">
+          VIEW PROFILE
+        </a>
+      </div>
+    `;
+  }
 
-  // List page controls "claim" in-page; for now we just let users apply.
+  const trackLine = pin.track
+    ? `<div style="font-size:11px;color:#7A7A7A;margin-top:6px">${esc(pin.track)}</div>`
+    : "";
+
   return `
     <div style="font-family:'DM Sans',sans-serif;min-width:220px">
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
@@ -114,15 +147,13 @@ export default function DirectoryMap({
 
   const pinById = useMemo(() => {
     const m = new Map<string, PrelaunchDirectoryPin>();
-    pins.forEach(p => m.set(p.id, p));
+    pins.forEach((p) => m.set(p.id, p));
     return m;
   }, [pins]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container || mapRef.current) return;
-
-    // StrictMode double-effect guard
     if ((container as any)._leaflet_id) return;
 
     injectCSS();
@@ -168,7 +199,6 @@ export default function DirectoryMap({
     mapRef.current.setView([defaultLat, defaultLng], mapRef.current.getZoom(), { animate: true });
   }, [defaultLat, defaultLng]);
 
-  // Expose selection handler to popup button (if we later add one).
   useEffect(() => {
     (window as any).__unwrappedDirectorySelect = (id: string) => onPinSelect?.(id);
     return () => {
@@ -176,15 +206,17 @@ export default function DirectoryMap({
     };
   }, [onPinSelect]);
 
-  // Render/update markers whenever pins change
   useEffect(() => {
     if (!mapRef.current) return;
 
-    markersByIdRef.current.forEach(marker => marker.remove());
+    markersByIdRef.current.forEach((marker) => marker.remove());
     markersByIdRef.current.clear();
 
-    pins.forEach(pin => {
-      const marker = L.marker([pin.lat, pin.lng], { icon: makeIcon() }).addTo(mapRef.current!);
+    pins.forEach((pin) => {
+      const marker = L.marker([pin.lat, pin.lng], {
+        icon: makeIcon(!!pin.isMember),
+        zIndexOffset: pin.isMember ? 200 : 0,
+      }).addTo(mapRef.current!);
       marker.bindPopup(makePopupHTML(pin), {
         closeButton: false,
         className: "uw-popup",
@@ -194,7 +226,6 @@ export default function DirectoryMap({
     });
   }, [pins]);
 
-  // Focus from list interactions
   useEffect(() => {
     if (!mapRef.current) return;
     if (!focusedId) return;
@@ -208,4 +239,3 @@ export default function DirectoryMap({
 
   return <div ref={containerRef} style={{ width: "100%", height }} />;
 }
-

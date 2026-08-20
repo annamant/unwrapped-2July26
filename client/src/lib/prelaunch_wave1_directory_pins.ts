@@ -9,6 +9,11 @@ export type PrelaunchDirectoryPin = {
   type?: string;
   mechanic?: string;
   district?: string;
+  /** Claimed Unwrapped member — shown differently on map/list. */
+  isMember?: boolean;
+  /** Public profile slug when isMember. */
+  slug?: string;
+  category?: string;
 };
 
 export const PRELAUNCH_WAVE1_DIRECTORY_PINS: PrelaunchDirectoryPin[] = [

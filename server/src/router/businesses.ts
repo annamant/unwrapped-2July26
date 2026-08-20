@@ -1,9 +1,11 @@
 import { z } from "zod";
-import { and, eq, desc, count, gte, lte, inArray } from "drizzle-orm";
+import { and, eq, desc, count, gte, lte, inArray, sql } from "drizzle-orm";
 import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, adminProcedure } from "../trpc";
-import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations } from "../db/schema";
+import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations, users } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive } from "../payments/fees";
+
+const UNCLAIMED_OWNER_EMAIL = "unclaimed-directory@shopunwrapped.com";
 
 function generateSlug(name: string): string {
   return name
@@ -15,6 +17,55 @@ function generateSlug(name: string): string {
 }
 
 export const businessesRouter = router({
+
+  // Public: claimed member shops for the landing directory map/list.
+  // Only returns shops with a map pin (location lat/lng).
+  directoryMembers: publicProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db
+      .select({
+        id: businesses.id,
+        name: businesses.name,
+        slug: businesses.slug,
+        category: businesses.category,
+        city: businesses.city,
+        address: businesses.address,
+        postcode: businesses.postcode,
+        lat: sql<number | null>`(
+          SELECT ${locations.latitude} FROM ${locations}
+          WHERE ${locations.businessId} = ${businesses.id}
+          ORDER BY ${locations.createdAt} DESC
+          LIMIT 1
+        )`,
+        lng: sql<number | null>`(
+          SELECT ${locations.longitude} FROM ${locations}
+          WHERE ${locations.businessId} = ${businesses.id}
+          ORDER BY ${locations.createdAt} DESC
+          LIMIT 1
+        )`,
+      })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+        sql`${users.passwordHash} IS NOT NULL`,
+      ))
+      .orderBy(businesses.name);
+
+    return rows
+      .filter((r) => r.lat != null && r.lng != null)
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        slug: r.slug,
+        category: r.category,
+        city: r.city,
+        address: r.address,
+        postcode: r.postcode,
+        lat: r.lat as number,
+        lng: r.lng as number,
+      }));
+  }),
 
   // Public: get a business profile by slug (includes active drops)
   getBySlug: publicProcedure
