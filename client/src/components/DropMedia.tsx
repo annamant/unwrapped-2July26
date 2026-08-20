@@ -1,9 +1,6 @@
 import { resolveDropMediaType, type DropMediaType } from "../lib/dropMedia";
+import { BG, FG, MUTED, MUTED_FG, V } from "../theme";
 
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
-const FG = "#141210";
-const BG = "#FAFAF8";
 
 function VideoBadge({ variant }: { variant: DropMediaProps["variant"] }) {
   if (variant === "thumb") return null;
@@ -15,14 +12,17 @@ function VideoBadge({ variant }: { variant: DropMediaProps["variant"] }) {
       display: "flex",
       alignItems: "center",
       gap: 5,
-      background: FG,
+      background: V,
       color: BG,
-      fontFamily: "'Space Mono', monospace",
-      fontSize: variant === "hero" ? 9 : 8,
-      letterSpacing: "0.12em",
-      padding: variant === "hero" ? "5px 10px" : "4px 8px",
+      fontFamily: "'DM Sans', sans-serif",
+      fontSize: variant === "hero" ? 10 : 9,
+      fontWeight: 800,
+      letterSpacing: "0.04em",
+      padding: variant === "hero" ? "6px 11px" : "5px 9px",
+      borderRadius: 999,
       pointerEvents: "none",
       zIndex: 2,
+      boxShadow: "0 6px 16px rgba(255,45,18,0.35)",
     }}>
       <span aria-hidden style={{ fontSize: variant === "hero" ? 10 : 9 }}>▶</span>
       CLIP

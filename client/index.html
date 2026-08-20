@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unwrapped — see it, claim it, collect it on your high street</title>
     <meta name="description" content="Unwrapped: look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Not mystery bags — local shopping you can see." />
-    <meta name="theme-color" content="#FFF8F5" />
+    <meta name="theme-color" content="#FFF4EF" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -24,12 +24,19 @@
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
-        --vermillion: rgb(232, 52, 28);
-        --black: #020202;
-        --white: #FCFCFC;
-        --grey: #ABABAB;
-        --light: #F4F4F4;
-        --border: #E2E2E2;
+        --vermillion: #FF2D12;
+        --vermillion-deep: #9E1C0E;
+        --vermillion-rich: #C92210;
+        --ink: #3A1610;
+        --cream: #FFF8F4;
+        --bg: #FFF4EF;
+        --muted: #FFE3D7;
+        --muted-fg: #8A564A;
+        --border: #F3C9BC;
+        --black: #9E1C0E;
+        --white: #FFF8F4;
+        --grey: #8A564A;
+        --light: #FFE3D7;
       }
       html {
         -webkit-text-size-adjust: 100%;
@@ -37,8 +44,12 @@
       }
       body {
         font-family: 'DM Sans', sans-serif;
-        background: var(--white);
-        color: var(--black);
+        background: var(--bg);
+        background-image:
+          radial-gradient(ellipse 90% 60% at 10% -10%, rgba(255,90,60,0.22), transparent 55%),
+          radial-gradient(ellipse 70% 50% at 95% 15%, rgba(255,45,18,0.12), transparent 50%),
+          linear-gradient(165deg, #FFF8F4 0%, #FFE8DE 45%, #FFF1EA 100%);
+        color: var(--ink);
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
       }

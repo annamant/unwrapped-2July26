@@ -6,16 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-
-// Design tokens — Unwrapped Design System (live drop energy)
-const BG = "#FFF7F2";
-const FG = "#120E0C";
-const BORDER = "#F2D9CF";
-const MUTED = "#FFE8DE";
-const MUTED_FG = "#6A5E58";
-const V = "#FF2D12";
-const RADIUS = 20;
-const RADIUS_SM = 999; // pill CTAs
+import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 /** Flip to false when real drops go live and the landing should show the live feed again. */
 const PRE_LAUNCH = true;
@@ -131,61 +122,74 @@ const LANDING_CSS = `
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
-.uw-fade-1 { animation: uw-fade-up 0.7s ease both; }
-.uw-fade-2 { animation: uw-fade-up 0.7s ease 0.12s both; }
-.uw-fade-3 { animation: uw-fade-up 0.7s ease 0.24s both; }
-.uw-fade-4 { animation: uw-fade-up 0.7s ease 0.36s both; }
+@keyframes uw-wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+@keyframes uw-pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.uw-fade-1 { animation: uw-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.uw-fade-2 { animation: uw-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.uw-fade-3 { animation: uw-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+.uw-fade-4 { animation: uw-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; }
 .uw-hero-map { animation: uw-map-drift 28s ease-in-out infinite; }
-.uw-pulse-dot { animation: uw-pulse-dot 2.2s ease-in-out infinite; }
+.uw-pulse-dot { animation: uw-pulse-dot 1.6s ease-in-out infinite; }
 .uw-marquee-track {
   display: flex;
   width: max-content;
-  animation: uw-marquee 28s linear infinite;
+  animation: uw-marquee 22s linear infinite;
 }
 .uw-marquee-track:hover { animation-play-state: paused; }
 .uw-btn-primary {
   border-radius: ${RADIUS_SM}px !important;
-  font-weight: 600 !important;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 800 !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
 }
 .uw-btn-primary:hover {
-  background: ${V} !important;
-  color: ${BG} !important;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(232, 52, 28, 0.28);
+  background: #ff4a32 !important;
+  color: #fff !important;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 32px rgba(255, 45, 18, 0.4);
 }
+.uw-btn-primary:active { transform: translateY(0) scale(0.98); }
 .uw-btn-ghost {
   border-radius: ${RADIUS_SM}px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 .uw-btn-ghost:hover {
   border-color: ${V} !important;
   color: ${V} !important;
   background: ${MUTED} !important;
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
 }
 .uw-btn-ghost-dark:hover {
-  border-color: ${BG} !important;
-  background: rgba(255,248,245,0.12) !important;
-  color: ${BG} !important;
-  transform: translateY(-2px);
+  border-color: ${CREAM} !important;
+  background: rgba(255,248,244,0.16) !important;
+  color: ${CREAM} !important;
+  transform: translateY(-3px) scale(1.02);
 }
 .uw-link {
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
 .uw-link:hover { color: ${V} !important; }
 .uw-sample-card {
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
   border-radius: ${RADIUS}px;
   overflow: hidden;
 }
-.uw-sample-card:hover { background: ${MUTED} !important; }
+.uw-sample-card:hover {
+  background: ${MUTED} !important;
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow: 0 18px 40px rgba(158,28,14,0.14);
+}
 .uw-sample-img {
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .uw-sample-card:hover .uw-sample-img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 .uw-sample-carousel {
   display: flex;
@@ -211,7 +215,7 @@ const LANDING_CSS = `
 .uw-step:hover {
   background: ${MUTED} !important;
   border-color: ${V} !important;
-  transform: translateY(-2px);
+  transform: translateY(-3px) rotate(0.4deg);
 }
 .uw-step-arrow {
   display: flex;
@@ -233,20 +237,54 @@ const LANDING_CSS = `
 .uw-live-badge {
   display: inline-flex;
   align-items: center;
+  gap: 7px;
+  background: #fff;
+  color: ${V};
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+  animation: uw-pop 2.8s ease-in-out infinite;
+}
+.uw-sticker {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
   background: ${V};
   color: #fff;
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 14px;
   border-radius: 999px;
-  box-shadow: 0 8px 20px rgba(255,45,18,0.35);
+  transform: rotate(-2deg);
+  box-shadow: 0 8px 20px rgba(255,45,18,0.3);
+}
+.uw-sticker:nth-child(even) { transform: rotate(2deg); }
+.uw-page-wash {
+  background: ${BG_WASH};
+  background-attachment: fixed;
+}
+.uw-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 0;
+  animation: uw-blob-drift 18s ease-in-out infinite;
+}
+@keyframes uw-blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(4%, -3%) scale(1.08); }
+  66% { transform: translate(-3%, 4%) scale(0.94); }
 }
 @media (prefers-reduced-motion: reduce) {
   .uw-fade-1, .uw-fade-2, .uw-fade-3, .uw-fade-4,
-  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track, .uw-float, .uw-float-delay { animation: none !important; }
+  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track, .uw-float, .uw-float-delay, .uw-live-badge, .uw-blob { animation: none !important; }
   .uw-sample-img, .uw-btn-primary, .uw-btn-ghost { transition: none !important; }
 }
 `;
@@ -266,8 +304,22 @@ export default function Landing() {
   }, []);
 
   return (
-    <div style={{ background: BG, color: FG, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="uw-page-wash" style={{ color: FG, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", position: "relative" }}>
       <style>{LANDING_CSS}</style>
+      <div aria-hidden className="uw-blob" style={{
+        top: "12%", left: "-8%", width: 420, height: 420,
+        background: "rgba(255,80,50,0.35)",
+      }} />
+      <div aria-hidden className="uw-blob" style={{
+        top: "48%", right: "-10%", width: 380, height: 380,
+        background: "rgba(255,160,120,0.45)",
+        animationDelay: "-6s",
+      }} />
+      <div aria-hidden className="uw-blob" style={{
+        bottom: "8%", left: "30%", width: 320, height: 320,
+        background: "rgba(255,45,18,0.18)",
+        animationDelay: "-11s",
+      }} />
 
       {/* ── Nav ── */}
       <nav style={{
@@ -275,14 +327,16 @@ export default function Landing() {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: isMobile ? "12px 20px" : "14px 40px",
         borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid transparent",
-        background: scrolled ? "rgba(255,247,242,0.92)" : "rgba(18,14,12,0.55)",
+        background: scrolled
+          ? "linear-gradient(180deg, rgba(255,248,244,0.94), rgba(255,232,222,0.9))"
+          : "rgba(158,28,14,0.35)",
         backdropFilter: "blur(14px)",
         WebkitBackdropFilter: "blur(14px)",
         transition: "border-color 0.2s ease, background 0.2s ease",
       }}>
         <a href="/" style={{
           display: "flex", alignItems: "center", gap: 10,
-          textDecoration: "none", color: scrolled ? FG : "#FFF7F2",
+          textDecoration: "none", color: scrolled ? FG : CREAM,
         }}>
           <img
             src="/logo-mark.svg"
@@ -312,7 +366,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -323,7 +377,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -334,7 +388,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -345,11 +399,11 @@ export default function Landing() {
             className="uw-btn-ghost"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? FG : "#FFF7F2", letterSpacing: "0.02em", fontWeight: 700,
-              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,247,242,0.55)",
+              color: scrolled ? FG : CREAM, letterSpacing: "0.02em", fontWeight: 700,
+              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.55)",
               padding: "9px 18px",
               textDecoration: "none",
-              background: scrolled ? "transparent" : "rgba(255,247,242,0.08)",
+              background: scrolled ? "transparent" : "rgba(255,248,244,0.1)",
               borderRadius: RADIUS_SM,
             }}
           >
@@ -362,12 +416,14 @@ export default function Landing() {
       <section style={{
         position: "relative",
         overflow: "hidden",
+        zIndex: 1,
         background: `
-          radial-gradient(ellipse 80% 60% at 85% 20%, rgba(255,45,18,0.22), transparent 55%),
-          radial-gradient(ellipse 50% 45% at 10% 90%, rgba(255,45,18,0.12), transparent 50%),
-          linear-gradient(165deg, #1A0F0C 0%, #2A1410 45%, #120E0C 100%)
+          radial-gradient(ellipse 80% 70% at 85% -10%, rgba(255,180,140,0.55), transparent 50%),
+          radial-gradient(ellipse 60% 55% at 5% 90%, rgba(255,60,30,0.5), transparent 55%),
+          radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,100,70,0.25), transparent 60%),
+          linear-gradient(155deg, #E8341C 0%, ${V_RICH} 35%, ${V_DEEP} 70%, #6B1209 100%)
         `,
-        color: "#FFF7F2",
+        color: CREAM,
       }}>
         <div style={{
           position: "relative",
@@ -390,7 +446,7 @@ export default function Landing() {
               <span className="uw-live-badge">
                 <span
                   className="uw-pulse-dot"
-                  style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: 8, height: 8, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
                 />
                 LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
               </span>
@@ -400,15 +456,15 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "clamp(38px, 6vw, 72px)",
-                fontWeight: 800, color: "#FFF7F2",
-                lineHeight: 0.98, letterSpacing: "-2.2px",
+                fontSize: "clamp(40px, 6.2vw, 76px)",
+                fontWeight: 800, color: CREAM,
+                lineHeight: 0.96, letterSpacing: "-2.4px",
                 marginBottom: 18,
               }}
             >
               A new way to shop your high street.
               <br />
-              <em style={{ fontStyle: "italic", fontWeight: 500, color: V }}>
+              <em style={{ fontStyle: "italic", fontWeight: 500, color: "#FFD2C2" }}>
                 See it. Claim it. Collect it.
               </em>
             </h1>
@@ -417,7 +473,7 @@ export default function Landing() {
               className="uw-fade-3"
               style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
-                color: "rgba(255,247,242,0.78)", lineHeight: 1.5, marginBottom: 28, fontWeight: 400,
+                color: "rgba(255,248,244,0.82)", lineHeight: 1.5, marginBottom: 28, fontWeight: 500,
                 maxWidth: 480,
               }}
             >
@@ -429,23 +485,29 @@ export default function Landing() {
             <div
               className="uw-fade-4"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-                maxWidth: 420,
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: 12,
+                maxWidth: 520,
               }}
             >
-              <div>
+              <div style={{
+                background: "rgba(255,248,244,0.1)",
+                border: "1px solid rgba(255,248,244,0.18)",
+                borderRadius: 18,
+                padding: "16px 16px 18px",
+                backdropFilter: "blur(8px)",
+              }}>
                 <div style={{
                   fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                  letterSpacing: "0.08em", color: "rgba(255,247,242,0.5)", marginBottom: 6,
-                  fontWeight: 600,
+                  letterSpacing: "0.06em", color: "#FFD2C2", marginBottom: 6,
+                  fontWeight: 800,
                 }}>
                   FOR SHOPPERS
                 </div>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 500,
-                  marginBottom: 10, lineHeight: 1.3, color: "rgba(255,247,242,0.9)",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
+                  marginBottom: 12, lineHeight: 1.3, color: CREAM,
                 }}>
                   Look in. See it. Claim it. Collect.
                 </div>
@@ -453,28 +515,33 @@ export default function Landing() {
                   onClick={() => navigate("/signin")}
                   className="uw-btn-primary"
                   style={{
-                    background: V, color: "#fff",
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                    letterSpacing: "0.02em", padding: "16px 28px",
-                    border: "none", cursor: "pointer", width: isMobile ? "100%" : "auto",
-                    borderRadius: RADIUS_SM, fontWeight: 700,
-                    boxShadow: "0 12px 32px rgba(255,45,18,0.4)",
+                    background: "#fff", color: V,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                    letterSpacing: "0.01em", padding: "13px 16px",
+                    border: "none", cursor: "pointer", width: "100%",
+                    borderRadius: RADIUS_SM, fontWeight: 800,
+                    boxShadow: "0 10px 28px rgba(0,0,0,0.2)",
                   }}
                 >
                   JOIN THE WAITLIST
                 </button>
               </div>
 
-              <div>
+              <div style={{
+                background: "rgba(255,248,244,0.08)",
+                border: "1.5px dashed rgba(255,248,244,0.35)",
+                borderRadius: 18,
+                padding: "16px 16px 18px",
+              }}>
                 <div style={{
                   fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                  letterSpacing: "0.08em", color: V, marginBottom: 6, fontWeight: 600,
+                  letterSpacing: "0.06em", color: "#FFD2C2", marginBottom: 6, fontWeight: 800,
                 }}>
                   FOR BUSINESSES
                 </div>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 500,
-                  color: "rgba(255,247,242,0.9)", marginBottom: 10, lineHeight: 1.3,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
+                  color: CREAM, marginBottom: 12, lineHeight: 1.3,
                 }}>
                   Get seen — so you can sell and welcome customers in.
                 </div>
@@ -482,13 +549,13 @@ export default function Landing() {
                   href="/business-apply"
                   className="uw-btn-ghost uw-btn-ghost-dark"
                   style={{
-                    border: "1.5px solid rgba(255,247,242,0.45)", color: "#FFF7F2",
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                    letterSpacing: "0.02em", padding: "14px 26px",
-                    textDecoration: "none", display: isMobile ? "block" : "inline-block",
+                    border: "1.5px solid rgba(255,248,244,0.55)", color: CREAM,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                    letterSpacing: "0.01em", padding: "12px 16px",
+                    textDecoration: "none", display: "block",
                     textAlign: "center",
-                    background: "rgba(255,247,242,0.06)",
-                    borderRadius: RADIUS_SM, fontWeight: 700,
+                    background: "transparent",
+                    borderRadius: RADIUS_SM, fontWeight: 800,
                   }}
                 >
                   PARTNER YOUR SHOP
@@ -521,9 +588,9 @@ export default function Landing() {
                     top, left, width: w, zIndex: z,
                     borderRadius: 22,
                     overflow: "hidden",
-                    boxShadow: "0 24px 50px rgba(0,0,0,0.45)",
+                    boxShadow: "0 24px 50px rgba(158,28,14,0.4)",
                     border: "2px solid rgba(255,247,242,0.15)",
-                    background: FG,
+                    background: V_DEEP,
                   }}
                 >
                   <div style={{
@@ -533,7 +600,7 @@ export default function Landing() {
                   }}>
                     <div style={{
                       position: "absolute", top: 10, left: 10,
-                      background: "rgba(18,14,12,0.75)", color: "#fff",
+                      background: "rgba(158,28,14,0.72)", color: "#fff",
                       fontSize: 9, fontWeight: 700, letterSpacing: "0.06em",
                       padding: "5px 9px", borderRadius: 999,
                       backdropFilter: "blur(6px)",
@@ -541,7 +608,7 @@ export default function Landing() {
                       EXAMPLE
                     </div>
                   </div>
-                  <div style={{ padding: "12px 14px 14px", background: "#1F1512" }}>
+                  <div style={{ padding: "12px 14px 14px", background: V_RICH }}>
                     <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.25, marginBottom: 4 }}>
                       {sample.title}
                     </div>
@@ -585,7 +652,7 @@ export default function Landing() {
                   fontSize: type === "Charity shops" ? 13 : 12,
                   fontStyle: type === "Charity shops" ? "italic" : "normal",
                   fontWeight: type === "Charity shops" ? 700 : 600,
-                  color: type === "Charity shops" ? V : "#FFF7F2",
+                  color: type === "Charity shops" ? V : "#FFF8F4",
                   background: type === "Charity shops" ? "rgba(255,45,18,0.18)" : "rgba(255,247,242,0.08)",
                   border: type === "Charity shops" ? "1px solid rgba(255,45,18,0.45)" : "1px solid rgba(255,247,242,0.12)",
                   padding: "8px 16px",
@@ -601,15 +668,9 @@ export default function Landing() {
       </section>
 
       {/* ── 2. SAMPLES — desire ── */}
-      <section style={{ background: MUTED }}>
+      <section style={{ background: SECTION_WASH, position: "relative", zIndex: 1 }}>
         <div style={{ padding: isMobile ? "40px 20px 12px" : "56px 40px 16px" }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: V, color: "#fff",
-            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-            fontWeight: 700, letterSpacing: "0.06em",
-            padding: "7px 12px", borderRadius: 999, marginBottom: 16,
-          }}>
+          <div className="uw-sticker" style={{ marginBottom: 16 }}>
             WHAT A DROP FEELS LIKE
           </div>
           <h2 style={{
@@ -648,16 +709,16 @@ export default function Landing() {
       </section>
 
       {/* ── 3. HOW IT WORKS — mission infographic ── */}
-      <section style={{ borderBottom: `1px solid ${BORDER}` }}>
+      <section style={{ borderBottom: "none", position: "relative", zIndex: 1 }}>
         <div style={{
-          background: FG,
+          background: BAND_WASH,
           color: BG,
-          padding: isMobile ? "40px 20px 32px" : "52px 40px 40px",
+          padding: isMobile ? "28px 20px 22px" : "36px 40px 28px",
         }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: V, letterSpacing: "0.06em", marginBottom: 16,
+            color: V, letterSpacing: "0.06em", marginBottom: 12,
           }}>
             <span
               className="uw-pulse-dot"
@@ -667,15 +728,15 @@ export default function Landing() {
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 30 : 44,
-            fontWeight: 700, letterSpacing: "-1px",
-            lineHeight: 1.08, marginBottom: 18, maxWidth: 720,
+            fontSize: isMobile ? 24 : 32,
+            fontWeight: 700, letterSpacing: "-0.8px",
+            lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
           }}>
             Bring the buzz back to your high street —{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>before it's gone.</em>
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FFD2C2" }}>before it's gone.</em>
           </h2>
           <div style={{
-            display: "flex", flexWrap: "wrap", gap: isMobile ? 8 : 12,
+            display: "flex", flexWrap: "wrap", gap: 8,
           }}>
             {[
               "Limited quantity",
@@ -686,11 +747,11 @@ export default function Landing() {
               <span
                 key={tag}
                 style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
                   fontWeight: 600, letterSpacing: "0.02em", color: "#fff",
                   background: "rgba(255,45,18,0.2)",
                   border: "1px solid rgba(255,45,18,0.45)",
-                  padding: "8px 14px",
+                  padding: "6px 11px",
                   borderRadius: 999,
                 }}
               >
@@ -701,10 +762,10 @@ export default function Landing() {
         </div>
 
         <div style={{
-          padding: isMobile ? "24px 16px 36px" : "32px 40px 48px",
-          background: BG,
+          padding: isMobile ? "16px 16px 24px" : "20px 40px 32px",
+          background: "transparent",
         }}>
-          <figure style={{ margin: 0, maxWidth: 1100, marginLeft: "auto", marginRight: "auto" }}>
+          <figure style={{ margin: 0, maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
             <img
               src="/landing/mission-infographic.jpg"
               alt="Unwrapped mission infographic: peek into local shops from your phone with real photos and clips; see it, claim it, and collect with a QR code; no mystery bags — choose real stock like sourdough or a salon slot; bring buzz and more faces through local shop doors."
@@ -712,20 +773,20 @@ export default function Landing() {
                 display: "block",
                 width: "100%",
                 height: "auto",
-                borderRadius: RADIUS,
+                borderRadius: 14,
                 border: `1px solid ${BORDER}`,
-                background: BG,
-                boxShadow: "0 18px 40px rgba(18,14,12,0.08)",
+                background: CREAM,
+                boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
               }}
             />
             <figcaption style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
+              fontSize: 12,
               color: MUTED_FG,
-              lineHeight: 1.55,
-              marginTop: 14,
+              lineHeight: 1.45,
+              marginTop: 10,
               textAlign: "center",
-              maxWidth: 640,
+              maxWidth: 480,
               marginLeft: "auto",
               marginRight: "auto",
             }}>
@@ -734,27 +795,28 @@ export default function Landing() {
           </figure>
 
           <div style={{
-            marginTop: isMobile ? 24 : 28,
-            padding: isMobile ? "20px 18px" : "22px 26px",
-            border: `1px solid ${FG}`,
-            background: MUTED,
+            marginTop: isMobile ? 16 : 18,
+            padding: isMobile ? "14px 16px" : "16px 20px",
+            border: `1px solid ${BORDER}`,
+            background: "rgba(255,248,244,0.75)",
+            borderRadius: 14,
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
             alignItems: isMobile ? "flex-start" : "center",
             justifyContent: "space-between",
-            gap: 16,
-            maxWidth: 1100,
+            gap: 12,
+            maxWidth: 720,
             marginLeft: "auto",
             marginRight: "auto",
           }}>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 20 : 24,
+              fontSize: isMobile ? 16 : 18,
               fontWeight: 600,
               color: FG,
               lineHeight: 1.3,
               margin: 0,
-              maxWidth: 520,
+              maxWidth: 420,
             }}>
               Drops sell out.{" "}
               <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
@@ -767,9 +829,10 @@ export default function Landing() {
               style={{
                 flexShrink: 0,
                 background: V, color: BG,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-                letterSpacing: "0.04em", padding: "13px 22px",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
                 border: "none", cursor: "pointer",
+                borderRadius: RADIUS_SM,
                 width: isMobile ? "100%" : "auto",
               }}
             >
@@ -783,8 +846,10 @@ export default function Landing() {
       {PRE_LAUNCH && (
         <section style={{
           padding: isMobile ? "40px 20px" : "52px 40px",
-          borderBottom: `1px solid ${BORDER}`,
-          background: `linear-gradient(135deg, ${MUTED} 0%, ${BG} 55%, rgba(232,52,28,0.03) 100%)`,
+          borderBottom: "none",
+          background: SECTION_WASH,
+          position: "relative",
+          zIndex: 1,
         }}>
           <div style={{ maxWidth: 820 }}>
             <div style={{
@@ -934,8 +999,8 @@ export default function Landing() {
 
               {/* Founding shoppers */}
               <div style={{
-                background: FG,
-                color: "#FFF7F2",
+                background: BAND_WASH,
+                color: CREAM,
                 borderRadius: 16,
                 padding: isMobile ? 14 : 16,
               }}>
@@ -1080,7 +1145,7 @@ export default function Landing() {
         gridTemplateColumns: isMobile ? "1fr" : "1.05fr 0.95fr",
         gap: isMobile ? 36 : 64,
         alignItems: "center",
-        borderBottom: `1px solid ${BORDER}`,
+        borderBottom: "none",
       }}>
         <div>
           <div style={{
@@ -1120,7 +1185,7 @@ export default function Landing() {
             href="/business-apply"
             className="uw-btn-primary"
             style={{
-              background: FG, color: BG,
+              background: V_DEEP, color: BG,
               fontFamily: "'DM Sans', sans-serif", fontSize: 10,
               letterSpacing: "0.04em", padding: "15px 28px",
               textDecoration: "none", display: "inline-block", border: "none",
@@ -1179,7 +1244,7 @@ export default function Landing() {
       {/* ── 6a. MERCHANT FAQ ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "64px 40px",
-        borderBottom: `1px solid ${BORDER}`,
+        borderBottom: "none",
         background: BG,
       }}>
         <div style={{
@@ -1241,8 +1306,10 @@ export default function Landing() {
       {/* ── 6b. RECOMMEND A SHOP — neighbourhood nominations ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "64px 40px",
-        borderBottom: `1px solid ${BORDER}`,
-        background: MUTED,
+        borderBottom: "none",
+        background: SECTION_WASH,
+        position: "relative",
+        zIndex: 1,
       }}>
         <div style={{ maxWidth: 720 }}>
           <div style={{
@@ -1270,7 +1337,7 @@ export default function Landing() {
             href="/recommend"
             className="uw-btn-primary"
             style={{
-              background: FG, color: BG,
+              background: V_DEEP, color: BG,
               fontFamily: "'DM Sans', sans-serif", fontSize: 10,
               letterSpacing: "0.04em", padding: "15px 28px",
               textDecoration: "none", display: "inline-block", border: "none",
@@ -1284,10 +1351,11 @@ export default function Landing() {
       {/* ── 7. CLOSE — final convert ── */}
       <section style={{
         padding: isMobile ? "56px 20px" : "80px 40px",
-        background: FG,
+        background: BAND_WASH,
         color: BG,
         position: "relative",
         overflow: "hidden",
+        zIndex: 1,
       }}>
         <div
           aria-hidden
@@ -1477,7 +1545,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
   }
 
   return (
-    <section style={{ borderBottom: `1px solid ${BORDER}` }}>
+    <section style={{ borderBottom: "none" }}>
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
         display: "flex", justifyContent: "space-between",
@@ -1534,7 +1602,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             }}
           />
           <button type="submit" className="uw-btn-primary" style={{
-            background: FG, color: BG,
+            background: V_DEEP, color: BG,
             fontFamily: "'DM Sans', sans-serif", fontSize: 10,
             letterSpacing: "0.04em", padding: "12px 22px",
             border: "none", cursor: "pointer",
@@ -1654,7 +1722,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
   }
 
   return (
-    <section style={{ borderBottom: `1px solid ${BORDER}` }}>
+    <section style={{ borderBottom: "none" }}>
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
         display: "grid",
@@ -1710,7 +1778,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             <a
               href="/business-apply"
               style={{
-                background: FG,
+                background: V_DEEP,
                 color: BG,
                 textDecoration: "none",
                 fontFamily: "'DM Sans', sans-serif",
@@ -1719,7 +1787,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 padding: "12px 18px",
                 border: "none",
                 borderRadius: 12,
-                boxShadow: "0 10px 26px rgba(0,0,0,0.10)",
+                boxShadow: "0 10px 26px rgba(158,28,14,0.10)",
                 cursor: "pointer",
                 display: "inline-flex",
                 alignItems: "center",
@@ -1778,7 +1846,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
               type="submit"
               className="uw-btn-primary"
               style={{
-                background: FG,
+                background: V_DEEP,
                 color: BG,
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 10,
@@ -1833,8 +1901,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       borderBottom: `1px solid ${BORDER}`,
                       cursor: "pointer",
                       background: focused
-                        ? (p.isMember ? "rgba(20,18,16,0.06)" : "rgba(232,52,28,0.06)")
-                        : MUTED,
+                        ? (p.isMember ? "rgba(158,28,14,0.08)" : "rgba(255,45,18,0.08)")
+                        : "transparent",
                     }}
                   >
                     <div style={{
@@ -1951,7 +2019,7 @@ function SampleDropsCarousel() {
   return (
     <div style={{
       padding: `${isMobile ? 8 : 12}px 0 ${isMobile ? 28 : 36}px`,
-      background: `linear-gradient(180deg, ${MUTED} 0%, ${BG} 100%)`,
+      background: SECTION_WASH,
     }}>
       <div
         ref={scrollerRef}
@@ -1966,7 +2034,7 @@ function SampleDropsCarousel() {
               width: slideWidth,
               borderRadius: RADIUS,
               overflow: "hidden",
-              boxShadow: "0 16px 40px rgba(18,14,12,0.12)",
+              boxShadow: "0 16px 40px rgba(158,28,14,0.12)",
               border: `1px solid ${BORDER}`,
               background: "#fff",
             }}
@@ -2076,7 +2144,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
         />
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(180deg, transparent 45%, rgba(18,14,12,0.55) 100%)",
+          background: "linear-gradient(180deg, transparent 45%, rgba(158,28,14,0.55) 100%)",
           pointerEvents: "none",
         }} />
         <div style={{
@@ -2151,7 +2219,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
         </div>
 
         <div style={{
-          background: FG, color: "#fff",
+          background: V, color: "#fff",
           textAlign: "center", fontWeight: 700, fontSize: 13,
           padding: "12px 14px", borderRadius: RADIUS_SM,
           letterSpacing: "0.02em",

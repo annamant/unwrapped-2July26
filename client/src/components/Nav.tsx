@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { trpc, clearSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
+import { BG, FG, BORDER, CREAM, V, V_DEEP } from "../theme";
 
 const styles: Record<string, React.CSSProperties> = {
   nav: {
@@ -9,8 +10,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "space-between",
     padding: "0 24px",
     height: 56,
-    borderBottom: "1px solid #E2E2E2",
-    background: "#FCFCFC",
+    borderBottom: `1px solid ${BORDER}`,
+    background: BG,
     position: "sticky",
     top: 0,
     zIndex: 100,
@@ -19,7 +20,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'Playfair Display', serif",
     fontSize: 20,
     fontWeight: 700,
-    color: "#020202",
+    color: V_DEEP,
     textDecoration: "none",
     letterSpacing: "-0.5px",
   },
@@ -27,7 +28,7 @@ const styles: Record<string, React.CSSProperties> = {
   link: {
     fontFamily: "'DM Sans', sans-serif",
     fontSize: 14,
-    color: "#020202",
+    color: FG,
     textDecoration: "none",
     cursor: "pointer",
     background: "none",
@@ -38,12 +39,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'DM Sans', sans-serif",
     fontSize: 14,
     fontWeight: 500,
-    color: "#FCFCFC",
-    background: "rgb(232, 52, 28)",
+    color: CREAM,
+    background: V,
     border: "none",
     padding: "8px 16px",
     cursor: "pointer",
     textDecoration: "none",
+    borderRadius: 999,
   },
 };
 

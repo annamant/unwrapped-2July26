@@ -14,8 +14,8 @@ export interface DirectoryMapProps {
   onPinSelect?: (id: string) => void;
 }
 
-const CURATED_COLOR = "#E8341C";
-const MEMBER_COLOR = "#141210";
+const CURATED_COLOR = "#FF2D12";
+const MEMBER_COLOR = "#3A1610";
 
 function makePinSVG(color: string): string {
   return [
@@ -26,7 +26,7 @@ function makePinSVG(color: string): string {
     "</circle>",
     `<circle cx="14" cy="14" r="8" fill="${color}" />`,
     color === MEMBER_COLOR
-      ? `<circle cx="14" cy="14" r="3.5" fill="#FAFAF8" />`
+      ? `<circle cx="14" cy="14" r="3.5" fill="#FFF4EF" />`
       : "",
     "</svg>",
   ].join("");

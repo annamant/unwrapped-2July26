@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 
-const V = "rgb(232, 52, 28)";
+const V = "#FF2D12";
 
 const CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
@@ -41,13 +41,13 @@ export default function Onboarding() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FCFCFC", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
+    <div style={{ minHeight: "100vh", background: "#FFF8F4", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
       <div style={{ width: "100%", maxWidth: 560 }}>
         <div style={{ marginBottom: 40 }}>
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: "#ABABAB", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
             Step 1 of 1
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: "#020202", letterSpacing: "-1px", marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: "#9E1C0E", letterSpacing: "-1px", marginBottom: 12 }}>
             What are you into?
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.6 }}>
@@ -68,8 +68,8 @@ export default function Onboarding() {
                   padding: "10px 18px",
                   cursor: "pointer",
                   border: active ? `2px solid ${V}` : "2px solid #E2E2E2",
-                  background: active ? "#FFF0EE" : "#FCFCFC",
-                  color: active ? V : "#020202",
+                  background: active ? "#FFF0EE" : "#FFF8F4",
+                  color: active ? V : "#9E1C0E",
                   transition: "all 0.1s",
                 }}
               >
@@ -89,7 +89,7 @@ export default function Onboarding() {
           style={{
             width: "100%",
             background: selected.length >= 3 ? V : "#E2E2E2",
-            color: "#FCFCFC",
+            color: "#FFF8F4",
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 16,
             fontWeight: 500,

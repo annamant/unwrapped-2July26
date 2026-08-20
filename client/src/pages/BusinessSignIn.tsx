@@ -2,7 +2,7 @@ import { useState } from "react";
 import { trpc, setSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
 
-const V = "rgb(232, 52, 28)";
+const V = "#FF2D12";
 
 export default function BusinessSignIn() {
   const isMobile = useIsMobile(900);
@@ -35,7 +35,7 @@ export default function BusinessSignIn() {
     fontSize: 15,
     border: "1px solid #E2E2E2",
     background: "#FAFAFA",
-    color: "#020202",
+    color: "#9E1C0E",
     outline: "none",
     boxSizing: "border-box",
     marginBottom: 12,
@@ -43,15 +43,15 @@ export default function BusinessSignIn() {
 
   return (
     <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
-      <div style={{ background: "#020202", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: isMobile ? 24 : 48, gap: isMobile ? 20 : 0 }}>
-        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#FCFCFC", textDecoration: "none" }}>
+      <div style={{ background: "#9E1C0E", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: isMobile ? 24 : 48, gap: isMobile ? 20 : 0 }}>
+        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#FFF8F4", textDecoration: "none" }}>
           Unwrapped
         </a>
         <div>
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: V, letterSpacing: 2, textTransform: "uppercase", marginBottom: 24 }}>
             Business Portal
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 28 : "clamp(36px, 4vw, 56px)", fontWeight: 700, color: "#FCFCFC", lineHeight: 1.1, letterSpacing: "-1px", marginBottom: isMobile ? 12 : 24 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 28 : "clamp(36px, 4vw, 56px)", fontWeight: 700, color: "#FFF8F4", lineHeight: 1.1, letterSpacing: "-1px", marginBottom: isMobile ? 12 : 24 }}>
             Create a drop.<br />
             <em style={{ color: V, fontStyle: "italic" }}>In 2 minutes.</em>
           </h1>
@@ -64,16 +64,16 @@ export default function BusinessSignIn() {
         <div style={{ display: "flex", gap: isMobile ? 24 : 32, flexWrap: "wrap" }}>
           {[["You set", "Your payout"], ["0", "Monthly fees"], ["2 min", "To publish"]].map(([val, label]) => (
             <div key={label}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#FCFCFC" }}>{val}</div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#FFF8F4" }}>{val}</div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#666" }}>{label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FCFCFC" }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FFF8F4" }}>
         <div style={{ width: "100%", maxWidth: 380 }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: "#020202" }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: "#9E1C0E" }}>
             Business sign in
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 32, lineHeight: 1.5 }}>
@@ -87,7 +87,7 @@ export default function BusinessSignIn() {
             {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 12, marginBottom: 0 }}>{error}</p>}
 
             <button type="submit" disabled={loading}
-              style={{ display: "block", width: "100%", background: loading ? "#888" : "#020202", color: "#FCFCFC", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 500, textAlign: "center", padding: "16px 0", border: "none", marginTop: 20, cursor: loading ? "not-allowed" : "pointer" }}>
+              style={{ display: "block", width: "100%", background: loading ? "#888" : "#9E1C0E", color: "#FFF8F4", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 500, textAlign: "center", padding: "16px 0", border: "none", marginTop: 20, cursor: loading ? "not-allowed" : "pointer" }}>
               {loading ? "Please wait…" : "Sign in →"}
             </button>
           </form>
@@ -107,7 +107,7 @@ export default function BusinessSignIn() {
           <div style={{ paddingTop: 32, marginTop: 32, borderTop: "1px solid #E2E2E2", textAlign: "center" }}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB" }}>
               Looking for drops?{" "}
-              <a href="/signin" style={{ color: "#020202", textDecoration: "none", fontWeight: 500 }}>Shopper sign in →</a>
+              <a href="/signin" style={{ color: "#9E1C0E", textDecoration: "none", fontWeight: 500 }}>Shopper sign in →</a>
             </p>
           </div>
         </div>

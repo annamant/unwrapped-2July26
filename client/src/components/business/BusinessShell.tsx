@@ -1,13 +1,9 @@
 import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import useIsMobile from "../../hooks/useIsMobile";
+import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../../theme";
 
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
-const V = "#E8341C";
+export { BG, FG, BORDER, MUTED, MUTED_FG, V };
 
 const NAV = [
   { href: "/dashboard", label: "Overview", exact: true },
@@ -130,5 +126,3 @@ export default function BusinessShell({ children }: { children: React.ReactNode 
     </div>
   );
 }
-
-export { BG, FG, BORDER, MUTED, MUTED_FG, V };

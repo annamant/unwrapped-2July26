@@ -8,16 +8,11 @@ import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
 import DropMedia from "../components/DropMedia";
+import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
 const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
 
-const V = "#E8341C";
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
 
 export default function DropDetail() {
   const isMobile = useIsMobile();

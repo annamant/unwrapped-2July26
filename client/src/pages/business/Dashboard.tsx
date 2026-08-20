@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
 import BusinessShell, { BG, FG, BORDER, MUTED, MUTED_FG } from "../../components/business/BusinessShell";
 
-const V = "#E8341C";
+const V = "#FF2D12";
 
 export default function Dashboard() {
   const isMobile = useIsMobile(768);

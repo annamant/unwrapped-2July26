@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { getSessionToken } from "../trpc";
 import DropMedia from "./DropMedia";
+import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 import {
   MAX_DROP_VIDEO_SECONDS,
   readVideoDuration,
@@ -8,11 +9,6 @@ import {
   type DropMediaType,
 } from "../lib/dropMedia";
 
-const FG = "#141210";
-const BG = "#FAFAF8";
-const BORDER = "#E0DFD9";
-const MUTED_FG = "#7A7A7A";
-const V = "#E8341C";
 
 /**
  * Photo or short clip picker: uploads to /api/upload (Cloudinary) and reports

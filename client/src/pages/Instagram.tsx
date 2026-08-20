@@ -1,12 +1,8 @@
 import { useLocation } from "wouter";
 import { format } from "date-fns";
 import { trpc } from "../trpc";
+import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED_FG = "#7A7A7A";
-const V = "#E8341C";
 
 const linkBtn: React.CSSProperties = {
   display: "block",

@@ -1,7 +1,4 @@
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED_FG = "#7A7A7A";
+import { BG, FG, BORDER, MUTED_FG } from "../theme";
 
 function LegalShell({ title, updated, children }: { title: string; updated: string; children: React.ReactNode }) {
   return (
@@ -26,7 +23,7 @@ function P({ children }: { children: React.ReactNode }) {
   return <p style={{ marginBottom: 14, color: "#3a3733" }}>{children}</p>;
 }
 
-const CONTACT = <a href="mailto:anna@shopunwrapped.com" style={{ color: "#E8341C" }}>anna@shopunwrapped.com</a>;
+const CONTACT = <a href="mailto:anna@shopunwrapped.com" style={{ color: "#FF2D12" }}>anna@shopunwrapped.com</a>;
 
 export function Privacy() {
   return (

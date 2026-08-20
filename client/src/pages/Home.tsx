@@ -10,13 +10,8 @@ import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import type { PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
-const V = "#E8341C";
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
 
 const CATEGORIES = [
   "All", "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",

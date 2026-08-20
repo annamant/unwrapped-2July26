@@ -4,13 +4,8 @@ import { trpc, clearSessionToken } from "../trpc";
 import Nav from "../components/Nav";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
+import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
-const V = "#E8341C";
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
 
 const CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",

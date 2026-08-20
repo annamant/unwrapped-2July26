@@ -1,11 +1,6 @@
 import useIsMobile from "../hooks/useIsMobile";
+import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
-const V = "#E8341C";
 
 type ResourceItem = {
   title: string;

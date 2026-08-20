@@ -30,7 +30,7 @@ interface DropMapProps {
 // ─── Custom SVG marker (branded, no image assets) ────────────────────────────
 
 function makeMarkerSVG(isLive: boolean, scarce: boolean): string {
-  const fill = scarce ? "#E8341C" : "#141210";
+  const fill = scarce ? "#FF2D12" : "#3A1610";
   if (isLive) {
     return [
       '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">',
