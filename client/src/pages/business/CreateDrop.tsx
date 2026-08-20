@@ -3,7 +3,8 @@ import { useLocation } from "wouter";
 import { trpc } from "../../trpc";
 import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
-import ImageUpload from "../../components/ImageUpload";
+import MediaUpload from "../../components/MediaUpload";
+import { resolveDropMediaType } from "../../lib/dropMedia";
 import { receiveFromList, formatPounds, checkoutFromList, discountPercent } from "../../lib/fees";
 import DropPrice from "../../components/DropPrice";
 
@@ -26,7 +27,7 @@ export default function CreateDrop() {
   const [, navigate] = useLocation();
   const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: "", description: "", imageUrl: "", category: "", format: "limited_item",
+    title: "", description: "", imageUrl: "", mediaType: "image" as "image" | "video", category: "", format: "limited_item",
     price: "", originalPrice: "", totalQuantity: "",
     collectionStart: "", collectionEnd: "",
     locationAddress: "", locationCity: "", locationPostcode: "",
@@ -86,6 +87,7 @@ export default function CreateDrop() {
       title: form.title,
       description: form.description || undefined,
       imageUrl: form.imageUrl || undefined,
+      mediaType: form.imageUrl ? resolveDropMediaType(form.imageUrl, form.mediaType) : undefined,
       category: form.category,
       format: form.format as "limited_item" | "clearance_discount" | "bundle" | "service_window",
       listPrice: listPricePence,
@@ -126,12 +128,28 @@ export default function CreateDrop() {
                 placeholder="What is this drop? What makes it worth showing up for?"
                 style={{ ...inputStyle, resize: "vertical" }} />
             </Field>
-            <Field label="Photo">
-              <ImageUpload value={form.imageUrl} onChange={(url) => setForm(prev => ({ ...prev, imageUrl: url }))} />
+            <Field label="Photo or clip">
+              <MediaUpload
+                value={form.imageUrl}
+                mediaType={form.mediaType}
+                onChange={(url, mediaType) => setForm(prev => ({ ...prev, imageUrl: url, mediaType }))}
+              />
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
-                Or paste an image URL:
+                Or paste a media URL:
               </p>
-              <input value={form.imageUrl} onChange={set("imageUrl")} placeholder="https://..." style={{ ...inputStyle, marginTop: 6 }} />
+              <input
+                value={form.imageUrl}
+                onChange={e => {
+                  const imageUrl = e.target.value;
+                  setForm(prev => ({
+                    ...prev,
+                    imageUrl,
+                    mediaType: imageUrl ? resolveDropMediaType(imageUrl, prev.mediaType) : "image",
+                  }));
+                }}
+                placeholder="https://..."
+                style={{ ...inputStyle, marginTop: 6 }}
+              />
             </Field>
           </Section>
 

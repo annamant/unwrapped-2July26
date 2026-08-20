@@ -5,6 +5,7 @@ import Nav from "../components/Nav";
 import DropMap, { toDropPin } from "../components/DropMap";
 import DirectoryMap from "../components/DirectoryMap";
 import DropPrice from "../components/DropPrice";
+import DropMedia from "../components/DropMedia";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
@@ -709,17 +710,19 @@ function DropCard({ drop, business, location, onClick }: {
       onMouseEnter={e => (e.currentTarget.style.background = MUTED)}
       onMouseLeave={e => (e.currentTarget.style.background = BG)}
     >
-      {/* Image */}
+      {/* Media */}
       <div style={{
-        height: 200, position: "relative",
-        background: drop.imageUrl ? `url(${drop.imageUrl}) center/cover` : MUTED,
-        display: "flex", alignItems: "center", justifyContent: "center",
+        height: 200, position: "relative", overflow: "hidden", background: MUTED,
       }}>
-        {!drop.imageUrl && (
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 13, color: MUTED_FG, fontStyle: "italic" }}>
-            {business.name}
-          </span>
-        )}
+        <DropMedia
+          url={drop.imageUrl}
+          mediaType={drop.mediaType}
+          placeholder={
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 13, color: MUTED_FG, fontStyle: "italic" }}>
+              {business.name}
+            </span>
+          }
+        />
         {drop.featured && (
           <div style={{
             position: "absolute", top: 12, left: 12,

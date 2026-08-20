@@ -5,7 +5,8 @@ import BusinessShell from "../../components/business/BusinessShell";
 import { StatusBadge } from "./Dashboard";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
-import ImageUpload from "../../components/ImageUpload";
+import MediaUpload from "../../components/MediaUpload";
+import { resolveDropMediaType } from "../../lib/dropMedia";
 
 const BG = "#FAFAF8";
 const FG = "#141210";
@@ -33,7 +34,10 @@ export default function Drops() {
 
   // ── Edit drop state ──
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState({ title: "", description: "", imageUrl: "", addQuantity: "", collectionEnd: "" });
+  const [editForm, setEditForm] = useState({
+    title: "", description: "", imageUrl: "", mediaType: "image" as "image" | "video",
+    addQuantity: "", collectionEnd: "",
+  });
   const [editError, setEditError] = useState("");
   const updateDrop = trpc.drops.update.useMutation({
     onSuccess: () => {
@@ -51,6 +55,7 @@ export default function Drops() {
       title: drop.title ?? "",
       description: drop.description ?? "",
       imageUrl: drop.imageUrl ?? "",
+      mediaType: resolveDropMediaType(drop.imageUrl, drop.mediaType),
       addQuantity: "",
       collectionEnd: "",
     });
@@ -67,7 +72,12 @@ export default function Drops() {
       dropId: drop.id,
       ...(editForm.title !== drop.title && editForm.title.trim() && { title: editForm.title.trim() }),
       ...(editForm.description !== (drop.description ?? "") && { description: editForm.description }),
-      ...(editForm.imageUrl !== (drop.imageUrl ?? "") && { imageUrl: editForm.imageUrl.trim() || null }),
+      ...(editForm.imageUrl !== (drop.imageUrl ?? "") && {
+        imageUrl: editForm.imageUrl.trim() || null,
+        mediaType: editForm.imageUrl.trim()
+          ? resolveDropMediaType(editForm.imageUrl, editForm.mediaType)
+          : "image",
+      }),
       ...(addQty && { addQuantity: addQty }),
       ...(editForm.collectionEnd && { collectionEnd: new Date(editForm.collectionEnd).toISOString() }),
     });
@@ -226,8 +236,12 @@ export default function Drops() {
                     <EditField label="Description">
                       <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows={3} style={{ ...editInputStyle, resize: "vertical" }} maxLength={1000} />
                     </EditField>
-                    <EditField label="Photo">
-                      <ImageUpload value={editForm.imageUrl} onChange={(url) => setEditForm(f => ({ ...f, imageUrl: url }))} />
+                    <EditField label="Photo or clip">
+                      <MediaUpload
+                        value={editForm.imageUrl}
+                        mediaType={editForm.mediaType}
+                        onChange={(url, mediaType) => setEditForm(f => ({ ...f, imageUrl: url, mediaType }))}
+                      />
                     </EditField>
                     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
                       <EditField label="Add stock (existing tickets unaffected)">

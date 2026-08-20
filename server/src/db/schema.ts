@@ -8,6 +8,7 @@ import { relations } from "drizzle-orm";
 export const userRoleEnum = pgEnum("user_role", ["consumer", "admin"]);
 export const businessStatusEnum = pgEnum("business_status", ["pending", "active", "suspended"]);
 export const dropFormatEnum = pgEnum("drop_format", ["limited_item", "clearance_discount", "bundle", "service_window"]);
+export const dropMediaTypeEnum = pgEnum("drop_media_type", ["image", "video"]);
 export const dropStatusEnum = pgEnum("drop_status", ["draft", "active", "sold_out", "cancelled", "expired"]);
 export const reservationStatusEnum = pgEnum("reservation_status", ["active", "fulfilled", "cancelled", "expired"]);
 export const payoutStatusEnum = pgEnum("payout_status", ["pending", "released"]);
@@ -168,6 +169,8 @@ export const drops = pgTable("drops", {
   title: text("title").notNull(),
   description: text("description"),
   imageUrl: text("image_url"),
+  /** Whether imageUrl points to a photo or a short async clip (Phase 1 white paper). */
+  mediaType: dropMediaTypeEnum("media_type").default("image").notNull(),
   price: integer("price").notNull(), // in pence — what shoppers pay (all-in checkout)
   /** What the business wants to receive per unit (pence). Null on legacy drops. */
   sellerReceive: integer("seller_receive"),

@@ -7,6 +7,7 @@ import Nav from "../components/Nav";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
+import DropMedia from "../components/DropMedia";
 
 const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
@@ -109,19 +110,22 @@ export default function DropDetail() {
           gap: isMobile ? 32 : 56, alignItems: "start",
         }}>
 
-          {/* ── Left: image + description ── */}
+          {/* ── Left: media + description ── */}
           <div>
-            {/* Image */}
             <div style={{
-              background: drop.imageUrl ? `url(${drop.imageUrl}) center/cover` : MUTED,
-              aspectRatio: "4/3", marginBottom: 32, position: "relative",
-              display: "flex", alignItems: "center", justifyContent: "center",
+              aspectRatio: "4/3", marginBottom: 32, position: "relative", overflow: "hidden",
+              background: MUTED,
             }}>
-              {!drop.imageUrl && (
-                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 14, color: MUTED_FG, fontStyle: "italic" }}>
-                  {business.name}
-                </span>
-              )}
+              <DropMedia
+                url={drop.imageUrl}
+                mediaType={drop.mediaType}
+                variant="hero"
+                placeholder={
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 14, color: MUTED_FG, fontStyle: "italic" }}>
+                    {business.name}
+                  </span>
+                }
+              />
               {isLive && (
                 <div style={{
                   position: "absolute", top: 16, left: 16,

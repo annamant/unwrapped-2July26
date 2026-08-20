@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice from "../components/DropPrice";
+import DropMedia from "../components/DropMedia";
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -261,9 +262,9 @@ function DropCard({ drop }: { drop: any }) {
       style={{ background: BG, textDecoration: "none", display: "block", padding: "0" }}
     >
       <div style={{
-        background: drop.imageUrl ? `url(${drop.imageUrl}) center/cover` : MUTED,
-        aspectRatio: "4/3", position: "relative",
+        aspectRatio: "4/3", position: "relative", overflow: "hidden", background: MUTED,
       }}>
+        <DropMedia url={drop.imageUrl} mediaType={drop.mediaType} />
         {isLive && (
           <div style={{
             position: "absolute", top: 12, left: 12,

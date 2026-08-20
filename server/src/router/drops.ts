@@ -7,6 +7,7 @@ import { dispatchDropNotifications } from "../notifications/dispatch";
 import { stripeEnabled, refundPaymentIntent } from "../payments/stripe";
 import { checkoutFromList, receiveFromList } from "../payments/fees";
 import { geocodeAddress, haversineKm } from "../geo";
+import { resolveDropMediaType } from "../media";
 
 const CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
@@ -110,6 +111,7 @@ export const dropsRouter = router({
       title: z.string().min(1).max(100),
       description: z.string().max(1000).optional(),
       imageUrl: z.string().url().optional(),
+      mediaType: z.enum(["image", "video"]).optional(),
       /** Business list price per unit (pence) — what they're selling at. 0 = free. */
       listPrice: z.number().int().min(0),
       /** Original list price (pence) — required for clearance/discount drops. */
@@ -206,6 +208,7 @@ export const dropsRouter = router({
           title: input.title,
           description: input.description,
           imageUrl: input.imageUrl,
+          mediaType: resolveDropMediaType(input.imageUrl, input.mediaType),
           price,
           sellerReceive,
           originalPrice: input.originalListPrice ?? null,
@@ -262,6 +265,7 @@ export const dropsRouter = router({
       title: z.string().min(1).max(100).optional(),
       description: z.string().max(1000).optional(),
       imageUrl: z.string().url().nullable().optional(),
+      mediaType: z.enum(["image", "video"]).optional(),
       addQuantity: z.number().int().positive().max(999).optional(),
       collectionEnd: z.string().datetime().optional(),
     }))
@@ -286,7 +290,15 @@ export const dropsRouter = router({
         .set({
           ...(input.title !== undefined && { title: input.title }),
           ...(input.description !== undefined && { description: input.description }),
-          ...(input.imageUrl !== undefined && { imageUrl: input.imageUrl }),
+          ...(input.imageUrl !== undefined && {
+            imageUrl: input.imageUrl,
+            mediaType: input.imageUrl
+              ? resolveDropMediaType(input.imageUrl, input.mediaType)
+              : "image",
+          }),
+          ...(input.mediaType !== undefined && input.imageUrl === undefined && {
+            mediaType: input.mediaType,
+          }),
           ...(input.collectionEnd !== undefined && { collectionEnd: new Date(input.collectionEnd) }),
           ...(input.addQuantity !== undefined && {
             totalQuantity: sql`${drops.totalQuantity} + ${input.addQuantity}`,

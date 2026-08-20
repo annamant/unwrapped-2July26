@@ -190,14 +190,19 @@ app.post("/api/push/unsubscribe", async (req, res) => {
     return res.json({ ok: true });
 });
 
-// ─── Image upload ─────────────────────────────────────────────────────────────
+// ─── Media upload (images + short clips) ──────────────────────────────────────
+
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
 
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    limits: { fileSize: MAX_VIDEO_BYTES },
     fileFilter: (_req, file, cb) => {
-          if (file.mimetype.startsWith("image/")) cb(null, true);
-          else cb(new Error("Only image files are allowed"));
+          const isImage = file.mimetype.startsWith("image/");
+          const isVideo = file.mimetype.startsWith("video/");
+          if (isImage || isVideo) cb(null, true);
+          else cb(new Error("Only image or video files are allowed"));
     },
 });
 
@@ -205,10 +210,20 @@ const upload = multer({
 // Env: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.
 app.post("/api/upload", upload.single("file"), async (req, res) => {
     const user = await getUserFromRequest(req);
-    if (!user) return res.status(401).json({ error: "Sign in to upload images" });
+    if (!user) return res.status(401).json({ error: "Sign in to upload media" });
 
     if (!req.file) {
           return res.status(400).json({ error: "No file provided" });
+    }
+
+    const isVideo = req.file.mimetype.startsWith("video/");
+    const maxBytes = isVideo ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+    if (req.file.size > maxBytes) {
+          return res.status(400).json({
+                error: isVideo
+                      ? "Video must be under 25 MB."
+                      : "Image must be under 10 MB.",
+          });
     }
 
     const cloud = process.env.CLOUDINARY_CLOUD_NAME;
@@ -216,7 +231,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     if (!cloud || !apiKey || !apiSecret) {
           return res.status(501).json({
-                error: "Image uploads aren't configured yet. Paste an image URL instead.",
+                error: "Uploads aren't configured yet. Paste a media URL instead.",
           });
     }
 
@@ -234,22 +249,25 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
           form.append("folder", folder);
           form.append("signature", signature);
 
-          const resp = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/image/upload`, {
+          const resource = isVideo ? "video" : "image";
+          const resp = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/${resource}/upload`, {
                 method: "POST",
                 body: form,
           });
           const data = (await resp.json()) as any;
           if (!resp.ok || !data.secure_url) {
                 console.error("[upload] Cloudinary error:", data?.error?.message ?? resp.status);
-                return res.status(502).json({ error: "Upload failed — try again or paste an image URL." });
+                return res.status(502).json({ error: "Upload failed — try again or paste a media URL." });
           }
 
-          // Serve a sane display size via Cloudinary's on-the-fly transformation
-          const url = (data.secure_url as string).replace("/upload/", "/upload/w_1600,q_auto,f_auto/");
-          return res.json({ url });
+          const rawUrl = data.secure_url as string;
+          const url = isVideo
+                ? rawUrl.replace("/upload/", "/upload/w_720,c_limit,q_auto,f_mp4/")
+                : rawUrl.replace("/upload/", "/upload/w_1600,q_auto,f_auto/");
+          return res.json({ url, mediaType: isVideo ? "video" : "image" });
     } catch (err) {
           console.error("[upload] error:", err);
-          return res.status(500).json({ error: "Upload failed — try again or paste an image URL." });
+          return res.status(500).json({ error: "Upload failed — try again or paste a media URL." });
     }
 });
 
