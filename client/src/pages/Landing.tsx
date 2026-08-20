@@ -316,14 +316,17 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(40px, 6.5vw, 78px)",
+                fontSize: "clamp(36px, 5.8vw, 68px)",
                 fontWeight: 700, color: FG,
-                lineHeight: 1.02, letterSpacing: "-2px",
+                lineHeight: 1.08, letterSpacing: "-1.8px",
                 marginBottom: 20,
               }}
             >
-              The high street,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>up to date.</em>
+              A new way to shop your high street.
+              <br />
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>
+                See it. Claim it. Collect it.
+              </em>
             </h1>
 
             <p
@@ -334,8 +337,9 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              See what independents nearby have ready — a photo or short video.
-              Claim the drop, pay in the app, collect at the counter.
+              Imagine looking into your favourite local shops from the sofa or the bus —
+              seeing what's ready, claiming it, and walking in to collect.
+              That's the high street we're bringing to life.
             </p>
 
             <div
@@ -364,7 +368,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  Discover. See it. Claim it. Collect.
+                  Look in. See it. Claim it. Collect.
                 </div>
                 <button
                   onClick={() => navigate("/signin")}
@@ -396,7 +400,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   color: FG, marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  We help you sell — and get them through the door.
+                  Get seen — so you can sell and welcome customers in.
                 </div>
                 <a
                   href="/business-apply"
@@ -488,17 +492,17 @@ export default function Landing() {
               fontWeight: 700, color: FG, lineHeight: 1.15,
               letterSpacing: "-0.8px", marginBottom: 20, maxWidth: 640,
             }}>
-              We're building the high street you can browse from anywhere —{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>one neighbourhood at a time.</em>
+              Be part of something new —{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>a high street that buzzes again.</em>
             </h2>
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
               color: FG, lineHeight: 1.7, marginBottom: 16, maxWidth: 580, fontWeight: 300,
             }}>
-              Unwrapped starts dense and local: shops show what's ready in a photo or short video,
-              locals see it from the sofa or the bus, claim it, pay in the app, and collect at the counter.
-              That only works if early shops and early shoppers show up together.
+              When shops get seen and neighbours show up, everyone wins —
+              more life on the street, more faces through the door, a local that feels alive.
+              Founding members help make that real, neighbourhood by neighbourhood.
             </p>
 
             <div style={{ marginBottom: 28, maxWidth: 540 }}>
@@ -514,7 +518,7 @@ export default function Landing() {
 
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
                 {[
-                  "We help you sell — first drop free",
+                  "Get seen — first drop free",
                   "We can shoot your first photo or short clip",
                   "You set the price — no mystery-bag model",
                   "Priority on the map as your area opens",
@@ -556,7 +560,7 @@ export default function Landing() {
                   {[
                     "First look when drops open near you",
                     "See into shops before you walk over",
-                    "Nominate the independents you love",
+                    "Nominate the local shops you love",
                   ].map((label) => (
                     <div
                       key={label}
@@ -584,7 +588,7 @@ export default function Landing() {
                 lineHeight: 1.65,
                 margin: 0,
               }}>
-                Join as a shopper or partner a shop — both make the map real.
+                Join as a shopper or partner a shop — both help bring your high street to life.
               </p>
             </div>
 
@@ -679,7 +683,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 4. HOW IT WORKS — discover → see → buy → collect ── */}
+      {/* ── 4. HOW IT WORKS — look in → see → buy → collect ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "72px 40px",
         borderBottom: `1px solid ${BORDER}`,
@@ -715,8 +719,8 @@ export default function Landing() {
           {[
             {
               n: "01",
-              title: "Discover",
-              body: "Open the map. See independents nearby with something ready now.",
+              title: "Look in",
+              body: "From the sofa, the desk, or the bus — peek into shops nearby as if you were there.",
             },
             {
               n: "02",
@@ -795,9 +799,9 @@ export default function Landing() {
             fontWeight: 700, color: FG,
             lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 18,
           }}>
-            We help you sell.
+            Get seen.
             <br />
-            <em style={{ fontStyle: "italic", color: V }}>They walk through your door.</em>
+            <em style={{ fontStyle: "italic", color: V }}>Sell and welcome customers through the door.</em>
           </h2>
 
           <p style={{
@@ -811,8 +815,8 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 420, fontWeight: 300,
           }}>
-            Nearby locals claim it, pay upfront, and collect with a QR.
-            You get the visit — and the chance to upsell at the counter.
+            Locals nearby see you, claim it, pay upfront, and collect with a QR.
+            You welcome customers at the counter — regulars and new faces alike.
           </p>
 
           <a
@@ -840,8 +844,8 @@ export default function Landing() {
               body: "Shoppers pay when they claim. You set the collection window. No holding stock for no-shows.",
             },
             {
-              label: "Foot traffic you can feel",
-              body: "They must walk in and scan a QR. Your drop turns screen time into a visit.",
+              label: "Customers through your door",
+              body: "They must walk in and scan a QR. You welcome customers who already know what they came for.",
             },
           ].map(({ label, body }, i) => (
             <div
@@ -916,7 +920,7 @@ export default function Landing() {
             },
             {
               q: "Who is Unwrapped for?",
-              a: "Independent shops, cafés, salons, restaurants, freelancers, services, and charity shops. Built for the high street — not chains.",
+              a: "Local shops, cafés, salons, restaurants, freelancers, services, and charity shops — the high street, not chains.",
             },
           ].map(({ q, a }) => (
             <div key={q}>
@@ -1020,8 +1024,8 @@ export default function Landing() {
             color: "rgba(250,250,248,0.62)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
-            Shoppers: get on the list to discover, see, claim, and collect.
-            Businesses: get on the map so we can help you sell.
+            Shoppers: get on the list to look in, see, claim, and collect.
+            Businesses: get on the map so your high street can see you.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
@@ -1071,7 +1075,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Discover. See it. Buy. Collect — local drops on a neighbourhood map.
+            Look in. See it. Claim it. Collect — your high street, from wherever you are.
           </p>
         </div>
 
@@ -1393,7 +1397,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches — clear your search to see the full curated board."
-              : "Imagine looking into your favourite independents from the sofa or the bus — seeing what's ready, claiming it, and walking in to collect. That's the high street we're bringing to life. Nominate a shop you love, or apply to be on it."}
+              : "Nominate a shop you love, or apply to be listed — help bring your high street onto Unwrapped."}
           </p>
           <div style={{
             fontFamily: "'Space Mono', monospace",
