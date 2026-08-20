@@ -131,77 +131,105 @@ export default function AdminDashboard() {
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
             Platform overview
           </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG }}>
-            {format(new Date(), "EEEE d MMMM yyyy")}
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, maxWidth: 560, lineHeight: 1.5 }}>
+            {format(new Date(), "EEEE d MMMM yyyy")} · Two separate pipelines: curated board vs claim campaign.
           </p>
         </div>
 
-        {/* Ops pipeline */}
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: BORDER, marginBottom: 32 }}>
-          {[
-            {
-              label: "Curated · not invited",
-              value: stats?.curatedNotInvited,
-              href: "/admin/businesses",
-              accent: (stats?.curatedNotInvited ?? 0) > 0,
-              hint: `${stats?.curatedTotal ?? "—"} on landing map`,
-            },
-            {
-              label: "Invite sent",
-              value: stats?.inviteSent,
-              href: "/admin/businesses",
-              hint: (stats?.followUpDue ?? 0) > 0 ? `${stats!.followUpDue} follow-up due` : "Awaiting claim",
-            },
-            {
-              label: "Claimed",
-              value: stats?.claimed,
-              href: "/admin/businesses",
-              hint: "Owners signed in",
-            },
-          ].map(({ label, value, href, accent, hint }) => (
-            <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: 28,
-                fontWeight: 700,
-                color: accent ? V : FG,
-                marginBottom: 6,
-              }}>
-                {value ?? "—"}
-              </div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
-            </a>
-          ))}
+        {/* Pipeline A — curated landing board */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+            CURATED BOARD · LANDING MAP
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
+            Shops on the public curated map — the list you’re approaching for curation. Not the same as the claim-email campaign.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr", gap: 1, background: BORDER }}>
+            {[
+              {
+                label: "On curated map",
+                value: stats?.curatedTotal,
+                hint: "Landing-page board",
+                href: "/admin/businesses",
+              },
+              {
+                label: "Still to approach",
+                value: stats?.curatedNotInvited,
+                hint: "No claim invite yet",
+                href: "/admin/businesses",
+                accent: (stats?.curatedNotInvited ?? 0) > 0,
+              },
+            ].map(({ label, value, hint, href, accent }) => (
+              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
+                  color: accent ? V : FG, marginBottom: 6,
+                }}>
+                  {value ?? "—"}
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
+              </a>
+            ))}
+          </div>
         </div>
 
-        <a
-          href="/admin/apparel-map"
-          style={{
-            display: "block",
-            border: `1px solid ${BORDER}`,
-            padding: isMobile ? 16 : 20,
-            marginBottom: 32,
-            textDecoration: "none",
-            background: MUTED,
-          }}
-        >
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 6 }}>
-            ON PLATFORM
+        {/* Pipeline B — claim campaign */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+            CLAIM CAMPAIGN · WAREHOUSE INVITES
           </div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, marginBottom: 4 }}>
-            Claimed businesses map →
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
+            Earlier bulk claim emails from scraped/imported profiles. The {stats?.claimed ?? "—"} members came from this campaign — not from the curated 221.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: BORDER }}>
+            {[
+              {
+                label: "Invites sent",
+                value: stats?.inviteSent,
+                hint: (stats?.followUpDue ?? 0) > 0 ? `${stats!.followUpDue} follow-up due` : "Awaiting claim",
+                href: "/admin/businesses",
+              },
+              {
+                label: "Claimed members",
+                value: stats?.claimed,
+                hint: "Owners signed in · black pins on landing map",
+                href: "/admin/businesses",
+              },
+              {
+                label: "Claimed map",
+                value: "→",
+                hint: "Pins for signed-up shops only",
+                href: "/admin/apparel-map",
+              },
+            ].map(({ label, value, hint, href }) => (
+              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
+                  color: FG, marginBottom: 6,
+                }}>
+                  {value ?? "—"}
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label}</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
+              </a>
+            ))}
           </div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
-            Map of shops whose owners have signed up. Separate from the curated landing-page map.
-          </div>
-        </a>
+        </div>
 
-        {/* Stats grid */}
+        {/* Platform / warehouse — secondary */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+            PLATFORM · WAREHOUSE COUNTS
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
+            Bulk leftovers from scrapes and invite placeholders — not the curated board size.
+          </p>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
           {[
-            { label: "Total users", value: stats?.totalUsers, href: "/admin/users" },
-            { label: "Listed profiles", value: stats?.totalBusinesses, href: "/admin/businesses" },
+            { label: "Accounts (incl. invite placeholders)", value: stats?.totalUsers, href: "/admin/users" },
+            { label: "Warehouse profiles", value: stats?.totalBusinesses, href: "/admin/businesses" },
             { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
             { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
             { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },

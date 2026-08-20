@@ -144,21 +144,21 @@ export default function AdminBusinesses() {
   const TABS: { key: OpsTab; label: string; count?: number; hint: string }[] = [
     {
       key: "curated",
-      label: "Curated · not invited",
+      label: "Curated board",
       count: counts?.curatedNotInvited,
-      hint: "On the landing map, no claim invite yet",
+      hint: `${counts?.curatedTotal ?? "—"} on landing map · still to approach`,
     },
     {
       key: "invite_sent",
-      label: "Invite sent",
+      label: "Claim campaign · invited",
       count: counts?.inviteSent,
-      hint: "Claim email sent, owner hasn’t signed in",
+      hint: "Warehouse claim emails — not the curated 221",
     },
     {
       key: "claimed",
-      label: "Claimed",
+      label: "Claim campaign · members",
       count: counts?.claimed,
-      hint: "Owner set a password and can sign in",
+      hint: "Signed up from the invite campaign",
     },
   ];
 
@@ -200,8 +200,8 @@ export default function AdminBusinesses() {
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, margin: 0 }}>
               Shop pipeline
             </h1>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, margin: "8px 0 0", maxWidth: 560, lineHeight: 1.5 }}>
-              Curated on the landing map → invite sent → claimed. Everything else stays in the warehouse.
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, margin: "8px 0 0", maxWidth: 580, lineHeight: 1.5 }}>
+              Two separate tracks: the curated landing board (approach list), and the claim campaign (warehouse invites → members).
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -278,15 +278,15 @@ export default function AdminBusinesses() {
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
             {tab === "curated" && (
               <>
-                {counts ? `${counts.curatedTotal} shops on the landing map · ${counts.curatedNotInvited} still need an invite` : "Loading…"}
+                {counts ? `${counts.curatedTotal} shops on the curated landing map · ${counts.curatedNotInvited} still to approach` : "Loading…"}
                 {invitablesOnCurated.length > 0 && (
-                  <span style={{ color: FG }}> · {invitablesOnCurated.length} already in the claim system with an email</span>
+                  <span style={{ color: FG }}> · {invitablesOnCurated.length} already have a claim-system profile + email</span>
                 )}
               </>
             )}
             {tab === "invite_sent" && (
               <>
-                {counts ? `${counts.inviteSent} waiting to claim` : "Loading…"}
+                {counts ? `${counts.inviteSent} warehouse invites still awaiting claim` : "Loading…"}
                 {(counts?.followUpDue ?? 0) > 0 && (
                   <span style={{ color: V }}> · {counts!.followUpDue} follow-up due</span>
                 )}
@@ -294,7 +294,7 @@ export default function AdminBusinesses() {
             )}
             {tab === "claimed" && (
               <>
-                {counts ? `${counts.claimed} claimed` : "Loading…"}
+                {counts ? `${counts.claimed} members from the claim campaign` : "Loading…"}
                 {unthanked.length > 0 && (
                   <span style={{ color: FG }}> · {unthanked.length} still need a thank-you</span>
                 )}
@@ -528,10 +528,10 @@ function CuratedList({
   }[];
   isMobile: boolean;
 }) {
-  if (!rows.length) return <EmptyState label="Every curated map shop has been invited or claimed." />;
+  if (!rows.length) return <EmptyState label="Every curated map shop already has a claim-system invite or is claimed." />;
   return (
     <div style={{ border: `1px solid ${BORDER}` }}>
-      <div style={listHeaderStyle}>{rows.length} ON MAP · NOT INVITED</div>
+      <div style={listHeaderStyle}>{rows.length} CURATED · STILL TO APPROACH</div>
       {rows.map((r, i) => (
         <div
           key={r.placeId}
@@ -590,10 +590,10 @@ function InviteSentList({
   }[];
   isMobile: boolean;
 }) {
-  if (!rows.length) return <EmptyState label="No outstanding claim invites." />;
+  if (!rows.length) return <EmptyState label="No outstanding claim-campaign invites." />;
   return (
     <div style={{ border: `1px solid ${BORDER}` }}>
-      <div style={listHeaderStyle}>{rows.length} INVITE SENT</div>
+      <div style={listHeaderStyle}>{rows.length} CLAIM CAMPAIGN · INVITED</div>
       {rows.map((r, i) => (
         <div
           key={r.id}
@@ -648,10 +648,10 @@ function ClaimedList({
   sending: boolean;
   onThank: (id: string, name: string, email: string) => void;
 }) {
-  if (!rows.length) return <EmptyState label="No claimed businesses yet." />;
+  if (!rows.length) return <EmptyState label="No claim-campaign members yet." />;
   return (
     <div style={{ border: `1px solid ${BORDER}` }}>
-      <div style={listHeaderStyle}>{rows.length} CLAIMED</div>
+      <div style={listHeaderStyle}>{rows.length} CLAIM CAMPAIGN · MEMBERS</div>
       {rows.map((r, i) => (
         <div
           key={r.id}
