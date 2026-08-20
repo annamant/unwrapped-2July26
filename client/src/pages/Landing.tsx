@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { format } from "date-fns";
 import { trpc } from "../trpc";
 import DropMap, { toDropPin } from "../components/DropMap";
 import DirectoryMap from "../components/DirectoryMap";
-import DropPrice from "../components/DropPrice";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 
-// Design tokens — Unwrapped Design System
-const BG = "#FAFAF8";
-const FG = "#141210";
-const BORDER = "#E0DFD9";
-const MUTED = "#F5F4F0";
-const MUTED_FG = "#7A7A7A";
-const V = "#E8341C";
+// Design tokens — Unwrapped Design System (live drop energy)
+const BG = "#FFF7F2";
+const FG = "#120E0C";
+const BORDER = "#F2D9CF";
+const MUTED = "#FFE8DE";
+const MUTED_FG = "#6A5E58";
+const V = "#FF2D12";
+const RADIUS = 20;
+const RADIUS_SM = 999; // pill CTAs
 
 /** Flip to false when real drops go live and the landing should show the live feed again. */
 const PRE_LAUNCH = true;
@@ -103,12 +103,20 @@ const BUSINESS_TYPES = [
 
 const LANDING_CSS = `
 @keyframes uw-fade-up {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(22px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes uw-pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.35); opacity: 0.55; }
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255,45,18,0.55); }
+  50% { transform: scale(1.15); opacity: 0.85; box-shadow: 0 0 0 10px rgba(255,45,18,0); }
+}
+@keyframes uw-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+@keyframes uw-float-delay {
+  0%, 100% { transform: translateY(0) rotate(3deg); }
+  50% { transform: translateY(-14px) rotate(2deg); }
 }
 @keyframes uw-map-drift {
   0% { transform: scale(1.08) translate(0, 0); }
@@ -118,6 +126,10 @@ const LANDING_CSS = `
 @keyframes uw-marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+@keyframes uw-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 .uw-fade-1 { animation: uw-fade-up 0.7s ease both; }
 .uw-fade-2 { animation: uw-fade-up 0.7s ease 0.12s both; }
@@ -132,44 +144,52 @@ const LANDING_CSS = `
 }
 .uw-marquee-track:hover { animation-play-state: paused; }
 .uw-btn-primary {
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  border-radius: ${RADIUS_SM}px !important;
+  font-weight: 600 !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .uw-btn-primary:hover {
   background: ${V} !important;
   color: ${BG} !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(232, 52, 28, 0.28);
 }
 .uw-btn-ghost {
+  border-radius: ${RADIUS_SM}px !important;
+  font-weight: 600 !important;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 .uw-btn-ghost:hover {
-  border-color: ${FG} !important;
+  border-color: ${V} !important;
+  color: ${V} !important;
   background: ${MUTED} !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .uw-btn-ghost-dark:hover {
   border-color: ${BG} !important;
-  background: rgba(250,250,248,0.1) !important;
+  background: rgba(255,248,245,0.12) !important;
   color: ${BG} !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .uw-link {
   transition: color 0.15s ease;
 }
-.uw-link:hover { color: ${FG} !important; }
+.uw-link:hover { color: ${V} !important; }
 .uw-sample-card {
-  transition: background 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s ease;
+  border-radius: ${RADIUS}px;
+  overflow: hidden;
 }
 .uw-sample-card:hover { background: ${MUTED} !important; }
 .uw-sample-img {
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .uw-sample-card:hover .uw-sample-img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 .uw-sample-carousel {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: inherit;
@@ -181,13 +201,16 @@ const LANDING_CSS = `
 .uw-sample-slide {
   flex: 0 0 auto;
   scroll-snap-align: start;
+  border-radius: ${RADIUS}px;
+  overflow: hidden;
 }
 .uw-step {
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  border-radius: ${RADIUS}px;
 }
 .uw-step:hover {
   background: ${MUTED} !important;
-  border-color: ${FG} !important;
+  border-color: ${V} !important;
   transform: translateY(-2px);
 }
 .uw-step-arrow {
@@ -195,14 +218,35 @@ const LANDING_CSS = `
   align-items: center;
   justify-content: center;
   color: ${V};
-  font-family: 'Space Mono', monospace;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   padding: 0 4px;
   flex-shrink: 0;
 }
+.uw-pill {
+  border-radius: 999px;
+  background: ${MUTED};
+  border: 1px solid ${BORDER};
+}
+.uw-float { animation: uw-float 5.5s ease-in-out infinite; }
+.uw-float-delay { animation: uw-float-delay 6.5s ease-in-out infinite; }
+.uw-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: ${V};
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(255,45,18,0.35);
+}
 @media (prefers-reduced-motion: reduce) {
   .uw-fade-1, .uw-fade-2, .uw-fade-3, .uw-fade-4,
-  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track { animation: none !important; }
+  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track, .uw-float, .uw-float-delay { animation: none !important; }
   .uw-sample-img, .uw-btn-primary, .uw-btn-ghost { transition: none !important; }
 }
 `;
@@ -210,7 +254,6 @@ const LANDING_CSS = `
 export default function Landing() {
   const [, navigate] = useLocation();
   const isMobile = useIsMobile();
-  const today = format(new Date(), "EEE d MMM yyyy").toUpperCase();
   const [scrolled, setScrolled] = useState(false);
 
   const { data: drops } = trpc.drops.list.useQuery({ limit: 60, timeWindow: undefined });
@@ -230,30 +273,29 @@ export default function Landing() {
       <nav style={{
         position: "sticky", top: 0, zIndex: 40,
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: isMobile ? "12px 20px" : "16px 40px",
-        borderBottom: `1px solid ${scrolled ? BORDER : "transparent"}`,
-        background: scrolled ? "rgba(250,250,248,0.92)" : BG,
-        backdropFilter: scrolled ? "blur(10px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(10px)" : "none",
+        padding: isMobile ? "12px 20px" : "14px 40px",
+        borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid transparent",
+        background: scrolled ? "rgba(255,247,242,0.92)" : "rgba(18,14,12,0.55)",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
         transition: "border-color 0.2s ease, background 0.2s ease",
       }}>
-        {!isMobile && (
-          <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 10,
-            color: MUTED_FG, letterSpacing: "0.12em", minWidth: 180,
-          }}>
-            LONDON · {today}
-          </span>
-        )}
-
         <a href="/" style={{
           display: "flex", alignItems: "center", gap: 10,
-          textDecoration: "none", color: FG,
-          position: isMobile ? "static" : "absolute",
-          left: isMobile ? undefined : "50%",
-          transform: isMobile ? undefined : "translateX(-50%)",
+          textDecoration: "none", color: scrolled ? FG : "#FFF7F2",
         }}>
-          <img src="/logo-mark.svg" alt="" width={28} height={28} style={{ display: "block", flexShrink: 0 }} />
+          <img
+            src="/logo-mark.svg"
+            alt=""
+            width={28}
+            height={28}
+            style={{
+              display: "block",
+              flexShrink: 0,
+              filter: scrolled ? "none" : "brightness(0) invert(1)",
+              transition: "filter 0.2s ease",
+            }}
+          />
           <span style={{
             fontFamily: "'Playfair Display', serif", fontSize: 22,
             fontWeight: 700, letterSpacing: "-0.5px",
@@ -262,27 +304,39 @@ export default function Landing() {
           </span>
         </a>
 
-        <div style={{ display: "flex", gap: isMobile ? 14 : 24, alignItems: "center", marginLeft: "auto" }}>
+        <div style={{ display: "flex", gap: isMobile ? 14 : 22, alignItems: "center" }}>
           <a
             href="https://www.instagram.com/shopunwrapped/"
             target="_blank"
             rel="noopener noreferrer"
             className="uw-link"
-            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              textDecoration: "none", fontWeight: 500,
+            }}
           >
             Instagram
           </a>
           <a
             href="/business-apply"
             className="uw-link"
-            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              textDecoration: "none", fontWeight: 500,
+            }}
           >
             {isMobile ? "Business" : "List your business"}
           </a>
           <a
             href="/recommend"
             className="uw-link"
-            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: scrolled ? MUTED_FG : "rgba(255,247,242,0.72)",
+              textDecoration: "none", fontWeight: 500,
+            }}
           >
             {isMobile ? "Recommend" : "Recommend a shop"}
           </a>
@@ -290,10 +344,13 @@ export default function Landing() {
             href="/signin"
             className="uw-btn-ghost"
             style={{
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              color: FG, letterSpacing: "0.08em",
-              border: `1px solid ${FG}`, padding: "8px 16px",
-              textDecoration: "none", background: "transparent",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: scrolled ? FG : "#FFF7F2", letterSpacing: "0.02em", fontWeight: 700,
+              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,247,242,0.55)",
+              padding: "9px 18px",
+              textDecoration: "none",
+              background: scrolled ? "transparent" : "rgba(255,247,242,0.08)",
+              borderRadius: RADIUS_SM,
             }}
           >
             SIGN IN
@@ -301,59 +358,57 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ── 1. HERO — understand + act ── */}
+      {/* ── 1. HERO — product-first, live drop energy ── */}
       <section style={{
         position: "relative",
         overflow: "hidden",
-        borderBottom: `1px solid ${BORDER}`,
+        background: `
+          radial-gradient(ellipse 80% 60% at 85% 20%, rgba(255,45,18,0.22), transparent 55%),
+          radial-gradient(ellipse 50% 45% at 10% 90%, rgba(255,45,18,0.12), transparent 50%),
+          linear-gradient(165deg, #1A0F0C 0%, #2A1410 45%, #120E0C 100%)
+        `,
+        color: "#FFF7F2",
       }}>
-        <div aria-hidden style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-          <div style={{
-            position: "absolute", inset: 0,
-            background: `
-              linear-gradient(180deg, ${BG} 0%, rgba(250,250,248,0.78) 30%, rgba(250,250,248,0.94) 72%, ${BG} 100%),
-              radial-gradient(ellipse 50% 45% at 90% 40%, rgba(232,52,28,0.05), transparent 55%)
-            `,
-          }} />
-        </div>
-
         <div style={{
           position: "relative",
           display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1.05fr) minmax(300px, 0.7fr)",
-          gap: isMobile ? 24 : 16,
-          alignItems: "end",
-          padding: isMobile ? "44px 20px 36px" : "56px 40px 52px",
+          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) minmax(280px, 0.95fr)",
+          gap: isMobile ? 36 : 40,
+          alignItems: "center",
+          padding: isMobile ? "36px 20px 28px" : "48px 40px 40px",
+          minHeight: isMobile ? undefined : "calc(100vh - 72px)",
+          maxHeight: isMobile ? undefined : 820,
         }}>
           <div>
             <div
               className="uw-fade-1"
               style={{
-                display: "inline-flex", alignItems: "center", gap: 10,
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                color: V, letterSpacing: "0.14em", marginBottom: 20,
+                display: "inline-flex", alignItems: "center", gap: 8,
+                marginBottom: 22,
               }}
             >
-              <span
-                className="uw-pulse-dot"
-                style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
-              />
-              LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
+              <span className="uw-live-badge">
+                <span
+                  className="uw-pulse-dot"
+                  style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff", display: "inline-block", flexShrink: 0 }}
+                />
+                LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
+              </span>
             </div>
 
             <h1
               className="uw-fade-2"
               style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(36px, 5.8vw, 68px)",
-                fontWeight: 700, color: FG,
-                lineHeight: 1.08, letterSpacing: "-1.8px",
-                marginBottom: 20,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "clamp(38px, 6vw, 72px)",
+                fontWeight: 800, color: "#FFF7F2",
+                lineHeight: 0.98, letterSpacing: "-2.2px",
+                marginBottom: 18,
               }}
             >
               A new way to shop your high street.
               <br />
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>
+              <em style={{ fontStyle: "italic", fontWeight: 500, color: V }}>
                 See it. Claim it. Collect it.
               </em>
             </h1>
@@ -361,9 +416,9 @@ export default function Landing() {
             <p
               className="uw-fade-3"
               style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 17,
-                color: FG, lineHeight: 1.55, marginBottom: 28, fontWeight: 400,
-                maxWidth: 520,
+                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
+                color: "rgba(255,247,242,0.78)", lineHeight: 1.5, marginBottom: 28, fontWeight: 400,
+                maxWidth: 480,
               }}
             >
               Imagine looking into your favourite local shops from the sofa or the bus —
@@ -375,27 +430,22 @@ export default function Landing() {
               className="uw-fade-4"
               style={{
                 display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                gap: 12,
-                maxWidth: isMobile ? "100%" : 560,
+                flexDirection: "column",
+                gap: 16,
+                maxWidth: 420,
               }}
             >
-              <div style={{
-                flex: 1,
-                border: `1px solid ${FG}`,
-                background: FG,
-                color: BG,
-                padding: "18px 18px 20px",
-              }}>
+              <div>
                 <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 9,
-                  letterSpacing: "0.12em", color: "rgba(250,250,248,0.5)", marginBottom: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                  letterSpacing: "0.08em", color: "rgba(255,247,242,0.5)", marginBottom: 6,
+                  fontWeight: 600,
                 }}>
                   FOR SHOPPERS
                 </div>
                 <div style={{
-                  fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
-                  marginBottom: 14, lineHeight: 1.25,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 500,
+                  marginBottom: 10, lineHeight: 1.3, color: "rgba(255,247,242,0.9)",
                 }}>
                   Look in. See it. Claim it. Collect.
                 </div>
@@ -403,43 +453,42 @@ export default function Landing() {
                   onClick={() => navigate("/signin")}
                   className="uw-btn-primary"
                   style={{
-                    background: V, color: BG,
-                    fontFamily: "'Space Mono', monospace", fontSize: 10,
-                    letterSpacing: "0.1em", padding: "12px 18px",
-                    border: "none", cursor: "pointer", width: "100%",
+                    background: V, color: "#fff",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                    letterSpacing: "0.02em", padding: "16px 28px",
+                    border: "none", cursor: "pointer", width: isMobile ? "100%" : "auto",
+                    borderRadius: RADIUS_SM, fontWeight: 700,
+                    boxShadow: "0 12px 32px rgba(255,45,18,0.4)",
                   }}
                 >
                   JOIN THE WAITLIST
                 </button>
               </div>
 
-              <div style={{
-                flex: 1,
-                border: `1px solid ${BORDER}`,
-                background: BG,
-                padding: "18px 18px 20px",
-              }}>
+              <div>
                 <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 9,
-                  letterSpacing: "0.12em", color: V, marginBottom: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                  letterSpacing: "0.08em", color: V, marginBottom: 6, fontWeight: 600,
                 }}>
                   FOR BUSINESSES
                 </div>
                 <div style={{
-                  fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
-                  color: FG, marginBottom: 14, lineHeight: 1.25,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 500,
+                  color: "rgba(255,247,242,0.9)", marginBottom: 10, lineHeight: 1.3,
                 }}>
                   Get seen — so you can sell and welcome customers in.
                 </div>
                 <a
                   href="/business-apply"
-                  className="uw-btn-ghost"
+                  className="uw-btn-ghost uw-btn-ghost-dark"
                   style={{
-                    border: `1px solid ${FG}`, color: FG,
-                    fontFamily: "'Space Mono', monospace", fontSize: 10,
-                    letterSpacing: "0.1em", padding: "11px 18px",
-                    textDecoration: "none", display: "block", textAlign: "center",
-                    background: "transparent",
+                    border: "1.5px solid rgba(255,247,242,0.45)", color: "#FFF7F2",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                    letterSpacing: "0.02em", padding: "14px 26px",
+                    textDecoration: "none", display: isMobile ? "block" : "inline-block",
+                    textAlign: "center",
+                    background: "rgba(255,247,242,0.06)",
+                    borderRadius: RADIUS_SM, fontWeight: 700,
                   }}
                 >
                   PARTNER YOUR SHOP
@@ -448,50 +497,102 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* (Removed) hero mock map image */}
+          {/* Floating drop collage — Whatnot-style product energy */}
+          {!isMobile && (
+            <div
+              className="uw-fade-4"
+              aria-hidden
+              style={{
+                position: "relative",
+                height: 520,
+                marginRight: -8,
+              }}
+            >
+              {[
+                { sample: SAMPLE_DROPS[0], top: 20, left: 40, w: 220, z: 3, cls: "uw-float" },
+                { sample: SAMPLE_DROPS[1], top: 120, left: 200, w: 200, z: 2, cls: "uw-float-delay" },
+                { sample: SAMPLE_DROPS[3], top: 280, left: 60, w: 210, z: 4, cls: "uw-float" },
+              ].map(({ sample, top, left, w, z, cls }) => (
+                <div
+                  key={sample.title}
+                  className={cls}
+                  style={{
+                    position: "absolute",
+                    top, left, width: w, zIndex: z,
+                    borderRadius: 22,
+                    overflow: "hidden",
+                    boxShadow: "0 24px 50px rgba(0,0,0,0.45)",
+                    border: "2px solid rgba(255,247,242,0.15)",
+                    background: FG,
+                  }}
+                >
+                  <div style={{
+                    height: 150,
+                    background: `url(${sample.imageUrl}) center/cover no-repeat`,
+                    position: "relative",
+                  }}>
+                    <div style={{
+                      position: "absolute", top: 10, left: 10,
+                      background: "rgba(18,14,12,0.75)", color: "#fff",
+                      fontSize: 9, fontWeight: 700, letterSpacing: "0.06em",
+                      padding: "5px 9px", borderRadius: 999,
+                      backdropFilter: "blur(6px)",
+                    }}>
+                      EXAMPLE
+                    </div>
+                  </div>
+                  <div style={{ padding: "12px 14px 14px", background: "#1F1512" }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.25, marginBottom: 4 }}>
+                      {sample.title}
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                      <span style={{ fontSize: 12, color: "rgba(255,247,242,0.55)" }}>{sample.business}</span>
+                      <span style={{
+                        background: V, color: "#fff", fontSize: 12, fontWeight: 800,
+                        padding: "5px 10px", borderRadius: 999,
+                      }}>
+                        £{(sample.pricePence / 100).toFixed(sample.pricePence % 100 === 0 ? 0 : 2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
+        {/* Category pills marquee */}
         <div
           className="uw-fade-4"
           style={{
             position: "relative",
-            borderTop: `1px solid ${BORDER}`,
-            background: "rgba(250,250,248,0.94)",
             overflow: "hidden",
+            padding: "0 0 28px",
+            borderTop: "1px solid rgba(255,247,242,0.08)",
           }}
         >
-          <div style={{
-            position: "absolute", left: 0, top: 0, bottom: 0, width: 40, zIndex: 1,
-            background: `linear-gradient(90deg, ${BG}, transparent)`, pointerEvents: "none",
-          }} />
-          <div style={{
-            position: "absolute", right: 0, top: 0, bottom: 0, width: 40, zIndex: 1,
-            background: `linear-gradient(270deg, ${BG}, transparent)`, pointerEvents: "none",
-          }} />
-          <div className="uw-marquee-track" aria-hidden>
+          <div className="uw-marquee-track" aria-hidden style={{ paddingTop: 22 }}>
             {[...BUSINESS_TYPES, ...BUSINESS_TYPES].map((type, i) => (
               <div
                 key={`${type}-${i}`}
                 style={{
-                  display: "flex", alignItems: "center", gap: 14,
-                  padding: "14px 24px", whiteSpace: "nowrap",
-                  borderRight: `1px solid ${BORDER}`,
+                  display: "flex", alignItems: "center",
+                  padding: "0 8px", whiteSpace: "nowrap",
                 }}
               >
                 <span style={{
-                  width: 6, height: 6, borderRadius: "50%",
-                  background: type === "Charity shops" ? V : FG,
-                  display: "inline-block", flexShrink: 0,
-                }} />
-                <span style={{
-                  fontFamily: type === "Charity shops" ? "'Playfair Display', serif" : "'Space Mono', monospace",
-                  fontSize: type === "Charity shops" ? 14 : 11,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: type === "Charity shops" ? 13 : 12,
                   fontStyle: type === "Charity shops" ? "italic" : "normal",
-                  fontWeight: type === "Charity shops" ? 600 : 400,
-                  color: type === "Charity shops" ? V : FG,
-                  letterSpacing: type === "Charity shops" ? "0" : "0.08em",
+                  fontWeight: type === "Charity shops" ? 700 : 600,
+                  color: type === "Charity shops" ? V : "#FFF7F2",
+                  background: type === "Charity shops" ? "rgba(255,45,18,0.18)" : "rgba(255,247,242,0.08)",
+                  border: type === "Charity shops" ? "1px solid rgba(255,45,18,0.45)" : "1px solid rgba(255,247,242,0.12)",
+                  padding: "8px 16px",
+                  borderRadius: 999,
+                  letterSpacing: "0.02em",
                 }}>
-                  {type === "Charity shops" ? "Charity shops — we love them" : type.toUpperCase()}
+                  {type === "Charity shops" ? "Charity shops — we love them" : type}
                 </span>
               </div>
             ))}
@@ -499,7 +600,54 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — mission infographic ── */}
+      {/* ── 2. SAMPLES — desire ── */}
+      <section style={{ background: MUTED }}>
+        <div style={{ padding: isMobile ? "40px 20px 12px" : "56px 40px 16px" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: V, color: "#fff",
+            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+            fontWeight: 700, letterSpacing: "0.06em",
+            padding: "7px 12px", borderRadius: 999, marginBottom: 16,
+          }}>
+            WHAT A DROP FEELS LIKE
+          </div>
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 30 : 40,
+            fontWeight: 800, color: FG, letterSpacing: "-1px",
+            lineHeight: 1.1, maxWidth: 560, marginBottom: 14,
+          }}>
+            See the real thing. Then collect it.
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
+            color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
+          }}>
+            Unwrapped turns your high street into something you can browse from the sofa —
+            then actually go and get.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
+          }}>
+            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
+            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
+            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
+            Just something you chose — waiting for you at the counter.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+            color: MUTED_FG, lineHeight: 1.5, margin: 0, fontWeight: 500,
+          }}>
+            Mock examples · fictional shops — nothing here can be reserved yet.
+          </p>
+        </div>
+
+        <SampleDropsCarousel />
+      </section>
+
+      {/* ── 3. HOW IT WORKS — mission infographic ── */}
       <section style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div style={{
           background: FG,
@@ -508,8 +656,8 @@ export default function Landing() {
         }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 16,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: V, letterSpacing: "0.06em", marginBottom: 16,
           }}>
             <span
               className="uw-pulse-dot"
@@ -518,7 +666,7 @@ export default function Landing() {
             HOW IT WORKS · THE MISSION
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 30 : 44,
             fontWeight: 700, letterSpacing: "-1px",
             lineHeight: 1.08, marginBottom: 18, maxWidth: 720,
@@ -538,13 +686,15 @@ export default function Landing() {
               <span
                 key={tag}
                 style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 9,
-                  letterSpacing: "0.1em", color: BG,
-                  border: "1px solid rgba(250,250,248,0.35)",
-                  padding: "7px 12px",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontWeight: 600, letterSpacing: "0.02em", color: "#fff",
+                  background: "rgba(255,45,18,0.2)",
+                  border: "1px solid rgba(255,45,18,0.45)",
+                  padding: "8px 14px",
+                  borderRadius: 999,
                 }}
               >
-                {tag.toUpperCase()}
+                {tag}
               </span>
             ))}
           </div>
@@ -562,8 +712,10 @@ export default function Landing() {
                 display: "block",
                 width: "100%",
                 height: "auto",
+                borderRadius: RADIUS,
                 border: `1px solid ${BORDER}`,
                 background: BG,
+                boxShadow: "0 18px 40px rgba(18,14,12,0.08)",
               }}
             />
             <figcaption style={{
@@ -596,7 +748,7 @@ export default function Landing() {
             marginRight: "auto",
           }}>
             <p style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: isMobile ? 20 : 24,
               fontWeight: 600,
               color: FG,
@@ -615,8 +767,8 @@ export default function Landing() {
               style={{
                 flexShrink: 0,
                 background: V, color: BG,
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                letterSpacing: "0.1em", padding: "13px 22px",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+                letterSpacing: "0.04em", padding: "13px 22px",
                 border: "none", cursor: "pointer",
                 width: isMobile ? "100%" : "auto",
               }}
@@ -625,50 +777,6 @@ export default function Landing() {
             </button>
           </div>
         </div>
-      </section>
-
-      {/* ── 3. SAMPLES — desire ── */}
-      <section>
-        <div style={{ padding: isMobile ? "40px 20px 20px" : "56px 40px 24px" }}>
-          <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 12,
-          }}>
-            WHAT A DROP FEELS LIKE
-          </div>
-          <h2 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? 28 : 36,
-            fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-            lineHeight: 1.15, maxWidth: 560, marginBottom: 16,
-          }}>
-            See the real thing. Then collect it.
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 16,
-            color: FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 400, marginBottom: 8,
-          }}>
-            Unwrapped turns your high street into something you can browse from the sofa —
-            then actually go and get.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 300, marginBottom: 20,
-          }}>
-            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
-            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
-            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
-            Just something you chose — waiting for you at the counter.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-            color: "#A8A8A0", lineHeight: 1.5, margin: 0,
-          }}>
-            Mock examples · fictional shops — nothing here can be reserved yet.
-          </p>
-        </div>
-
-        <SampleDropsCarousel />
       </section>
 
       {/* ── 4. FOUNDING — belonging + convert ── */}
@@ -680,25 +788,25 @@ export default function Landing() {
         }}>
           <div style={{ maxWidth: 820 }}>
             <div style={{
-              fontFamily: "'Space Mono', monospace", fontSize: 9,
-              color: V, letterSpacing: "0.14em", marginBottom: 12,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+              color: V, letterSpacing: "0.05em", marginBottom: 12,
             }}>
               PRE-LAUNCH · FOUNDING MEMBERS
             </div>
             <div style={{ width: 40, height: 3, background: V, marginBottom: 20 }} />
 
             <div style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: 9,
               color: V,
-              letterSpacing: "0.14em",
+              letterSpacing: "0.05em",
               marginBottom: 12,
             }}>
               WHY WE NEED YOU
             </div>
 
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: isMobile ? 28 : 40,
               fontWeight: 700, color: FG, lineHeight: 1.15,
               letterSpacing: "-0.8px", marginBottom: 16, maxWidth: 640,
@@ -718,109 +826,224 @@ export default function Landing() {
 
             <div style={{
               display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-              gap: isMobile ? 22 : 0,
-              marginBottom: 24,
-              maxWidth: 760,
-              border: `1px solid ${BORDER}`,
-              background: BG,
+              gridTemplateColumns: isMobile ? "1fr" : "1.15fr 0.85fr",
+              gap: isMobile ? 12 : 14,
+              marginBottom: 22,
+              maxWidth: 880,
             }}>
+              {/* Founding shops */}
               <div style={{
-                padding: isMobile ? "18px 18px 0" : "22px 26px",
-                borderRight: isMobile ? "none" : `1px solid ${BORDER}`,
-                borderBottom: isMobile ? `1px solid ${BORDER}` : "none",
+                background: "#fff",
+                border: `1.5px solid ${BORDER}`,
+                borderRadius: 16,
+                padding: isMobile ? 14 : 16,
               }}>
                 <div style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: 9,
-                  color: V,
-                  letterSpacing: "0.14em",
-                  marginBottom: 12,
+                  display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
                 }}>
-                  FOUNDING SHOPS
+                  <span style={{
+                    width: 28, height: 28, borderRadius: 8,
+                    background: V, color: "#fff",
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  }} aria-hidden>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 10.5 6.5 5h11L20 10.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800,
+                    letterSpacing: "0.05em", color: V,
+                  }}>
+                    FOUNDING SHOPS
+                  </span>
                 </div>
-                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 8,
+                }}>
                   {[
-                    "Get seen — first drop free",
-                    "We can shoot your first photo or short clip",
-                    "You set the price — no mystery-bag model",
-                    "Priority on the map as your area opens",
-                  ].map((label) => (
-                    <li
+                    {
+                      label: "Get seen — first drop free",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M2.5 12S6.5 5.5 12 5.5 21.5 12 21.5 12 17.5 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      label: "We can shoot your first photo or short clip",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <rect x="3" y="6" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M17 10.5 21 8v8l-4-2.5V10.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      label: "You set the price — no mystery-bag model",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      label: "Priority on the map as your area opens",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      ),
+                    },
+                  ].map(({ label, icon }) => (
+                    <div
                       key={label}
                       style={{
+                        background: MUTED,
+                        borderRadius: 12,
+                        padding: "10px 10px 11px",
                         display: "flex",
-                        gap: 10,
-                        alignItems: "flex-start",
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 14,
-                        color: MUTED_FG,
-                        lineHeight: 1.45,
+                        flexDirection: "column",
+                        gap: 7,
+                        minHeight: isMobile ? 88 : 96,
                       }}
                     >
-                      <span style={{ color: V, flexShrink: 0, marginTop: 1 }}>—</span>
-                      <span>{label}</span>
-                    </li>
+                      <span style={{
+                        width: 28, height: 28, borderRadius: 8,
+                        background: "#fff", color: V,
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        boxShadow: "0 1px 0 rgba(18,14,12,0.04)",
+                      }}>
+                        {icon}
+                      </span>
+                      <span style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: isMobile ? 12.5 : 13,
+                        fontWeight: 600, color: FG, lineHeight: 1.3,
+                      }}>
+                        {label}
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
-              <div style={{ padding: isMobile ? "18px" : "22px 26px" }}>
+              {/* Founding shoppers */}
+              <div style={{
+                background: FG,
+                color: "#FFF7F2",
+                borderRadius: 16,
+                padding: isMobile ? 14 : 16,
+              }}>
                 <div style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: 9,
-                  color: V,
-                  letterSpacing: "0.14em",
-                  marginBottom: 12,
+                  display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
                 }}>
-                  FOUNDING SHOPPERS
+                  <span style={{
+                    width: 28, height: 28, borderRadius: 8,
+                    background: V, color: "#fff",
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  }} aria-hidden>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="8" r="3.2" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M5 19.5c1.2-3.2 3.6-4.8 7-4.8s5.8 1.6 7 4.8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </span>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800,
+                    letterSpacing: "0.05em", color: V,
+                  }}>
+                    FOUNDING SHOPPERS
+                  </span>
                 </div>
-                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {[
-                    "First look when drops open near you",
-                    "See into shops before you walk over",
-                    "Nominate the local shops you love",
-                  ].map((label) => (
-                    <li
+                    {
+                      label: "First look when drops open near you",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <path d="M12 4v3M12 17v3M4 12H7M17 12h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      label: "See into shops before you walk over",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M4 10h16" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M9 14h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      label: "Nominate the local shops you love",
+                      icon: (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <path d="M12 20s-7-4.4-7-10a4.2 4.2 0 0 1 7-3 4.2 4.2 0 0 1 7 3c0 5.6-7 10-7 10Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        </svg>
+                      ),
+                    },
+                  ].map(({ label, icon }) => (
+                    <div
                       key={label}
                       style={{
                         display: "flex",
+                        alignItems: "center",
                         gap: 10,
-                        alignItems: "flex-start",
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 14,
-                        color: MUTED_FG,
-                        lineHeight: 1.45,
+                        background: "rgba(255,247,242,0.08)",
+                        border: "1px solid rgba(255,247,242,0.12)",
+                        borderRadius: 12,
+                        padding: "10px 12px",
                       }}
                     >
-                      <span style={{ color: V, flexShrink: 0, marginTop: 1 }}>—</span>
-                      <span>{label}</span>
-                    </li>
+                      <span style={{
+                        width: 30, height: 30, borderRadius: 8,
+                        background: "rgba(255,45,18,0.18)", color: V,
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0,
+                      }}>
+                        {icon}
+                      </span>
+                      <span style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: isMobile ? 12.5 : 13.5,
+                        fontWeight: 600, lineHeight: 1.3,
+                        color: "rgba(255,247,242,0.92)",
+                      }}>
+                        {label}
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 15,
+              fontSize: 14,
               color: MUTED_FG,
-              lineHeight: 1.55,
-              margin: "0 0 18px",
+              lineHeight: 1.45,
+              margin: "0 0 14px",
               maxWidth: 560,
             }}>
               Join as a shopper or partner a shop — both help bring your high street to life.
             </p>
 
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <button
                 onClick={() => navigate("/signin")}
                 className="uw-btn-primary"
                 style={{
-                  background: FG, color: BG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "13px 24px",
+                  background: V, color: "#fff",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
                   border: "none", cursor: "pointer",
+                  borderRadius: RADIUS_SM,
                 }}
               >
                 JOIN AS A FOUNDING SHOPPER
@@ -829,10 +1052,11 @@ export default function Landing() {
                 href="/business-apply"
                 className="uw-btn-ghost"
                 style={{
-                  border: `1px solid ${FG}`, color: FG,
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "12px 22px",
-                  textDecoration: "none", display: "inline-block", background: "transparent",
+                  border: `1.5px solid ${FG}`, color: FG,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontWeight: 700, letterSpacing: "0.02em", padding: "10px 16px",
+                  textDecoration: "none", display: "inline-block", background: "#fff",
+                  borderRadius: RADIUS_SM,
                 }}
               >
                 PARTNER AS A FOUNDING SHOP
@@ -860,14 +1084,14 @@ export default function Landing() {
       }}>
         <div>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 16,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: V, letterSpacing: "0.06em", marginBottom: 16,
           }}>
             FOR BUSINESSES · BOARDING NOW
           </div>
 
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(28px, 3.6vw, 42px)",
             fontWeight: 700, color: FG,
             lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 18,
@@ -897,8 +1121,8 @@ export default function Landing() {
             className="uw-btn-primary"
             style={{
               background: FG, color: BG,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              letterSpacing: "0.1em", padding: "15px 28px",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+              letterSpacing: "0.04em", padding: "15px 28px",
               textDecoration: "none", display: "inline-block", border: "none",
             }}
           >
@@ -930,13 +1154,13 @@ export default function Landing() {
               }}
             >
               <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                color: V, letterSpacing: "0.1em", marginBottom: 8,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+                color: V, letterSpacing: "0.04em", marginBottom: 8,
               }}>
                 0{i + 1}
               </div>
               <h3 style={{
-                fontFamily: "'Playfair Display', serif", fontSize: 20,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 20,
                 fontWeight: 700, color: FG, marginBottom: 8, letterSpacing: "-0.3px",
               }}>
                 {label}
@@ -959,13 +1183,13 @@ export default function Landing() {
         background: BG,
       }}>
         <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 9,
-          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+          color: MUTED_FG, letterSpacing: "0.06em", marginBottom: 12,
         }}>
           FOR BUSINESSES · FAQ
         </div>
         <h2 style={{
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'DM Sans', sans-serif",
           fontSize: isMobile ? 26 : 32,
           fontWeight: 700, color: FG, letterSpacing: "-0.6px",
           lineHeight: 1.15, marginBottom: 28, maxWidth: 480,
@@ -998,7 +1222,7 @@ export default function Landing() {
           ].map(({ q, a }) => (
             <div key={q}>
               <h3 style={{
-                fontFamily: "'Playfair Display', serif", fontSize: 18,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 18,
                 fontWeight: 600, color: FG, marginBottom: 8, lineHeight: 1.3,
               }}>
                 {q}
@@ -1022,13 +1246,13 @@ export default function Landing() {
       }}>
         <div style={{ maxWidth: 720 }}>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 16,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: V, letterSpacing: "0.06em", marginBottom: 16,
           }}>
             FOR NEIGHBOURS · NOMINATE
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(26px, 3.4vw, 38px)",
             fontWeight: 700, color: FG,
             lineHeight: 1.15, letterSpacing: "-0.8px", marginBottom: 16,
@@ -1047,8 +1271,8 @@ export default function Landing() {
             className="uw-btn-primary"
             style={{
               background: FG, color: BG,
-              fontFamily: "'Space Mono', monospace", fontSize: 10,
-              letterSpacing: "0.1em", padding: "15px 28px",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+              letterSpacing: "0.04em", padding: "15px 28px",
               textDecoration: "none", display: "inline-block", border: "none",
             }}
           >
@@ -1078,13 +1302,13 @@ export default function Landing() {
         />
         <div style={{ position: "relative", maxWidth: 640 }}>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 16,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: V, letterSpacing: "0.06em", marginBottom: 16,
           }}>
             TWO WAYS IN
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(30px, 4.2vw, 48px)",
             fontWeight: 700, lineHeight: 1.1, letterSpacing: "-1.2px",
             marginBottom: 16,
@@ -1094,7 +1318,7 @@ export default function Landing() {
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-            color: "rgba(250,250,248,0.62)", lineHeight: 1.65,
+            color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
             Shoppers: get on the list to look in, see, claim, and collect.
@@ -1106,8 +1330,8 @@ export default function Landing() {
               className="uw-btn-primary"
               style={{
                 background: V, color: BG,
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                letterSpacing: "0.1em", padding: "15px 28px",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+                letterSpacing: "0.04em", padding: "15px 28px",
                 border: "none", cursor: "pointer",
               }}
             >
@@ -1117,9 +1341,9 @@ export default function Landing() {
               href="/business-apply"
               className="uw-btn-ghost uw-btn-ghost-dark"
               style={{
-                border: "1px solid rgba(250,250,248,0.35)", color: BG,
-                fontFamily: "'Space Mono', monospace", fontSize: 10,
-                letterSpacing: "0.1em", padding: "14px 24px",
+                border: "1px solid rgba(255,248,245,0.4)", color: BG,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+                letterSpacing: "0.04em", padding: "14px 24px",
                 textDecoration: "none", display: "inline-block", background: "transparent",
               }}
             >
@@ -1140,7 +1364,7 @@ export default function Landing() {
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
             <img src="/logo-mark.svg" alt="" width={24} height={24} style={{ display: "block", flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: FG }}>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, fontWeight: 700, color: FG }}>
               Unwrapped
             </span>
           </div>
@@ -1154,8 +1378,8 @@ export default function Landing() {
 
         <div>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 14,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: MUTED_FG, letterSpacing: "0.05em", marginBottom: 14,
           }}>
             EXPLORE
           </div>
@@ -1182,8 +1406,8 @@ export default function Landing() {
 
         <div>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 14,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: MUTED_FG, letterSpacing: "0.05em", marginBottom: 14,
           }}>
             LEGAL
           </div>
@@ -1215,10 +1439,10 @@ export default function Landing() {
           flexWrap: "wrap",
           gap: 12,
         }}>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em" }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 9, color: MUTED_FG, letterSpacing: "0.04em" }}>
             © 2026 UNWRAPPED · LONDON
           </span>
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em" }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 9, color: MUTED_FG, letterSpacing: "0.04em" }}>
             SHOPUNWRAPPED.COM
           </span>
         </div>
@@ -1263,13 +1487,13 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
       }}>
         <div>
           <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
+            color: MUTED_FG, letterSpacing: "0.06em", marginBottom: 12,
           }}>
             LONDON · GETTING READY
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 26 : 32,
             fontWeight: 700, color: FG, letterSpacing: "-0.6px",
             lineHeight: 1.15, marginBottom: 8,
@@ -1311,8 +1535,8 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
           />
           <button type="submit" className="uw-btn-primary" style={{
             background: FG, color: BG,
-            fontFamily: "'Space Mono', monospace", fontSize: 10,
-            letterSpacing: "0.08em", padding: "12px 22px",
+            fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+            letterSpacing: "0.04em", padding: "12px 22px",
             border: "none", cursor: "pointer",
           }}>
             GO
@@ -1440,16 +1664,16 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
       }}>
         <div>
           <div style={{
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: 9,
             color: MUTED_FG,
-            letterSpacing: "0.15em",
+            letterSpacing: "0.06em",
             marginBottom: 12,
           }}>
             LONDON · GETTING READY
           </div>
           <h2 style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 24 : 30,
             fontWeight: 700,
             color: FG,
@@ -1473,10 +1697,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
               : "Nominate a shop you love, or apply to be listed — help bring your high street onto Unwrapped."}
           </p>
           <div style={{
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: 10,
             color: MUTED_FG,
-            letterSpacing: "0.08em",
+            letterSpacing: "0.04em",
             marginBottom: 14,
           }}>
             {filteredPins.length} showing
@@ -1489,7 +1713,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 background: FG,
                 color: BG,
                 textDecoration: "none",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'DM Sans', sans-serif",
                 fontSize: 12,
                 letterSpacing: "0.06em",
                 padding: "12px 18px",
@@ -1509,7 +1733,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 background: "transparent",
                 color: FG,
                 textDecoration: "none",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'DM Sans', sans-serif",
                 fontSize: 12,
                 letterSpacing: "0.06em",
                 padding: "11px 18px",
@@ -1556,9 +1780,9 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
               style={{
                 background: FG,
                 color: BG,
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'DM Sans', sans-serif",
                 fontSize: 10,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.04em",
                 padding: "12px 22px",
                 border: "none",
                 cursor: "pointer",
@@ -1630,10 +1854,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       <span style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                         {p.isMember ? (
                           <span style={{
-                            fontFamily: "'Space Mono', monospace",
+                            fontFamily: "'DM Sans', sans-serif",
                             fontSize: 8,
                             color: FG,
-                            letterSpacing: "0.1em",
+                            letterSpacing: "0.04em",
                             border: `1px solid ${FG}`,
                             padding: "2px 6px",
                           }}>
@@ -1642,10 +1866,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                         ) : null}
                         {focused ? (
                           <span style={{
-                            fontFamily: "'Space Mono', monospace",
+                            fontFamily: "'DM Sans', sans-serif",
                             fontSize: 9,
                             color: p.isMember ? FG : V,
-                            letterSpacing: "0.12em",
+                            letterSpacing: "0.05em",
                           }}>
                             FOCUSED
                           </span>
@@ -1653,10 +1877,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       </span>
                     </div>
                     <div style={{
-                      fontFamily: "'Space Mono', monospace",
+                      fontFamily: "'DM Sans', sans-serif",
                       fontSize: 10,
                       color: MUTED_FG,
-                      letterSpacing: "0.08em",
+                      letterSpacing: "0.04em",
                       lineHeight: 1.45,
                     }}>
                       {p.postcode ? p.postcode : p.district ?? "—"}
@@ -1726,10 +1950,8 @@ function SampleDropsCarousel() {
 
   return (
     <div style={{
-      borderTop: `1px solid ${BORDER}`,
-      borderBottom: `1px solid ${BORDER}`,
-      padding: `${isMobile ? 16 : 20}px 0 ${isMobile ? 20 : 24}px`,
-      background: BG,
+      padding: `${isMobile ? 8 : 12}px 0 ${isMobile ? 28 : 36}px`,
+      background: `linear-gradient(180deg, ${MUTED} 0%, ${BG} 100%)`,
     }}>
       <div
         ref={scrollerRef}
@@ -1740,7 +1962,14 @@ function SampleDropsCarousel() {
           <div
             key={sample.title}
             className="uw-sample-slide"
-            style={{ width: slideWidth, border: `1px solid ${BORDER}` }}
+            style={{
+              width: slideWidth,
+              borderRadius: RADIUS,
+              overflow: "hidden",
+              boxShadow: "0 16px 40px rgba(18,14,12,0.12)",
+              border: `1px solid ${BORDER}`,
+              background: "#fff",
+            }}
           >
             <SampleDropCard sample={sample} compact />
           </div>
@@ -1752,7 +1981,7 @@ function SampleDropsCarousel() {
         alignItems: "center",
         justifyContent: "space-between",
         gap: 16,
-        padding: `${isMobile ? 14 : 16}px ${pad}px 0`,
+        padding: `${isMobile ? 16 : 20}px ${pad}px 0`,
       }}>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {SAMPLE_DROPS.map((sample, i) => (
@@ -1762,8 +1991,8 @@ function SampleDropsCarousel() {
               aria-label={`Go to example ${i + 1}`}
               onClick={() => goTo(i)}
               style={{
-                width: i === index ? 18 : 7,
-                height: 7,
+                width: i === index ? 22 : 8,
+                height: 8,
                 borderRadius: 999,
                 border: "none",
                 padding: 0,
@@ -1782,14 +2011,15 @@ function SampleDropsCarousel() {
             disabled={index === 0}
             onClick={() => goTo(index - 1)}
             style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              padding: "10px 14px",
-              border: `1px solid ${BORDER}`,
-              background: BG,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 14,
+              fontWeight: 700,
+              padding: "10px 16px",
+              border: `1.5px solid ${BORDER}`,
+              background: "#fff",
               color: index === 0 ? MUTED_FG : FG,
               cursor: index === 0 ? "default" : "pointer",
+              borderRadius: RADIUS_SM,
             }}
           >
             ←
@@ -1800,14 +2030,15 @@ function SampleDropsCarousel() {
             disabled={index >= SAMPLE_DROPS.length - 1}
             onClick={() => goTo(index + 1)}
             style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              padding: "10px 14px",
-              border: `1px solid ${BORDER}`,
-              background: BG,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 14,
+              fontWeight: 700,
+              padding: "10px 16px",
+              border: `1.5px solid ${BORDER}`,
+              background: "#fff",
               color: index >= SAMPLE_DROPS.length - 1 ? MUTED_FG : FG,
               cursor: index >= SAMPLE_DROPS.length - 1 ? "default" : "pointer",
+              borderRadius: RADIUS_SM,
             }}
           >
             →
@@ -1829,11 +2060,11 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
   return (
     <div
       className="uw-sample-card"
-      style={{ background: BG, padding: 0, position: "relative" }}
+      style={{ background: "#fff", padding: 0, position: "relative" }}
       aria-label={`Sample drop: ${sample.title}. Not live.`}
     >
       <div style={{
-        height: compact ? 148 : 180,
+        height: compact ? 200 : 240,
         position: "relative", overflow: "hidden", background: MUTED,
       }}>
         <div
@@ -1844,78 +2075,88 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
           }}
         />
         <div style={{
-          position: "absolute", top: 10, left: 10,
-          background: BG, padding: "4px 8px", border: `1px solid ${BORDER}`,
+          position: "absolute", inset: 0,
+          background: "linear-gradient(180deg, transparent 45%, rgba(18,14,12,0.55) 100%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute", top: 12, left: 12,
+          background: "rgba(18,14,12,0.72)", color: "#fff",
+          padding: "6px 10px", borderRadius: 999,
+          backdropFilter: "blur(8px)",
+          fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+          fontWeight: 700, letterSpacing: "0.06em",
         }}>
-          <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 8,
-            color: MUTED_FG, letterSpacing: "0.1em",
-          }}>
-            EXAMPLE
-          </span>
+          EXAMPLE
         </div>
         {hasDiscount && discountPct != null && discountPct > 0 && (
           <div style={{
-            position: "absolute", bottom: 10, left: 10,
-            background: V, color: BG,
-            fontFamily: "'Space Mono', monospace", fontSize: 8,
-            letterSpacing: "0.12em", padding: "4px 7px",
+            position: "absolute", top: 12, right: 12,
+            background: V, color: "#fff",
+            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+            fontWeight: 800, letterSpacing: "0.04em", padding: "6px 10px",
+            borderRadius: 999,
+            boxShadow: "0 8px 18px rgba(255,45,18,0.35)",
           }}>
             {discountPct}% OFF
           </div>
         )}
+        <div style={{
+          position: "absolute", bottom: 12, left: 12, right: 12,
+          display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 8,
+        }}>
+          <span style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+            color: "rgba(255,247,242,0.9)", fontWeight: 600,
+          }}>
+            {sample.left}
+          </span>
+          <span style={{
+            background: "#fff", color: FG,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 800,
+            padding: "7px 12px", borderRadius: 999,
+          }}>
+            £{(sample.pricePence / 100).toFixed(sample.pricePence % 100 === 0 ? 0 : 2)}
+          </span>
+        </div>
       </div>
 
-      <div style={{ padding: compact ? "14px 14px 18px" : "18px 18px 22px" }}>
+      <div style={{ padding: compact ? "16px 16px 18px" : "18px 18px 22px" }}>
         <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 8,
-          color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase",
+          fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+          color: V, letterSpacing: "0.04em", marginBottom: 6, fontWeight: 700,
+          textTransform: "uppercase",
         }}>
           {sample.category} · {sample.neighbourhood}
         </div>
 
         <h3 style={{
-          fontFamily: "'Playfair Display', serif", fontSize: compact ? 15 : 17,
-          fontWeight: 600, color: FG, marginBottom: 4, lineHeight: 1.3,
+          fontFamily: "'DM Sans', sans-serif", fontSize: compact ? 17 : 19,
+          fontWeight: 800, color: FG, marginBottom: 4, lineHeight: 1.25, letterSpacing: "-0.3px",
         }}>
           {sample.title}
         </h3>
 
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-          color: MUTED_FG, marginBottom: 12, fontWeight: 300,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+          color: MUTED_FG, marginBottom: 14, fontWeight: 500,
         }}>
           {sample.business}
         </div>
 
         <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "flex-end",
-          gap: 8, marginBottom: 6, paddingTop: 10, borderTop: `1px solid ${BORDER}`,
-        }}>
-          <DropPrice
-            price={sample.pricePence}
-            originalPrice={sample.originalPricePence}
-            size="sm"
-            layout={hasDiscount ? "stacked" : "inline"}
-          />
-          <span style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG,
-            textAlign: "right", flexShrink: 0,
-          }}>
-            {sample.left}
-          </span>
-        </div>
-
-        <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, marginBottom: 8,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginBottom: 12,
         }}>
           {sample.window}
         </div>
+
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-          color: MUTED_FG, fontStyle: "italic", lineHeight: 1.4,
+          background: FG, color: "#fff",
+          textAlign: "center", fontWeight: 700, fontSize: 13,
+          padding: "12px 14px", borderRadius: RADIUS_SM,
+          letterSpacing: "0.02em",
         }}>
-          Illustrative only — cannot be reserved
+          Claim · illustrative only
         </div>
       </div>
     </div>
