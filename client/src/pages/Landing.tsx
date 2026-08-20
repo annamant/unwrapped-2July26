@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { format } from "date-fns";
 import { trpc } from "../trpc";
@@ -166,6 +166,21 @@ const LANDING_CSS = `
 }
 .uw-sample-card:hover .uw-sample-img {
   transform: scale(1.04);
+}
+.uw-sample-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: inherit;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.uw-sample-carousel::-webkit-scrollbar { display: none; }
+.uw-sample-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 .uw-step {
   transition: background 0.25s ease;
@@ -470,7 +485,144 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. WHY YOU MATTER — belonging + convert ── */}
+      {/* ── 2. HOW IT WORKS — look in → see → buy → collect ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "72px 40px",
+        borderBottom: `1px solid ${BORDER}`,
+        background: MUTED,
+      }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 9,
+          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
+        }}>
+          HOW IT WORKS
+        </div>
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: isMobile ? 28 : 36,
+          fontWeight: 700, color: FG, letterSpacing: "-0.8px",
+          lineHeight: 1.15, marginBottom: 12,
+        }}>
+          Your neighbourhood feed.
+        </h2>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+          color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, marginBottom: 36, fontWeight: 300,
+        }}>
+          On the sofa. At your desk. On the bus home. Open Unwrapped and look inside the shops
+          around you — as if you were standing at the counter. See what's ready, claim it in a tap,
+          then walk over when you're free. Fun. Easy. Local — without the wasted trip.
+        </p>
+
+        <div style={{
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
+          gap: isMobile ? 16 : 0,
+        }}>
+          {[
+            {
+              n: "01",
+              title: "Look in",
+              body: "From the sofa, the desk, or the bus — peek into shops nearby as if you were there.",
+            },
+            {
+              n: "02",
+              title: "See it",
+              body: "A photo or short video of the real thing — not a mystery bag.",
+            },
+            {
+              n: "03",
+              title: "Buy",
+              body: "Claim the drop and pay in the app before it sells out.",
+            },
+            {
+              n: "04",
+              title: "Collect",
+              body: "Walk in. Show your QR. Done — and you're in the shop.",
+            },
+          ].map(({ n, title, body }, i) => (
+            <div
+              key={n}
+              className="uw-step"
+              style={{
+                background: BG,
+                padding: isMobile ? "24px 22px" : "32px 24px",
+                border: isMobile ? `1px solid ${BORDER}` : undefined,
+                borderTop: !isMobile ? `1px solid ${BORDER}` : undefined,
+                borderBottom: !isMobile ? `1px solid ${BORDER}` : undefined,
+                borderLeft: !isMobile && i === 0 ? `1px solid ${BORDER}` : undefined,
+                borderRight: !isMobile ? `1px solid ${BORDER}` : undefined,
+              }}
+            >
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 42, fontWeight: 700, color: V,
+                opacity: 0.2, lineHeight: 1, marginBottom: 16, letterSpacing: "-2px",
+              }}>
+                {n}
+              </div>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 20, fontWeight: 600, color: FG,
+                marginBottom: 10, lineHeight: 1.25,
+              }}>
+                {title}
+              </h3>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14, color: MUTED_FG, lineHeight: 1.65, fontWeight: 300,
+              }}>
+                {body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 3. SAMPLES — desire ── */}
+      <section>
+        <div style={{ padding: isMobile ? "40px 20px 20px" : "56px 40px 24px" }}>
+          <div style={{
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: V, letterSpacing: "0.15em", marginBottom: 12,
+          }}>
+            WHAT A DROP FEELS LIKE
+          </div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 28 : 36,
+            fontWeight: 700, color: FG, letterSpacing: "-0.8px",
+            lineHeight: 1.15, maxWidth: 560, marginBottom: 16,
+          }}>
+            See the real thing. Then collect it.
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 16,
+            color: FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 400, marginBottom: 8,
+          }}>
+            Unwrapped turns your high street into something you can browse from the sofa —
+            then actually go and get.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 300, marginBottom: 20,
+          }}>
+            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
+            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
+            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
+            Just something you chose — waiting for you at the counter.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+            color: "#A8A8A0", lineHeight: 1.5, margin: 0,
+          }}>
+            Mock examples · fictional shops — nothing here can be reserved yet.
+          </p>
+        </div>
+
+        <SampleDropsCarousel />
+      </section>
+
+      {/* ── 4. FOUNDING — belonging + convert ── */}
       {PRE_LAUNCH && (
         <section style={{
           padding: isMobile ? "44px 20px" : "64px 40px",
@@ -622,161 +774,14 @@ export default function Landing() {
         </section>
       )}
 
-      {/* ── 2b. MAP — London is real ── */}
+      {/* ── 5. MAP — London is real ── */}
       {PRE_LAUNCH ? (
         <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS} />
       ) : (
         <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
       )}
 
-      {/* ── 3. SAMPLES — desire ── */}
-      <section>
-        <div style={{ padding: isMobile ? "40px 20px 20px" : "56px 40px 24px" }}>
-          <div style={{
-            fontFamily: "'Space Mono', monospace", fontSize: 9,
-            color: V, letterSpacing: "0.15em", marginBottom: 12,
-          }}>
-            WHAT A DROP FEELS LIKE
-          </div>
-          <h2 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? 28 : 36,
-            fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-            lineHeight: 1.15, maxWidth: 560, marginBottom: 16,
-          }}>
-            See the real thing. Then collect it.
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 16,
-            color: FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 400, marginBottom: 8,
-          }}>
-            Unwrapped turns your high street into something you can browse from the sofa —
-            then actually go and get.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 300, marginBottom: 20,
-          }}>
-            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
-            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
-            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
-            Just something you chose — waiting for you at the counter.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-            color: "#A8A8A0", lineHeight: 1.5, margin: 0,
-          }}>
-            Mock examples · fictional shops — nothing here can be reserved yet.
-          </p>
-        </div>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(220px, 1fr))",
-          gap: 1, background: BORDER,
-          borderTop: `1px solid ${BORDER}`,
-          borderBottom: `1px solid ${BORDER}`,
-        }}>
-          {SAMPLE_DROPS.map((sample) => (
-            <SampleDropCard key={sample.title} sample={sample} compact={!isMobile} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── 4. HOW IT WORKS — look in → see → buy → collect ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "72px 40px",
-        borderBottom: `1px solid ${BORDER}`,
-        background: MUTED,
-      }}>
-        <div style={{
-          fontFamily: "'Space Mono', monospace", fontSize: 9,
-          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
-        }}>
-          HOW IT WORKS
-        </div>
-        <h2 style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: isMobile ? 28 : 36,
-          fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-          lineHeight: 1.15, marginBottom: 12,
-        }}>
-          Your neighbourhood feed.
-        </h2>
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-          color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, marginBottom: 36, fontWeight: 300,
-        }}>
-          On the sofa. At your desk. On the bus home. Open Unwrapped and look inside the shops
-          around you — as if you were standing at the counter. See what's ready, claim it in a tap,
-          then walk over when you're free. Fun. Easy. Local — without the wasted trip.
-        </p>
-
-        <div style={{
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
-          gap: isMobile ? 16 : 0,
-        }}>
-          {[
-            {
-              n: "01",
-              title: "Look in",
-              body: "From the sofa, the desk, or the bus — peek into shops nearby as if you were there.",
-            },
-            {
-              n: "02",
-              title: "See it",
-              body: "A photo or short video of the real thing — not a mystery bag.",
-            },
-            {
-              n: "03",
-              title: "Buy",
-              body: "Claim the drop and pay in the app before it sells out.",
-            },
-            {
-              n: "04",
-              title: "Collect",
-              body: "Walk in. Show your QR. Done — and you're in the shop.",
-            },
-          ].map(({ n, title, body }, i) => (
-            <div
-              key={n}
-              className="uw-step"
-              style={{
-                background: BG,
-                padding: isMobile ? "24px 22px" : "32px 24px",
-                border: isMobile ? `1px solid ${BORDER}` : undefined,
-                borderTop: !isMobile ? `1px solid ${BORDER}` : undefined,
-                borderBottom: !isMobile ? `1px solid ${BORDER}` : undefined,
-                borderLeft: !isMobile && i === 0 ? `1px solid ${BORDER}` : undefined,
-                borderRight: !isMobile ? `1px solid ${BORDER}` : undefined,
-              }}
-            >
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 42, fontWeight: 700, color: V,
-                opacity: 0.2, lineHeight: 1, marginBottom: 16, letterSpacing: "-2px",
-              }}>
-                {n}
-              </div>
-              <h3 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 20, fontWeight: 600, color: FG,
-                marginBottom: 10, lineHeight: 1.25,
-              }}>
-                {title}
-              </h3>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 14, color: MUTED_FG, lineHeight: 1.65, fontWeight: 300,
-              }}>
-                {body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 5. FOR BUSINESSES — help sell ── */}
+      {/* ── 6. FOR BUSINESSES — help sell ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "72px 40px",
         display: "grid",
@@ -879,7 +884,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 5a. MERCHANT FAQ ── */}
+      {/* ── 6a. MERCHANT FAQ ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "64px 40px",
         borderBottom: `1px solid ${BORDER}`,
@@ -941,7 +946,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 5b. RECOMMEND A SHOP — neighbourhood nominations ── */}
+      {/* ── 6b. RECOMMEND A SHOP — neighbourhood nominations ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "64px 40px",
         borderBottom: `1px solid ${BORDER}`,
@@ -1608,6 +1613,140 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
         </div>
       </div>
     </section>
+  );
+}
+
+function SampleDropsCarousel() {
+  const isMobile = useIsMobile();
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const pad = isMobile ? 20 : 40;
+  const slideWidth = isMobile ? "min(300px, 82vw)" : "280px";
+
+  function goTo(next: number) {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const clamped = Math.max(0, Math.min(SAMPLE_DROPS.length - 1, next));
+    const slide = el.children[clamped] as HTMLElement | undefined;
+    if (!slide) return;
+    el.scrollTo({ left: slide.offsetLeft - pad, behavior: "smooth" });
+    setIndex(clamped);
+  }
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const slides = Array.from(el.children) as HTMLElement[];
+      if (!slides.length) return;
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      slides.forEach((slide, i) => {
+        const mid = slide.offsetLeft + slide.offsetWidth / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      setIndex(best);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div style={{
+      borderTop: `1px solid ${BORDER}`,
+      borderBottom: `1px solid ${BORDER}`,
+      padding: `${isMobile ? 16 : 20}px 0 ${isMobile ? 20 : 24}px`,
+      background: BG,
+    }}>
+      <div
+        ref={scrollerRef}
+        className="uw-sample-carousel"
+        style={{ paddingInline: pad, scrollPaddingInline: pad }}
+      >
+        {SAMPLE_DROPS.map((sample) => (
+          <div
+            key={sample.title}
+            className="uw-sample-slide"
+            style={{ width: slideWidth, border: `1px solid ${BORDER}` }}
+          >
+            <SampleDropCard sample={sample} compact />
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 16,
+        padding: `${isMobile ? 14 : 16}px ${pad}px 0`,
+      }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {SAMPLE_DROPS.map((sample, i) => (
+            <button
+              key={sample.title}
+              type="button"
+              aria-label={`Go to example ${i + 1}`}
+              onClick={() => goTo(i)}
+              style={{
+                width: i === index ? 18 : 7,
+                height: 7,
+                borderRadius: 999,
+                border: "none",
+                padding: 0,
+                background: i === index ? V : BORDER,
+                cursor: "pointer",
+                transition: "width 0.2s ease, background 0.2s ease",
+              }}
+            />
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            type="button"
+            aria-label="Previous example"
+            disabled={index === 0}
+            onClick={() => goTo(index - 1)}
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              padding: "10px 14px",
+              border: `1px solid ${BORDER}`,
+              background: BG,
+              color: index === 0 ? MUTED_FG : FG,
+              cursor: index === 0 ? "default" : "pointer",
+            }}
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            aria-label="Next example"
+            disabled={index >= SAMPLE_DROPS.length - 1}
+            onClick={() => goTo(index + 1)}
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              padding: "10px 14px",
+              border: `1px solid ${BORDER}`,
+              background: BG,
+              color: index >= SAMPLE_DROPS.length - 1 ? MUTED_FG : FG,
+              cursor: index >= SAMPLE_DROPS.length - 1 ? "default" : "pointer",
+            }}
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
