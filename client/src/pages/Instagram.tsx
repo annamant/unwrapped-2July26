@@ -36,7 +36,7 @@ export default function Instagram() {
     return start <= now && end >= now && drop.availableQuantity > 0;
   }) ?? [];
 
-  const browseHref = user ? "/home" : "/signin";
+  const browseHref = user ? "/home?tab=shops" : "/signin";
 
   return (
     <div style={{

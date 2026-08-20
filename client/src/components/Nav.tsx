@@ -61,6 +61,7 @@ export default function Nav() {
       <div style={{ ...styles.actions, gap: isMobile ? 14 : 20 }}>
         {user ? (
           <>
+            <a href="/home?tab=shops" style={styles.link}>Shops</a>
             {user.hasBusiness && (
               <a href="/dashboard" style={{ ...styles.link, fontWeight: 500 }}>Business mode</a>
             )}

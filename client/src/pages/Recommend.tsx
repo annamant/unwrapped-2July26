@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "../trpc";
+import Nav from "../components/Nav";
 
 const V = "#E8341C";
 const BG = "#FAFAF8";
@@ -13,20 +14,32 @@ const CATEGORIES = [
   "Kids & Family", "Services & Experiences",
 ];
 
+const emptyForm = {
+  businessName: "",
+  neighbourhood: "",
+  category: "",
+  businessInstagram: "",
+  businessWebsite: "",
+  businessAddress: "",
+  note: "",
+  recommenderName: "",
+  recommenderEmail: "",
+};
+
 export default function Recommend() {
+  const { data: user } = trpc.auth.me.useQuery();
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({
-    businessName: "",
-    neighbourhood: "",
-    category: "",
-    businessInstagram: "",
-    businessWebsite: "",
-    businessAddress: "",
-    note: "",
-    recommenderName: "",
-    recommenderEmail: "",
-  });
+  const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+    setForm((prev) => ({
+      ...prev,
+      recommenderName: prev.recommenderName || user.name || "",
+      recommenderEmail: prev.recommenderEmail || user.email || "",
+    }));
+  }, [user]);
 
   const submit = trpc.recommendations.submit.useMutation({
     onSuccess: () => setSubmitted(true),
@@ -38,54 +51,53 @@ export default function Recommend() {
       setForm((prev) => ({ ...prev, [k]: e.target.value }));
   }
 
+  const shopsHref = user ? "/home?tab=shops" : "/";
+
   if (submitted) {
     return (
-      <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
-        <div style={{ maxWidth: 480, textAlign: "center" }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: "#22C55E", letterSpacing: "0.2em", marginBottom: 20 }}>
-            RECOMMENDATION RECEIVED
-          </div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: FG, lineHeight: 1.1, marginBottom: 16 }}>
-            We'll reach out.
-          </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 12 }}>
-            Thanks for nominating <strong style={{ color: FG }}>{form.businessName}</strong>. We'll contact them and let them know someone in the neighbourhood picked them for Unwrapped.
-          </p>
-          {form.recommenderEmail ? (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.7, marginBottom: 32 }}>
-              If they come on board, we can let you know at <strong style={{ color: FG }}>{form.recommenderEmail}</strong>.
+      <div style={{ minHeight: "100vh", background: BG }}>
+        <Nav />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "64px 24px" }}>
+          <div style={{ maxWidth: 480, textAlign: "center" }}>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: "#22C55E", letterSpacing: "0.2em", marginBottom: 20 }}>
+              RECOMMENDATION RECEIVED
+            </div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: FG, lineHeight: 1.1, marginBottom: 16 }}>
+              We'll reach out.
+            </h1>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 12 }}>
+              Thanks for nominating <strong style={{ color: FG }}>{form.businessName}</strong>. We'll contact them and let them know someone in the neighbourhood picked them for Unwrapped.
             </p>
-          ) : (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.7, marginBottom: 32 }}>
-              Want another tip? Recommend as many as you love.
-            </p>
-          )}
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button
-              onClick={() => {
-                setSubmitted(false);
-                setForm({
-                  businessName: "",
-                  neighbourhood: "",
-                  category: "",
-                  businessInstagram: "",
-                  businessWebsite: "",
-                  businessAddress: "",
-                  note: "",
-                  recommenderName: "",
-                  recommenderEmail: "",
-                });
-              }}
-              style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 10, color: BG, background: FG,
-                border: `1px solid ${FG}`, padding: "12px 24px", letterSpacing: "0.1em", cursor: "pointer",
-              }}
-            >
-              RECOMMEND ANOTHER
-            </button>
-            <a href="/" style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: FG, border: `1px solid ${FG}`, padding: "12px 24px", textDecoration: "none", letterSpacing: "0.1em" }}>
-              BACK TO UNWRAPPED
-            </a>
+            {form.recommenderEmail ? (
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.7, marginBottom: 32 }}>
+                If they come on board, we can let you know at <strong style={{ color: FG }}>{form.recommenderEmail}</strong>.
+              </p>
+            ) : (
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.7, marginBottom: 32 }}>
+                Want another tip? Recommend as many as you love — that's how the map fills.
+              </p>
+            )}
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={() => {
+                  setSubmitted(false);
+                  setForm({
+                    ...emptyForm,
+                    recommenderName: user?.name || form.recommenderName,
+                    recommenderEmail: user?.email || form.recommenderEmail,
+                  });
+                }}
+                style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 10, color: BG, background: FG,
+                  border: `1px solid ${FG}`, padding: "12px 24px", letterSpacing: "0.1em", cursor: "pointer",
+                }}
+              >
+                RECOMMEND ANOTHER
+              </button>
+              <a href={shopsHref} style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: FG, border: `1px solid ${FG}`, padding: "12px 24px", textDecoration: "none", letterSpacing: "0.1em" }}>
+                {user ? "BACK TO SHOPS" : "BACK TO UNWRAPPED"}
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -94,14 +106,7 @@ export default function Recommend() {
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
-      <div style={{ borderBottom: `1px solid ${BORDER}`, padding: "18px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, textDecoration: "none" }}>
-          Unwrapped
-        </a>
-        <a href="/business-apply" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, textDecoration: "none" }}>
-          Own the business? Apply →
-        </a>
-      </div>
+      <Nav />
 
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px" }}>
         <div style={{ marginBottom: 48 }}>
@@ -149,22 +154,29 @@ export default function Recommend() {
             />
           </Row>
 
-          <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 24, marginTop: 4 }}>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 16 }}>
-              ABOUT YOU · OPTIONAL
-            </div>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.6, marginBottom: 16 }}>
-              Leave your details if you'd like us to tell you when they're on Unwrapped — and so we can say a neighbour nominated them.
+          {user ? (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.6 }}>
+              Nominating as <strong style={{ color: FG }}>{user.name || user.email}</strong>
+              {user.email ? ` · ${user.email}` : ""}. We'll use this if we tell the shop a neighbour sent us.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <Row label="Your name">
-                <input value={form.recommenderName} onChange={set("recommenderName")} placeholder="Optional" style={inputStyle} />
-              </Row>
-              <Row label="Your email">
-                <input type="email" value={form.recommenderEmail} onChange={set("recommenderEmail")} placeholder="you@email.com" style={inputStyle} />
-              </Row>
+          ) : (
+            <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 24, marginTop: 4 }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 16 }}>
+                ABOUT YOU · OPTIONAL
+              </div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.6, marginBottom: 16 }}>
+                Leave your details if you'd like us to tell you when they're on Unwrapped — and so we can say a neighbour nominated them.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <Row label="Your name">
+                  <input value={form.recommenderName} onChange={set("recommenderName")} placeholder="Optional" style={inputStyle} />
+                </Row>
+                <Row label="Your email">
+                  <input type="email" value={form.recommenderEmail} onChange={set("recommenderEmail")} placeholder="you@email.com" style={inputStyle} />
+                </Row>
+              </div>
             </div>
-          </div>
+          )}
 
           {error && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: V }}>{error}</p>
@@ -185,8 +197,8 @@ export default function Recommend() {
                 businessWebsite: form.businessWebsite.trim() || undefined,
                 businessAddress: form.businessAddress.trim() || undefined,
                 note: form.note.trim() || undefined,
-                recommenderName: form.recommenderName.trim() || undefined,
-                recommenderEmail: form.recommenderEmail.trim() || undefined,
+                recommenderName: form.recommenderName.trim() || user?.name || undefined,
+                recommenderEmail: form.recommenderEmail.trim() || user?.email || undefined,
               });
             }}
             disabled={submit.isPending}

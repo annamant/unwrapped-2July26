@@ -21,7 +21,7 @@ export default function Onboarding() {
   const complete = trpc.auth.completeOnboarding.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
-      navigate("/home");
+      navigate("/home?tab=shops");
     },
     onError: (e) => setError(e.message),
   });
@@ -51,7 +51,7 @@ export default function Onboarding() {
             What are you into?
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.6 }}>
-            Pick at least 3 categories. We'll show you drops from local businesses that match.
+            Pick at least 3 categories. We'll match you with neighbourhood shops — and tell you when they drop.
           </p>
         </div>
 

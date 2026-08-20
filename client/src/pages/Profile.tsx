@@ -18,7 +18,7 @@ const CATEGORIES = [
   "Kids & Family", "Services & Experiences",
 ];
 
-type Tab = "reservations" | "past" | "notifications" | "account";
+type Tab = "reservations" | "past" | "following" | "notifications" | "account";
 
 export default function Profile() {
   const [, navigate] = useLocation();
@@ -29,6 +29,7 @@ export default function Profile() {
   const { data: user } = trpc.auth.me.useQuery();
   const { data: active } = trpc.reservations.myReservations.useQuery({ status: "active" }, { enabled: tab === "reservations" });
   const { data: past } = trpc.reservations.myReservations.useQuery({ status: "past" }, { enabled: tab === "past" });
+  const { data: following } = trpc.businesses.myFollows.useQuery(undefined, { enabled: tab === "following" });
   const { data: notifPrefs } = trpc.auth.getNotificationPreferences.useQuery(undefined, { enabled: tab === "notifications" });
 
   const utils = trpc.useUtils();
@@ -41,6 +42,7 @@ export default function Profile() {
   const TABS: { key: Tab; label: string }[] = [
     { key: "reservations", label: "My drops" },
     { key: "past", label: "Past" },
+    { key: "following", label: "Following" },
     { key: "notifications", label: "Notifications" },
     { key: "account", label: "Account" },
   ];
@@ -92,9 +94,11 @@ export default function Profile() {
             {!active?.length ? (
               <EmptyState
                 title="No active drops"
-                sub="When you reserve a drop, your ticket appears here."
-                cta="Browse drops"
-                href="/home"
+                sub="When you reserve a drop, your ticket appears here. Meanwhile, follow shops you love so you don't miss them."
+                cta="See member shops"
+                href="/home?tab=shops"
+                extraCta="Nominate a shop"
+                extraHref="/recommend"
               />
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 1, background: BORDER }}>
@@ -127,6 +131,42 @@ export default function Profile() {
                     status={reservation.status}
                     referenceCode={reservation.referenceCode}
                   />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Following ── */}
+        {tab === "following" && (
+          <div>
+            {!following?.length ? (
+              <EmptyState
+                title="You're not following anyone yet"
+                sub="Follow member shops and we'll tell you when they drop. Don't see yours? Nominate them."
+                cta="See member shops"
+                href="/home?tab=shops"
+                extraCta="Nominate a shop"
+                extraHref="/recommend"
+              />
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 1, background: BORDER }}>
+                {following.map(({ business, since }) => (
+                  <a
+                    key={business.id}
+                    href={`/business/${business.slug}`}
+                    style={{ background: BG, padding: "20px", textDecoration: "none", display: "block" }}
+                  >
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase" }}>
+                      {business.category}
+                    </div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600, color: FG, marginBottom: 6 }}>
+                      {business.name}
+                    </div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                      Following since {format(new Date(since), "d MMM yyyy")}
+                    </div>
+                  </a>
                 ))}
               </div>
             )}
@@ -318,12 +358,25 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-function EmptyState({ title, sub, cta, href }: { title: string; sub: string; cta?: string; href?: string }) {
+function EmptyState({ title, sub, cta, href, extraCta, extraHref }: {
+  title: string; sub: string; cta?: string; href?: string; extraCta?: string; extraHref?: string;
+}) {
   return (
     <div style={{ padding: "60px 0", textAlign: "center" }}>
       <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, color: MUTED_FG, marginBottom: 8 }}>{title}</p>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 24 }}>{sub}</p>
-      {cta && href && <a href={href} style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: FG, letterSpacing: "0.1em", border: `1px solid ${FG}`, padding: "10px 20px" }}>{cta.toUpperCase()}</a>}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+        {cta && href && (
+          <a href={href} style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: BG, background: FG, letterSpacing: "0.1em", padding: "10px 20px", textDecoration: "none" }}>
+            {cta.toUpperCase()}
+          </a>
+        )}
+        {extraCta && extraHref && (
+          <a href={extraHref} style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: FG, letterSpacing: "0.1em", border: `1px solid ${FG}`, padding: "10px 20px", textDecoration: "none" }}>
+            {extraCta.toUpperCase()}
+          </a>
+        )}
+      </div>
     </div>
   );
 }

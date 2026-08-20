@@ -1266,12 +1266,12 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
     });
 
     const extras: PrelaunchDirectoryPin[] = memberRows
-      .filter((m) => !matchedMemberIds.has(m.id))
+      .filter((m) => !matchedMemberIds.has(m.id) && m.lat != null && m.lng != null)
       .map((m) => ({
         id: `member-${m.id}`,
         name: m.name,
-        lat: m.lat,
-        lng: m.lng,
+        lat: m.lat as number,
+        lng: m.lng as number,
         postcode: m.postcode ?? undefined,
         address: m.address ?? undefined,
         district: m.city ?? undefined,

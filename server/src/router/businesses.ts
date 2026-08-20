@@ -18,8 +18,8 @@ function generateSlug(name: string): string {
 
 export const businessesRouter = router({
 
-  // Public: claimed member shops for the landing directory map/list.
-  // Only returns shops with a map pin (location lat/lng).
+  // Public: claimed member shops for the landing directory and shopper home.
+  // Lat/lng are optional — shops without a pin still appear in the list.
   directoryMembers: publicProcedure.query(async ({ ctx }) => {
     const rows = await ctx.db
       .select({
@@ -27,6 +27,8 @@ export const businessesRouter = router({
         name: businesses.name,
         slug: businesses.slug,
         category: businesses.category,
+        description: businesses.description,
+        logoUrl: businesses.logoUrl,
         city: businesses.city,
         address: businesses.address,
         postcode: businesses.postcode,
@@ -52,19 +54,19 @@ export const businessesRouter = router({
       ))
       .orderBy(businesses.name);
 
-    return rows
-      .filter((r) => r.lat != null && r.lng != null)
-      .map((r) => ({
-        id: r.id,
-        name: r.name,
-        slug: r.slug,
-        category: r.category,
-        city: r.city,
-        address: r.address,
-        postcode: r.postcode,
-        lat: r.lat as number,
-        lng: r.lng as number,
-      }));
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      slug: r.slug,
+      category: r.category,
+      description: r.description,
+      logoUrl: r.logoUrl,
+      city: r.city,
+      address: r.address,
+      postcode: r.postcode,
+      lat: r.lat,
+      lng: r.lng,
+    }));
   }),
 
   // Public: get a business profile by slug (includes active drops)

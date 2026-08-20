@@ -159,6 +159,11 @@ export default function BusinessProfile() {
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 8 }}>
                   Follow to get notified when a new drop lands.
                 </p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 16 }}>
+                  <a href="/home?tab=shops" style={{ color: FG }}>See other member shops</a>
+                  {" · "}
+                  <a href="/recommend" style={{ color: FG }}>Nominate a shop</a>
+                </p>
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 1, background: BORDER }}>
