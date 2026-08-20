@@ -499,12 +499,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — look in → see → claim → collect ── */}
+      {/* ── 2. HOW IT WORKS — mission infographic ── */}
       <section style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div style={{
           background: FG,
           color: BG,
-          padding: isMobile ? "44px 20px 36px" : "56px 40px 48px",
+          padding: isMobile ? "40px 20px 32px" : "52px 40px 40px",
         }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
@@ -515,26 +515,17 @@ export default function Landing() {
               className="uw-pulse-dot"
               style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
             />
-            HOW IT WORKS
+            HOW IT WORKS · THE MISSION
           </div>
           <h2 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: isMobile ? 30 : 44,
             fontWeight: 700, letterSpacing: "-1px",
-            lineHeight: 1.08, marginBottom: 18, maxWidth: 680,
+            lineHeight: 1.08, marginBottom: 18, maxWidth: 720,
           }}>
-            The best of your high street —{" "}
+            Bring the buzz back to your high street —{" "}
             <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>before it's gone.</em>
           </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
-            color: "rgba(250,250,248,0.88)", lineHeight: 1.6, maxWidth: 620, fontWeight: 400,
-            marginBottom: 22,
-          }}>
-            That fresh batch. The last salon slot. The piece someone else is already eyeing.
-            Look inside real shops from wherever you are, claim what you want in seconds,
-            and walk over when you're ready — no mystery bag, no wasted trip, no "sorry, we just sold out."
-          </p>
           <div style={{
             display: "flex", flexWrap: "wrap", gap: isMobile ? 8 : 12,
           }}>
@@ -560,91 +551,38 @@ export default function Landing() {
         </div>
 
         <div style={{
-          padding: isMobile ? "28px 20px 40px" : "36px 40px 56px",
+          padding: isMobile ? "24px 16px 36px" : "32px 40px 48px",
           background: BG,
         }}>
-          <div style={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            alignItems: "stretch",
-            gap: isMobile ? 12 : 0,
-          }}>
-            {[
-              {
-                n: "01",
-                title: "Look in",
-                body: "Open the map and peek inside bakeries, boutiques, and salons near you — from the sofa or the bus.",
-              },
-              {
-                n: "02",
-                title: "See it",
-                body: "Every drop is a real photo or short clip of the actual thing. No guessing. No blind bag.",
-              },
-              {
-                n: "03",
-                title: "Claim it",
-                body: "Tap to pay in the app. It's locked in — before the next person gets there first.",
-              },
-              {
-                n: "04",
-                title: "Collect it",
-                body: "Walk in, show your QR, walk out with it. You're already through the door.",
-              },
-            ].flatMap(({ n, title, body }, i, arr) => {
-              const card = (
-                <div
-                  key={n}
-                  className="uw-step"
-                  style={{
-                    flex: 1,
-                    background: BG,
-                    padding: isMobile ? "22px 20px" : "28px 22px",
-                    border: `1px solid ${BORDER}`,
-                    minWidth: 0,
-                  }}
-                >
-                  <div style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 36,
-                    height: 36,
-                    background: V,
-                    color: BG,
-                    fontFamily: "'Space Mono', monospace",
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: "0.05em",
-                    marginBottom: 16,
-                  }}>
-                    {n}
-                  </div>
-                  <h3 style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: isMobile ? 22 : 24, fontWeight: 700, color: FG,
-                    marginBottom: 10, lineHeight: 1.2,
-                  }}>
-                    {title}
-                  </h3>
-                  <p style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 14, color: FG, lineHeight: 1.6, fontWeight: 400,
-                    margin: 0,
-                  }}>
-                    {body}
-                  </p>
-                </div>
-              );
-              if (isMobile || i === arr.length - 1) return [card];
-              return [
-                card,
-                <div key={`arrow-${n}`} className="uw-step-arrow" aria-hidden="true">→</div>,
-              ];
-            })}
-          </div>
+          <figure style={{ margin: 0, maxWidth: 1100, marginLeft: "auto", marginRight: "auto" }}>
+            <img
+              src="/landing/mission-infographic.jpg"
+              alt="Unwrapped mission infographic: peek into local shops from your phone with real photos and clips; see it, claim it, and collect with a QR code; no mystery bags — choose real stock like sourdough or a salon slot; bring buzz and more faces through local shop doors."
+              style={{
+                display: "block",
+                width: "100%",
+                height: "auto",
+                border: `1px solid ${BORDER}`,
+                background: BG,
+              }}
+            />
+            <figcaption style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              color: MUTED_FG,
+              lineHeight: 1.55,
+              marginTop: 14,
+              textAlign: "center",
+              maxWidth: 640,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}>
+              Connects neighbours to local shops in real time — see the real thing, claim it, collect it.
+            </figcaption>
+          </figure>
 
           <div style={{
-            marginTop: isMobile ? 28 : 32,
+            marginTop: isMobile ? 24 : 28,
             padding: isMobile ? "20px 18px" : "22px 26px",
             border: `1px solid ${FG}`,
             background: MUTED,
@@ -653,6 +591,9 @@ export default function Landing() {
             alignItems: isMobile ? "flex-start" : "center",
             justifyContent: "space-between",
             gap: 16,
+            maxWidth: 1100,
+            marginLeft: "auto",
+            marginRight: "auto",
           }}>
             <p style={{
               fontFamily: "'Playfair Display', serif",
