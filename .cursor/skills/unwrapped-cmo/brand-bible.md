@@ -1,40 +1,45 @@
 # Unwrapped brand bible (social)
 
-Source of truth for marketing agents. Product site: https://shopunwrapped.com
+Source of truth for marketing voice + visuals. Product / positioning thesis: **`brand/WHITE_PAPER_v1.md`** (v1 — CMO, SDR, and related agents must follow it).
+
+Product site: https://shopunwrapped.com
 
 ## What Unwrapped is
 
-Local drop discovery and reservation. Neighbourhood operators publish **time-limited drops**; shoppers **reserve in seconds** and **collect with a QR code**.
+A new way to shop your high street: **look in** from afar → **see** what's ready (photo or short video) → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
-**Locked one-liner (use everywhere — tagline, bio, OG, LinkedIn, posts):**  
-**Limited local drops, reserved in seconds.**
+**Locked shopper framing:**  
+**A new way to shop your high street. See it. Claim it. Collect it.**
 
-Do **not** use “people and places” as the product definition or umbrella. That phrase is retired.
+**Locked merchant framing:**  
+**Get seen — so you can sell and welcome customers through the door.**
+
+Do **not** position Unwrapped as Too Good To Go (mystery bags / waste / deep discount), a static directory, or livestream commerce (live video is Phase 2 only — white paper §9).
 
 ### Who lists drops (framing — non-negotiable)
 
-**Problem:** “Independent shops” is too narrow. “Local businesses” is too vague — restaurants, freelancers, services and charities disappear inside it.
+**Problem:** “Independent shops” alone is too narrow if overused. Prefer **your high street / local shops**. “Local businesses” alone is too vague.
 
-**Solution — three layers; the one-liner stays product-first:**
+**Solution — three layers:**
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG, LinkedIn tagline — must stay short | **Limited local drops, reserved in seconds.** |
-| **2. Proof set** | Body copy, landing, apply pages, emails — when there’s room | Concrete types (below) |
-| **3. Eligibility** | Business pitch / apply — the real filter | **If people can collect from you in person during a window, you can list a drop.** |
+| **1. One-liner** | Headlines, posters, bio, OG | **See it. Claim it. Collect it.** (with “a new way to shop your high street” when there’s room) |
+| **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
+| **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
 **Proof set** (rotate; don’t dump all in a headline):  
 shops · restaurants · cafés · salons · freelancers · services · charities  
 (+ accountants, trainers, studios, makers when useful)
 
-**Product truth:** Unwrapped is not retail-only and not “any company.” It’s for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
+**Product truth:** Unwrapped is for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** limited local drops · reserved in seconds · neighbourhood · from your street · collect in person · proof set nouns  
-**Don’t say:** people and places (retired) · independent shops (alone) · local businesses (alone) · marketplace for SMEs
+**Do say:** look in · see it · claim it · collect · your high street · local shops · get seen · pay upfront · photo or short video  
+**Don't say:** mystery bag · waste clearance as the brand · livestream (unless Phase 2) · people and places (retired) · independents (alone / overused)
 
-**Example — short:** Limited local drops, reserved in seconds.  
-**Example — with proof:** Shops, restaurants, freelancers, services, charities — if they can hand it over in person, they can drop.  
-**Example — business CTA:** Got a door people can walk to? List a drop.
+**Example — short:** A new way to shop your high street. See it. Claim it. Collect it.  
+**Example — with proof:** Shops, restaurants, freelancers, services, charities — look in, claim what’s ready, collect in person.  
+**Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
 

@@ -17,29 +17,33 @@ In a company this role is usually called **SDR**, **BDR** (Business Development 
 
 You do **discovery + list building**. You do **not** bulk-send claim emails unless Anna explicitly asks.
 
-## Strategic direction (Aug 2026) — read this first
+## Strategic direction — white paper v1 (canonical)
 
-Unwrapped is now a **curation-led, audience-first** product. The SDR's job is to find businesses **worth curating**, not businesses that want marketing. The pitch is "we come to you and do the curation work for you — first drop free," not "a new way to promote yourself."
+**Source of truth:** `brand/WHITE_PAPER_v1.md` (product positioning, competitor gaps, merchant pitch §10, Phase 1 media).
 
-### Target profile (the businesses we want)
-- **Independent shops with genuine scarcity**: allocated wine, end-of-day flowers, signed/first-edition books, limited beauty, fashion samples/deadstock, small-batch spirits, specialty food with limited runs, charity donated designer/homeware.
-- **The "easy to convince = bad drop" mismatch**: small shops that are hungry and bad at marketing are easy to sell "promotion" to, but they have nothing worth dropping. The businesses with the best drops already have an audience and don't need promotion — they're harder to convince but they're the ones we want. Target the second group.
-- **Geography: Lambeth-first**, enforced by the photographer + curator travelling on-site. Then South London, then one more borough. Don't scrape outside travel distance.
+Unwrapped helps local shops **get seen** so they can sell and welcome customers through the door. Shoppers **look in from afar** (sofa / bus), see the real thing (photo / short clip), claim & pay, collect with QR. Not Too Good To Go. Not Groupon. Not a static directory.
 
-### Category set (launch)
-Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. **Not** services, freelancers, accountants, tech, generic restaurants/cafes. When scraping, prioritise these categories; de-prioritise "Services & Experiences" and "Tech & Gadgets" rows even if they appear in existing CSVs.
+### Target profile
+- Local high-street operators who can host an in-person collection window (shops, food & drink, beauty, retail, charity shops, services with bookable slots, etc.).
+- Prefer businesses with something worth *showing* — limited batches, quiet capacity, new arrivals — not “mystery surplus only.”
+- Geography: dense neighbourhood-by-neighbourhood seeding (white paper §8). Current list work remains borough-based (Lambeth / Wandsworth / next); pilot narrative may name a primary zone (e.g. Hackney) when briefing outreach.
 
-### Charity segment — different track
-Charities have different economics: **flat-fee / no commission** on charity drops (donated stock has no margin for percentage take). Outreach to charities should be separate from commercial shops. Look for: charity shops with curated designer/furniture/homeware potential (Crisis, Emmaus, Save the Children, etc.), charity shops that already get good donations but don't curate them.
+### The pitch (when asked for outreach copy)
+Use white paper §10. Short form:
 
-### The pitch (for outreach copy, when asked)
-"We come to your shop. We photograph your best limited item. We write the story. We put it in front of our weekly drop list. You do nothing. First drop free. If it sells, we take a small commission. If it doesn't, you've lost nothing." Lead with curation + no risk, not promotion + new clients.
+"We're helping local shops get seen on a neighbourhood map. When something's ready, you post a photo or short video, set price and quantity, and locals claim it in the app, pay upfront, and walk in with a QR. No catalog. You control the price. First founding perks may include help with your first shoot."
+
+Lead with **get seen + foot traffic + pay upfront**, not “we promote you” or mystery-bag clearance.
+
+### Category set
+Full scrape still uses all Unwrapped category query variants (see below). For outreach ranking, prioritise categories that fit visual drops and in-person collect; de-prioritise pure online / chain-like junk. Charity shops remain a valued track (white paper includes them explicitly).
 
 ## Always read first
 
 1. This skill
-2. `tmp/places/README.md` — borough scripts, permanent scrape rules, outputs
-3. Progress files for the borough in progress (e.g. `tmp/places/*_progress.json`)
+2. **`brand/WHITE_PAPER_v1.md`** — positioning + merchant pitch
+3. `tmp/places/README.md` — borough scripts, permanent scrape rules, outputs
+4. Progress files for the borough in progress (e.g. `tmp/places/*_progress.json`)
 
 ## What “done” looks like for a borough
 
@@ -54,7 +58,7 @@ Charities have different economics: **flat-fee / no commission** on charity drop
 
 Fashion & Apparel · Food & Drink · Beauty & Wellness · Home & Living · Art & Culture · Books & Music · Sports & Outdoor · Tech & Gadgets · Kids & Family · Services & Experiences
 
-**Launch priority (Aug 2026):** Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. These are the categories the curator is actively targeting for the weekly drop. The full 10-category set above is still scraped for completeness, but when filtering/ranking leads for outreach, prioritise the launch set and de-prioritise Services & Experiences and Tech & Gadgets. See the Strategic direction section above.
+**Launch priority:** Categories that fit visual drops + in-person collect (food & drink, beauty, fashion, home, books, charity shops, etc.). Full 10-category set above is still scraped for completeness; when filtering/ranking leads for outreach, prioritise visual/high-street fit and de-prioritise thin “Services & Experiences” / “Tech & Gadgets” junk. See `brand/WHITE_PAPER_v1.md` and the Strategic direction section above.
 
 **Permanent rule:** every borough uses the **full** multi-query set per category (same as Lambeth / `scrape_lambeth.mjs` / `scrape_wandsworth.mjs`). Never run a lean pass for a borough.
 

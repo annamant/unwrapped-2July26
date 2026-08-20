@@ -27,34 +27,32 @@ You already know the brand, the job, and the tools. The human briefs you when th
 ## Always read first
 
 1. [brand-bible.md](brand-bible.md) — who Unwrapped is, voice, visual system
-2. [content-system.md](content-system.md) — pillars, formats, hooks
-3. [instagram-playbook.md](instagram-playbook.md) — Instagram workflow
-4. [gamma-theme-playbook.md](gamma-theme-playbook.md) — **Unwrapped 2026** Gamma theme (colours, fonts, logo, setup)
-5. `marketing/instagram/CONTENT_CALENDAR.md`
+2. **`brand/WHITE_PAPER_v1.md`** — canonical product / positioning (vision, competitors, merchant pitch, Phase 1 loop)
+3. [content-system.md](content-system.md) — pillars, formats, hooks
+4. [instagram-playbook.md](instagram-playbook.md) — Instagram workflow
+5. [gamma-theme-playbook.md](gamma-theme-playbook.md) — **Unwrapped 2026** Gamma theme (colours, fonts, logo, setup)
+6. `marketing/instagram/CONTENT_CALENDAR.md`
 
-Repo visuals: `brand/` + `brand/README.md`.
+Repo visuals: `brand/` + `brand/README.md`. Product thesis: **`brand/WHITE_PAPER_v1.md`**.
 
-## Strategic direction (Aug 2026) — read this first
+## Strategic direction — white paper v1 (canonical)
 
-Unwrapped is now a **curation-led, audience-first** product, not a marketplace launch. The platform/website stays as-is (marketplace shape), but the first 12–18 months of work happen **off-platform**: one curated drop a week, manually produced, distributed via Instagram and a weekly email.
+**Source of truth for product positioning:** `brand/WHITE_PAPER_v1.md`.
 
-### The operating model
-- A **photographer + curator** go on-site to the shop and produce the first few drops — photography, copy, story. The business does nothing.
-- **First drop free.** Commission on completed reservations after that: 18% tapering to ~10% at 5+ drops. **Charity drops are flat-fee / no commission** — different economics, different outreach.
-- The **curator picks the item**, not the business. The business has veto power. This editorial act is the curation signal that makes the audience trust the next drop.
-- Cadence is **one drop a week**, set by operational capacity (photographer + curator can do ~1–2 shoots/week), not by ambition.
-- Geography is **Lambeth-first**, enforced by travel distance for on-site shoots. Then South London, then one more borough.
+Unwrapped is an **eventized commerce engine for the high street**: look in from afar → see the real thing (photo / short async video) → claim & pay → collect in person with QR. Not a mystery-bag waste app. Not a static directory. Not deep-discount Groupon.
+
+### Locked public framing
+- **Shopper:** A new way to shop your high street. See it. Claim it. Collect it. (Look into local shops from the sofa / bus.)
+- **Merchant:** Get seen — so you can sell and welcome customers through the door.
+- **Vs Too Good To Go:** They hide product + cut price. We **show** product, preserve brand, convert screen time into a collection visit.
+- **Media roadmap:** Phase 1 = photos + short async clips. Phase 2 = live video (future only — never imply live broadcasts today).
+- **Founding perk (§8):** Concierge help shooting / writing first drops is a pilot incentive, not the whole product story. Default product: merchant uploads a photo or short clip themselves.
 
 ### What this means for marketing
-- **Instagram is the primary channel** for the weekly drop. The drop is announced, teased, and revealed on Instagram; the email is the weekly digest.
-- **Voice = curator voice**, not marketplace voice. Editorial, one item, one story, one reason. Not "browse many drops from many businesses."
-- **Content pillars shift**: the weekly drop is the hero. Story of the drop, the maker/shop, the curator's note, behind-the-scenes from the shoot, the collection moment.
-- **Emails are weekly, not daily.** One drop, one email. Cadence honesty: "we'll only email when a drop matches your taste — usually once a week."
-- **Posters/materials reflect curation**: single item, editorial, story-led. NOT marketplace breadth (many categories, many businesses, "browse drops near you").
-- **The pitch to businesses** (for any business-facing creative) is: "We come to your shop. We photograph your best limited item. We write the story. We put it in front of our weekly drop list. You do nothing. First drop free." Lead with curation + no risk, not promotion + new clients.
-
-### Category set (launch)
-Wine, Flowers, Books, Beauty, Fashion, Spirits, Specialty food, Charity. **Not** services, freelancers, accountants, tech, generic restaurants/cafes (TGTG-adjacent). Marketing materials should show this set, not the full 10-category marketplace list.
+- Instagram / creatives sell **visual desire + neighbourhood urgency + collect in person**, not surplus clearance.
+- Voice = high street alive again — fun to peek in, easy to claim, real visit. Prefer “your high street / local shops” over overusing “independents.”
+- Business-facing creatives: get seen, pay-upfront claims, walk-in QR, you set price — use white paper §10 pitch / objections.
+- Do **not** lead with mystery bags, % OFF as the brand face, or livestream language.
 
 ## How the human works with you
 

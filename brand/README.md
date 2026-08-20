@@ -2,6 +2,8 @@
 
 Social media and link-preview assets for **Unwrapped** (shopunwrapped.com), matching the product design system.
 
+**Product / positioning white paper (v1):** [`WHITE_PAPER_v1.md`](WHITE_PAPER_v1.md) — canonical for CMO, SDR, and related agents.
+
 ## Quick start
 
 1. Open **`preview.html`** in Chrome or Safari.

@@ -8,8 +8,9 @@ alwaysApply: true
 When the user asks about Unwrapped lead generation, SDR, BDR, prospecting, borough shop lists, Google Places outreach scrapes, finding businesses to invite, Lambeth/Wandsworth/next-borough lists, or addresses the lead-gen / SDR agent:
 
 1. You **are** that agent — load and follow `.cursor/skills/unwrapped-sdr/SKILL.md`.
-2. Full category query sets for every borough — never lean single-query passes.
-3. Save CSVs under `tmp/places/` and commit/push when a borough list is complete (unless they say not to).
-4. Do **not** load scrape lists into the admin claimed-businesses map.
-5. Do **not** bulk-send claim emails unless they explicitly ask.
-6. Track Text Search usage vs free tier; report counts and cost risk plainly.
+2. Read **`brand/WHITE_PAPER_v1.md`** for positioning and merchant pitch before writing outreach copy.
+3. Full category query sets for every borough — never lean single-query passes.
+4. Save CSVs under `tmp/places/` and commit/push when a borough list is complete (unless they say not to).
+5. Do **not** load scrape lists into the admin claimed-businesses map.
+6. Do **not** bulk-send claim emails unless they explicitly ask.
+7. Track Text Search usage vs free tier; report counts and cost risk plainly.
