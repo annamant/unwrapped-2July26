@@ -51,7 +51,6 @@ const SAMPLE_DROPS: SampleDrop[] = [
     title: "Weekend edit — 3-piece clothing bundle",
     business: "North Lane Boutique",
     pricePence: checkoutFromList(10800),
-    originalPricePence: 12000,
     window: "Example window · Sat–Sun",
     left: "e.g. 8 bundles",
     imageUrl: "/samples/clothing.jpg",
@@ -62,7 +61,6 @@ const SAMPLE_DROPS: SampleDrop[] = [
     title: "Early supper — two courses + drink",
     business: "Fig & Thyme Kitchen",
     pricePence: checkoutFromList(6800),
-    originalPricePence: 8000,
     window: "Example window · Tue–Thu 5–7pm",
     left: "e.g. 12 covers",
     imageUrl: "/samples/restaurant.jpg",
@@ -324,8 +322,8 @@ export default function Landing() {
                 marginBottom: 20,
               }}
             >
-              Limited local drops,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>reserved in seconds.</em>
+              The high street,{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>up to date.</em>
             </h1>
 
             <p
@@ -336,9 +334,8 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Imagine your favourite high street as a map.
-              Local businesses add something special for a limited window — right where you are.
-              You reserve in seconds, then collect with a QR code.
+              See what independents nearby have ready — a photo or short video.
+              Claim the drop, pay in the app, collect at the counter.
             </p>
 
             <div
@@ -367,7 +364,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  Get notified first when drops go live
+                  Discover. See it. Claim it. Collect.
                 </div>
                 <button
                   onClick={() => navigate("/signin")}
@@ -379,7 +376,7 @@ export default function Landing() {
                     border: "none", cursor: "pointer", width: "100%",
                   }}
                 >
-                  SIGN UP — GET NOTIFIED FIRST
+                  JOIN THE WAITLIST
                 </button>
               </div>
 
@@ -399,7 +396,7 @@ export default function Landing() {
                   fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600,
                   color: FG, marginBottom: 14, lineHeight: 1.25,
                 }}>
-                  Become a Founding Business
+                  We help you sell — and get them through the door.
                 </div>
                 <a
                   href="/business-apply"
@@ -412,7 +409,7 @@ export default function Landing() {
                     background: "transparent",
                   }}
                 >
-                  BECOME A FOUNDING BUSINESS
+                  PARTNER YOUR SHOP
                 </a>
               </div>
             </div>
@@ -481,7 +478,7 @@ export default function Landing() {
               fontFamily: "'Space Mono', monospace", fontSize: 9,
               color: V, letterSpacing: "0.14em", marginBottom: 14,
             }}>
-              WHY WE NEED YOU
+              PRE-LAUNCH · FOUNDING MEMBERS
             </div>
             <div style={{ width: 40, height: 3, background: V, marginBottom: 24 }} />
 
@@ -491,16 +488,17 @@ export default function Landing() {
               fontWeight: 700, color: FG, lineHeight: 1.15,
               letterSpacing: "-0.8px", marginBottom: 20, maxWidth: 640,
             }}>
-              We're starting drops — and that's why we need all the help from the{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>community</em>.
+              We're building the high street you can browse from anywhere —{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>one neighbourhood at a time.</em>
             </h2>
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
               color: FG, lineHeight: 1.7, marginBottom: 16, maxWidth: 580, fontWeight: 300,
             }}>
-              Unwrapped is starting local. We launch one neighbourhood at a time —
-              and the map becomes real when real shops step in early and shoppers sign up early.
+              Unwrapped starts dense and local: shops show what's ready in a photo or short video,
+              locals see it from the sofa or the bus, claim it, pay in the app, and collect at the counter.
+              That only works if early shops and early shoppers show up together.
             </p>
 
             <div style={{ marginBottom: 28, maxWidth: 540 }}>
@@ -511,58 +509,32 @@ export default function Landing() {
                 letterSpacing: "0.14em",
                 marginBottom: 12,
               }}>
-                BUSINESS FOUNDING MEMBER PERKS
+                FOUNDING SHOPS
               </div>
 
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-                <div style={{
-                  border: `1px solid ${BORDER}`,
-                  background: BG,
-                  borderRadius: 999,
-                  padding: "10px 14px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  color: MUTED_FG,
-                  lineHeight: 1.4,
-                }}>
-                  We come to your shop
-                </div>
-                <div style={{
-                  border: `1px solid ${BORDER}`,
-                  background: BG,
-                  borderRadius: 999,
-                  padding: "10px 14px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  color: MUTED_FG,
-                  lineHeight: 1.4,
-                }}>
-                  Help pick your first limited item
-                </div>
-                <div style={{
-                  border: `1px solid ${BORDER}`,
-                  background: BG,
-                  borderRadius: 999,
-                  padding: "10px 14px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  color: MUTED_FG,
-                  lineHeight: 1.4,
-                }}>
-                  First drop is free
-                </div>
-                <div style={{
-                  border: `1px solid ${BORDER}`,
-                  background: BG,
-                  borderRadius: 999,
-                  padding: "10px 14px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  color: MUTED_FG,
-                  lineHeight: 1.4,
-                }}>
-                  Priority when drops roll into your area
-                </div>
+                {[
+                  "We help you sell — first drop free",
+                  "We can shoot your first photo or short clip",
+                  "You set the price — no mystery-bag model",
+                  "Priority on the map as your area opens",
+                ].map((label) => (
+                  <div
+                    key={label}
+                    style={{
+                      border: `1px solid ${BORDER}`,
+                      background: BG,
+                      borderRadius: 999,
+                      padding: "10px 14px",
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 14,
+                      color: MUTED_FG,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {label}
+                  </div>
+                ))}
               </div>
 
               <div style={{
@@ -577,46 +549,31 @@ export default function Landing() {
                   letterSpacing: "0.14em",
                   marginBottom: 12,
                 }}>
-                  SHOPPER FOUNDING MEMBER PERKS
+                  FOUNDING SHOPPERS
                 </div>
 
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
-                  <div style={{
-                    border: `1px solid ${BORDER}`,
-                    background: BG,
-                    borderRadius: 999,
-                    padding: "10px 14px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 14,
-                    color: MUTED_FG,
-                    lineHeight: 1.4,
-                  }}>
-                    Get notified first when drops go live in your area
-                  </div>
-                  <div style={{
-                    border: `1px solid ${BORDER}`,
-                    background: BG,
-                    borderRadius: 999,
-                    padding: "10px 14px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 14,
-                    color: MUTED_FG,
-                    lineHeight: 1.4,
-                  }}>
-                    Nominate shops on the map
-                  </div>
-                  <div style={{
-                    border: `1px solid ${BORDER}`,
-                    background: BG,
-                    borderRadius: 999,
-                    padding: "10px 14px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 14,
-                    color: MUTED_FG,
-                    lineHeight: 1.4,
-                  }}>
-                    Be ready to reserve when your neighbourhood drops open
-                  </div>
+                  {[
+                    "First look when drops open near you",
+                    "See into shops before you walk over",
+                    "Nominate the independents you love",
+                  ].map((label) => (
+                    <div
+                      key={label}
+                      style={{
+                        border: `1px solid ${BORDER}`,
+                        background: BG,
+                        borderRadius: 999,
+                        padding: "10px 14px",
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: 14,
+                        color: MUTED_FG,
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -627,7 +584,7 @@ export default function Landing() {
                 lineHeight: 1.65,
                 margin: 0,
               }}>
-                Choose your role below.
+                Join as a shopper or partner a shop — both make the map real.
               </p>
             </div>
 
@@ -642,7 +599,7 @@ export default function Landing() {
                   border: "none", cursor: "pointer",
                 }}
               >
-                BECOME A FOUNDING MEMBER — SHOPPER
+                JOIN AS A FOUNDING SHOPPER
               </button>
               <a
                 href="/business-apply"
@@ -654,7 +611,7 @@ export default function Landing() {
                   textDecoration: "none", display: "inline-block", background: "transparent",
                 }}
               >
-                BECOME A FOUNDING MEMBER — BUSINESS
+                PARTNER AS A FOUNDING SHOP
               </a>
             </div>
           </div>
@@ -670,42 +627,42 @@ export default function Landing() {
 
       {/* ── 3. SAMPLES — desire ── */}
       <section>
-        <div style={{ padding: isMobile ? "40px 20px 24px" : "56px 40px 28px" }}>
+        <div style={{ padding: isMobile ? "40px 20px 20px" : "56px 40px 24px" }}>
           <div style={{
-            display: "flex", alignItems: "flex-end", justifyContent: "space-between",
-            flexWrap: "wrap", gap: 16, marginBottom: 14,
+            fontFamily: "'Space Mono', monospace", fontSize: 9,
+            color: V, letterSpacing: "0.15em", marginBottom: 12,
           }}>
-            <div>
-              <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 9,
-                color: V, letterSpacing: "0.15em", marginBottom: 12,
-              }}>
-                EXAMPLE DROPS · ILLUSTRATIVE
-              </div>
-              <h2 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: isMobile ? 28 : 36,
-                fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-                lineHeight: 1.15, maxWidth: 520,
-              }}>
-                This is what a drop will look like.
-              </h2>
-            </div>
-            <span style={{
-              fontFamily: "'Space Mono', monospace", fontSize: 9,
-              color: MUTED_FG, letterSpacing: "0.12em",
-              border: `1px solid ${BORDER}`, padding: "8px 12px",
-            }}>
-              NOT LIVE YET
-            </span>
+            WHAT A DROP FEELS LIKE
           </div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 28 : 36,
+            fontWeight: 700, color: FG, letterSpacing: "-0.8px",
+            lineHeight: 1.15, maxWidth: 560, marginBottom: 16,
+          }}>
+            See the real thing. Then collect it.
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 16,
+            color: FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 400, marginBottom: 8,
+          }}>
+            Unwrapped turns your high street into something you can browse from the sofa —
+            then actually go and get.
+          </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.65, maxWidth: 620,
+            color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, fontWeight: 300, marginBottom: 20,
           }}>
-            Mock listings only — fictional shops, so you can see the product.
-            Services, bundles, and discounted drops all work the same way.
-            Nothing here can be reserved yet.
+            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
+            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
+            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
+            Just something you chose — waiting for you at the counter.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+            color: "#A8A8A0", lineHeight: 1.5, margin: 0,
+          }}>
+            Mock examples · fictional shops — nothing here can be reserved yet.
           </p>
         </div>
 
@@ -722,7 +679,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 4. HOW IT WORKS — reassure ── */}
+      {/* ── 4. HOW IT WORKS — discover → see → buy → collect ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "72px 40px",
         borderBottom: `1px solid ${BORDER}`,
@@ -738,30 +695,43 @@ export default function Landing() {
           fontFamily: "'Playfair Display', serif",
           fontSize: isMobile ? 28 : 36,
           fontWeight: 700, color: FG, letterSpacing: "-0.8px",
-          lineHeight: 1.15, marginBottom: 36,
+          lineHeight: 1.15, marginBottom: 12,
         }}>
-          Three steps. That's it.
+          Your neighbourhood feed.
         </h2>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+          color: MUTED_FG, lineHeight: 1.7, maxWidth: 560, marginBottom: 36, fontWeight: 300,
+        }}>
+          On the sofa. At your desk. On the bus home. Open Unwrapped and look inside the shops
+          around you — as if you were standing at the counter. See what's ready, claim it in a tap,
+          then walk over when you're free. Fun. Easy. Local — without the wasted trip.
+        </p>
 
         <div style={{
-          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
           gap: isMobile ? 16 : 0,
         }}>
           {[
             {
               n: "01",
-              title: "Discover what's dropping",
-              body: "Browse time-limited drops from local businesses near you.",
+              title: "Discover",
+              body: "Open the map. See independents nearby with something ready now.",
             },
             {
               n: "02",
-              title: "Reserve before it's gone",
-              body: "Tap to reserve. Your ticket is issued instantly — limited quantity.",
+              title: "See it",
+              body: "A photo or short video of the real thing — not a mystery bag.",
             },
             {
               n: "03",
-              title: "Show up. QR. Done.",
-              body: "Arrive in the window. They scan your code. The drop is yours.",
+              title: "Buy",
+              body: "Claim the drop and pay in the app before it sells out.",
+            },
+            {
+              n: "04",
+              title: "Collect",
+              body: "Walk in. Show your QR. Done — and you're in the shop.",
             },
           ].map(({ n, title, body }, i) => (
             <div
@@ -769,7 +739,7 @@ export default function Landing() {
               className="uw-step"
               style={{
                 background: BG,
-                padding: isMobile ? "24px 22px" : "36px 32px",
+                padding: isMobile ? "24px 22px" : "32px 24px",
                 border: isMobile ? `1px solid ${BORDER}` : undefined,
                 borderTop: !isMobile ? `1px solid ${BORDER}` : undefined,
                 borderBottom: !isMobile ? `1px solid ${BORDER}` : undefined,
@@ -802,7 +772,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 5. FOR BUSINESSES — dedicated convert ── */}
+      {/* ── 5. FOR BUSINESSES — help sell ── */}
       <section style={{
         padding: isMobile ? "48px 20px" : "72px 40px",
         display: "grid",
@@ -825,23 +795,24 @@ export default function Landing() {
             fontWeight: 700, color: FG,
             lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 18,
           }}>
-            We come to your shop.
+            We help you sell.
             <br />
-            <em style={{ fontStyle: "italic", color: V }}>We do the curation for you.</em>
+            <em style={{ fontStyle: "italic", color: V }}>They walk through your door.</em>
           </h2>
 
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 14, maxWidth: 440, fontWeight: 300,
           }}>
-            A curator and photographer visit you, choose one carefully selected item,
-            photograph it, and write its story. We put it in front of our weekly drop list.
+            No catalog to build. When something's ready — a batch, a quiet slot, a limited edit —
+            publish a photo or short video, set price and quantity, and hit publish.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 420, fontWeight: 300,
           }}>
-            You do nothing. First drop free.
+            Nearby locals claim it, pay upfront, and collect with a QR.
+            You get the visit — and the chance to upsell at the counter.
           </p>
 
           <a
@@ -854,23 +825,23 @@ export default function Landing() {
               textDecoration: "none", display: "inline-block", border: "none",
             }}
           >
-            APPLY TO LIST YOUR BUSINESS
+            PARTNER YOUR SHOP
           </a>
         </div>
 
         <div style={{ border: `1px solid ${BORDER}`, boxShadow: `8px 8px 0 ${MUTED}` }}>
           {[
             {
-              label: "We photograph it",
-              body: "A photographer comes to your shop and shoots one item — properly, on-site.",
+              label: "Show what's ready",
+              body: "Upload a photo or short clip. No product IDs. No endless catalog setup.",
             },
             {
-              label: "We write it",
-              body: "A curator writes the story behind the item — why it's worth a drop.",
+              label: "Paid claims, not maybe-laters",
+              body: "Shoppers pay when they claim. You set the collection window. No holding stock for no-shows.",
             },
             {
-              label: "We put it in front of our audience",
-              body: "Your drop goes to our weekly drop list. You do nothing. First drop free.",
+              label: "Foot traffic you can feel",
+              body: "They must walk in and scan a QR. Your drop turns screen time into a visit.",
             },
           ].map(({ label, body }, i) => (
             <div
@@ -898,6 +869,68 @@ export default function Landing() {
                 color: MUTED_FG, lineHeight: 1.65, fontWeight: 300, margin: 0,
               }}>
                 {body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 5a. MERCHANT FAQ ── */}
+      <section style={{
+        padding: isMobile ? "48px 20px" : "64px 40px",
+        borderBottom: `1px solid ${BORDER}`,
+        background: BG,
+      }}>
+        <div style={{
+          fontFamily: "'Space Mono', monospace", fontSize: 9,
+          color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12,
+        }}>
+          FOR BUSINESSES · FAQ
+        </div>
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: isMobile ? 26 : 32,
+          fontWeight: 700, color: FG, letterSpacing: "-0.6px",
+          lineHeight: 1.15, marginBottom: 28, maxWidth: 480,
+        }}>
+          Quick answers before you apply.
+        </h2>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? 20 : 28,
+          maxWidth: 920,
+        }}>
+          {[
+            {
+              q: "Is this another deep-discount app?",
+              a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
+            },
+            {
+              q: "Do I have to build a catalog?",
+              a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+            },
+            {
+              q: "What if they don't show up?",
+              a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
+            },
+            {
+              q: "Who is Unwrapped for?",
+              a: "Independent shops, cafés, salons, restaurants, freelancers, services, and charity shops. Built for the high street — not chains.",
+            },
+          ].map(({ q, a }) => (
+            <div key={q}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif", fontSize: 18,
+                fontWeight: 600, color: FG, marginBottom: 8, lineHeight: 1.3,
+              }}>
+                {q}
+              </h3>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                color: MUTED_FG, lineHeight: 1.65, fontWeight: 300, margin: 0,
+              }}>
+                {a}
               </p>
             </div>
           ))}
@@ -987,8 +1020,8 @@ export default function Landing() {
             color: "rgba(250,250,248,0.62)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
-            Shoppers: get on the list. Businesses: get on the map.
-            Either way — don't wait for launch to join.
+            Shoppers: get on the list to discover, see, claim, and collect.
+            Businesses: get on the map so we can help you sell.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
@@ -1001,7 +1034,7 @@ export default function Landing() {
                 border: "none", cursor: "pointer",
               }}
             >
-              SIGN UP AS A SHOPPER
+              JOIN THE WAITLIST
             </button>
             <a
               href="/business-apply"
@@ -1013,7 +1046,7 @@ export default function Landing() {
                 textDecoration: "none", display: "inline-block", background: "transparent",
               }}
             >
-              LIST YOUR BUSINESS
+              PARTNER YOUR SHOP
             </a>
           </div>
         </div>
@@ -1038,7 +1071,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Limited local drops, reserved in seconds. Collect with QR.
+            Discover. See it. Buy. Collect — local drops on a neighbourhood map.
           </p>
         </div>
 
@@ -1297,8 +1330,6 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
     });
   }, [directoryPins, normalized]);
 
-  const memberCount = directoryPins.filter((p) => p.isMember).length;
-
   useEffect(() => {
     if (!focusedId) return;
     if (!filteredPins.some((p) => p.id === focusedId)) setFocusedId(undefined);
@@ -1349,20 +1380,20 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.15,
             marginBottom: 8,
           }}>
-            Help build the map
+            A new way to be local
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 14,
             color: MUTED_FG,
-            lineHeight: 1.6,
+            lineHeight: 1.65,
             maxWidth: 520,
             fontWeight: 300,
             marginBottom: 8,
           }}>
             {filteredPins.length === 0
               ? "No matches — clear your search to see the full curated board."
-              : "We’re building this map together: shoppers nominate shops and businesses apply to be listed. Black pins are Unwrapped members."}
+              : "Imagine looking into your favourite independents from the sofa or the bus — seeing what's ready, claiming it, and walking in to collect. That's the high street we're bringing to life. Nominate a shop you love, or apply to be on it."}
           </p>
           <div style={{
             fontFamily: "'Space Mono', monospace",
@@ -1370,13 +1401,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             color: MUTED_FG,
             letterSpacing: "0.08em",
             marginBottom: 14,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 14,
           }}>
-            <span><span style={{ color: V }}>●</span> Curated board</span>
-            <span><span style={{ color: FG }}>●</span> Members{memberCount ? ` · ${memberCount}` : ""}</span>
-            <span>{filteredPins.length} showing</span>
+            {filteredPins.length} showing
           </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
