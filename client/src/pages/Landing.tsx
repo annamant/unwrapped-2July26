@@ -8,6 +8,13 @@ import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
+const HERO_SHOP_IMAGES = [
+  "/landing/hero-shop-1.jpg",
+  "/landing/hero-shop-2.jpg",
+  "/samples/restaurant.jpg",
+  "/samples/clothing.jpg",
+];
+
 /** Flip to false when real drops go live and the landing should show the live feed again. */
 const PRE_LAUNCH = true;
 
@@ -118,9 +125,52 @@ const LANDING_CSS = `
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-@keyframes uw-shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+@keyframes uw-kenburns-a {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.14) translate(-2.5%, -1.5%); }
+}
+@keyframes uw-kenburns-b {
+  0% { transform: scale(1.12) translate(-1%, 0); }
+  100% { transform: scale(1) translate(1.5%, -2%); }
+}
+@keyframes uw-hero-fade {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  25% { opacity: 1; }
+  33% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.uw-hero-slide {
+  position: absolute;
+  inset: -4%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.uw-hero-slide:nth-child(1) {
+  animation: uw-hero-fade 28s ease-in-out infinite, uw-kenburns-a 28s ease-in-out infinite;
+  animation-delay: 0s, 0s;
+}
+.uw-hero-slide:nth-child(2) {
+  animation: uw-hero-fade 28s ease-in-out infinite, uw-kenburns-b 28s ease-in-out infinite;
+  animation-delay: -7s, -7s;
+}
+.uw-hero-slide:nth-child(3) {
+  animation: uw-hero-fade 28s ease-in-out infinite, uw-kenburns-a 28s ease-in-out infinite;
+  animation-delay: -14s, -14s;
+}
+.uw-hero-slide:nth-child(4) {
+  animation: uw-hero-fade 28s ease-in-out infinite, uw-kenburns-b 28s ease-in-out infinite;
+  animation-delay: -21s, -21s;
+}
+.uw-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(105deg, rgba(107,18,9,0.88) 0%, rgba(158,28,14,0.72) 42%, rgba(201,34,16,0.45) 68%, rgba(107,18,9,0.55) 100%),
+    linear-gradient(180deg, rgba(18,10,8,0.25) 0%, transparent 35%, rgba(18,10,8,0.45) 100%);
+  pointer-events: none;
 }
 @keyframes uw-wiggle {
   0%, 100% { transform: rotate(-2deg); }
@@ -284,7 +334,9 @@ const LANDING_CSS = `
 }
 @media (prefers-reduced-motion: reduce) {
   .uw-fade-1, .uw-fade-2, .uw-fade-3, .uw-fade-4,
-  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track, .uw-float, .uw-float-delay, .uw-live-badge, .uw-blob { animation: none !important; }
+  .uw-hero-map, .uw-pulse-dot, .uw-marquee-track, .uw-float, .uw-float-delay, .uw-live-badge, .uw-blob,
+  .uw-hero-slide { animation: none !important; }
+  .uw-hero-slide:nth-child(1) { opacity: 1 !important; transform: none !important; }
   .uw-sample-img, .uw-btn-primary, .uw-btn-ghost { transition: none !important; }
 }
 `;
@@ -417,14 +469,28 @@ export default function Landing() {
         position: "relative",
         overflow: "hidden",
         zIndex: 1,
-        background: `
-          radial-gradient(ellipse 80% 70% at 85% -10%, rgba(255,180,140,0.55), transparent 50%),
-          radial-gradient(ellipse 60% 55% at 5% 90%, rgba(255,60,30,0.5), transparent 55%),
-          radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,100,70,0.25), transparent 60%),
-          linear-gradient(155deg, #E8341C 0%, ${V_RICH} 35%, ${V_DEEP} 70%, #6B1209 100%)
-        `,
         color: CREAM,
+        background: V_DEEP,
       }}>
+        <div aria-hidden style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+          <div
+            style={{
+              position: "absolute", inset: "-2%",
+              backgroundImage: `url(${HERO_SHOP_IMAGES[0]})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          {HERO_SHOP_IMAGES.map((src) => (
+            <div
+              key={src}
+              className="uw-hero-slide"
+              style={{ backgroundImage: `url(${src})` }}
+            />
+          ))}
+          <div className="uw-hero-overlay" />
+        </div>
+
         <div style={{
           position: "relative",
           display: "grid",
