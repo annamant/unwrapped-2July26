@@ -13,6 +13,10 @@ import {
 } from "../notifications/dispatch";
 import crypto from "crypto";
 import type { DB } from "../db";
+import {
+  CURATED_DIRECTORY_PINS,
+  matchCuratedPinToBusiness,
+} from "../curatedDirectory";
 
 const BUSINESS_CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
@@ -960,6 +964,112 @@ export const adminRouter = router({
       return { success: true };
     }),
 
+  // Ops pipeline for the admin Businesses home: curated map / invite sent / claimed.
+  opsPipeline: adminProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db
+      .select({
+        id: businesses.id,
+        name: businesses.name,
+        slug: businesses.slug,
+        city: businesses.city,
+        postcode: businesses.postcode,
+        address: businesses.address,
+        contactEmail: businesses.contactEmail,
+        category: businesses.category,
+        claimInviteSentAt: businesses.claimInviteSentAt,
+        claimFollowUpSentAt: businesses.claimFollowUpSentAt,
+        thankYouSentAt: businesses.thankYouSentAt,
+        ownerEmail: users.email,
+        ownerCreatedAt: users.createdAt,
+        ownerHasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
+      })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+      ))
+      .orderBy(desc(businesses.createdAt));
+
+    const claimed = rows
+      .filter((r) => r.ownerHasPassword)
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        slug: r.slug,
+        city: r.city,
+        postcode: r.postcode,
+        contactEmail: r.contactEmail,
+        ownerEmail: r.ownerEmail,
+        category: r.category,
+        thankYouSentAt: r.thankYouSentAt,
+        claimInviteSentAt: r.claimInviteSentAt,
+        ownerCreatedAt: r.ownerCreatedAt,
+      }));
+
+    const inviteSent = rows
+      .filter((r) => !r.ownerHasPassword && !!r.claimInviteSentAt)
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        slug: r.slug,
+        city: r.city,
+        postcode: r.postcode,
+        contactEmail: r.contactEmail,
+        ownerEmail: r.ownerEmail,
+        category: r.category,
+        claimInviteSentAt: r.claimInviteSentAt,
+        claimFollowUpSentAt: r.claimFollowUpSentAt,
+        followUpDue: !r.claimFollowUpSentAt
+          && !!r.claimInviteSentAt
+          && r.claimInviteSentAt.getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000,
+      }));
+
+    const matchable = rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      postcode: r.postcode,
+      slug: r.slug,
+      contactEmail: r.contactEmail,
+      ownerHasPassword: r.ownerHasPassword,
+      claimInviteSentAt: r.claimInviteSentAt,
+    }));
+
+    const curatedNotInvited = CURATED_DIRECTORY_PINS.flatMap((pin) => {
+      const match = matchCuratedPinToBusiness(pin, matchable);
+      if (match?.ownerHasPassword) return [];
+      if (match?.claimInviteSentAt) return [];
+      return [{
+        placeId: pin.id,
+        name: pin.name,
+        postcode: pin.postcode ?? null,
+        address: pin.address ?? null,
+        district: pin.district ?? null,
+        track: pin.track ?? null,
+        type: pin.type ?? null,
+        lat: pin.lat,
+        lng: pin.lng,
+        businessId: match?.id ?? null,
+        slug: match?.slug ?? null,
+        contactEmail: match?.contactEmail ?? null,
+        inClaimSystem: !!match,
+      }];
+    });
+
+    return {
+      counts: {
+        curatedTotal: CURATED_DIRECTORY_PINS.length,
+        curatedNotInvited: curatedNotInvited.length,
+        inviteSent: inviteSent.length,
+        claimed: claimed.length,
+        followUpDue: inviteSent.filter((r) => r.followUpDue).length,
+      },
+      curatedNotInvited,
+      inviteSent,
+      claimed,
+    };
+  }),
+
   // Platform stats for admin dashboard
   stats: adminProcedure.query(async ({ ctx }) => {
     const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
@@ -987,6 +1097,40 @@ export const adminRouter = router({
       0,
     );
 
+    // Ops pipeline counts (same definitions as opsPipeline)
+    const activeBiz = await ctx.db
+      .select({
+        id: businesses.id,
+        name: businesses.name,
+        postcode: businesses.postcode,
+        claimInviteSentAt: businesses.claimInviteSentAt,
+        claimFollowUpSentAt: businesses.claimFollowUpSentAt,
+        ownerHasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
+      })
+      .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(and(
+        eq(businesses.status, "active"),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+      ));
+
+    const claimedCount = activeBiz.filter((r) => r.ownerHasPassword).length;
+    const inviteSentCount = activeBiz.filter((r) => !r.ownerHasPassword && !!r.claimInviteSentAt).length;
+    const followUpDue = activeBiz.filter((r) =>
+      !r.ownerHasPassword
+      && !!r.claimInviteSentAt
+      && !r.claimFollowUpSentAt
+      && r.claimInviteSentAt.getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000,
+    ).length;
+
+    let curatedNotInvited = 0;
+    for (const pin of CURATED_DIRECTORY_PINS) {
+      const match = matchCuratedPinToBusiness(pin, activeBiz);
+      if (match?.ownerHasPassword) continue;
+      if (match?.claimInviteSentAt) continue;
+      curatedNotInvited += 1;
+    }
+
     return {
       totalUsers: userCount.count,
       totalBusinesses: bizCount.count,
@@ -997,6 +1141,11 @@ export const adminRouter = router({
       fulfillmentsToday: fulfilledToday.count,
       grossRevenue,
       platformRevenue,
+      curatedTotal: CURATED_DIRECTORY_PINS.length,
+      curatedNotInvited,
+      inviteSent: inviteSentCount,
+      claimed: claimedCount,
+      followUpDue,
     };
   }),
 

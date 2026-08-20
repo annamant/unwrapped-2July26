@@ -18,7 +18,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
   const NAV = [
     { href: "/admin", label: "Overview" },
     { href: "/admin/users", label: "Users" },
-    { href: "/admin/businesses", label: "Businesses" },
+    { href: "/admin/businesses", label: "Shop pipeline" },
     { href: "/admin/drops", label: "Drops" },
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
@@ -136,6 +136,45 @@ export default function AdminDashboard() {
           </p>
         </div>
 
+        {/* Ops pipeline */}
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: BORDER, marginBottom: 32 }}>
+          {[
+            {
+              label: "Curated · not invited",
+              value: stats?.curatedNotInvited,
+              href: "/admin/businesses",
+              accent: (stats?.curatedNotInvited ?? 0) > 0,
+              hint: `${stats?.curatedTotal ?? "—"} on landing map`,
+            },
+            {
+              label: "Invite sent",
+              value: stats?.inviteSent,
+              href: "/admin/businesses",
+              hint: (stats?.followUpDue ?? 0) > 0 ? `${stats!.followUpDue} follow-up due` : "Awaiting claim",
+            },
+            {
+              label: "Claimed",
+              value: stats?.claimed,
+              href: "/admin/businesses",
+              hint: "Owners signed in",
+            },
+          ].map(({ label, value, href, accent, hint }) => (
+            <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
+              <div style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 28,
+                fontWeight: 700,
+                color: accent ? V : FG,
+                marginBottom: 6,
+              }}>
+                {value ?? "—"}
+              </div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
+            </a>
+          ))}
+        </div>
+
         <a
           href="/admin/apparel-map"
           style={{
@@ -154,7 +193,7 @@ export default function AdminDashboard() {
             Claimed businesses map →
           </div>
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.45 }}>
-            Map of shops whose owners have signed up. Outreach lists stay in tmp/places.
+            Map of shops whose owners have signed up. Separate from the curated landing-page map.
           </div>
         </a>
 
