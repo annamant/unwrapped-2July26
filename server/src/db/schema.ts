@@ -86,6 +86,9 @@ export const businesses = pgTable("businesses", {
   // Set when a claim-invite email has been sent for this seeded profile, so the
   // batch sender never double-emails the same business.
   claimInviteSentAt: timestamp("claim_invite_sent_at"),
+  // Set when a claim follow-up email has been sent. Prevents re-emailing the
+  // same unclaimed cohort on every "SEND FOLLOW-UPS" click.
+  claimFollowUpSentAt: timestamp("claim_follow_up_sent_at"),
   // Set when a "thank you / what's next" email has been sent to the owner after
   // they claimed their profile. Prevents double-sending on repeat runs.
   thankYouSentAt: timestamp("thank_you_sent_at"),

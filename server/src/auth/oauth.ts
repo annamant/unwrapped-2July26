@@ -37,7 +37,16 @@ export async function getUserFromRequest(req: Request) {
   if (!session || session.expiresAt < new Date()) return null;
 
   const [user] = await db
-    .select()
+    .select({
+      id: users.id,
+      email: users.email,
+      name: users.name,
+      phone: users.phone,
+      role: users.role,
+      onboardingComplete: users.onboardingComplete,
+      interestCategories: users.interestCategories,
+      createdAt: users.createdAt,
+    })
     .from(users)
     .where(eq(users.id, session.userId))
     .limit(1);

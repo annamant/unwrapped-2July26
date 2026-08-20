@@ -21,7 +21,21 @@ export const businessesRouter = router({
     .input(z.object({ slug: z.string() }))
     .query(async ({ ctx, input }) => {
       const [biz] = await ctx.db
-        .select()
+        .select({
+          id: businesses.id,
+          slug: businesses.slug,
+          name: businesses.name,
+          description: businesses.description,
+          category: businesses.category,
+          instagramHandle: businesses.instagramHandle,
+          website: businesses.website,
+          logoUrl: businesses.logoUrl,
+          coverUrl: businesses.coverUrl,
+          city: businesses.city,
+          address: businesses.address,
+          postcode: businesses.postcode,
+          status: businesses.status,
+        })
         .from(businesses)
         .where(eq(businesses.slug, input.slug))
         .limit(1);
@@ -38,7 +52,24 @@ export const businessesRouter = router({
 
       // Only expose publicly visible drops (no drafts/cancelled)
       const bizDrops = await ctx.db
-        .select()
+        .select({
+          id: drops.id,
+          businessId: drops.businessId,
+          locationId: drops.locationId,
+          format: drops.format,
+          category: drops.category,
+          title: drops.title,
+          description: drops.description,
+          imageUrl: drops.imageUrl,
+          price: drops.price,
+          originalPrice: drops.originalPrice,
+          totalQuantity: drops.totalQuantity,
+          availableQuantity: drops.availableQuantity,
+          collectionStart: drops.collectionStart,
+          collectionEnd: drops.collectionEnd,
+          status: drops.status,
+          featured: drops.featured,
+        })
         .from(drops)
         .where(and(
           eq(drops.businessId, biz.id),

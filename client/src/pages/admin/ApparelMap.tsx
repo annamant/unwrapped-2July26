@@ -160,7 +160,17 @@ export default function AdminApparelMap() {
       const bounds = L.latLngBounds(withCoords.map((p) => [p.lat!, p.lng!]));
       map.fitBounds(bounds.pad(0.15));
     }
-  }, [withCoords, mapReady, activeId]);
+  }, [withCoords, mapReady]);
+
+  // Restyle markers when selection changes without rebuilding the layer / fitBounds.
+  useEffect(() => {
+    Object.entries(markersRef.current).forEach(([id, marker]) => {
+      marker.setStyle({
+        radius: activeId === id ? 9 : 7,
+        weight: activeId === id ? 2 : 1,
+      });
+    });
+  }, [activeId]);
 
   function focusPlace(p: ClaimedBiz) {
     setActiveId(p.id);
@@ -193,7 +203,7 @@ export default function AdminApparelMap() {
               Claimed businesses
             </h1>
             <p style={{ margin: 0, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, lineHeight: 1.45 }}>
-              Only shops whose owner has signed up. Pins use drop location when available.
+              Only shops whose owner has signed up. Pins use their saved location when available.
             </p>
           </div>
 
@@ -249,7 +259,7 @@ export default function AdminApparelMap() {
                   </div>
                   {!hasPin && (
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "#b45309", marginTop: 2 }}>
-                      No drop yet — no map pin
+                      No location pin yet
                     </div>
                   )}
                 </div>
@@ -257,7 +267,7 @@ export default function AdminApparelMap() {
             })}
             {!isLoading && withoutCoords.length > 0 && withCoords.length > 0 && (
               <div style={{ padding: "10px 16px", fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: MUTED_FG }}>
-                {withoutCoords.length} claimed without a drop pin
+                {withoutCoords.length} claimed without a map pin
               </div>
             )}
           </div>

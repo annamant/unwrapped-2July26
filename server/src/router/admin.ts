@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
-import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens } from "../db/schema";
+import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens, locations } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive, platformFeePence } from "../payments/fees";
 import {
@@ -435,13 +435,17 @@ export const adminRouter = router({
   // sendClaimInvites), and the follow-up-eligible cohort (invited but not
   // claimed, with the original 7-day link now expired).
   claimInviteStats: adminProcedure.query(async ({ ctx }) => {
-    // Pending = active profile with a real contact email that has not been invited yet.
-    // Ownership may still be the shared unclaimed placeholder — sendClaimInvites
-    // attaches the contact as owner before emailing.
+    // Pending = active profile with a real contact email that has not been invited yet
+    // and whose owner still needs a password (already-claimed owners are not "pending").
     const pendingWhere = and(
       eq(businesses.status, "active"),
       isNull(businesses.claimInviteSentAt),
       sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+      sql`NOT EXISTS (
+        SELECT 1 FROM users u
+        WHERE u.id = ${businesses.ownerId}
+          AND u.password_hash IS NOT NULL
+      )`,
     );
     const [{ pending }] = await ctx.db
       .select({ pending: count() })
@@ -450,7 +454,11 @@ export const adminRouter = router({
     const [{ invited }] = await ctx.db
       .select({ invited: count() })
       .from(businesses)
-      .where(isNotNull(businesses.claimInviteSentAt));
+      .where(and(
+        eq(businesses.status, "active"),
+        isNotNull(businesses.claimInviteSentAt),
+        sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
+      ));
 
     // Claimed = active business whose owner has a password set (i.e. a human
     // signed in). Excludes the shared unclaimed-directory placeholder.
@@ -464,9 +472,8 @@ export const adminRouter = router({
         sql`${users.passwordHash} IS NOT NULL`,
       ));
 
-    // Follow-up due = invited but not claimed, and the invite was sent >7 days
-    // ago (so the original link has expired). These are the businesses worth
-    // re-emailing with a fresh link via sendClaimFollowUps.
+    // Follow-up due = invited but not claimed, original invite >7 days ago,
+    // and we have not already sent a follow-up.
     const [{ followUpDue }] = await ctx.db
       .select({ followUpDue: count() })
       .from(businesses)
@@ -474,6 +481,7 @@ export const adminRouter = router({
       .where(and(
         eq(businesses.status, "active"),
         isNotNull(businesses.claimInviteSentAt),
+        isNull(businesses.claimFollowUpSentAt),
         sql`${businesses.claimInviteSentAt} < NOW() - INTERVAL '7 days'`,
         sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
         sql`${users.passwordHash} IS NULL`,
@@ -502,18 +510,19 @@ export const adminRouter = router({
         ownerName: users.name,
         ownerCreatedAt: users.createdAt,
         claimInviteSentAt: businesses.claimInviteSentAt,
+        claimFollowUpSentAt: businesses.claimFollowUpSentAt,
         thankYouSentAt: businesses.thankYouSentAt,
-        // Pin from most recent drop with coordinates, if any
+        // Pin from most recent location (drops reference locations, not lat/lng directly)
         lat: sql<number | null>`(
-          SELECT ${drops.latitude} FROM ${drops}
-          WHERE ${drops.businessId} = ${businesses.id}
-          ORDER BY ${drops.createdAt} DESC
+          SELECT ${locations.latitude} FROM ${locations}
+          WHERE ${locations.businessId} = ${businesses.id}
+          ORDER BY ${locations.createdAt} DESC
           LIMIT 1
         )`,
         lng: sql<number | null>`(
-          SELECT ${drops.longitude} FROM ${drops}
-          WHERE ${drops.businessId} = ${businesses.id}
-          ORDER BY ${drops.createdAt} DESC
+          SELECT ${locations.longitude} FROM ${locations}
+          WHERE ${locations.businessId} = ${businesses.id}
+          ORDER BY ${locations.createdAt} DESC
           LIMIT 1
         )`,
       })
@@ -658,10 +667,8 @@ export const adminRouter = router({
 
   // Re-email businesses that were sent a claim invite >7 days ago but never
   // claimed (owner still has no password). Issues a fresh password-setup token
-  // and sends the shorter follow-up template. Does NOT touch
-  // claimInviteSentAt — that stays as the original invite date so the cohort
-  // query (invited >7 days ago, no password) keeps working until they actually
-  // set a password.
+  // and sends the shorter follow-up template. Stamps claimFollowUpSentAt so the
+  // same shop is not re-emailed on every batch run.
   sendClaimFollowUps: adminProcedure
     .input(z.object({
       limit: z.number().int().min(1).max(200).default(50),
@@ -672,6 +679,7 @@ export const adminRouter = router({
       const where = and(
         eq(businesses.status, "active"),
         isNotNull(businesses.claimInviteSentAt),
+        isNull(businesses.claimFollowUpSentAt),
         sql`${businesses.claimInviteSentAt} < NOW() - INTERVAL '7 days'`,
         sql`lower(${businesses.contactEmail}) <> ${UNCLAIMED_OWNER_EMAIL}`,
         sql`EXISTS (SELECT 1 FROM users u WHERE u.id = ${businesses.ownerId} AND u.password_hash IS NULL)`,
@@ -728,6 +736,10 @@ export const adminRouter = router({
             b.name,
             setupUrl,
           );
+          await ctx.db
+            .update(businesses)
+            .set({ claimFollowUpSentAt: new Date() })
+            .where(eq(businesses.id, b.id));
           sent.push({ name: b.name, contactEmail: b.contactEmail, slug: b.slug });
         } catch (err) {
           failed.push({
@@ -829,14 +841,17 @@ export const adminRouter = router({
     .input(z.object({ applicationId: z.string().uuid(), reason: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
       const [app] = await ctx.db
-                .select()
-                .from(businessApplications)
-                .where(eq(businessApplications.id, input.applicationId))
-                .limit(1);
-      
-            if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
-      
-            await ctx.db
+        .select()
+        .from(businessApplications)
+        .where(eq(businessApplications.id, input.applicationId))
+        .limit(1);
+
+      if (!app) throw new TRPCError({ code: "NOT_FOUND", message: "Application not found" });
+      if (app.status !== "pending") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Application already reviewed" });
+      }
+
+      await ctx.db
         .update(businessApplications)
         .set({
           status: "rejected",
@@ -846,8 +861,8 @@ export const adminRouter = router({
         .where(eq(businessApplications.id, input.applicationId));
 
       void sendApplicationRejectedEmail(app.contactEmail, app.name, input.reason);
-      
-            return { success: true };
+
+      return { success: true };
     }),
 
   // List all businesses (with status filter)
