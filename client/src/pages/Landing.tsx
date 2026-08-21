@@ -901,44 +901,41 @@ export default function Landing() {
       {/* ── 4. FOUNDING — belonging + convert ── */}
       {PRE_LAUNCH && (
         <section style={{
-          padding: isMobile ? "40px 20px" : "52px 40px",
+          padding: isMobile ? "44px 20px" : "64px 40px",
           borderBottom: "none",
-          background: SECTION_WASH,
+          background: V,
           position: "relative",
           zIndex: 1,
         }}>
-          <div style={{ maxWidth: 820 }}>
+          <div style={{ width: "100%", maxWidth: 1180, margin: "0 auto" }}>
             <div style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-              color: V, letterSpacing: "0.05em", marginBottom: 12,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+              fontWeight: 800,
+              color: CREAM,
+              letterSpacing: "0.08em",
+              marginBottom: 18,
             }}>
-              PRE-LAUNCH · FOUNDING MEMBERS
-            </div>
-            <div style={{ width: 40, height: 3, background: V, marginBottom: 20 }} />
-
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 9,
-              color: V,
-              letterSpacing: "0.05em",
-              marginBottom: 12,
-            }}>
-              WHY WE NEED YOU
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM }} />
+              FOUNDING MEMBERS · PRE-LAUNCH
             </div>
 
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 28 : 40,
-              fontWeight: 700, color: FG, lineHeight: 1.15,
-              letterSpacing: "-0.8px", marginBottom: 16, maxWidth: 640,
+              fontSize: isMobile ? 32 : 46,
+              fontWeight: 750, color: CREAM, lineHeight: 1.08,
+              letterSpacing: isMobile ? "-1px" : "-1.8px", marginBottom: 18, maxWidth: 850,
             }}>
-              Be part of something new —{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>a high street that buzzes again.</em>
+              Be part of something new
+              <br />
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: FG }}>a high street that buzzes again.</em>
             </h2>
 
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
-              color: FG, lineHeight: 1.65, marginBottom: isMobile ? 24 : 28, maxWidth: 620, fontWeight: 300,
+              color: "rgba(255,247,242,0.9)", lineHeight: 1.65, marginBottom: isMobile ? 24 : 32, maxWidth: 720, fontWeight: 400,
             }}>
               When shops get seen and neighbours show up, everyone wins —
               more life on the street, more faces through the door, a local that feels alive.
@@ -947,42 +944,47 @@ export default function Landing() {
 
             <div style={{
               display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1.15fr 0.85fr",
-              gap: isMobile ? 12 : 14,
-              marginBottom: 22,
-              maxWidth: 880,
+              gridTemplateColumns: isMobile ? "1fr" : "1.02fr 0.98fr",
+              gap: isMobile ? 18 : 22,
+              marginBottom: isMobile ? 22 : 26,
             }}>
               {/* Founding shops */}
               <div style={{
-                background: "#fff",
-                border: `1.5px solid ${BORDER}`,
-                borderRadius: 16,
-                padding: isMobile ? 14 : 16,
+                background: BAND_WASH,
+                color: CREAM,
+                border: "1px solid rgba(255,247,242,0.22)",
+                borderRadius: 10,
+                padding: isMobile ? 18 : 22,
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "none",
               }}>
                 <div style={{
-                  display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
+                  display: "flex", alignItems: "center", gap: 12,
+                  marginBottom: isMobile ? 8 : 12,
                 }}>
                   <span style={{
-                    width: 28, height: 28, borderRadius: 8,
-                    background: V, color: "#fff",
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    width: 28, height: 28,
+                    background: "transparent", color: V,
+                    display: "inline-flex",
+                    alignItems: "center", justifyContent: "center", flexShrink: 0,
                   }} aria-hidden>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                       <path d="M4 10.5 6.5 5h11L20 10.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                       <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                     </svg>
                   </span>
                   <span style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800,
-                    letterSpacing: "0.05em", color: V,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 20 : 24,
+                    fontWeight: 750, letterSpacing: "-0.4px", color: CREAM,
                   }}>
-                    FOUNDING SHOPS
+                    For founding shops
                   </span>
                 </div>
                 <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  flex: 1,
                 }}>
                   {[
                     {
@@ -1024,27 +1026,26 @@ export default function Landing() {
                     <div
                       key={label}
                       style={{
-                        background: MUTED,
-                        borderRadius: 12,
-                        padding: "10px 10px 11px",
+                        borderTop: "1px solid rgba(255,247,242,0.2)",
+                        padding: "7px 2px",
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 7,
-                        minHeight: isMobile ? 88 : 96,
+                        alignItems: "center",
+                        gap: 10,
+                        minHeight: 0,
                       }}
                     >
                       <span style={{
-                        width: 28, height: 28, borderRadius: 8,
-                        background: "#fff", color: V,
+                        width: 22, height: 22,
+                        background: "transparent", color: V,
                         display: "inline-flex", alignItems: "center", justifyContent: "center",
-                        boxShadow: "0 1px 0 rgba(18,14,12,0.04)",
+                        flexShrink: 0,
                       }}>
                         {icon}
                       </span>
                       <span style={{
                         fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 12.5 : 13,
-                        fontWeight: 600, color: FG, lineHeight: 1.3,
+                        fontSize: isMobile ? 13.5 : 14,
+                        fontWeight: 600, color: CREAM, lineHeight: 1.35,
                       }}>
                         {label}
                       </span>
@@ -1057,15 +1058,22 @@ export default function Landing() {
               <div style={{
                 background: BAND_WASH,
                 color: CREAM,
-                borderRadius: 16,
-                padding: isMobile ? 14 : 16,
+                border: "1px solid rgba(255,247,242,0.22)",
+                borderRadius: 10,
+                padding: isMobile ? 18 : 22,
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "none",
+                position: "relative",
+                overflow: "hidden",
               }}>
                 <div style={{
-                  display: "flex", alignItems: "center", gap: 8, marginBottom: 12,
+                  display: "flex", alignItems: "center", gap: 12,
+                  marginBottom: isMobile ? 8 : 12, position: "relative",
                 }}>
                   <span style={{
-                    width: 28, height: 28, borderRadius: 8,
-                    background: V, color: "#fff",
+                    width: 28, height: 28,
+                    background: "transparent", color: V,
                     display: "inline-flex", alignItems: "center", justifyContent: "center",
                   }} aria-hidden>
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
@@ -1074,13 +1082,19 @@ export default function Landing() {
                     </svg>
                   </span>
                   <span style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 800,
-                    letterSpacing: "0.05em", color: V,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 20 : 24,
+                    fontWeight: 750, letterSpacing: "-0.4px", color: CREAM,
                   }}>
-                    FOUNDING SHOPPERS
+                    For founding shoppers
                   </span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                  flex: 1,
+                  position: "relative",
+                }}>
                   {[
                     {
                       label: "Golden Ticket — claim drops before the public",
@@ -1107,22 +1121,25 @@ export default function Landing() {
                         </svg>
                       ),
                     },
-                  ].map(({ label, icon }) => (
+                  ].map(({ label, icon }, index) => (
                     <div
                       key={label}
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: 10,
-                        background: "rgba(255,247,242,0.08)",
-                        border: "1px solid rgba(255,247,242,0.12)",
-                        borderRadius: 12,
-                        padding: "10px 12px",
+                        background: "transparent",
+                        border: "none",
+                        borderTop: "1px solid rgba(255,247,242,0.2)",
+                        borderRadius: 0,
+                        padding: "8px 2px",
+                        minHeight: 0,
                       }}
                     >
                       <span style={{
-                        width: 30, height: 30, borderRadius: 8,
-                        background: "rgba(255,45,18,0.18)", color: V,
+                        width: 22,
+                        height: 22,
+                        background: "transparent", color: V,
                         display: "inline-flex", alignItems: "center", justifyContent: "center",
                         flexShrink: 0,
                       }}>
@@ -1130,11 +1147,19 @@ export default function Landing() {
                       </span>
                       <span style={{
                         fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 12.5 : 13.5,
-                        fontWeight: 600, lineHeight: 1.3,
-                        color: "rgba(255,247,242,0.92)",
+                        fontSize: isMobile ? 13.5 : 14,
+                        fontWeight: index === 0 ? 700 : 600, lineHeight: 1.35,
+                        color: CREAM,
                       }}>
-                        {label}
+                        {index === 0 && (
+                          <small style={{
+                            display: "block", color: V, fontSize: 9, fontWeight: 850,
+                            letterSpacing: "0.09em", marginBottom: 2,
+                          }}>
+                            YOUR GOLDEN TICKET
+                          </small>
+                        )}
+                        {index === 0 ? "Claim drops before the public" : label}
                       </span>
                     </div>
                   ))}
@@ -1142,44 +1167,62 @@ export default function Landing() {
               </div>
             </div>
 
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 14,
-              color: MUTED_FG,
-              lineHeight: 1.45,
-              margin: "0 0 14px",
-              maxWidth: 560,
+            <div style={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "stretch" : "center",
+              justifyContent: "space-between",
+              gap: isMobile ? 16 : 24,
+              padding: isMobile ? "2px 0 0" : "0 4px",
+              background: "transparent",
+              border: "none",
+              borderRadius: 0,
             }}>
-              Join as a shopper or partner a shop — both help bring your high street to life.
-            </p>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                color: "rgba(255,247,242,0.9)",
+                lineHeight: 1.45,
+                margin: 0,
+                maxWidth: 480,
+              }}>
+                Join as a shopper or partner a shop — both help bring your high street to life.
+              </p>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <button
-                onClick={() => navigate("/signin")}
-                className="uw-btn-primary"
-                style={{
-                  background: V, color: "#fff",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                  fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
-                  border: "none", cursor: "pointer",
-                  borderRadius: RADIUS_SM,
-                }}
-              >
-                JOIN AS A FOUNDING SHOPPER
-              </button>
-              <a
-                href="/business-apply"
-                className="uw-btn-ghost"
-                style={{
-                  border: `1.5px solid ${FG}`, color: FG,
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                  fontWeight: 700, letterSpacing: "0.02em", padding: "10px 16px",
-                  textDecoration: "none", display: "inline-block", background: "#fff",
-                  borderRadius: RADIUS_SM,
-                }}
-              >
-                PARTNER AS A FOUNDING SHOP
-              </a>
+              <div style={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                gap: 8,
+                flexShrink: 0,
+              }}>
+                <button
+                  onClick={() => navigate("/signin")}
+                  className="uw-btn-primary"
+                  style={{
+                    background: FG, color: CREAM,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                    fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
+                    border: "none", cursor: "pointer",
+                    borderRadius: 999,
+                  }}
+                >
+                  JOIN AS A FOUNDING SHOPPER
+                </button>
+                <a
+                  href="/business-apply"
+                  className="uw-btn-ghost"
+                  style={{
+                    border: `1.5px solid ${FG}`, color: FG,
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                    fontWeight: 700, letterSpacing: "0.02em", padding: "10px 16px",
+                    textDecoration: "none", display: "inline-block", background: "#fff",
+                    textAlign: "center",
+                    borderRadius: 999,
+                  }}
+                >
+                  PARTNER AS A FOUNDING SHOP
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -1793,8 +1836,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 0.95fr) minmax(0, 1.05fr)",
-        gap: 20,
+        gridTemplateColumns: isMobile ? "1fr" : "minmax(280px, 0.68fr) minmax(0, 1.32fr)",
+        gap: isMobile ? 24 : 28,
         alignItems: "start",
       }}>
         <div>
@@ -1809,14 +1852,17 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 24 : 30,
-            fontWeight: 700,
+            fontSize: isMobile ? 29 : 36,
+            fontWeight: 750,
             color: FG,
-            letterSpacing: "-0.6px",
-            lineHeight: 1.15,
-            marginBottom: 8,
+            letterSpacing: "-1px",
+            lineHeight: 1.08,
+            marginBottom: 12,
           }}>
-            A new way to be local
+            See your high street{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
+              coming to life.
+            </em>
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -2028,13 +2074,19 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           </div>
         </div>
 
-        <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 0 }}>
+        <div style={{
+          border: `${isMobile ? 2 : 3}px solid ${FG}`,
+          borderRadius: isMobile ? 18 : 22,
+          overflow: "hidden",
+          background: FG,
+          boxShadow: "0 18px 50px rgba(75,32,22,0.12)",
+        }}>
           <DirectoryMap
             pins={filteredPins}
             defaultLat={mapCenter.lat}
             defaultLng={mapCenter.lng}
             zoom={13}
-            height={isMobile ? "360px" : "520px"}
+            height={isMobile ? "356px" : "514px"}
             focusedId={focusedFromList ? focusedId : focusedId}
           />
         </div>

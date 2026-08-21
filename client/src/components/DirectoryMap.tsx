@@ -19,21 +19,21 @@ const MEMBER_COLOR = "#3A1610";
 
 function makePinSVG(color: string): string {
   return [
-    '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28">',
-    `<circle cx="14" cy="14" r="12" fill="${color}" opacity="0.18">`,
-    '<animate attributeName="r" from="12" to="17" dur="2.2s" repeatCount="indefinite"/>',
+    '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34">',
+    `<circle cx="17" cy="17" r="14" fill="${color}" opacity="0.22">`,
+    '<animate attributeName="r" from="14" to="20" dur="2.2s" repeatCount="indefinite"/>',
     '<animate attributeName="opacity" from="0.18" to="0" dur="2.2s" repeatCount="indefinite"/>',
     "</circle>",
-    `<circle cx="14" cy="14" r="8" fill="${color}" />`,
+    `<circle cx="17" cy="17" r="9" fill="${color}" stroke="#FFF7F2" stroke-width="2" />`,
     color === MEMBER_COLOR
-      ? `<circle cx="14" cy="14" r="3.5" fill="#FFF4EF" />`
+      ? `<circle cx="17" cy="17" r="3.5" fill="#FFF4EF" />`
       : "",
     "</svg>",
   ].join("");
 }
 
 function makeIcon(isMember: boolean): L.DivIcon {
-  const size = 28;
+  const size = 34;
   return L.divIcon({
     className: "",
     html: makePinSVG(isMember ? MEMBER_COLOR : CURATED_COLOR),
@@ -237,5 +237,5 @@ export default function DirectoryMap({
     marker.openPopup();
   }, [focusedId, pinById, zoom]);
 
-  return <div ref={containerRef} style={{ width: "100%", height }} />;
+  return <div ref={containerRef} className="uw-directory-map" style={{ width: "100%", height, background: "#E9E1DB" }} />;
 }
