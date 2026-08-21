@@ -400,8 +400,9 @@ export default function Landing() {
             style={{
               display: "block",
               flexShrink: 0,
-              filter: scrolled ? "none" : "brightness(0) invert(1)",
-              transition: "filter 0.2s ease",
+              // Keep the real mark (ink square + cream U + vermillion spark).
+              // brightness/invert collapses it to a blank white box on the wine nav.
+              borderRadius: 6,
             }}
           />
           <span style={{
