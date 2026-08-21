@@ -37,8 +37,11 @@ export default function App() {
     staleTime: 30_000,
   });
 
-  const postLoginPath =
-    user?.role === "admin" && !user?.hasBusiness
+  // Merchants land in the business dashboard by default; they can switch to
+  // shopper browse from BusinessShell. Admins without a shop go to /admin.
+  const postLoginPath = user?.hasBusiness
+    ? "/dashboard"
+    : user?.role === "admin"
       ? "/admin"
       : "/home";
 
