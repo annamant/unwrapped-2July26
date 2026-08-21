@@ -1,6 +1,6 @@
 /** Site-wide SEO constants and helpers for Unwrapped (shopunwrapped.com). */
 
-import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd } from "./londonBoroughs";
+import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJsonLd } from "./londonBoroughs";
 
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
@@ -22,7 +22,8 @@ export type SeoProps = {
 
 export function absoluteUrl(path = "/"): string {
   if (path.startsWith("http")) return path;
-  const p = path.startsWith("/") ? path : `/${path}`;
+  let p = path.startsWith("/") ? path : `/${path}`;
+  if (p.length > 1 && p.endsWith("/")) p = p.replace(/\/+$/, "");
   return `${SITE_ORIGIN}${p === "/" ? "/" : p}`;
 }
 
@@ -42,6 +43,16 @@ export function homeJsonLd(): Record<string, unknown>[] {
       url: SITE_ORIGIN,
       logo: `${SITE_ORIGIN}/icon-512.png`,
       email: "anna@shopunwrapped.com",
+      areaServed: {
+        "@type": "City",
+        name: "London",
+        containedInPlace: { "@type": "Country", name: "United Kingdom" },
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "London",
+        addressCountry: "GB",
+      },
       sameAs: [
         "https://www.instagram.com/shopunwrapped/",
         "https://www.linkedin.com/company/shopunwrapped/",
@@ -54,6 +65,7 @@ export function homeJsonLd(): Record<string, unknown>[] {
       url: SITE_ORIGIN,
       description: DEFAULT_DESCRIPTION,
       publisher: { "@type": "Organization", name: SITE_NAME },
+      inLanguage: "en-GB",
     },
   ];
 }
@@ -206,7 +218,7 @@ export function seoForPath(pathname: string): SeoProps {
       };
     case "/london": {
       const hub = londonHubSeo();
-      return { title: hub.title, description: hub.description, path: hub.path };
+      return { title: hub.title, description: hub.description, path: hub.path, jsonLd: londonHubJsonLd() };
     }
     default: {
       const boroughMatch = path.match(/^\/london\/([^/]+)$/);

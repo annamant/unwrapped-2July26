@@ -16,6 +16,7 @@ import {
 } from "../theme";
 import {
   LONDON_BOROUGHS,
+  londonHubJsonLd,
   londonHubSeo,
   type LondonRegion,
 } from "../lib/londonBoroughs";
@@ -40,18 +41,16 @@ export default function LondonHub() {
         title={seo.title}
         description={seo.description}
         path={seo.path}
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: "London boroughs on Unwrapped",
-          description: seo.description,
-          url: "https://shopunwrapped.com/london",
-          isPartOf: { "@type": "WebSite", name: "Unwrapped", url: "https://shopunwrapped.com" },
-        }}
+        jsonLd={londonHubJsonLd()}
       />
       <Nav />
 
       <header style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "36px 20px 28px" : "56px 24px 40px" }}>
+        <nav aria-label="Breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16 }}>
+          <Link href="/" style={{ color: MUTED_FG, textDecoration: "none" }}>Home</Link>
+          <span style={{ margin: "0 8px" }}>›</span>
+          <span style={{ color: FG, fontWeight: 600 }}>London</span>
+        </nav>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: V, marginBottom: 14 }}>
           United Kingdom · London
         </div>

@@ -1472,6 +1472,18 @@ export default function Landing() {
               JOIN THE WAITLIST
             </button>
             <a
+              href="/london"
+              className="uw-btn-ghost uw-btn-ghost-dark"
+              style={{
+                border: "1px solid rgba(255,248,245,0.4)", color: BG,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+                letterSpacing: "0.04em", padding: "15px 28px",
+                textDecoration: "none",
+              }}
+            >
+              LONDON BOROUGHS
+            </a>
+            <a
               href="/business-apply"
               className="uw-btn-ghost uw-btn-ghost-dark"
               style={{

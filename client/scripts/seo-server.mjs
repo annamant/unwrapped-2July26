@@ -194,12 +194,18 @@ const server = http.createServer(async (req, res) => {
 
     // SPA shell (possibly with bot SEO injection)
     let html = readIndex();
+    let status = 200;
+    // Canonical paths are slash-free except `/`
+    const seoPath = pathname.length > 1 && pathname.endsWith("/") ? pathname.replace(/\/+$/, "") : pathname;
     if (isBot(ua)) {
-      const seo = await fetchSeo(pathname);
-      if (seo) html = injectSeo(html, seo);
+      const seo = await fetchSeo(seoPath);
+      if (seo) {
+        html = injectSeo(html, seo);
+        if (typeof seo.status === "number" && seo.status >= 400) status = seo.status;
+      }
     }
 
-    return send(res, 200, html, {
+    return send(res, status, html, {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-cache",
       "X-Content-Type-Options": "nosniff",

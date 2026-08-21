@@ -6,7 +6,9 @@ import {
   boroughJsonLd,
   boroughSeo,
   getBoroughBySlug,
+  londonHubJsonLd,
   londonHubSeo,
+  shopMatchesBorough,
 } from "./londonBoroughs";
 
 const SITE = () =>
@@ -46,6 +48,8 @@ type SeoPayload = {
   robots: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   bodyHtml?: string;
+  /** HTTP status hint for the SEO shell server (defaults to 200). */
+  status?: number;
 };
 
 const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> & { path: string; noindex?: boolean }> = {
@@ -110,6 +114,16 @@ function homeJsonLd() {
       url: SITE(),
       logo: `${SITE()}/icon-512.png`,
       email: "anna@shopunwrapped.com",
+      areaServed: {
+        "@type": "City",
+        name: "London",
+        containedInPlace: { "@type": "Country", name: "United Kingdom" },
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "London",
+        addressCountry: "GB",
+      },
       sameAs: [
         "https://www.instagram.com/shopunwrapped/",
         "https://www.linkedin.com/company/shopunwrapped/",
@@ -121,6 +135,7 @@ function homeJsonLd() {
       name: "Unwrapped",
       url: SITE(),
       description: DEFAULT_DESCRIPTION,
+      inLanguage: "en-GB",
     },
   ];
 }
@@ -396,9 +411,33 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         image: DEFAULT_OG(),
         type: "website",
         robots: "noindex, follow",
+        status: 404,
       };
     }
     const s = boroughSeo(borough);
+    const bizRows = await db
+      .select({
+        name: businesses.name,
+        slug: businesses.slug,
+        city: businesses.city,
+        postcode: businesses.postcode,
+        address: businesses.address,
+        category: businesses.category,
+      })
+      .from(businesses)
+      .where(eq(businesses.status, "active"));
+
+    const matched = bizRows
+      .filter((b) => shopMatchesBorough(b, borough))
+      .slice(0, 40);
+
+    const shopLinks = matched
+      .map(
+        (b) =>
+          `<li><a href="${escapeHtml(abs(`/business/${b.slug}`))}">${escapeHtml(b.name)}</a>${b.city || b.postcode ? ` — ${escapeHtml([b.city, b.postcode].filter(Boolean).join(", "))}` : ""}</li>`,
+      )
+      .join("");
+
     return {
       title: s.title,
       description: truncate(s.description),
@@ -406,8 +445,11 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       image: DEFAULT_OG(),
       type: "website",
       robots: "index, follow",
-      jsonLd: boroughJsonLd(borough),
-      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p><p><a href="${escapeHtml(abs(s.path))}">View ${escapeHtml(borough.name)} on Unwrapped</a></p></article>`,
+      jsonLd: boroughJsonLd(
+        borough,
+        matched.map((b) => ({ name: b.name, slug: b.slug })),
+      ),
+      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p>${matched.length ? `<h2>Shops in ${escapeHtml(borough.name)}</h2><ul>${shopLinks}</ul>` : `<p>We're onboarding ${escapeHtml(borough.name)} shops now.</p>`}<p><a href="${escapeHtml(abs("/london"))}">All London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">List your shop</a></p></article>`,
     };
   }
 
@@ -424,19 +466,13 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         path === "/"
           ? homeJsonLd()
           : path === "/london"
-            ? {
-                "@context": "https://schema.org",
-                "@type": "CollectionPage",
-                name: "London boroughs on Unwrapped",
-                description: staticPage.description,
-                url: abs("/london"),
-              }
+            ? londonHubJsonLd()
             : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>Unwrapped</h1><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><p><a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>Unwrapped</h1><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
-            ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a></li>`).join("")}</ul></article>`
+            ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a> — ${escapeHtml(b.neighbourhoods.slice(0, 3).join(", "))}</li>`).join("")}</ul></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }
@@ -448,5 +484,6 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     image: DEFAULT_OG(),
     type: "website",
     robots: "noindex, follow",
+    status: 404,
   };
 }

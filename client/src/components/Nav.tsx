@@ -75,6 +75,7 @@ export default function Nav() {
           </>
         ) : (
           <>
+            <a href="/london" style={styles.link}>London</a>
             <a href="/business-apply" style={styles.link}>List your business</a>
             <a href="/signin" style={styles.cta}>Get drops</a>
           </>

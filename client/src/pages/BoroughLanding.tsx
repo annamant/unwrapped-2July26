@@ -89,7 +89,11 @@ export default function BoroughLanding() {
   if (!borough) {
     return (
       <div style={{ minHeight: "100vh", background: BG }}>
-        <SeoHead title="Borough not found — Unwrapped" path="/london" noindex />
+        <SeoHead
+          title="Borough not found — Unwrapped"
+          path={`/london/${params.borough || "unknown"}`}
+          noindex
+        />
         <Nav />
         <div style={{ maxWidth: 640, margin: "0 auto", padding: mobile ? "48px 20px" : "80px 24px", textAlign: "center" }}>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, color: FG, marginBottom: 12 }}>
@@ -110,6 +114,9 @@ export default function BoroughLanding() {
   const shops = shopsForBorough(borough, members);
   const membersCount = shops.filter((s) => s.isMember).length;
   const southPeers = LONDON_BOROUGHS.filter((b) => b.region === "south" && b.slug !== borough.slug).slice(0, 8);
+  const peerStrip = borough.region === "south"
+    ? southPeers
+    : LONDON_BOROUGHS.filter((b) => b.region === borough.region && b.slug !== borough.slug).slice(0, 8);
 
   return (
     <div style={{ minHeight: "100vh", background: BG, backgroundImage: BG_WASH }}>
@@ -117,11 +124,21 @@ export default function BoroughLanding() {
         title={seo.title}
         description={seo.description}
         path={seo.path}
-        jsonLd={boroughJsonLd(borough)}
+        jsonLd={boroughJsonLd(
+          borough,
+          shops.map((s) => ({ name: s.name, slug: s.slug })),
+        )}
       />
       <Nav />
 
       <header style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "36px 20px 28px" : "56px 24px 40px" }}>
+        <nav aria-label="Breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16 }}>
+          <Link href="/" style={{ color: MUTED_FG, textDecoration: "none" }}>Home</Link>
+          <span style={{ margin: "0 8px" }}>›</span>
+          <Link href="/london" style={{ color: MUTED_FG, textDecoration: "none" }}>London</Link>
+          <span style={{ margin: "0 8px" }}>›</span>
+          <span style={{ color: FG, fontWeight: 600 }}>{borough.name}</span>
+        </nav>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: V, marginBottom: 14 }}>
           {borough.region === "south" ? "South London · Launch" : "London · Unwrapped"}
         </div>
@@ -294,16 +311,18 @@ export default function BoroughLanding() {
         </div>
       </section>
 
-      {borough.region === "south" && (
+      {peerStrip.length > 0 && (
         <section style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "36px 20px 56px" : "48px 24px 72px" }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 8 }}>
-            More South London
+            {borough.region === "south" ? "More South London" : `More ${borough.region} London`}
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 20 }}>
-            We’re densifying South London first — then the rest of the city.
+            {borough.region === "south"
+              ? "We’re densifying South London first — then the rest of the city."
+              : "Explore neighbouring boroughs on Unwrapped."}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {southPeers.map((b) => (
+            {peerStrip.map((b) => (
               <Link
                 key={b.slug}
                 href={`/london/${b.slug}`}
@@ -322,6 +341,19 @@ export default function BoroughLanding() {
                 {b.name}
               </Link>
             ))}
+            <Link
+              href="/london"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                fontWeight: 600,
+                color: V,
+                padding: "10px 16px",
+                textDecoration: "none",
+              }}
+            >
+              All boroughs →
+            </Link>
           </div>
         </section>
       )}

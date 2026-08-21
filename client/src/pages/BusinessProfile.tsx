@@ -4,6 +4,7 @@ import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import SeoHead from "../components/SeoHead";
 import { businessJsonLd, truncateMeta } from "../lib/seo";
+import { findBoroughForShop } from "../lib/londonBoroughs";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
 import useIsMobile from "../hooks/useIsMobile";
@@ -68,9 +69,10 @@ export default function BusinessProfile() {
   const { business, drops } = data;
   const activeDrops = drops.filter(d => d.status === "active" || d.status === "sold_out");
   const isFollowing = followStatus?.following ?? false;
+  const borough = findBoroughForShop(business);
   const seoDescription = truncateMeta(
     business.description ||
-      `${business.name} on Unwrapped — see drops from this ${business.city || "London"} shop, claim in the app, collect at the counter.`,
+      `${business.name} on Unwrapped — see drops from this ${business.city || borough?.name || "London"} shop, claim in the app, collect at the counter.`,
   );
 
   return (
@@ -88,7 +90,7 @@ export default function BusinessProfile() {
           image: business.coverUrl || business.logoUrl,
           address: business.address,
           postcode: business.postcode,
-          city: business.city,
+          city: business.city || borough?.name || "London",
           website: business.website,
           instagramHandle: business.instagramHandle,
         })}
@@ -101,7 +103,15 @@ export default function BusinessProfile() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
             <div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12, textTransform: "uppercase" }}>
-                {business.category} · {business.city}
+                {business.category} · {business.city || borough?.name || "London"}
+                {borough && (
+                  <>
+                    {" · "}
+                    <a href={`/london/${borough.slug}`} style={{ color: V, textDecoration: "none" }}>
+                      {borough.name}
+                    </a>
+                  </>
+                )}
               </div>
               <h1 style={{
                 fontFamily: "'Playfair Display', serif",

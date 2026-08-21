@@ -322,13 +322,23 @@ export function shopMatchesBorough(
   shop: { city?: string | null; postcode?: string | null; address?: string | null; district?: string | null },
   borough: LondonBorough,
 ): boolean {
-  const oc = outcodeFromPostcode(shop.postcode) || (shop.district ? shop.district.toUpperCase() : null);
-  if (oc && borough.outcodes.some((code) => oc === code || oc.startsWith(code))) return true;
+  const oc = outcodeFromPostcode(shop.postcode) || (shop.district ? shop.district.toUpperCase().trim() : null);
+  // Exact outcode match only — SE19 must not match SE1.
+  if (oc && borough.outcodes.includes(oc)) return true;
 
   const hay = `${shop.city ?? ""} ${shop.address ?? ""}`.toLowerCase();
   if (!hay.trim()) return false;
   if (hay.includes(borough.name.toLowerCase())) return true;
   return borough.neighbourhoods.some((n) => hay.includes(n.toLowerCase()));
+}
+
+/** Prefer South London when an outcode spans multiple boroughs. */
+export function findBoroughForShop(
+  shop: { city?: string | null; postcode?: string | null; address?: string | null; district?: string | null },
+): LondonBorough | undefined {
+  const matches = LONDON_BOROUGHS.filter((b) => shopMatchesBorough(shop, b));
+  if (!matches.length) return undefined;
+  return matches.find((b) => b.region === "south") || matches[0];
 }
 
 export function boroughSeo(borough: LondonBorough): { title: string; description: string; path: string } {
@@ -349,27 +359,105 @@ export function londonHubSeo(): { title: string; description: string; path: stri
   };
 }
 
-export function boroughJsonLd(borough: LondonBorough): Record<string, unknown> {
-  return {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: `${borough.name} on Unwrapped`,
-    description: borough.blurb,
-    url: `https://shopunwrapped.com/london/${borough.slug}`,
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Unwrapped",
-      url: "https://shopunwrapped.com",
-    },
-    about: {
-      "@type": "Place",
-      name: `London Borough of ${borough.name}`,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: borough.name,
-        addressRegion: "London",
-        addressCountry: "GB",
+type BoroughShopLd = { name: string; slug?: string; url?: string };
+
+export function boroughJsonLd(
+  borough: LondonBorough,
+  shops: BoroughShopLd[] = [],
+): Record<string, unknown>[] {
+  const pageUrl = `https://shopunwrapped.com/london/${borough.slug}`;
+  const graphs: Record<string, unknown>[] = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: `${borough.name} on Unwrapped`,
+      description: borough.blurb,
+      url: pageUrl,
+      isPartOf: {
+        "@type": "WebSite",
+        name: "Unwrapped",
+        url: "https://shopunwrapped.com",
+      },
+      about: {
+        "@type": "Place",
+        name: `London Borough of ${borough.name}`,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: borough.name,
+          addressRegion: "London",
+          addressCountry: "GB",
+        },
       },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopunwrapped.com/" },
+        { "@type": "ListItem", position: 2, name: "London", item: "https://shopunwrapped.com/london" },
+        { "@type": "ListItem", position: 3, name: borough.name, item: pageUrl },
+      ],
+    },
+  ];
+
+  if (shops.length) {
+    graphs.push({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: `Shops in ${borough.name}`,
+      numberOfItems: shops.length,
+      itemListElement: shops.slice(0, 50).map((shop, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: shop.name,
+        ...(shop.slug || shop.url
+          ? { url: shop.url || `https://shopunwrapped.com/business/${shop.slug}` }
+          : {}),
+      })),
+    });
+  }
+
+  return graphs;
+}
+
+export function londonHubJsonLd(): Record<string, unknown>[] {
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "London boroughs on Unwrapped",
+      description: londonHubSeo().description,
+      url: "https://shopunwrapped.com/london",
+      isPartOf: {
+        "@type": "WebSite",
+        name: "Unwrapped",
+        url: "https://shopunwrapped.com",
+      },
+      about: {
+        "@type": "Place",
+        name: "London",
+        address: { "@type": "PostalAddress", addressLocality: "London", addressCountry: "GB" },
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopunwrapped.com/" },
+        { "@type": "ListItem", position: 2, name: "London", item: "https://shopunwrapped.com/london" },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "London boroughs on Unwrapped",
+      numberOfItems: LONDON_BOROUGHS.length,
+      itemListElement: LONDON_BOROUGHS.map((b, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: b.name,
+        url: `https://shopunwrapped.com/london/${b.slug}`,
+      })),
+    },
+  ];
 }
