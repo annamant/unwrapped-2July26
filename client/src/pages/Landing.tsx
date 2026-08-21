@@ -568,15 +568,8 @@ export default function Landing() {
                 backdropFilter: "blur(8px)",
               }}>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                  letterSpacing: "0.06em", color: "#FFD2C2", marginBottom: 6,
-                  fontWeight: 800,
-                }}>
-                  FOR SHOPPERS
-                </div>
-                <div style={{
                   fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
-                  marginBottom: 12, lineHeight: 1.3, color: CREAM,
+                  marginBottom: 12, lineHeight: 1.35, color: CREAM,
                 }}>
                   Look in. See it. Claim it. Collect.
                 </div>
@@ -592,7 +585,7 @@ export default function Landing() {
                     boxShadow: "0 10px 28px rgba(0,0,0,0.2)",
                   }}
                 >
-                  JOIN THE WAITLIST
+                  I am a shopper
                 </button>
               </div>
 
@@ -603,16 +596,10 @@ export default function Landing() {
                 padding: "16px 16px 18px",
               }}>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                  letterSpacing: "0.06em", color: "#FFD2C2", marginBottom: 6, fontWeight: 800,
-                }}>
-                  FOR BUSINESSES
-                </div>
-                <div style={{
                   fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
-                  color: CREAM, marginBottom: 12, lineHeight: 1.3,
+                  color: CREAM, marginBottom: 12, lineHeight: 1.35,
                 }}>
-                  Get seen — so you can sell and welcome customers in.
+                  Get seen — and welcome customers in.
                 </div>
                 <a
                   href="/business-apply"
@@ -627,7 +614,7 @@ export default function Landing() {
                     borderRadius: RADIUS_SM, fontWeight: 800,
                   }}
                 >
-                  PARTNER YOUR SHOP
+                  I am a business
                 </a>
               </div>
             </div>
