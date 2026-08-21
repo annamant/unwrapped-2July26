@@ -377,6 +377,7 @@ export default function Landing() {
       <nav style={{
         position: "sticky", top: 0, zIndex: 40,
         display: "flex", alignItems: "center", justifyContent: "space-between",
+        gap: isMobile ? 10 : 24,
         padding: isMobile ? "10px 12px" : "14px 40px",
         borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid rgba(255,248,244,0.12)",
         // At top the nav sits above the hero on the light page wash — must stay opaque
@@ -388,15 +389,16 @@ export default function Landing() {
         WebkitBackdropFilter: scrolled ? "blur(14px)" : undefined,
         transition: "border-color 0.2s ease, background 0.2s ease",
       }}>
-        <a href="/" style={{
-          display: "flex", alignItems: "center", gap: isMobile ? 7 : 10,
+        <a href="/" aria-label="Unwrapped home" style={{
+          display: "flex", alignItems: "center", gap: isMobile ? 6 : 10,
           textDecoration: "none", color: scrolled ? FG : CREAM,
+          flexShrink: 0,
         }}>
           <img
             src="/logo-mark.svg"
             alt=""
-            width={isMobile ? 24 : 28}
-            height={isMobile ? 24 : 28}
+            width={isMobile ? 22 : 28}
+            height={isMobile ? 22 : 28}
             style={{
               display: "block",
               flexShrink: 0,
@@ -406,7 +408,7 @@ export default function Landing() {
             }}
           />
           <span style={{
-            fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 18 : 22,
+            fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 15 : 22,
             fontWeight: 700, letterSpacing: "-0.5px",
             whiteSpace: "nowrap",
           }}>
@@ -414,28 +416,34 @@ export default function Landing() {
           </span>
         </a>
 
-        <div style={{ display: "flex", gap: isMobile ? 8 : 22, alignItems: "center" }}>
+        <div style={{
+          display: "flex",
+          gap: isMobile ? 8 : 22,
+          alignItems: "center",
+          flexShrink: 0,
+          marginLeft: "auto",
+        }}>
           <a
             href="https://www.instagram.com/shopunwrapped/"
             target="_blank"
             rel="noopener noreferrer"
             className="uw-link"
             aria-label="Instagram"
+            title="Instagram"
             style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
               color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
-              textDecoration: "none", fontWeight: 500,
+              textDecoration: "none",
               display: "inline-flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
+              width: isMobile ? 26 : 30,
+              height: isMobile ? 26 : 30,
             }}
           >
-            {isMobile ? (
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-              </svg>
-            ) : "Instagram"}
+            <svg width={isMobile ? 16 : 18} height={isMobile ? 16 : 18} viewBox="0 0 24 24" fill="none" aria-hidden>
+              <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2"/>
+              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
+              <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+            </svg>
           </a>
           <a
             href="/business-apply"
@@ -448,17 +456,19 @@ export default function Landing() {
           >
             {isMobile ? "Business" : "List your business"}
           </a>
-          <a
-            href="/recommend"
-            className="uw-link"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
-              textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
-            }}
-          >
-            {isMobile ? "Recommend" : "Recommend a shop"}
-          </a>
+          {!isMobile && (
+            <a
+              href="/recommend"
+              className="uw-link"
+              style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
+                textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
+              }}
+            >
+              Recommend a shop
+            </a>
+          )}
           <a
             href="/signin"
             className="uw-btn-ghost"
@@ -466,7 +476,7 @@ export default function Landing() {
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
               color: scrolled ? FG : CREAM, letterSpacing: "0.02em", fontWeight: 700,
               border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.65)",
-              padding: isMobile ? "7px 10px" : "9px 18px",
+              padding: isMobile ? "6px 9px" : "9px 18px",
               textDecoration: "none",
               background: scrolled ? "transparent" : "rgba(255,248,244,0.12)",
               borderRadius: RADIUS_SM,
