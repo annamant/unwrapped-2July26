@@ -9,6 +9,8 @@ Allow: /business-apply
 Allow: /recommend
 Allow: /instagram
 Allow: /resources
+Allow: /london
+Allow: /london/
 
 # Account / app surfaces — no value in search results
 Disallow: /signin

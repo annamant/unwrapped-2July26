@@ -1,6 +1,13 @@
 import { and, eq, gte, sql } from "drizzle-orm";
 import { businesses, drops } from "./db/schema";
 import { db } from "./db";
+import {
+  LONDON_BOROUGHS,
+  boroughJsonLd,
+  boroughSeo,
+  getBoroughBySlug,
+  londonHubSeo,
+} from "./londonBoroughs";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -8,9 +15,9 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped — see it, claim it, collect it on your high street";
+const DEFAULT_TITLE = "Unwrapped — see it, claim it, collect it on your London high street";
 const DEFAULT_DESCRIPTION =
-  "Unwrapped: look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Not mystery bags — local shopping you can see.";
+  "Unwrapped (London): look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Launching in South London. Not mystery bags — local shopping you can see.";
 
 function abs(path: string): string {
   return `${SITE()}${path.startsWith("/") ? path : `/${path}`}`;
@@ -84,6 +91,12 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/terms",
     title: "Terms & Conditions — Unwrapped",
     description: "Terms governing use of Unwrapped at shopunwrapped.com.",
+    type: "website",
+  },
+  "/london": {
+    path: "/london",
+    title: londonHubSeo().title,
+    description: londonHubSeo().description,
     type: "website",
   },
 };
@@ -170,6 +183,10 @@ export function renderSitemapXml(payload: {
   push(abs("/recommend"), undefined, "monthly", "0.7");
   push(abs("/instagram"), undefined, "weekly", "0.6");
   push(abs("/resources"), undefined, "monthly", "0.6");
+  push(abs("/london"), undefined, "weekly", "0.9");
+  for (const b of LONDON_BOROUGHS) {
+    push(abs(`/london/${b.slug}`), undefined, "weekly", b.region === "south" ? "0.85" : "0.7");
+  }
   push(abs("/privacy"), undefined, "yearly", "0.3");
   push(abs("/terms"), undefined, "yearly", "0.3");
 
@@ -368,6 +385,32 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     };
   }
 
+  const boroughMatch = path.match(/^\/london\/([^/]+)$/);
+  if (boroughMatch) {
+    const borough = getBoroughBySlug(decodeURIComponent(boroughMatch[1]));
+    if (!borough) {
+      return {
+        title: "Borough not found — Unwrapped",
+        description: DEFAULT_DESCRIPTION,
+        canonical: abs(path),
+        image: DEFAULT_OG(),
+        type: "website",
+        robots: "noindex, follow",
+      };
+    }
+    const s = boroughSeo(borough);
+    return {
+      title: s.title,
+      description: truncate(s.description),
+      canonical: abs(s.path),
+      image: DEFAULT_OG(),
+      type: "website",
+      robots: "index, follow",
+      jsonLd: boroughJsonLd(borough),
+      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p><p><a href="${escapeHtml(abs(s.path))}">View ${escapeHtml(borough.name)} on Unwrapped</a></p></article>`,
+    };
+  }
+
   const staticPage = STATIC[path];
   if (staticPage) {
     return {
@@ -377,11 +420,24 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       image: DEFAULT_OG(),
       type: staticPage.type,
       robots: staticPage.noindex ? "noindex, nofollow" : "index, follow",
-      jsonLd: path === "/" ? homeJsonLd() : undefined,
+      jsonLd:
+        path === "/"
+          ? homeJsonLd()
+          : path === "/london"
+            ? {
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                name: "London boroughs on Unwrapped",
+                description: staticPage.description,
+                url: abs("/london"),
+              }
+            : undefined,
       bodyHtml:
         path === "/"
           ? `<article><h1>Unwrapped</h1><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><p><a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
-          : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
+          : path === "/london"
+            ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a></li>`).join("")}</ul></article>`
+            : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }
 

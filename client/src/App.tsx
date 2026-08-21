@@ -32,13 +32,17 @@ import ResetPassword from "./pages/ResetPassword";
 import Instagram from "./pages/Instagram";
 import Resources from "./pages/Resources";
 import { Privacy, Terms } from "./pages/Legal";
+import LondonHub from "./pages/LondonHub";
+import BoroughLanding from "./pages/BoroughLanding";
 
-/** Applies path-based defaults; BusinessProfile / DropDetail override with richer tags. */
+/** Applies path-based defaults; BusinessProfile / DropDetail / London pages override with richer tags. */
 function RouteSeo() {
   const [loc] = useLocation();
   const path = loc.split("?")[0] || "/";
   // Deep public pages set their own SeoHead once data loads — skip defaults to avoid flicker.
-  if (path.startsWith("/business/") || path.startsWith("/drop/")) return null;
+  if (path.startsWith("/business/") || path.startsWith("/drop/") || path === "/london" || path.startsWith("/london/")) {
+    return null;
+  }
   const seo = seoForPath(path);
   return <SeoHead {...seo} />;
 }
@@ -91,6 +95,8 @@ export default function App() {
         <Route path="/recommend" component={Recommend} />
         <Route path="/instagram" component={Instagram} />
         <Route path="/resources" component={Resources} />
+        <Route path="/london" component={LondonHub} />
+        <Route path="/london/:borough" component={BoroughLanding} />
         <Route path="/reset-password" component={ResetPassword} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={Terms} />

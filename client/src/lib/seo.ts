@@ -1,11 +1,13 @@
 /** Site-wide SEO constants and helpers for Unwrapped (shopunwrapped.com). */
 
+import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd } from "./londonBoroughs";
+
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — see it, claim it, collect it on your high street";
+export const DEFAULT_TITLE = "Unwrapped — see it, claim it, collect it on your London high street";
 export const DEFAULT_DESCRIPTION =
-  "Unwrapped: look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Not mystery bags — local shopping you can see.";
+  "Unwrapped (London): look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Launching in South London. Not mystery bags — local shopping you can see.";
 
 export type SeoProps = {
   title?: string;
@@ -202,7 +204,30 @@ export function seoForPath(pathname: string): SeoProps {
         description: "Terms governing use of Unwrapped at shopunwrapped.com.",
         path,
       };
-    default:
+    case "/london": {
+      const hub = londonHubSeo();
+      return { title: hub.title, description: hub.description, path: hub.path };
+    }
+    default: {
+      const boroughMatch = path.match(/^\/london\/([^/]+)$/);
+      if (boroughMatch) {
+        const borough = getBoroughBySlug(decodeURIComponent(boroughMatch[1]));
+        if (borough) {
+          const s = boroughSeo(borough);
+          return {
+            title: s.title,
+            description: s.description,
+            path: s.path,
+            jsonLd: boroughJsonLd(borough),
+          };
+        }
+        return {
+          title: `Borough not found — ${SITE_NAME}`,
+          description: DEFAULT_DESCRIPTION,
+          path,
+          noindex: true,
+        };
+      }
       if (path.startsWith("/business/") || path.startsWith("/drop/")) {
         // Page components set rich tags once data loads; keep indexable defaults.
         return {
@@ -217,5 +242,6 @@ export function seoForPath(pathname: string): SeoProps {
         path,
         noindex: true,
       };
+    }
   }
 }

@@ -1522,6 +1522,7 @@ export default function Landing() {
               { label: "Sign in", href: "/signin" },
               { label: "List your business", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
+              { label: "London boroughs", href: "/london" },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (
