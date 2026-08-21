@@ -780,7 +780,7 @@ export default function Landing() {
               className="uw-pulse-dot"
               style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
             />
-            HOW IT WORKS · THE MISSION
+            THE UNWRAPPED MANIFESTO
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -788,9 +788,23 @@ export default function Landing() {
             fontWeight: 700, letterSpacing: "-0.8px",
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
           }}>
-            Bring the buzz back to your high street —{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FFD2C2" }}>before it's gone.</em>
+            Unwrapped turns your local high street into a{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FFD2C2" }}>
+              real-time digital feed.
+            </em>
           </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 14 : 16,
+            fontWeight: 400,
+            color: "rgba(255,247,242,0.9)",
+            lineHeight: 1.55,
+            maxWidth: 760,
+            margin: "0 0 16px",
+          }}>
+            Look in from wherever you are. See what local shops have just made, opened up or chosen
+            to drop through real photos and short clips. Claim it. Collect it in person.
+          </p>
           <div style={{
             display: "flex", flexWrap: "wrap", gap: 8,
           }}>
@@ -821,79 +835,94 @@ export default function Landing() {
           padding: isMobile ? "16px 16px 24px" : "20px 40px 32px",
           background: "transparent",
         }}>
-          <figure style={{ margin: 0, maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
+          <div style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: 900,
+            aspectRatio: "3.5 / 1",
+            margin: "0 auto 14px",
+            overflow: "hidden",
+            borderRadius: 12,
+            border: `1px solid ${BORDER}`,
+            background: CREAM,
+          }}>
             <img
               src="/landing/mission-infographic.jpg"
-              alt="Unwrapped mission infographic: peek into local shops from your phone with real photos and clips; see it, claim it, and collect with a QR code; no mystery bags — choose real stock like sourdough or a salon slot; bring buzz and more faces through local shop doors."
+              alt="A phone showing local shop drops connects to an illustrated local high street."
               style={{
+                position: "absolute",
                 display: "block",
+                top: 0,
+                left: 0,
                 width: "100%",
                 height: "auto",
-                borderRadius: 14,
-                border: `1px solid ${BORDER}`,
-                background: CREAM,
-                boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
+                transform: "translateY(-12%)",
               }}
             />
-            <figcaption style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12,
-              color: MUTED_FG,
-              lineHeight: 1.45,
-              marginTop: 10,
-              textAlign: "center",
-              maxWidth: 480,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}>
-              Connects neighbours to local shops in real time — see the real thing, claim it, collect it.
-            </figcaption>
-          </figure>
+          </div>
 
           <div style={{
-            marginTop: isMobile ? 16 : 18,
-            padding: isMobile ? "14px 16px" : "16px 20px",
-            border: `1px solid ${BORDER}`,
-            background: "rgba(255,248,244,0.75)",
-            borderRadius: 14,
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            alignItems: isMobile ? "flex-start" : "center",
-            justifyContent: "space-between",
-            gap: 12,
-            maxWidth: 720,
-            marginLeft: "auto",
-            marginRight: "auto",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) 250px",
+            gap: isMobile ? 14 : 18,
+            alignItems: "stretch",
+            width: "100%",
+            maxWidth: 1100,
+            margin: "0 auto",
           }}>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 16 : 18,
-              fontWeight: 600,
-              color: FG,
-              lineHeight: 1.3,
+            <figure style={{
               margin: 0,
-              maxWidth: 420,
+              width: "100%",
+              overflowX: isMobile ? "auto" : "hidden",
+              borderRadius: 12,
+              border: `1px solid ${BORDER}`,
+              background: CREAM,
+              boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
             }}>
-              Drops sell out.{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
-                Don't find out when you're already at the shop.
-              </em>
-            </p>
-            <button
-              onClick={() => navigate("/signin")}
-              className="uw-btn-primary"
-              style={{
-                flexShrink: 0,
-                background: V, color: BG,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
-                border: "none", cursor: "pointer",
-                borderRadius: RADIUS_SM,
-                width: isMobile ? "100%" : "auto",
-              }}
-            >
-              JOIN THE WAITLIST
-            </button>
+              <div style={{
+                position: "relative",
+                width: isMobile ? 820 : "100%",
+                aspectRatio: "3.2 / 1",
+                overflow: "hidden",
+              }}>
+                <img
+                  src="/landing/mission-infographic.jpg"
+                  alt="Four steps: peek into local shops from anywhere; see it, claim it and collect it; choose real stock with no mystery bags; bring life back to your neighbourhood."
+                  style={{
+                    position: "absolute",
+                    display: "block",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "auto",
+                    transform: "translateY(-52%)",
+                  }}
+                />
+              </div>
+            </figure>
+
+            <div style={{
+              padding: isMobile ? "14px 16px" : "20px",
+              border: `1px solid ${BORDER}`,
+              background: "rgba(255,248,244,0.75)",
+              borderRadius: 12,
+              display: "flex",
+              alignItems: "center",
+            }}>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 16 : 18,
+                fontWeight: 600,
+                color: FG,
+                lineHeight: 1.35,
+                margin: 0,
+              }}>
+                Shops create drops for one-offs, limited stock, last-minute slots and exclusive local offers.{" "}
+                <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
+                  like being in the shop, wherever you are.
+                </em>
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -909,38 +938,66 @@ export default function Landing() {
         }}>
           <div style={{ width: "100%", maxWidth: 1180, margin: "0 auto" }}>
             <div style={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "flex-start" : "center",
+              justifyContent: "space-between",
+              gap: isMobile ? 10 : 28,
+              padding: isMobile ? "18px 20px" : "22px 26px",
+              marginBottom: 20,
+              background: CREAM,
+              border: "1px solid rgba(58,22,16,0.25)",
+              borderRadius: 10,
+            }}>
+              <div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 9,
+                  fontWeight: 800,
+                  color: V,
+                  letterSpacing: "0.09em",
+                  marginBottom: 5,
+                }}>
+                  FOUNDING MEMBERS · PRE-LAUNCH
+                </div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 27 : 34,
+                  fontWeight: 800,
+                  color: FG,
+                  letterSpacing: "-1px",
+                  lineHeight: 1,
+                }}>
+                  WE NEED YOU
+                </div>
+              </div>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 14 : 16,
+                fontWeight: 500,
+                color: FG,
+                lineHeight: 1.45,
+                maxWidth: 600,
+                margin: 0,
+              }}>
+                Help bring the buzz back to your high street. One shop, one drop and one neighbourhood at a time.
+              </p>
+            </div>
+
+            <div style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 10,
               fontWeight: 800,
               color: CREAM,
               letterSpacing: "0.08em",
-              marginBottom: 18,
+              marginBottom: 12,
             }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM }} />
-              FOUNDING MEMBERS · PRE-LAUNCH
+              FOUNDING MEMBER BENEFITS
             </div>
-
-            <h2 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 32 : 46,
-              fontWeight: 750, color: CREAM, lineHeight: 1.08,
-              letterSpacing: isMobile ? "-1px" : "-1.8px", marginBottom: 18, maxWidth: 850,
-            }}>
-              Be part of something new
-              <br />
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: FG }}>a high street that buzzes again.</em>
-            </h2>
-
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
-              color: "rgba(255,247,242,0.9)", lineHeight: 1.65, marginBottom: isMobile ? 24 : 32, maxWidth: 720, fontWeight: 400,
-            }}>
-              When shops get seen and neighbours show up, everyone wins —
-              more life on the street, more faces through the door, a local that feels alive.
-              Founding members help make that real, neighbourhood by neighbourhood.
-            </p>
 
             <div style={{
               display: "grid",
@@ -1844,7 +1901,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 9,
-            color: MUTED_FG,
+            color: FG,
             letterSpacing: "0.06em",
             marginBottom: 12,
           }}>
@@ -1867,10 +1924,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 14,
-            color: MUTED_FG,
+            color: FG,
             lineHeight: 1.65,
             maxWidth: 520,
-            fontWeight: 300,
+            fontWeight: 400,
             marginBottom: 8,
           }}>
             {filteredPins.length === 0
@@ -1880,7 +1937,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 10,
-            color: MUTED_FG,
+            color: FG,
             letterSpacing: "0.04em",
             marginBottom: 14,
           }}>
@@ -2060,7 +2117,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                     <div style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: 10,
-                      color: MUTED_FG,
+                      color: FG,
                       letterSpacing: "0.04em",
                       lineHeight: 1.45,
                     }}>
@@ -2080,6 +2137,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           overflow: "hidden",
           background: FG,
           boxShadow: "0 18px 50px rgba(75,32,22,0.12)",
+          marginTop: isMobile ? 0 : 30,
         }}>
           <DirectoryMap
             pins={filteredPins}
