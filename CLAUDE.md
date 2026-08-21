@@ -10,7 +10,7 @@ This is the ACTIVE repository: `annamant/unwrapped-2July26`, branch `master`. Th
 
 - Pushes to `master` auto-deploy to **production** (https://shopunwrapped.com) via the Railway project **UNWRAPPED JULY26**. There is no staging environment.
 - Verify the client builds before committing: `cd client && npx vite build`. Railway runs `vite build` only — `tsc` is NOT part of the build and has known pre-existing tRPC type errors unrelated to most changes. Do not try to "fix" the build by adding tsc.
-- Server pre-deploy runs `drizzle-kit push` (`server/railway.json`) — schema edits hit the live database on deploy.
+- Server pre-deploy runs `node scripts/migrate.mjs` (`server/railway.json`) — additive SQL in `server/migrations/*.sql` is applied on deploy (tracked in `schema_migrations`). Do **not** rely on interactive `drizzle-kit push` in predeploy (it can prompt and abort the release). For risky type changes, apply manually then add an idempotent migration file.
 
 ## Client conventions — do not deviate
 
@@ -37,12 +37,12 @@ This is the ACTIVE repository: `annamant/unwrapped-2July26`, branch `master`. Th
 
 ## Env vars the server expects
 
-`DATABASE_URL`, `CLIENT_URL` (comma-separated origins), `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY`/`VAPID_SUBJECT`, `ADMIN_EMAILS`. Client build needs `VITE_API_URL`, `VITE_STRIPE_PUBLISHABLE_KEY`, `VITE_VAPID_PUBLIC_KEY`.
+`DATABASE_URL`, `CLIENT_URL` (comma-separated origins), `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY`/`VAPID_SUBJECT`, `ADMIN_EMAILS`, `CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET`. Client build needs `VITE_API_URL`, `VITE_STRIPE_PUBLISHABLE_KEY`, `VITE_VAPID_PUBLIC_KEY`.
 
 ## Known gaps (deliberate, pending decisions — see unwrapped-launch-readiness.md history)
 
 - No payout mechanism (Stripe Connect vs manual — awaiting decision).
-- Image upload endpoint exists but returns 501 until R2/S3 storage is configured.
+- Media upload (`POST /api/upload`) uses Cloudinary (`CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET`). Photos ≤10 MB; clips ≤25 MB / 15s (client-enforced). Returns `{ url, mediaType }`.
 - No email verification on signup (UX decision pending).
 - Per-route OG tags for drop/business pages (SPA serves one shell — needs prerender/bot middleware).
 
