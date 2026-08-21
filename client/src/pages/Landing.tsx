@@ -35,7 +35,7 @@ type SampleDrop = {
 const SAMPLE_DROPS: SampleDrop[] = [
   {
     category: "Food & Drink",
-    neighbourhood: "Hackney",
+    neighbourhood: "Brixton",
     title: "Morning bake — country loaf",
     business: "River Oven Bakery",
     pricePence: 450,
@@ -45,7 +45,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
   },
   {
     category: "Fashion & Retail",
-    neighbourhood: "Shoreditch",
+    neighbourhood: "Peckham",
     title: "Weekend edit — 3-piece clothing bundle",
     business: "North Lane Boutique",
     pricePence: checkoutFromList(10800),
@@ -75,7 +75,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
   },
   {
     category: "Beauty & Wellness",
-    neighbourhood: "Islington",
+    neighbourhood: "Streatham",
     title: "45-min personal training",
     business: "Jordan Ellis PT",
     pricePence: 3500,
@@ -522,16 +522,16 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "clamp(40px, 6.2vw, 76px)",
+                fontSize: "clamp(36px, 5.4vw, 64px)",
                 fontWeight: 800, color: CREAM,
-                lineHeight: 0.96, letterSpacing: "-2.4px",
+                lineHeight: 0.98, letterSpacing: "-2px",
                 marginBottom: 18,
               }}
             >
-              A new way to shop your high street.
+              See London high street shop drops.
               <br />
               <em style={{ fontStyle: "italic", fontWeight: 500, color: "#FFD2C2" }}>
-                See it. Claim it. Collect it.
+                From wherever you are.
               </em>
             </h1>
 
@@ -540,12 +540,12 @@ export default function Landing() {
               style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
                 color: "rgba(255,248,244,0.82)", lineHeight: 1.5, marginBottom: 28, fontWeight: 500,
-                maxWidth: 480,
+                maxWidth: 520,
               }}
             >
-              Imagine looking into your favourite local shops from the sofa or the bus —
-              seeing what's ready, claiming it, and walking in to collect.
-              That's the high street we're bringing to life.
+              Shops publish what's ready in a photo or short video. You see the real thing,
+              claim and pay in the app, then collect in person with a QR.
+              Launching across South London first.
             </p>
 
             <div

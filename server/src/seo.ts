@@ -17,9 +17,9 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped — see it, claim it, collect it on your London high street";
+const DEFAULT_TITLE = "Unwrapped — see London high street shop drops from wherever you are";
 const DEFAULT_DESCRIPTION =
-  "Unwrapped (London): look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Launching in South London. Not mystery bags — local shopping you can see.";
+  "See London high street shop drops through photos and short videos. Claim in the app, collect in person with a QR. Launching in South London.";
 
 function abs(path: string): string {
   return `${SITE()}${path.startsWith("/") ? path : `/${path}`}`;
