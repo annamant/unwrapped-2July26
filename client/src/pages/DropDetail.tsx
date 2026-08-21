@@ -4,6 +4,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
+import SeoHead from "../components/SeoHead";
+import { dropJsonLd, truncateMeta } from "../lib/seo";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
@@ -65,7 +67,14 @@ export default function DropDetail() {
   });
 
   if (isLoading) return <PageShell><Spinner /></PageShell>;
-  if (error || !data) return <PageShell><NotFound /></PageShell>;
+  if (error || !data) {
+    return (
+      <PageShell>
+        <SeoHead title="Drop not found — Unwrapped" path={`/drop/${id}`} noindex />
+        <NotFound />
+      </PageShell>
+    );
+  }
 
   const { drop, business, location } = data;
   const now = new Date();
@@ -78,6 +87,10 @@ export default function DropDetail() {
   const total = drop.totalQuantity || 1;
   const pct = Math.round(((total - drop.availableQuantity) / total) * 100);
   const scarce = !soldOut && drop.availableQuantity <= 3;
+  const seoDescription = truncateMeta(
+    drop.description ||
+      `${drop.title} from ${business.name} on Unwrapped — see it, claim it, collect it on your high street.`,
+  );
 
   const reserving = createPI.isPending || reserve.isPending;
 
@@ -98,6 +111,23 @@ export default function DropDetail() {
 
   return (
     <PageShell>
+      <SeoHead
+        title={`${drop.title} · ${business.name} — Unwrapped`}
+        description={seoDescription}
+        path={`/drop/${drop.id}`}
+        image={drop.imageUrl}
+        type="product"
+        jsonLd={dropJsonLd({
+          id: drop.id,
+          title: drop.title,
+          description: drop.description,
+          image: drop.imageUrl,
+          pricePence: drop.price,
+          availableQuantity: drop.availableQuantity,
+          businessName: business.name,
+          businessSlug: business.slug,
+        })}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "24px 20px" : "40px 24px" }}>
         <div style={{
           display: "grid",

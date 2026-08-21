@@ -1,0 +1,26 @@
+# Unwrapped — https://shopunwrapped.com
+User-agent: *
+Allow: /
+Allow: /business/
+Allow: /drop/
+Allow: /privacy
+Allow: /terms
+Allow: /business-apply
+Allow: /recommend
+Allow: /instagram
+Allow: /resources
+
+# Account / app surfaces — no value in search results
+Disallow: /signin
+Disallow: /business/signin
+Disallow: /reset-password
+Disallow: /onboarding
+Disallow: /home
+Disallow: /profile
+Disallow: /ticket/
+Disallow: /dashboard
+Disallow: /admin
+
+Sitemap: https://shopunwrapped.com/sitemap.xml
+# Always-fresh copy from the API (same URLs). Submit in Search Console if needed:
+# https://unwrapped-2july26-production.up.railway.app/api/sitemap.xml

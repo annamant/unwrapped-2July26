@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unwrapped — see it, claim it, collect it on your high street</title>
     <meta name="description" content="Unwrapped: look into your high street from anywhere — see what's ready in a photo or short video, claim in the app, collect at the counter. Not mystery bags — local shopping you can see." />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#FFF4EF" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
@@ -13,11 +15,22 @@
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Unwrapped" />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content="Unwrapped — see it, claim it, collect it on your high street" />
     <meta property="og:description" content="Look into shops nearby from the sofa or the bus. See the real thing, pay in the app, collect with a QR. Local shopping you can see — not mystery bags." />
-    <meta property="og:url" content="https://shopunwrapped.com" />
+    <meta property="og:url" content="https://shopunwrapped.com/" />
     <meta property="og:image" content="https://shopunwrapped.com/og-image.png" />
+    <meta property="og:image:alt" content="Unwrapped — see it, claim it, collect it on your high street" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Unwrapped — see it, claim it, collect it on your high street" />
+    <meta name="twitter:description" content="Look into shops nearby from the sofa or the bus. See the real thing, pay in the app, collect with a QR. Local shopping you can see — not mystery bags." />
+    <meta name="twitter:image" content="https://shopunwrapped.com/og-image.png" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Organization","name":"Unwrapped","url":"https://shopunwrapped.com","logo":"https://shopunwrapped.com/icon-512.png","email":"anna@shopunwrapped.com","sameAs":["https://www.instagram.com/shopunwrapped/","https://www.linkedin.com/company/shopunwrapped/"]}
+    </script>
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"Unwrapped","url":"https://shopunwrapped.com","description":"Look into your high street from anywhere — see what's ready, claim in the app, collect at the counter."}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
@@ -64,6 +77,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main style="max-width:640px;margin:48px auto;padding:0 20px;font-family:system-ui,sans-serif;line-height:1.6;color:#3A1610">
+        <h1>Unwrapped</h1>
+        <p>See it, claim it, collect it on your high street. Look into shops nearby from anywhere — see the real thing in a photo or short video, pay in the app, collect with a QR. Not mystery bags — local shopping you can see.</p>
+        <p><a href="https://shopunwrapped.com/">shopunwrapped.com</a> · <a href="https://shopunwrapped.com/business-apply">List your shop</a> · <a href="https://shopunwrapped.com/privacy">Privacy</a> · <a href="https://shopunwrapped.com/terms">Terms</a></p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
