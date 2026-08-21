@@ -5,9 +5,13 @@ import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
 const CATEGORIES = [
-  "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
-  "Art & Culture", "Books & Music", "Sports & Outdoor", "Tech & Gadgets",
-  "Kids & Family", "Services & Experiences",
+  "Fashion & Apparel",
+  "Food & Drink",
+  "Beauty & Wellness",
+  "Books & Music",
+  "Home & Living",
+  "Art & Culture",
+  "Charity shops",
 ];
 
 const emptyForm = {
@@ -113,7 +117,7 @@ export default function Recommend() {
             Recommend a shop<br />you'd love on Unwrapped.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            Know a café, salon, florist, restaurant, studio, or neighbourhood spot that should be here?
+            Know a bakery, florist, bookshop, boutique, or charity shop that should be here?
             Tell us — we'll reach out and let them know someone selected them.
           </p>
         </div>

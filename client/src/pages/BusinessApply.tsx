@@ -4,9 +4,13 @@ import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
 const CATEGORIES = [
-  "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
-  "Art & Culture", "Books & Music", "Sports & Outdoor", "Tech & Gadgets",
-  "Kids & Family", "Services & Experiences",
+  "Fashion & Apparel",
+  "Food & Drink",
+  "Beauty & Wellness",
+  "Books & Music",
+  "Home & Living",
+  "Art & Culture",
+  "Charity shops",
 ];
 
 export default function BusinessApply() {
@@ -66,10 +70,17 @@ export default function BusinessApply() {
             FOR BUSINESSES
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
-            Apply to list<br />your business.
+            Apply to partner<br />your shop.
           </h1>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: FG, lineHeight: 1.6, marginBottom: 14, fontWeight: 500 }}>
+            Get seen — so you can sell and welcome customers through the door.
+          </p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 16 }}>
+            No catalog. Publish a photo or short clip, set your price and quantity, done in under a minute.
+            Locals pay upfront and walk in with a QR. Founding shops: 0% fees during the pilot.
+          </p>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            We review every application to keep Unwrapped curated. Tell us about your business and we'll be in touch within 2–3 working days.
+            We review every application to keep Unwrapped curated. Tell us about your shop and we'll be in touch within 2–3 working days.
           </p>
         </div>
 
@@ -143,7 +154,7 @@ export default function BusinessApply() {
               opacity: apply.isPending ? 0.6 : 1,
             }}
           >
-            {apply.isPending ? "SENDING…" : "SUBMIT APPLICATION"}
+            {apply.isPending ? "SENDING…" : "APPLY TO PARTNER YOUR SHOP"}
           </button>
 
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textAlign: "center", lineHeight: 1.6 }}>

@@ -181,7 +181,7 @@ export default function BoroughLanding() {
               textDecoration: "none",
             }}
           >
-            List your {borough.name} shop
+            Apply to partner your shop
           </Link>
           <Link
             href="/recommend"

@@ -5,9 +5,29 @@ import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJso
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — see London high street shop drops from wherever you are";
+export const DEFAULT_TITLE = "Unwrapped — see what your London high street has today";
 export const DEFAULT_DESCRIPTION =
-  "See London high street shop drops through photos and short videos. Claim in the app, collect in person with a QR. Launching in South London.";
+  "See what your London high street has today — from wherever you are. Photo or short video, claim in the app, collect in person. Launching across South London.";
+
+/** Merchant FAQ rendered on the homepage and in FAQPage JSON-LD. */
+export const HOME_FAQS: { q: string; a: string }[] = [
+  {
+    q: "Is this another deep-discount app?",
+    a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
+  },
+  {
+    q: "Do I have to build a catalog?",
+    a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+  },
+  {
+    q: "What if they don't show up?",
+    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
+  },
+  {
+    q: "Who is Unwrapped for?",
+    a: "Local high-street shops — bakeries, florists, bookshops, beauty, fashion, wine, specialty food, and charity shops. If people can collect from you in person during a window, you can list a drop.",
+  },
+];
 
 export type SeoProps = {
   title?: string;
@@ -66,6 +86,18 @@ export function homeJsonLd(): Record<string, unknown>[] {
       description: DEFAULT_DESCRIPTION,
       publisher: { "@type": "Organization", name: SITE_NAME },
       inLanguage: "en-GB",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: HOME_FAQS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
     },
   ];
 }
@@ -178,16 +210,16 @@ export function seoForPath(pathname: string): SeoProps {
       };
     case "/business-apply":
       return {
-        title: `List your shop on ${SITE_NAME}`,
+        title: `Apply to partner your shop — ${SITE_NAME}`,
         description:
-          "Apply to publish photo and video drops on Unwrapped — local shoppers see the real thing, claim in the app, and collect at your counter.",
+          "Get seen on your high street. Publish a photo or short clip, set your price, and welcome customers who already paid. Founding shops: 0% fees during the pilot.",
         path,
       };
     case "/recommend":
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Know a brilliant independent on your high street? Recommend them for Unwrapped — see it, claim it, collect it.",
+          "Know a shop you'd love on your high street? Recommend a bakery, florist, bookshop, boutique, or charity shop for Unwrapped.",
         path,
       };
     case "/instagram":

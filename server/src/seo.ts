@@ -17,9 +17,28 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped — see London high street shop drops from wherever you are";
+const DEFAULT_TITLE = "Unwrapped — see what your London high street has today";
 const DEFAULT_DESCRIPTION =
-  "See London high street shop drops through photos and short videos. Claim in the app, collect in person with a QR. Launching in South London.";
+  "See what your London high street has today — from wherever you are. Photo or short video, claim in the app, collect in person. Launching across South London.";
+
+const HOME_FAQS: { q: string; a: string }[] = [
+  {
+    q: "Is this another deep-discount app?",
+    a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
+  },
+  {
+    q: "Do I have to build a catalog?",
+    a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+  },
+  {
+    q: "What if they don't show up?",
+    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
+  },
+  {
+    q: "Who is Unwrapped for?",
+    a: "Local high-street shops — bakeries, florists, bookshops, beauty, fashion, wine, specialty food, and charity shops. If people can collect from you in person during a window, you can list a drop.",
+  },
+];
 
 function abs(path: string): string {
   return `${SITE()}${path.startsWith("/") ? path : `/${path}`}`;
@@ -61,16 +80,16 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
   },
   "/business-apply": {
     path: "/business-apply",
-    title: "List your shop on Unwrapped",
+    title: "Apply to partner your shop — Unwrapped",
     description:
-      "Apply to publish photo and video drops on Unwrapped — local shoppers see the real thing, claim in the app, and collect at your counter.",
+      "Get seen on your high street. Publish a photo or short clip, set your price, and welcome customers who already paid. Founding shops: 0% fees during the pilot.",
     type: "website",
   },
   "/recommend": {
     path: "/recommend",
     title: "Recommend a shop — Unwrapped",
     description:
-      "Know a brilliant independent on your high street? Recommend them for Unwrapped — see it, claim it, collect it.",
+      "Know a shop you'd love on your high street? Recommend a bakery, florist, bookshop, boutique, or charity shop for Unwrapped.",
     type: "website",
   },
   "/instagram": {
@@ -136,6 +155,18 @@ function homeJsonLd() {
       url: SITE(),
       description: DEFAULT_DESCRIPTION,
       inLanguage: "en-GB",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: HOME_FAQS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
     },
   ];
 }
@@ -449,7 +480,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         borough,
         matched.map((b) => ({ name: b.name, slug: b.slug })),
       ),
-      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p>${matched.length ? `<h2>Shops in ${escapeHtml(borough.name)}</h2><ul>${shopLinks}</ul>` : `<p>We're onboarding ${escapeHtml(borough.name)} shops now.</p>`}<p><a href="${escapeHtml(abs("/london"))}">All London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">List your shop</a></p></article>`,
+      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p>${matched.length ? `<h2>Shops in ${escapeHtml(borough.name)}</h2><ul>${shopLinks}</ul>` : `<p>We're onboarding ${escapeHtml(borough.name)} shops now.</p>`}<p><a href="${escapeHtml(abs("/london"))}">All London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`,
     };
   }
 

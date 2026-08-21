@@ -105,7 +105,7 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
          style="display:block;margin-top:12px;background:#141210;color:#FAFAF8;
                 text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
                 letter-spacing:0.1em;padding:10px 0;text-align:center">
-        APPLY TO LIST YOUR BUSINESS
+        APPLY TO PARTNER YOUR SHOP
       </a>
     </div>
   `;

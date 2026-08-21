@@ -72,7 +72,7 @@ export default function LondonHub() {
           maxWidth: 640,
           marginBottom: 24,
         }}>
-          Unwrapped is an eventized high-street engine for London — see what’s ready in a photo or short video, claim in the app, collect at the counter. We’re launching densest in <strong style={{ color: FG }}>South London</strong>, with pages ready for every borough.
+          Unwrapped lets you see what's ready on London high streets — a photo or short video, claim in the app, collect at the counter. We're launching densest in <strong style={{ color: FG }}>South London</strong>, with a page for every borough.
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           <Link
@@ -89,7 +89,7 @@ export default function LondonHub() {
               textDecoration: "none",
             }}
           >
-            List your London shop
+            Apply to partner your shop
           </Link>
           <Link
             href="/recommend"

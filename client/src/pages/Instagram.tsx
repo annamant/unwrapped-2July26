@@ -113,7 +113,7 @@ export default function Instagram() {
             RECOMMEND A SHOP
           </a>
           <a href="/business-apply" style={linkBtn}>
-            LIST YOUR BUSINESS
+            APPLY TO PARTNER YOUR SHOP
           </a>
         </div>
 

@@ -6,6 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { HOME_FAQS } from "../lib/seo";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
@@ -54,16 +55,6 @@ const SAMPLE_DROPS: SampleDrop[] = [
     imageUrl: "/samples/clothing.jpg",
   },
   {
-    category: "Food & Drink",
-    neighbourhood: "Bermondsey",
-    title: "Early supper — two courses + drink",
-    business: "Fig & Thyme Kitchen",
-    pricePence: checkoutFromList(6800),
-    window: "Example window · Tue–Thu 5–7pm",
-    left: "e.g. 12 covers",
-    imageUrl: "/samples/restaurant.jpg",
-  },
-  {
     category: "Beauty & Wellness",
     neighbourhood: "Clapham",
     title: "Express blow-dry — afternoon slots",
@@ -73,30 +64,19 @@ const SAMPLE_DROPS: SampleDrop[] = [
     left: "e.g. 4 spots",
     imageUrl: "/samples/blowdry.jpg",
   },
-  {
-    category: "Beauty & Wellness",
-    neighbourhood: "Streatham",
-    title: "45-min personal training",
-    business: "Jordan Ellis PT",
-    pricePence: 3500,
-    window: "Example window · weekday evening",
-    left: "e.g. 3 spots",
-    imageUrl: "/samples/pt.jpg",
-  },
 ];
 
 const BUSINESS_TYPES = [
   "Charity shops",
-  "Restaurants",
-  "Salons",
-  "Cafés",
-  "Bakeries",
-  "Freelancers",
-  "Accountants",
-  "Trainers",
-  "Boutiques",
-  "Studios",
   "Florists",
+  "Bakeries",
+  "Bookshops",
+  "Wine merchants",
+  "Beauty",
+  "Fashion",
+  "Spirits",
+  "Boutiques",
+  "Specialty food",
 ];
 
 const LANDING_CSS = `
@@ -454,7 +434,7 @@ export default function Landing() {
               textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
             }}
           >
-            {isMobile ? "Business" : "List your business"}
+            {isMobile ? "Business" : "Partner your shop"}
           </a>
           {!isMobile && (
             <a
@@ -552,7 +532,7 @@ export default function Landing() {
                 marginBottom: 18,
               }}
             >
-              Want to see what your high street has to offer today?
+              See what your London high street has today
               <br />
               <em style={{ fontStyle: "italic", fontWeight: 500, color: "#FFD2C2" }}>
                 From wherever you are.
@@ -594,7 +574,7 @@ export default function Landing() {
                   minHeight: isMobile ? 28 : 0,
                   textAlign: isMobile ? "center" : "left",
                 }}>
-                  Look in. See it. Claim it. Collect.
+                  Look in. See it. Claim it. Collect it.
                 </div>
                 <button
                   onClick={() => navigate("/signin")}
@@ -608,7 +588,7 @@ export default function Landing() {
                     boxShadow: isMobile ? "none" : "0 10px 28px rgba(0,0,0,0.2)",
                   }}
                 >
-                  I am a shopper
+                  {isMobile ? "Join as shopper" : "Join as a founding shopper"}
                 </button>
               </div>
 
@@ -642,7 +622,7 @@ export default function Landing() {
                     borderRadius: RADIUS_SM, fontWeight: 800,
                   }}
                 >
-                  I am a business
+                  {isMobile ? "Partner your shop" : "Apply to partner your shop"}
                 </a>
               </div>
             </div>
@@ -662,7 +642,7 @@ export default function Landing() {
               {[
                 { sample: SAMPLE_DROPS[0], top: 20, left: 40, w: 220, z: 3, cls: "uw-float" },
                 { sample: SAMPLE_DROPS[1], top: 120, left: 200, w: 200, z: 2, cls: "uw-float-delay" },
-                { sample: SAMPLE_DROPS[3], top: 280, left: 60, w: 210, z: 4, cls: "uw-float" },
+                { sample: SAMPLE_DROPS[2], top: 280, left: 60, w: 210, z: 4, cls: "uw-float" },
               ].map(({ sample, top, left, w, z, cls }) => (
                 <div
                   key={sample.title}
@@ -776,8 +756,8 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
           }}>
-            A bakery posts the loaf that just came out. A boutique shows the jacket that just landed.
-            A salon opens a free slot. You see it in a photo or short video, claim it in seconds,
+            A bakery posts the loaf that just came out. A florist shows the bunch that just landed.
+            A boutique puts the jacket on the rail. You see it in a photo or short video, claim it in seconds,
             pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
             Just something you chose — waiting for you at the counter.
           </p>
@@ -808,7 +788,7 @@ export default function Landing() {
               className="uw-pulse-dot"
               style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
             />
-            THE UNWRAPPED MANIFESTO
+            HOW IT WORKS
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -818,7 +798,7 @@ export default function Landing() {
           }}>
             Unwrapped turns your local high street into a{" "}
             <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FFD2C2" }}>
-              real-time digital feed.
+              map of what's ready right now.
             </em>
           </h2>
           <p style={{
@@ -840,7 +820,7 @@ export default function Landing() {
               "Limited quantity",
               "Real photo or clip",
               "Pay upfront · it's yours",
-              "Collect when you're free",
+              "Collect in person",
             ].map((tag) => (
               <span
                 key={tag}
@@ -996,7 +976,7 @@ export default function Landing() {
                   letterSpacing: "-1px",
                   lineHeight: 1,
                 }}>
-                  WE NEED YOU
+                  BE FIRST ON YOUR HIGH STREET
                 </div>
               </div>
               <p style={{
@@ -1305,7 +1285,7 @@ export default function Landing() {
                     borderRadius: 999,
                   }}
                 >
-                  PARTNER AS A FOUNDING SHOP
+                  APPLY TO PARTNER YOUR SHOP
                 </a>
               </div>
             </div>
@@ -1373,7 +1353,7 @@ export default function Landing() {
               textDecoration: "none", display: "inline-block", border: "none",
             }}
           >
-            PARTNER YOUR SHOP
+              APPLY TO PARTNER YOUR SHOP
           </a>
         </div>
 
@@ -1449,24 +1429,7 @@ export default function Landing() {
           gap: isMobile ? 20 : 28,
           maxWidth: 920,
         }}>
-          {[
-            {
-              q: "Is this another deep-discount app?",
-              a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
-            },
-            {
-              q: "Do I have to build a catalog?",
-              a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
-            },
-            {
-              q: "What if they don't show up?",
-              a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
-            },
-            {
-              q: "Who is Unwrapped for?",
-              a: "Local shops, cafés, salons, restaurants, freelancers, services, and charity shops — the high street, not chains.",
-            },
-          ].map(({ q, a }) => (
+          {HOME_FAQS.map(({ q, a }) => (
             <div key={q}>
               <h3 style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: 18,
@@ -1512,7 +1475,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Recommend a café, salon, florist, restaurant, or neighbourhood spot.
+            Recommend a bakery, florist, bookshop, boutique, or charity shop.
             We'll reach out and let them know someone selected them — you don't need to own the business to nominate it.
           </p>
           <a
@@ -1571,8 +1534,8 @@ export default function Landing() {
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
-            Shoppers: get on the list to look in, see, claim, and collect.
-            Businesses: get on the map so your high street can see you.
+            Shoppers: create a founding account to look in, see, claim, and collect.
+            Businesses: apply to get on the map so your high street can see you.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
@@ -1585,20 +1548,8 @@ export default function Landing() {
                 border: "none", cursor: "pointer",
               }}
             >
-              JOIN THE WAITLIST
+              JOIN AS A FOUNDING SHOPPER
             </button>
-            <a
-              href="/london"
-              className="uw-btn-ghost uw-btn-ghost-dark"
-              style={{
-                border: "1px solid rgba(255,248,245,0.4)", color: BG,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-                letterSpacing: "0.04em", padding: "15px 28px",
-                textDecoration: "none",
-              }}
-            >
-              LONDON BOROUGHS
-            </a>
             <a
               href="/business-apply"
               className="uw-btn-ghost uw-btn-ghost-dark"
@@ -1609,9 +1560,23 @@ export default function Landing() {
                 textDecoration: "none", display: "inline-block", background: "transparent",
               }}
             >
-              PARTNER YOUR SHOP
+              APPLY TO PARTNER YOUR SHOP
             </a>
           </div>
+          <a
+            href="/london"
+            style={{
+              display: "inline-block",
+              marginTop: 18,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              fontWeight: 600,
+              color: "rgba(255,248,245,0.75)",
+              textDecoration: "none",
+            }}
+          >
+            Browse London boroughs →
+          </a>
         </div>
       </section>
 
@@ -1634,7 +1599,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Look in. See it. Claim it. Collect — your high street, from wherever you are.
+            Look in. See it. Claim it. Collect it — your high street, from wherever you are.
           </p>
         </div>
 
@@ -1648,7 +1613,7 @@ export default function Landing() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
               { label: "Sign in", href: "/signin" },
-              { label: "List your business", href: "/business-apply" },
+              { label: "Partner your shop", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
               { label: "London boroughs", href: "/london" },
               { label: "Resources", href: "/resources" },
@@ -1991,7 +1956,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 alignItems: "center",
               }}
             >
-              LIST YOUR BUSINESS
+              PARTNER YOUR SHOP
             </a>
             <a
               href="/recommend"
