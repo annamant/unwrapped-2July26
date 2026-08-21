@@ -378,12 +378,14 @@ export default function Landing() {
         position: "sticky", top: 0, zIndex: 40,
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: isMobile ? "12px 20px" : "14px 40px",
-        borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid transparent",
+        borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid rgba(255,248,244,0.12)",
+        // At top the nav sits above the hero on the light page wash — must stay opaque
+        // and high-contrast (cream on wine). Scrolled = cream glass + dark ink.
         background: scrolled
-          ? "linear-gradient(180deg, rgba(255,248,244,0.94), rgba(255,232,222,0.9))"
-          : "rgba(158,28,14,0.35)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
+          ? "linear-gradient(180deg, rgba(255,248,244,0.96), rgba(255,232,222,0.94))"
+          : V_DEEP,
+        backdropFilter: scrolled ? "blur(14px)" : undefined,
+        WebkitBackdropFilter: scrolled ? "blur(14px)" : undefined,
         transition: "border-color 0.2s ease, background 0.2s ease",
       }}>
         <a href="/" style={{
@@ -418,7 +420,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -429,7 +431,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -440,7 +442,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.78)",
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
               textDecoration: "none", fontWeight: 500,
             }}
           >
@@ -452,10 +454,10 @@ export default function Landing() {
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
               color: scrolled ? FG : CREAM, letterSpacing: "0.02em", fontWeight: 700,
-              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.55)",
+              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.65)",
               padding: "9px 18px",
               textDecoration: "none",
-              background: scrolled ? "transparent" : "rgba(255,248,244,0.1)",
+              background: scrolled ? "transparent" : "rgba(255,248,244,0.12)",
               borderRadius: RADIUS_SM,
             }}
           >
