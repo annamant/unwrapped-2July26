@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "db:push": "drizzle-kit push",
+    "db:migrate": "node scripts/migrate.mjs",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {

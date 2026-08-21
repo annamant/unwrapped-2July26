@@ -18,11 +18,11 @@ const cases: Array<{
     want: "/dashboard",
   },
   {
-    name: "merchant via shopper portal",
+    name: "merchant via shopper portal still opens dashboard",
     user: { onboardingComplete: false, role: "consumer" },
     business: active,
     portal: "shopper",
-    want: "/home",
+    want: "/dashboard",
   },
   {
     name: "admin-only via shopper portal",

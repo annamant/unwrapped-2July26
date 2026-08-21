@@ -8,8 +8,10 @@ export function resolveLoginRedirect(
   const hasActiveBusiness = business?.status === "active";
   const isAdminOnly = user.role === "admin" && !hasActiveBusiness;
 
+  // Active merchants always open in business mode; shopper browse is opt-in
+  // via "Browse as shopper" in the dashboard shell.
   if (hasActiveBusiness) {
-    return portal === "business" ? "/dashboard" : "/home";
+    return "/dashboard";
   }
 
   if (isAdminOnly) {

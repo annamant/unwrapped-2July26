@@ -9,7 +9,7 @@ Local drop discovery and reservation platform. Businesses publish time-limited d
 - **Live site:** https://shopunwrapped.com
 - **Hosting:** Railway, project **UNWRAPPED JULY26** (the only Railway project connected to this repo). Pushes to `master` auto-deploy to production — there is no staging environment, so verify builds locally before committing.
 - Client build on Railway is `vite build` only. `tsc` is NOT part of the build (cross-directory type imports don't work in the monorepo build); run `npm run typecheck` locally instead. Known pre-existing tRPC type errors exist and are unrelated to most changes.
-- Server pre-deploy runs `drizzle-kit push` (see `server/railway.json`), so schema changes in `server/src/db/schema.ts` are applied to the database on deploy.
+- Server pre-deploy runs `node scripts/migrate.mjs` (see `server/railway.json`), applying additive SQL from `server/migrations/` on deploy.
 
 ## Structure
 
