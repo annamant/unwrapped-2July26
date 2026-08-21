@@ -546,13 +546,13 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "clamp(36px, 5.4vw, 64px)",
+                fontSize: "clamp(30px, 4.6vw, 54px)",
                 fontWeight: 800, color: CREAM,
-                lineHeight: 0.98, letterSpacing: "-2px",
+                lineHeight: 1.02, letterSpacing: "-1.5px",
                 marginBottom: 18,
               }}
             >
-              See London high street shop drops.
+              Want to see what your high street has to offer today?
               <br />
               <em style={{ fontStyle: "italic", fontWeight: 500, color: "#FFD2C2" }}>
                 From wherever you are.
