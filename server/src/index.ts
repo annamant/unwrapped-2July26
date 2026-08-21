@@ -11,6 +11,7 @@ import { db } from "./db";
 import { pushSubscriptions, reservations, drops } from "./db/schema";
 import { and, eq, gt, sql } from "drizzle-orm";
 import { refundPaymentIntent } from "./payments/stripe";
+import { buildSitemapPayload, renderSitemapXml, resolveSeoMeta } from "./seo";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -285,6 +286,44 @@ app.use(
           },
     }),
   );
+
+// ─── SEO: sitemap + crawler meta (used by client seo-server + Search Console) ─
+
+app.get("/api/sitemap.json", async (_req, res) => {
+  try {
+    const payload = await buildSitemapPayload();
+    res.setHeader("Cache-Control", "public, max-age=300");
+    return res.json(payload);
+  } catch (err) {
+    console.error("[seo] sitemap.json failed:", err);
+    return res.status(500).json({ error: "sitemap unavailable" });
+  }
+});
+
+app.get("/api/sitemap.xml", async (_req, res) => {
+  try {
+    const payload = await buildSitemapPayload();
+    const xml = renderSitemapXml(payload);
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=300");
+    return res.send(xml);
+  } catch (err) {
+    console.error("[seo] sitemap.xml failed:", err);
+    return res.status(500).type("text/plain").send("sitemap unavailable");
+  }
+});
+
+app.get("/api/seo/meta", async (req, res) => {
+  try {
+    const path = typeof req.query.path === "string" ? req.query.path : "/";
+    const meta = await resolveSeoMeta(path);
+    res.setHeader("Cache-Control", "public, max-age=60");
+    return res.json(meta);
+  } catch (err) {
+    console.error("[seo] meta failed:", err);
+    return res.status(500).json({ error: "meta unavailable" });
+  }
+});
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 

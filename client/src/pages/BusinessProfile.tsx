@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
+import SeoHead from "../components/SeoHead";
+import { businessJsonLd, truncateMeta } from "../lib/seo";
 import { format } from "date-fns";
 import { requestPushPermission } from "../hooks/usePushNotifications";
 import useIsMobile from "../hooks/useIsMobile";
@@ -50,6 +52,11 @@ export default function BusinessProfile() {
 
   if (!data) return (
     <div style={{ minHeight: "100vh", background: BG }}>
+      <SeoHead
+        title="Business not found — Unwrapped"
+        path={`/business/${slug}`}
+        noindex
+      />
       <Nav />
       <div style={{ padding: 80, textAlign: "center" }}>
         <p style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: MUTED_FG }}>Business not found</p>
@@ -61,9 +68,31 @@ export default function BusinessProfile() {
   const { business, drops } = data;
   const activeDrops = drops.filter(d => d.status === "active" || d.status === "sold_out");
   const isFollowing = followStatus?.following ?? false;
+  const seoDescription = truncateMeta(
+    business.description ||
+      `${business.name} on Unwrapped — see drops from this ${business.city || "London"} shop, claim in the app, collect at the counter.`,
+  );
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
+      <SeoHead
+        title={`${business.name} — Unwrapped`}
+        description={seoDescription}
+        path={`/business/${business.slug}`}
+        image={business.coverUrl || business.logoUrl}
+        jsonLd={businessJsonLd({
+          name: business.name,
+          slug: business.slug,
+          description: business.description,
+          category: business.category,
+          image: business.coverUrl || business.logoUrl,
+          address: business.address,
+          postcode: business.postcode,
+          city: business.city,
+          website: business.website,
+          instagramHandle: business.instagramHandle,
+        })}
+      />
       <Nav />
 
       {/* Hero band */}
