@@ -170,11 +170,11 @@ export default function DirectoryMap({
       return;
     }
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
-      maxZoom: 20,
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      subdomains: "abc",
+      maxZoom: 19,
     }).addTo(map);
 
     L.control.zoom({ position: "bottomright" }).addTo(map);

@@ -1893,8 +1893,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "minmax(280px, 0.68fr) minmax(0, 1.32fr)",
-        gap: isMobile ? 24 : 28,
+        gridTemplateColumns: isMobile ? "1fr" : "250px minmax(0, 1fr)",
+        gap: isMobile ? 24 : 24,
         alignItems: "start",
       }}>
         <div>
@@ -2137,14 +2137,14 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           overflow: "hidden",
           background: FG,
           boxShadow: "0 18px 50px rgba(75,32,22,0.12)",
-          marginTop: isMobile ? 0 : 30,
+          marginTop: isMobile ? 0 : 150,
         }}>
           <DirectoryMap
             pins={filteredPins}
             defaultLat={mapCenter.lat}
             defaultLng={mapCenter.lng}
             zoom={13}
-            height={isMobile ? "356px" : "514px"}
+            height={isMobile ? "356px" : "760px"}
             focusedId={focusedFromList ? focusedId : focusedId}
           />
         </div>
