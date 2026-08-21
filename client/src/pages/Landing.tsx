@@ -377,7 +377,7 @@ export default function Landing() {
       <nav style={{
         position: "sticky", top: 0, zIndex: 40,
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: isMobile ? "12px 20px" : "14px 40px",
+        padding: isMobile ? "10px 12px" : "14px 40px",
         borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid rgba(255,248,244,0.12)",
         // At top the nav sits above the hero on the light page wash — must stay opaque
         // and high-contrast (cream on wine). Scrolled = cream glass + dark ink.
@@ -389,14 +389,14 @@ export default function Landing() {
         transition: "border-color 0.2s ease, background 0.2s ease",
       }}>
         <a href="/" style={{
-          display: "flex", alignItems: "center", gap: 10,
+          display: "flex", alignItems: "center", gap: isMobile ? 7 : 10,
           textDecoration: "none", color: scrolled ? FG : CREAM,
         }}>
           <img
             src="/logo-mark.svg"
             alt=""
-            width={28}
-            height={28}
+            width={isMobile ? 24 : 28}
+            height={isMobile ? 24 : 28}
             style={{
               display: "block",
               flexShrink: 0,
@@ -406,34 +406,44 @@ export default function Landing() {
             }}
           />
           <span style={{
-            fontFamily: "'Playfair Display', serif", fontSize: 22,
+            fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 18 : 22,
             fontWeight: 700, letterSpacing: "-0.5px",
+            whiteSpace: "nowrap",
           }}>
             Unwrapped
           </span>
         </a>
 
-        <div style={{ display: "flex", gap: isMobile ? 14 : 22, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: isMobile ? 8 : 22, alignItems: "center" }}>
           <a
             href="https://www.instagram.com/shopunwrapped/"
             target="_blank"
             rel="noopener noreferrer"
             className="uw-link"
+            aria-label="Instagram"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 13,
               color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
               textDecoration: "none", fontWeight: 500,
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            Instagram
+            {isMobile ? (
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2"/>
+                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
+                <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+              </svg>
+            ) : "Instagram"}
           </a>
           <a
             href="/business-apply"
             className="uw-link"
             style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
               color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
-              textDecoration: "none", fontWeight: 500,
+              textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
             }}
           >
             {isMobile ? "Business" : "List your business"}
@@ -442,9 +452,9 @@ export default function Landing() {
             href="/recommend"
             className="uw-link"
             style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
               color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
-              textDecoration: "none", fontWeight: 500,
+              textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
             }}
           >
             {isMobile ? "Recommend" : "Recommend a shop"}
@@ -453,13 +463,14 @@ export default function Landing() {
             href="/signin"
             className="uw-btn-ghost"
             style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
               color: scrolled ? FG : CREAM, letterSpacing: "0.02em", fontWeight: 700,
               border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.65)",
-              padding: "9px 18px",
+              padding: isMobile ? "7px 10px" : "9px 18px",
               textDecoration: "none",
               background: scrolled ? "transparent" : "rgba(255,248,244,0.12)",
               borderRadius: RADIUS_SM,
+              whiteSpace: "nowrap",
             }}
           >
             SIGN IN
@@ -555,21 +566,23 @@ export default function Landing() {
               className="uw-fade-4"
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: 12,
+                gridTemplateColumns: "1fr 1fr",
+                gap: isMobile ? 8 : 12,
                 maxWidth: 520,
               }}
             >
               <div style={{
-                background: "rgba(255,248,244,0.1)",
-                border: "1px solid rgba(255,248,244,0.18)",
-                borderRadius: 18,
-                padding: "16px 16px 18px",
-                backdropFilter: "blur(8px)",
+                background: isMobile ? "transparent" : "rgba(255,248,244,0.1)",
+                border: isMobile ? "none" : "1px solid rgba(255,248,244,0.18)",
+                borderRadius: isMobile ? 0 : 18,
+                padding: isMobile ? 0 : "16px 16px 18px",
+                backdropFilter: isMobile ? undefined : "blur(8px)",
               }}>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
-                  marginBottom: 12, lineHeight: 1.35, color: CREAM,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 10 : 14, fontWeight: 600,
+                  marginBottom: isMobile ? 6 : 12, lineHeight: 1.35, color: CREAM,
+                  minHeight: isMobile ? 28 : 0,
+                  textAlign: isMobile ? "center" : "left",
                 }}>
                   Look in. See it. Claim it. Collect.
                 </div>
@@ -578,11 +591,11 @@ export default function Landing() {
                   className="uw-btn-primary"
                   style={{
                     background: "#fff", color: V,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    letterSpacing: "0.01em", padding: "13px 16px",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
+                    letterSpacing: "0.01em", padding: isMobile ? "10px 8px" : "13px 16px",
                     border: "none", cursor: "pointer", width: "100%",
                     borderRadius: RADIUS_SM, fontWeight: 800,
-                    boxShadow: "0 10px 28px rgba(0,0,0,0.2)",
+                    boxShadow: isMobile ? "none" : "0 10px 28px rgba(0,0,0,0.2)",
                   }}
                 >
                   I am a shopper
@@ -590,24 +603,29 @@ export default function Landing() {
               </div>
 
               <div style={{
-                background: "rgba(255,248,244,0.08)",
-                border: "1.5px dashed rgba(255,248,244,0.35)",
-                borderRadius: 18,
-                padding: "16px 16px 18px",
+                background: isMobile ? "transparent" : "rgba(255,248,244,0.08)",
+                border: isMobile ? "none" : "1.5px dashed rgba(255,248,244,0.35)",
+                borderRadius: isMobile ? 0 : 18,
+                padding: isMobile ? 0 : "16px 16px 18px",
               }}>
                 <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
-                  color: CREAM, marginBottom: 12, lineHeight: 1.35,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 9 : 12, fontWeight: 600,
+                  color: CREAM, marginBottom: isMobile ? 6 : 12, lineHeight: 1.2,
+                  minHeight: isMobile ? 28 : 0,
+                  textAlign: isMobile ? "center" : "left",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "clip",
                 }}>
-                  Get seen — and welcome customers in.
+                  Get seen. Welcome customers in.
                 </div>
                 <a
                   href="/business-apply"
                   className="uw-btn-ghost uw-btn-ghost-dark"
                   style={{
                     border: "1.5px solid rgba(255,248,244,0.55)", color: CREAM,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    letterSpacing: "0.01em", padding: "12px 16px",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
+                    letterSpacing: "0.01em", padding: isMobile ? "9px 8px" : "12px 16px",
                     textDecoration: "none", display: "block",
                     textAlign: "center",
                     background: "transparent",
