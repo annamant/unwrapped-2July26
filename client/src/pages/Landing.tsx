@@ -986,11 +986,10 @@ export default function Landing() {
                 }}>
                   {[
                     {
-                      label: "Get seen — first drop free",
+                      label: "0% fees — locked in for founding shops",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M2.5 12S6.5 5.5 12 5.5 21.5 12 21.5 12 17.5 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
                       ),
                     },
@@ -1004,15 +1003,16 @@ export default function Landing() {
                       ),
                     },
                     {
-                      label: "You set the price — no mystery-bag model",
+                      label: "You set the price — never a mystery bag",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M2.5 12S6.5 5.5 12 5.5 21.5 12 21.5 12 17.5 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="2"/>
                         </svg>
                       ),
                     },
                     {
-                      label: "Priority on the map as your area opens",
+                      label: "Pioneer Partner priority on the map",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
                           <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" strokeWidth="2"/>
@@ -1083,7 +1083,7 @@ export default function Landing() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {[
                     {
-                      label: "First look when drops open near you",
+                      label: "Golden Ticket — claim drops before the public",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
                           <path d="M12 4v3M12 17v3M4 12H7M17 12h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -1092,20 +1092,18 @@ export default function Landing() {
                       ),
                     },
                     {
-                      label: "See into shops before you walk over",
+                      label: "Founding prices on premium local drops",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M4 10h16" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M9 14h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
                       ),
                     },
                     {
-                      label: "Nominate the local shops you love",
+                      label: "Founding status and neighbourhood perks",
                       icon: (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 20s-7-4.4-7-10a4.2 4.2 0 0 1 7-3 4.2 4.2 0 0 1 7 3c0 5.6-7 10-7 10Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M12 3.5 14.2 8l4.8.7-3.5 3.4.8 4.8L12 14.8 7.7 16.9l.8-4.8L5 8.7 9.8 8 12 3.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                         </svg>
                       ),
                     },
