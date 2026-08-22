@@ -193,10 +193,10 @@ export default function AdminBusinesses() {
         }}>
           <div>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, margin: 0 }}>
-              Shop pipeline
+              Onboarding pipeline
             </h1>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, margin: "8px 0 0", maxWidth: 580, lineHeight: 1.5 }}>
-              Two separate tracks: the curated landing board (approach list), and the claim campaign (warehouse invites → members).
+              Two separate tracks: the curated landing board (approach list), and the claim campaign (warehouse invites → members). Account login rows live under Accounts — not here.
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

@@ -935,22 +935,139 @@ export const adminRouter = router({
       return { success: true };
     }),
 
-  // List all users
+  // Full accounts database — every login row, classified by how it was created / used.
+  // Not the same as the onboarding pipeline (shops); this is the users table.
   listUsers: adminProcedure
-    .input(z.object({ limit: z.number().default(100) }))
+    .input(z.object({
+      limit: z.number().min(1).max(5000).default(2000),
+      kind: z.enum([
+        "all",
+        "shopper",
+        "invite_pending",
+        "claimed_owner",
+        "admin",
+        "directory_placeholder",
+        "other",
+      ]).optional(),
+    }))
     .query(async ({ ctx, input }) => {
-      return ctx.db
+      const allUsers = await ctx.db
         .select({
           id: users.id,
           email: users.email,
           name: users.name,
           role: users.role,
           onboardingComplete: users.onboardingComplete,
+          hasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
           createdAt: users.createdAt,
         })
         .from(users)
-        .orderBy(desc(users.createdAt))
-        .limit(input.limit);
+        .orderBy(desc(users.createdAt));
+
+      const owned = await ctx.db
+        .select({
+          ownerId: businesses.ownerId,
+          businessId: businesses.id,
+          businessName: businesses.name,
+          businessStatus: businesses.status,
+          claimInviteSentAt: businesses.claimInviteSentAt,
+        })
+        .from(businesses);
+
+      type BizAgg = {
+        businessCount: number;
+        businessName: string | null;
+        businessId: string | null;
+        claimInviteSentAt: Date | null;
+      };
+      const byOwner = new Map<string, BizAgg>();
+      for (const row of owned) {
+        const prev = byOwner.get(row.ownerId);
+        if (!prev) {
+          byOwner.set(row.ownerId, {
+            businessCount: 1,
+            businessName: row.businessName,
+            businessId: row.businessId,
+            claimInviteSentAt: row.claimInviteSentAt,
+          });
+        } else {
+          prev.businessCount += 1;
+          // Prefer an invited / active shop name for display when many are shared.
+          if (!prev.claimInviteSentAt && row.claimInviteSentAt) {
+            prev.businessName = row.businessName;
+            prev.businessId = row.businessId;
+            prev.claimInviteSentAt = row.claimInviteSentAt;
+          }
+        }
+      }
+
+      const classified = allUsers.map((u) => {
+        const email = u.email.toLowerCase();
+        const biz = byOwner.get(u.id);
+        const ownsBusiness = (biz?.businessCount ?? 0) > 0;
+
+        let kind:
+          | "admin"
+          | "directory_placeholder"
+          | "claimed_owner"
+          | "invite_pending"
+          | "shopper"
+          | "other";
+
+        if (email === UNCLAIMED_OWNER_EMAIL) kind = "directory_placeholder";
+        else if (u.role === "admin") kind = "admin";
+        else if (ownsBusiness && u.hasPassword) kind = "claimed_owner";
+        else if (ownsBusiness && !u.hasPassword) kind = "invite_pending";
+        else if (u.hasPassword) kind = "shopper";
+        else kind = "other";
+
+        let statusLabel: string;
+        if (kind === "directory_placeholder") statusLabel = "Shared directory owner";
+        else if (kind === "invite_pending") {
+          statusLabel = biz?.claimInviteSentAt ? "Invited — not claimed" : "Shop attached — no claim yet";
+        } else if (kind === "claimed_owner") statusLabel = "Claimed shop owner";
+        else if (kind === "shopper") statusLabel = u.onboardingComplete ? "Shopper · onboarded" : "Shopper · incomplete";
+        else if (kind === "admin") statusLabel = "Admin";
+        else statusLabel = "Unclassified";
+
+        return {
+          id: u.id,
+          email: u.email,
+          name: u.name,
+          role: u.role,
+          onboardingComplete: u.onboardingComplete,
+          hasPassword: u.hasPassword,
+          createdAt: u.createdAt,
+          kind,
+          statusLabel,
+          businessCount: biz?.businessCount ?? 0,
+          businessName: biz?.businessName ?? null,
+          businessId: biz?.businessId ?? null,
+          claimInviteSentAt: biz?.claimInviteSentAt ?? null,
+        };
+      });
+
+      const counts = {
+        total: classified.length,
+        shopper: classified.filter((r) => r.kind === "shopper").length,
+        invitePending: classified.filter((r) => r.kind === "invite_pending").length,
+        claimedOwner: classified.filter((r) => r.kind === "claimed_owner").length,
+        admin: classified.filter((r) => r.kind === "admin").length,
+        directoryPlaceholder: classified.filter((r) => r.kind === "directory_placeholder").length,
+        other: classified.filter((r) => r.kind === "other").length,
+      };
+
+      const kindFilter = input.kind && input.kind !== "all" ? input.kind : null;
+      const filtered = kindFilter
+        ? classified.filter((r) => r.kind === kindFilter)
+        : classified;
+
+      return {
+        users: filtered.slice(0, input.limit),
+        truncated: filtered.length > input.limit,
+        totalMatching: filtered.length,
+        counts,
+      };
     }),
 
   // Promote user to admin
@@ -1131,6 +1248,34 @@ export const adminRouter = router({
       curatedNotInvited += 1;
     }
 
+    // Account-kind breakdown (same rules as listUsers) — overview must not
+    // treat invite placeholders as shoppers.
+    const allAccountUsers = await ctx.db
+      .select({
+        id: users.id,
+        email: users.email,
+        role: users.role,
+        hasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
+      })
+      .from(users);
+    const ownerIdsWithBiz = new Set(
+      (await ctx.db.select({ ownerId: businesses.ownerId }).from(businesses))
+        .map((r) => r.ownerId),
+    );
+    let shopperAccounts = 0;
+    let invitePendingAccounts = 0;
+    let claimedOwnerAccounts = 0;
+    let adminAccounts = 0;
+    for (const u of allAccountUsers) {
+      const email = u.email.toLowerCase();
+      const owns = ownerIdsWithBiz.has(u.id);
+      if (email === UNCLAIMED_OWNER_EMAIL) continue;
+      if (u.role === "admin") { adminAccounts += 1; continue; }
+      if (owns && u.hasPassword) claimedOwnerAccounts += 1;
+      else if (owns && !u.hasPassword) invitePendingAccounts += 1;
+      else if (u.hasPassword) shopperAccounts += 1;
+    }
+
     return {
       totalUsers: userCount.count,
       totalBusinesses: bizCount.count,
@@ -1146,6 +1291,10 @@ export const adminRouter = router({
       inviteSent: inviteSentCount,
       claimed: claimedCount,
       followUpDue,
+      shopperAccounts,
+      invitePendingAccounts,
+      claimedOwnerAccounts,
+      adminAccounts,
     };
   }),
 
