@@ -212,7 +212,52 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Databases — raw tables, not day-to-day ops */}
+        {/* Live platform activity */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+            LIVE PLATFORM
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
+            Drops, reservations, applications — day-to-day product activity.
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 28 }}>
+          {[
+            { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
+            { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
+            { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },
+            { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
+            { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
+            { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
+            { label: "Platform take", value: stats?.platformRevenue != null ? `£${(stats.platformRevenue / 100).toFixed(2)}` : "—" },
+          ].map(({ label, value, accent, href }) => {
+            const inner = (
+              <>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
+                  fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
+                }}>
+                  {value ?? "—"}
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                  {label}{href ? " →" : ""}
+                </div>
+              </>
+            );
+            return href ? (
+              <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
+                {inner}
+              </a>
+            ) : (
+              <div key={label} style={{ background: BG, padding: "24px 20px" }}>
+                {inner}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Databases — under platform, above recent drops */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
             DATABASES · RAW TABLES
@@ -253,51 +298,6 @@ export default function AdminDashboard() {
               </a>
             ))}
           </div>
-        </div>
-
-        {/* Live platform activity */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            LIVE PLATFORM
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Drops, reservations, applications — separate from Databases and the onboarding pipeline.
-          </p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
-          {[
-            { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
-            { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
-            { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },
-            { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
-            { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
-            { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
-            { label: "Platform take", value: stats?.platformRevenue != null ? `£${(stats.platformRevenue / 100).toFixed(2)}` : "—" },
-          ].map(({ label, value, accent, href }) => {
-            const inner = (
-              <>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
-                  fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
-                }}>
-                  {value ?? "—"}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                  {label}{href ? " →" : ""}
-                </div>
-              </>
-            );
-            return href ? (
-              <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
-                {inner}
-              </a>
-            ) : (
-              <div key={label} style={{ background: BG, padding: "24px 20px" }}>
-                {inner}
-              </div>
-            );
-          })}
         </div>
 
         {/* Pending applications / recommendations shortcuts */}
