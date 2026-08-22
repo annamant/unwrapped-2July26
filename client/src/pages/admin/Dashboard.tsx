@@ -12,8 +12,8 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 
   const NAV = [
     { href: "/admin", label: "Overview" },
-    { href: "/admin/users", label: "Accounts" },
     { href: "/admin/businesses", label: "Onboarding pipeline" },
+    { href: "/admin/databases", label: "Databases" },
     { href: "/admin/drops", label: "Drops" },
     { href: "/admin/reservations", label: "Reservations" },
     { href: "/admin/applications", label: "Applications" },
@@ -212,54 +212,47 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Accounts database — login rows, not the shop pipeline */}
-        <div style={{ marginBottom: 16 }}>
+        {/* Databases — raw tables, not day-to-day ops */}
+        <div style={{ marginBottom: 28 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            ACCOUNTS · LOGIN DATABASE
+            DATABASES · RAW TABLES
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Every user row. Invited shops that have not claimed are not shoppers — they are passwordless owners waiting on the claim link.
+            Login accounts and warehouse shop profiles from imports. Kept for lookup — not the onboarding pipeline.
           </p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 28 }}>
-          {[
-            {
-              label: "Invited · not claimed",
-              value: stats?.invitePendingAccounts,
-              hint: "Had email · claim open",
-              href: "/admin/users",
-              accent: true,
-            },
-            {
-              label: "Shoppers",
-              value: stats?.shopperAccounts,
-              hint: "Self sign-up · no shop",
-              href: "/admin/users",
-            },
-            {
-              label: "Claimed owners",
-              value: stats?.claimedOwnerAccounts,
-              hint: "Set password · own a shop",
-              href: "/admin/users",
-            },
-            {
-              label: "All accounts",
-              value: stats?.totalUsers,
-              hint: "Full users table",
-              href: "/admin/users",
-            },
-          ].map(({ label, value, hint, href, accent }) => (
-            <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
-              <div style={{
-                fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
-                color: accent ? V : FG, marginBottom: 6,
-              }}>
-                {value ?? "—"}
-              </div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
-            </a>
-          ))}
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 1, background: BORDER }}>
+            {[
+              {
+                label: "Accounts (logins)",
+                value: stats?.totalUsers,
+                hint: `${stats?.invitePendingAccounts ?? "—"} invited · not claimed`,
+                href: "/admin/databases",
+              },
+              {
+                label: "Warehouse shops",
+                value: stats?.totalBusinesses,
+                hint: "Scrapes + imports + members",
+                href: "/admin/databases?tab=warehouse",
+              },
+              {
+                label: "Open Databases →",
+                value: "···",
+                hint: "Full classified lists",
+                href: "/admin/databases",
+              },
+            ].map(({ label, value, hint, href }) => (
+              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
+                <div style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
+                  color: FG, marginBottom: 6,
+                }}>
+                  {value ?? "—"}
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label}</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Live platform activity */}
@@ -268,12 +261,11 @@ export default function AdminDashboard() {
             LIVE PLATFORM
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Drops, reservations, applications — separate from account rows and from the onboarding warehouse.
+            Drops, reservations, applications — separate from Databases and the onboarding pipeline.
           </p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 48 }}>
           {[
-            { label: "Warehouse shop profiles", value: stats?.totalBusinesses, href: "/admin/businesses" },
             { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
             { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
             { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },

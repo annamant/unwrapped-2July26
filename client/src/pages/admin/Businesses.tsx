@@ -42,7 +42,6 @@ const SAMPLE_CSV = [
 export default function AdminBusinesses() {
   const isMobile = useIsMobile(768);
   const [tab, setTab] = useState<OpsTab>("curated");
-  const [showWarehouse, setShowWarehouse] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [csvText, setCsvText] = useState("");
   const [sendInviteEmails, setSendInviteEmails] = useState(true);
@@ -58,10 +57,6 @@ export default function AdminBusinesses() {
 
   const utils = trpc.useUtils();
   const { data: pipeline, isLoading } = trpc.admin.opsPipeline.useQuery();
-  const { data: warehouse, isLoading: warehouseLoading } = trpc.admin.listBusinesses.useQuery(
-    { status: "active" },
-    { enabled: showWarehouse },
-  );
 
   const [inviteResult, setInviteResult] = useState<{
     sentCount: number;
@@ -127,14 +122,6 @@ export default function AdminBusinesses() {
     },
   });
 
-  const setStatus = trpc.admin.setBusinessStatus.useMutation({
-    onSuccess: () => {
-      utils.admin.listBusinesses.invalidate();
-      utils.admin.opsPipeline.invalidate();
-      utils.admin.stats.invalidate();
-    },
-  });
-
   const counts = pipeline?.counts;
   const TABS: { key: OpsTab; label: string; count?: number; hint: string }[] = [
     {
@@ -196,7 +183,7 @@ export default function AdminBusinesses() {
               Onboarding pipeline
             </h1>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, margin: "8px 0 0", maxWidth: 580, lineHeight: 1.5 }}>
-              Two separate tracks: the curated landing board (approach list), and the claim campaign (warehouse invites → members). Account login rows live under Accounts — not here.
+              Two separate tracks: the curated landing board (approach list), and the claim campaign (warehouse invites → members). Raw account and shop tables live under Databases.
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -207,13 +194,12 @@ export default function AdminBusinesses() {
             >
               {showImport ? "CLOSE IMPORT" : "IMPORT LIST"}
             </button>
-            <button
-              type="button"
-              onClick={() => setShowWarehouse((v) => !v)}
-              style={ghostBtn(showWarehouse)}
+            <a
+              href="/admin/databases?tab=warehouse"
+              style={{ ...ghostBtn(), textDecoration: "none", display: "inline-block" }}
             >
-              {showWarehouse ? "HIDE WAREHOUSE" : "WAREHOUSE"}
-            </button>
+              OPEN DATABASES
+            </a>
           </div>
         </div>
 
@@ -427,77 +413,6 @@ export default function AdminBusinesses() {
               }
             }}
           />
-        )}
-
-        {showWarehouse && (
-          <div style={{ marginTop: 40 }}>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12 }}>
-              WAREHOUSE · FULL DIRECTORY
-            </div>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16, maxWidth: 560 }}>
-              Bulk-imported / scraped profiles. Not the curated landing map. Use for suspend/list housekeeping only.
-            </p>
-            {warehouseLoading ? (
-              <LoadingState />
-            ) : !warehouse?.length ? (
-              <EmptyState label="No warehouse profiles." />
-            ) : (
-              <div style={{ border: `1px solid ${BORDER}` }}>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG,
-                  letterSpacing: "0.1em", padding: "10px 20px", borderBottom: `1px solid ${BORDER}`, background: MUTED,
-                }}>
-                  {warehouse.length} PROFILE{warehouse.length === 1 ? "" : "S"}
-                </div>
-                {warehouse.map((biz, i) => (
-                  <div
-                    key={biz.id}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: isMobile ? "1fr" : "1fr 140px 110px auto",
-                      gap: isMobile ? 8 : 16,
-                      alignItems: "center",
-                      padding: isMobile ? "14px 16px" : "14px 20px",
-                      borderBottom: i < warehouse.length - 1 ? `1px solid ${BORDER}` : "none",
-                    }}
-                  >
-                    <div>
-                      <a href={`/business/${biz.slug}`} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, textDecoration: "none" }}>
-                        {biz.name}
-                      </a>
-                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 2 }}>
-                        {isPlaceholderEmail(biz.contactEmail) ? "no email" : biz.contactEmail}
-                        {biz.city ? ` · ${biz.city}` : ""}
-                      </div>
-                    </div>
-                    <ClaimBadge status={biz.claimStatus} />
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                      {format(new Date(biz.createdAt), "d MMM yyyy")}
-                    </div>
-                    {biz.status !== "pending" && (
-                      <button
-                        type="button"
-                        onClick={() => setStatus.mutate({
-                          businessId: biz.id,
-                          status: biz.status === "active" ? "suspended" : "active",
-                        })}
-                        disabled={setStatus.isPending}
-                        style={{
-                          fontFamily: "'Space Mono', monospace", fontSize: 9,
-                          letterSpacing: "0.08em", padding: "6px 10px",
-                          background: BG, border: `1px solid ${BORDER}`,
-                          color: biz.status === "active" ? V : "#15803D",
-                          cursor: "pointer", whiteSpace: "nowrap",
-                        }}
-                      >
-                        {biz.status === "active" ? "SUSPEND" : "LIST"}
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         )}
       </div>
     </AdminLayout>
@@ -943,29 +858,6 @@ function splitCsvLine(line: string): string[] {
   }
   out.push(cur);
   return out;
-}
-
-function isPlaceholderEmail(email: string | null | undefined): boolean {
-  return !email || email.toLowerCase() === "unclaimed-directory@shopunwrapped.com";
-}
-
-function ClaimBadge({ status }: { status: string }) {
-  const colors: Record<string, { bg: string; text: string; label: string }> = {
-    claimed: { bg: "#F0FDF4", text: "#15803D", label: "CLAIMED" },
-    invite_sent: { bg: "#EFF6FF", text: "#1D4ED8", label: "INVITE SENT" },
-    awaiting_invite: { bg: "#FEF3C7", text: "#92400E", label: "AWAITING INVITE" },
-    no_email: { bg: MUTED, text: MUTED_FG, label: "NO EMAIL" },
-  };
-  const c = colors[status] ?? { bg: MUTED, text: MUTED_FG, label: status.toUpperCase() };
-  return (
-    <span style={{
-      fontFamily: "'Space Mono', monospace", fontSize: 8,
-      letterSpacing: "0.1em", padding: "3px 8px",
-      background: c.bg, color: c.text, display: "inline-block", width: "fit-content",
-    }}>
-      {c.label}
-    </span>
-  );
 }
 
 function LoadingState() {
