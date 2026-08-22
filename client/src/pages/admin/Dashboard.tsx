@@ -1,11 +1,12 @@
 import { useLocation } from "wouter";
+import type { CSSProperties, ReactNode } from "react";
 import { trpc } from "../../trpc";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../../theme";
 
 
-function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile(768);
   const [location] = useLocation();
   const signOut = trpc.auth.signOut.useMutation({ onSuccess: () => { window.location.href = "/"; } });
@@ -119,263 +120,265 @@ export default function AdminDashboard() {
   const { data: stats } = trpc.admin.stats.useQuery();
   const { data: recentDrops } = trpc.admin.recentDrops.useQuery({ limit: 10 });
 
+  const archive = (
+    <div style={{
+      padding: isMobile ? "16px 0 0" : 0,
+      borderTop: isMobile ? `1px solid ${BORDER}` : "none",
+      marginTop: isMobile ? 32 : 0,
+    }}>
+      <div style={{
+        fontFamily: "'Space Mono', monospace", fontSize: 8, color: MUTED_FG,
+        letterSpacing: "0.14em", marginBottom: 12,
+      }}>
+        BACKGROUND · NOT TODAY
+      </div>
+      <p style={{
+        fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG,
+        lineHeight: 1.45, marginBottom: 16, maxWidth: 280,
+      }}>
+        Claim campaign and raw tables — open when you need them, not mixed with today’s work.
+      </p>
+
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: FG, marginBottom: 6 }}>
+          Claim campaign
+        </div>
+        <a href="/admin/businesses" style={archiveLink}>
+          {stats?.inviteSent ?? "—"} invites sent
+          {(stats?.followUpDue ?? 0) > 0 ? ` · ${stats!.followUpDue} follow-up due` : ""}
+        </a>
+        <a href="/admin/businesses" style={archiveLink}>
+          {stats?.claimed ?? "—"} claimed members
+        </a>
+        <a href="/admin/apparel-map" style={archiveLink}>
+          Claimed map →
+        </a>
+      </div>
+
+      <div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: FG, marginBottom: 6 }}>
+          Databases
+        </div>
+        <a href="/admin/databases" style={archiveLink}>
+          {stats?.totalUsers ?? "—"} login accounts
+          {stats?.invitePendingAccounts != null ? ` · ${stats.invitePendingAccounts} awaiting claim` : ""}
+        </a>
+        <a href="/admin/databases?tab=warehouse" style={archiveLink}>
+          {stats?.totalBusinesses ?? "—"} warehouse shops
+        </a>
+        <a href="/admin/databases" style={archiveLink}>
+          Open Databases →
+        </a>
+      </div>
+    </div>
+  );
+
   return (
     <AdminLayout>
       <div style={{ padding: isMobile ? "24px 16px" : "40px 48px" }}>
-        <div style={{ marginBottom: 36 }}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
-            Platform overview
-          </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, maxWidth: 560, lineHeight: 1.5 }}>
-            {format(new Date(), "EEEE d MMMM yyyy")} · Two separate pipelines: curated board vs claim campaign.
-          </p>
-        </div>
-
-        {/* Pipeline A — curated landing board */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            CURATED BOARD · LANDING MAP
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Shops on the public curated map — the list you’re approaching for curation. Not the same as the claim-email campaign.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr", gap: 1, background: BORDER }}>
-            {[
-              {
-                label: "On curated map",
-                value: stats?.curatedTotal,
-                hint: "Landing-page board",
-                href: "/admin/businesses",
-              },
-              {
-                label: "Still to approach",
-                value: stats?.curatedNotInvited,
-                hint: "No claim invite yet",
-                href: "/admin/businesses",
-                accent: (stats?.curatedNotInvited ?? 0) > 0,
-              },
-            ].map(({ label, value, hint, href, accent }) => (
-              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
-                  color: accent ? V : FG, marginBottom: 6,
-                }}>
-                  {value ?? "—"}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Pipeline B — claim campaign */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            CLAIM CAMPAIGN · WAREHOUSE INVITES
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Earlier bulk claim emails from scraped/imported profiles. The {stats?.claimed ?? "—"} members came from this campaign — not from the curated 221.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: BORDER }}>
-            {[
-              {
-                label: "Invites sent",
-                value: stats?.inviteSent,
-                hint: (stats?.followUpDue ?? 0) > 0 ? `${stats!.followUpDue} follow-up due` : "Awaiting claim",
-                href: "/admin/businesses",
-              },
-              {
-                label: "Claimed members",
-                value: stats?.claimed,
-                hint: "Owners signed in · black pins on landing map",
-                href: "/admin/businesses",
-              },
-              {
-                label: "Claimed map",
-                value: "→",
-                hint: "Pins for signed-up shops only",
-                href: "/admin/apparel-map",
-              },
-            ].map(({ label, value, hint, href }) => (
-              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
-                  color: FG, marginBottom: 6,
-                }}>
-                  {value ?? "—"}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label}</div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Live platform activity */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            LIVE PLATFORM
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Drops, reservations, applications — day-to-day product activity.
-          </p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: BORDER, marginBottom: 28 }}>
-          {[
-            { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
-            { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
-            { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },
-            { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
-            { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
-            { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
-            { label: "Platform take", value: stats?.platformRevenue != null ? `£${(stats.platformRevenue / 100).toFixed(2)}` : "—" },
-          ].map(({ label, value, accent, href }) => {
-            const inner = (
-              <>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
-                  fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
-                }}>
-                  {value ?? "—"}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                  {label}{href ? " →" : ""}
-                </div>
-              </>
-            );
-            return href ? (
-              <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
-                {inner}
-              </a>
-            ) : (
-              <div key={label} style={{ background: BG, padding: "24px 20px" }}>
-                {inner}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Databases — under platform, above recent drops */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
-            DATABASES · RAW TABLES
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 640, lineHeight: 1.45 }}>
-            Login accounts and warehouse shop profiles from imports. Kept for lookup — not the onboarding pipeline.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 1, background: BORDER }}>
-            {[
-              {
-                label: "Accounts (logins)",
-                value: stats?.totalUsers,
-                hint: `${stats?.invitePendingAccounts ?? "—"} invited · not claimed`,
-                href: "/admin/databases",
-              },
-              {
-                label: "Warehouse shops",
-                value: stats?.totalBusinesses,
-                hint: "Scrapes + imports + members",
-                href: "/admin/databases?tab=warehouse",
-              },
-              {
-                label: "Open Databases →",
-                value: "···",
-                hint: "Full classified lists",
-                href: "/admin/databases",
-              },
-            ].map(({ label, value, hint, href }) => (
-              <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
-                <div style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
-                  color: FG, marginBottom: 6,
-                }}>
-                  {value ?? "—"}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label}</div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Pending applications / recommendations shortcuts */}
-        {(stats?.pendingApplications ?? 0) > 0 && (
-          <a
-            href="/admin/applications"
-            style={{
-              display: "block", padding: "16px 20px",
-              border: `1px solid ${V}`,
-              marginBottom: (stats?.pendingRecommendations ?? 0) > 0 ? 12 : 32,
-              textDecoration: "none",
-            }}
-          >
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
-              {stats!.pendingApplications} APPLICATION{stats!.pendingApplications !== 1 ? "S" : ""} AWAITING REVIEW →
-            </span>
-          </a>
-        )}
-        {(stats?.pendingRecommendations ?? 0) > 0 && (
-          <a
-            href="/admin/recommendations"
-            style={{
-              display: "block", padding: "16px 20px",
-              border: `1px solid ${V}`, marginBottom: 32,
-              textDecoration: "none",
-            }}
-          >
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
-              {stats!.pendingRecommendations} RECOMMENDATION{stats!.pendingRecommendations !== 1 ? "S" : ""} TO FOLLOW UP →
-            </span>
-          </a>
-        )}
-
-        {/* Recent drops */}
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em" }}>
-              RECENT DROPS
+        <div style={{
+          display: isMobile ? "block" : "grid",
+          gridTemplateColumns: "1fr 200px",
+          gap: isMobile ? 0 : 40,
+          alignItems: "start",
+        }}>
+          <div>
+            <div style={{ marginBottom: 36 }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG }}>
+                Today
+              </h1>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, maxWidth: 520, lineHeight: 1.5 }}>
+                {format(new Date(), "EEEE d MMMM yyyy")} · Curated board, live product, recent drops.
+              </p>
             </div>
-            <a href="/admin/drops" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textDecoration: "none" }}>
-              View all →
-            </a>
-          </div>
-          <div style={{ border: `1px solid ${BORDER}` }}>
-            {!recentDrops?.length ? (
-              <div style={{ padding: "32px 20px", textAlign: "center" }}>
-                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: MUTED_FG }}>No drops yet</span>
+
+            {/* Curated board */}
+            <div style={{ marginBottom: 28 }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+                CURATED BOARD · LANDING MAP
               </div>
-            ) : recentDrops.map((drop: any, i: number) => (
-              <div
-                key={drop.id}
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 560, lineHeight: 1.45 }}>
+                Shops on the public map — your approach list for onboarding.
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: BORDER }}>
+                {[
+                  {
+                    label: "On curated map",
+                    value: stats?.curatedTotal,
+                    hint: "Landing-page board",
+                    href: "/admin/businesses",
+                  },
+                  {
+                    label: "Still to approach",
+                    value: stats?.curatedNotInvited,
+                    hint: "No claim invite yet",
+                    href: "/admin/businesses",
+                    accent: (stats?.curatedNotInvited ?? 0) > 0,
+                  },
+                ].map(({ label, value, hint, href, accent }) => (
+                  <a key={label} href={href} style={{ background: BG, padding: "22px 20px", textDecoration: "none", display: "block" }}>
+                    <div style={{
+                      fontFamily: "'Space Mono', monospace", fontSize: 28, fontWeight: 700,
+                      color: accent ? V : FG, marginBottom: 6,
+                    }}>
+                      {value ?? "—"}
+                    </div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>{label} →</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>{hint}</div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Live platform */}
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 10 }}>
+                LIVE PLATFORM
+              </div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12, maxWidth: 560, lineHeight: 1.45 }}>
+                What’s running now — drops, reservations, applications.
+              </p>
+            </div>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)",
+              gap: 1, background: BORDER, marginBottom: 24,
+            }}>
+              {[
+                { label: "Active drops", value: stats?.activeDrops, href: "/admin/drops" },
+                { label: "Pending applications", value: stats?.pendingApplications, accent: (stats?.pendingApplications ?? 0) > 0, href: "/admin/applications" },
+                { label: "Pending recommendations", value: stats?.pendingRecommendations, accent: (stats?.pendingRecommendations ?? 0) > 0, href: "/admin/recommendations" },
+                { label: "Total reservations", value: stats?.totalReservations, href: "/admin/reservations" },
+                { label: "Fulfillments today", value: stats?.fulfillmentsToday, href: "/admin/reservations" },
+                { label: "Revenue (gross)", value: stats?.grossRevenue != null ? `£${(stats.grossRevenue / 100).toFixed(2)}` : "—" },
+                { label: "Platform take", value: stats?.platformRevenue != null ? `£${(stats.platformRevenue / 100).toFixed(2)}` : "—" },
+              ].map(({ label, value, accent, href }) => {
+                const inner = (
+                  <>
+                    <div style={{
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: typeof value === "string" && value.length > 5 ? 22 : 28,
+                      fontWeight: 700, color: accent ? V : FG, marginBottom: 6,
+                    }}>
+                      {value ?? "—"}
+                    </div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                      {label}{href ? " →" : ""}
+                    </div>
+                  </>
+                );
+                return href ? (
+                  <a key={label} href={href} style={{ background: BG, padding: "24px 20px", textDecoration: "none", display: "block" }}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={label} style={{ background: BG, padding: "24px 20px" }}>
+                    {inner}
+                  </div>
+                );
+              })}
+            </div>
+
+            {(stats?.pendingApplications ?? 0) > 0 && (
+              <a
+                href="/admin/applications"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: isMobile ? "1fr auto" : "1fr 120px 100px 80px",
-                  gap: isMobile ? 8 : 16, alignItems: "center",
-                  padding: isMobile ? "14px 16px" : "14px 20px",
-                  borderBottom: i < recentDrops.length - 1 ? `1px solid ${BORDER}` : "none",
+                  display: "block", padding: "16px 20px",
+                  border: `1px solid ${V}`,
+                  marginBottom: (stats?.pendingRecommendations ?? 0) > 0 ? 12 : 24,
+                  textDecoration: "none",
                 }}
               >
-                <div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, marginBottom: 2 }}>{drop.title}</div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>{drop.businessName}</div>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
+                  {stats!.pendingApplications} APPLICATION{stats!.pendingApplications !== 1 ? "S" : ""} AWAITING REVIEW →
+                </span>
+              </a>
+            )}
+            {(stats?.pendingRecommendations ?? 0) > 0 && (
+              <a
+                href="/admin/recommendations"
+                style={{
+                  display: "block", padding: "16px 20px",
+                  border: `1px solid ${V}`, marginBottom: 24,
+                  textDecoration: "none",
+                }}
+              >
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: V, letterSpacing: "0.1em" }}>
+                  {stats!.pendingRecommendations} RECOMMENDATION{stats!.pendingRecommendations !== 1 ? "S" : ""} TO FOLLOW UP →
+                </span>
+              </a>
+            )}
+
+            {/* Recent drops */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
+                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em" }}>
+                  RECENT DROPS
                 </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                  {format(new Date(drop.collectionStart), "d MMM")}
-                </div>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: FG }}>
-                  {drop.availableQuantity}/{drop.totalQuantity}
-                </div>
-                <DropStatus status={drop.status} />
+                <a href="/admin/drops" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textDecoration: "none" }}>
+                  View all →
+                </a>
               </div>
-            ))}
+              <div style={{ border: `1px solid ${BORDER}` }}>
+                {!recentDrops?.length ? (
+                  <div style={{ padding: "32px 20px", textAlign: "center" }}>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: MUTED_FG }}>No drops yet</span>
+                  </div>
+                ) : recentDrops.map((drop: any, i: number) => (
+                  <div
+                    key={drop.id}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: isMobile ? "1fr auto" : "1fr 120px 100px 80px",
+                      gap: isMobile ? 8 : 16, alignItems: "center",
+                      padding: isMobile ? "14px 16px" : "14px 20px",
+                      borderBottom: i < recentDrops.length - 1 ? `1px solid ${BORDER}` : "none",
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, marginBottom: 2 }}>{drop.title}</div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>{drop.businessName}</div>
+                    </div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                      {format(new Date(drop.collectionStart), "d MMM")}
+                    </div>
+                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: FG }}>
+                      {drop.availableQuantity}/{drop.totalQuantity}
+                    </div>
+                    <DropStatus status={drop.status} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {isMobile && archive}
           </div>
+
+          {!isMobile && (
+            <aside style={{
+              borderLeft: `1px solid ${BORDER}`,
+              paddingLeft: 24,
+              position: "sticky",
+              top: 24,
+            }}>
+              {archive}
+            </aside>
+          )}
         </div>
       </div>
     </AdminLayout>
   );
 }
+
+const archiveLink: CSSProperties = {
+  display: "block",
+  fontFamily: "'DM Sans', sans-serif",
+  fontSize: 12,
+  color: MUTED_FG,
+  textDecoration: "none",
+  lineHeight: 1.55,
+  marginBottom: 4,
+};
 
 function DropStatus({ status }: { status: string }) {
   const colors: Record<string, string> = {
