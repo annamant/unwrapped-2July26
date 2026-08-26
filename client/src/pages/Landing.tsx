@@ -627,7 +627,7 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              The thrill of live shopping from local shops.
+              The thrill of live shopping your high street.
             </h1>
 
             <p
@@ -639,10 +639,10 @@ export default function Landing() {
                 lineHeight: 1.5,
                 marginBottom: isMobile ? 10 : 12,
                 fontWeight: 500,
-                maxWidth: 500,
+                maxWidth: 520,
               }}
             >
-              As they post images and videos of limited drops and deals, you buy with a click and collect in person.
+              As shops post live images and videos of limited drops and deals, you buy with a click and collect in person.
             </p>
             <p
               className="uw-fade-3"
@@ -653,10 +653,10 @@ export default function Landing() {
                 lineHeight: 1.45,
                 marginBottom: isMobile ? 24 : 28,
                 fontWeight: 600,
-                maxWidth: 480,
+                maxWidth: 520,
               }}
             >
-              A new way to shop the high street from your phone, and discover the people and stories behind the windows.
+              Shop the high street from your phone, and discover the people and stories behind its shops.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
