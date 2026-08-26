@@ -627,7 +627,7 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              The thrill of live shopping your high street.
+              Claim the best of your high street before it's gone.
             </h1>
 
             <p
@@ -642,7 +642,7 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              As shops post live images and videos of limited drops and deals, you buy with a click and collect in person.
+              Local shops post photos and videos when fresh inventory arrives or limited deals go live. Claim what you want in seconds, pay in the app, collect in person.
             </p>
             <p
               className="uw-fade-3"
@@ -656,7 +656,7 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Shop the high street from your phone, and discover the people and stories behind its shops.
+              No mystery bags. No shipping wait. Just real products from real shops, on your phone.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
@@ -835,8 +835,8 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            Shops post short videos or images of product deals and offers.
-            All you have to do is claim it and collect it — no mystery bags, no surprise bags.
+            A bakery posts the loaf that just came out. A boutique shows the jacket on the rail.
+            You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.
           </p>
         </div>
 
@@ -940,7 +940,7 @@ export default function Landing() {
               marginBottom: 28,
               maxWidth: 560,
             }}>
-              First 500 only. Special perks, unlocked before your neighbourhood opens.
+              First 500 only. Get early access to drops, founding prices, and special perks when your neighbourhood launches.
             </p>
 
             <div style={{
@@ -964,9 +964,9 @@ export default function Landing() {
               background: "rgba(0,0,0,0.12)",
             }}>
               {[
-                "Golden Ticket — claim drops before the public",
-                "Founding prices on premium local drops",
-                "Founding status and neighbourhood perks",
+                "Early access — claim drops before the general public",
+                "Founding prices on premium drops from local shops",
+                "Founder badge and special neighbourhood perks",
               ].map((label) => (
                 <div
                   key={label}
@@ -1095,8 +1095,7 @@ export default function Landing() {
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
-            Create a founding shopper account. See the real thing from local shops,
-            claim it on your phone, collect in person.
+            Create a founding shopper account. When London's best shops post fresh arrivals and limited deals, claim them instantly on your phone before they're gone.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
@@ -1163,7 +1162,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Look in. See it. Claim it. Collect it — your high street, on your phone.
+            See what local shops just posted. Claim it before it's gone. Collect in person.
           </p>
         </div>
 
