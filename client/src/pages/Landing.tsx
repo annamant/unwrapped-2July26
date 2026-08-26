@@ -801,11 +801,23 @@ export default function Landing() {
       </section>
 
       {/* ── 2. HOW IT WORKS — phone proof ── */}
-      <section style={{ borderBottom: "none", position: "relative", zIndex: 1 }}>
+      <section style={{ borderBottom: "none", position: "relative", zIndex: 1, overflow: "hidden" }}>
+        <div aria-hidden style={{
+          position: "absolute",
+          top: "5%",
+          right: "-5%",
+          width: 380,
+          height: 380,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(255,120,80,0.12), transparent 65%)",
+          filter: "blur(90px)",
+          pointerEvents: "none",
+        }} />
         <div style={{
-          background: BAND_WASH,
-          color: BG,
-          padding: isMobile ? "28px 20px 8px" : "36px 40px 12px",
+          background: SECTION_WASH,
+          color: FG,
+          padding: isMobile ? "40px 20px 12px" : "56px 40px 20px",
+          position: "relative",
         }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
@@ -823,6 +835,7 @@ export default function Landing() {
             fontSize: isMobile ? 24 : 32,
             fontWeight: 700, letterSpacing: "-0.8px",
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
+            color: FG,
           }}>
             See it. Claim it. Collect it.
           </h2>
@@ -830,7 +843,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 14 : 16,
             fontWeight: 400,
-            color: "rgba(255,247,242,0.9)",
+            color: MUTED_FG,
             lineHeight: 1.55,
             maxWidth: 760,
             margin: "0 0 16px",
@@ -841,8 +854,9 @@ export default function Landing() {
         </div>
 
         <div style={{
-          padding: isMobile ? "20px 16px 36px" : "28px 40px 48px",
-          background: BAND_WASH,
+          padding: isMobile ? "20px 16px 48px" : "28px 40px 64px",
+          background: SECTION_WASH,
+          position: "relative",
         }}>
           <HowItWorksPhones />
           <p style={{
@@ -851,7 +865,7 @@ export default function Landing() {
             textAlign: "center",
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 12,
-            color: "rgba(255,247,242,0.55)",
+            color: MUTED_FG,
             fontWeight: 500,
           }}>
             Illustrative phone screens · fictional shops — nothing here can be claimed yet.
