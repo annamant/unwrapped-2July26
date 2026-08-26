@@ -977,7 +977,7 @@ export default function Landing() {
               marginBottom: 32,
               maxWidth: 540,
             }}>
-              When we launch your neighbourhood, you'll have access before anyone else. Better prices, first dibs, and exclusive perks that regular shoppers won't get.
+              When we launch your neighbourhood, you'll have access before anyone else. Free premium features, first dibs on every drop, and real influence over what happens next.
             </p>
 
             <div style={{
@@ -993,14 +993,14 @@ export default function Landing() {
                   desc: "Claim items 24 hours before the public — the best stuff won't even make it to general release",
                 },
                 {
-                  icon: "💰",
-                  title: "Founding member pricing",
-                  desc: "Permanently lower prices on premium drops. Save 15-25% compared to regular shoppers",
+                  icon: "✨",
+                  title: "Premium features, free forever",
+                  desc: "Get all the premium tools for free while regular shoppers pay. Priority notifications, advanced filters, saved searches — all unlocked",
                 },
                 {
                   icon: "🎯",
-                  title: "Your high street, your way",
-                  desc: "Help shape which shops join your area. Get notified first when new favourites go live",
+                  title: "Shape what happens next",
+                  desc: "Vote on which shops join your neighbourhood, request new features, and help build Unwrapped for your high street",
                 },
               ].map(({ icon, title, desc }) => (
                 <div
@@ -1107,7 +1107,7 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              Once we hit 500, this closes. Regular shoppers will pay more and wait longer.
+              Once we hit 500, this closes. Regular shoppers won't get early access or free premium features.
             </div>
           </div>
         </section>
