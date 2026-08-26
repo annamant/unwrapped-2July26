@@ -903,101 +903,212 @@ export default function Landing() {
       {/* ── 4. FOUNDING SHOPPERS ── */}
       {PRE_LAUNCH && (
         <section style={{
-          padding: isMobile ? "44px 20px" : "64px 40px",
+          padding: isMobile ? "52px 20px" : "72px 40px",
           borderBottom: "none",
           background: V,
           position: "relative",
           zIndex: 1,
+          overflow: "hidden",
         }}>
-          <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
+          <div aria-hidden style={{
+            position: "absolute",
+            top: "-20%",
+            right: "-15%",
+            width: 480,
+            height: 480,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(255,80,50,0.18), transparent 70%)",
+            filter: "blur(80px)",
+            pointerEvents: "none",
+          }} />
+          <div aria-hidden style={{
+            position: "absolute",
+            bottom: "-25%",
+            left: "-10%",
+            width: 420,
+            height: 420,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(139,22,11,0.25), transparent 65%)",
+            filter: "blur(70px)",
+            pointerEvents: "none",
+          }} />
+
+          <div style={{ width: "100%", maxWidth: 680, margin: "0 auto", position: "relative" }}>
             <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 9,
               fontWeight: 800,
               color: CREAM,
               letterSpacing: "0.09em",
-              marginBottom: 14,
+              marginBottom: 16,
+              background: "rgba(255,247,242,0.12)",
+              padding: "6px 12px",
+              borderRadius: 999,
+              border: "1px solid rgba(255,247,242,0.2)",
             }}>
-              FOUNDING SHOPPERS · PRE-LAUNCH
+              <span
+                className="uw-pulse-dot"
+                style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
+              />
+              FIRST 500 ONLY · CLOSING SOON
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 28 : 36,
+              fontSize: isMobile ? 32 : 44,
               fontWeight: 800,
               color: CREAM,
-              letterSpacing: "-1px",
-              lineHeight: 1.1,
-              marginBottom: 14,
+              letterSpacing: "-1.2px",
+              lineHeight: 1.05,
+              marginBottom: 16,
             }}>
-              Join as a founding shopper
+              Be a founding shopper.
+              <br />
+              Get in before the doors open.
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 15 : 17,
+              fontSize: isMobile ? 16 : 18,
               fontWeight: 500,
-              color: "rgba(255,247,242,0.9)",
+              color: "rgba(255,247,242,0.85)",
               lineHeight: 1.5,
-              marginBottom: 28,
-              maxWidth: 560,
+              marginBottom: 32,
+              maxWidth: 540,
             }}>
-              First 500 only. Get early access to drops, founding prices, and special perks when your neighbourhood launches.
+              When we launch your neighbourhood, you'll have access before anyone else. Better prices, first dibs, and exclusive perks that regular shoppers won't get.
             </p>
 
             <div style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 9,
-              fontWeight: 800,
-              color: CREAM,
-              letterSpacing: "0.08em",
-              marginBottom: 10,
-            }}>
-              FOUNDING MEMBER BENEFITS
-            </div>
-            <div style={{
               display: "flex",
               flexDirection: "column",
-              gap: 0,
-              marginBottom: 28,
-              border: "1px solid rgba(255,247,242,0.22)",
-              borderRadius: 10,
-              overflow: "hidden",
-              background: "rgba(0,0,0,0.12)",
+              gap: isMobile ? 14 : 16,
+              marginBottom: 36,
             }}>
               {[
-                "Early access — claim drops before the general public",
-                "Founding prices on premium drops from local shops",
-                "Founder badge and special neighbourhood perks",
-              ].map((label) => (
+                {
+                  icon: "⚡",
+                  title: "First access to every drop",
+                  desc: "Claim items 24 hours before the public — the best stuff won't even make it to general release",
+                },
+                {
+                  icon: "💰",
+                  title: "Founding member pricing",
+                  desc: "Permanently lower prices on premium drops. Save 15-25% compared to regular shoppers",
+                },
+                {
+                  icon: "🎯",
+                  title: "Your high street, your way",
+                  desc: "Help shape which shops join your area. Get notified first when new favourites go live",
+                },
+              ].map(({ icon, title, desc }) => (
                 <div
-                  key={label}
+                  key={title}
                   style={{
-                    borderTop: "1px solid rgba(255,247,242,0.18)",
-                    padding: "14px 18px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: isMobile ? 14 : 15,
-                    fontWeight: 600,
-                    color: CREAM,
-                    lineHeight: 1.35,
+                    background: "rgba(255,247,242,0.08)",
+                    backdropFilter: "blur(12px)",
+                    border: "1px solid rgba(255,247,242,0.18)",
+                    borderRadius: 14,
+                    padding: isMobile ? "18px 16px" : "20px 22px",
+                    transition: "all 0.25s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,247,242,0.14)";
+                    e.currentTarget.style.borderColor = "rgba(255,247,242,0.35)";
+                    e.currentTarget.style.transform = "translateX(4px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255,247,242,0.08)";
+                    e.currentTarget.style.borderColor = "rgba(255,247,242,0.18)";
+                    e.currentTarget.style.transform = "translateX(0)";
                   }}
                 >
-                  {label}
+                  <div style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 14,
+                  }}>
+                    <span style={{
+                      fontSize: 26,
+                      lineHeight: 1,
+                      flexShrink: 0,
+                    }}>
+                      {icon}
+                    </span>
+                    <div>
+                      <div style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: isMobile ? 16 : 17,
+                        fontWeight: 700,
+                        color: CREAM,
+                        marginBottom: 6,
+                        letterSpacing: "-0.2px",
+                      }}>
+                        {title}
+                      </div>
+                      <div style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: isMobile ? 14 : 15,
+                        fontWeight: 400,
+                        color: "rgba(255,247,242,0.75)",
+                        lineHeight: 1.5,
+                      }}>
+                        {desc}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <button
-              onClick={() => navigate("/signin")}
-              className="uw-btn-primary"
-              style={{
-                background: FG, color: CREAM,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                fontWeight: 800, letterSpacing: "0.02em", padding: "14px 24px",
-                border: "none", cursor: "pointer",
-                borderRadius: RADIUS_SM,
-              }}
-            >
-              Claim my founder badge
-            </button>
+            <div style={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              gap: 14,
+              alignItems: isMobile ? "stretch" : "center",
+              marginBottom: 18,
+            }}>
+              <button
+                onClick={() => navigate("/signin")}
+                className="uw-btn-primary"
+                style={{
+                  background: CREAM,
+                  color: V_DEEP,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 14 : 15,
+                  fontWeight: 800,
+                  letterSpacing: "0.01em",
+                  padding: isMobile ? "17px 28px" : "18px 32px",
+                  border: "none",
+                  cursor: "pointer",
+                  borderRadius: RADIUS_SM,
+                  boxShadow: "0 14px 38px rgba(0,0,0,0.35)",
+                }}
+              >
+                Become a founding shopper
+              </button>
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13,
+                color: "rgba(255,247,242,0.65)",
+                fontWeight: 500,
+                textAlign: isMobile ? "center" : "left",
+              }}>
+                No payment required · Just your email
+              </div>
+            </div>
+
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 12,
+              color: "rgba(255,247,242,0.5)",
+              fontWeight: 500,
+              textAlign: "center",
+              fontStyle: "italic",
+            }}>
+              Once we hit 500, this closes. Regular shoppers will pay more and wait longer.
+            </div>
           </div>
         </section>
       )}
