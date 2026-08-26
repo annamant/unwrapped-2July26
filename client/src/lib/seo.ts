@@ -5,12 +5,32 @@ import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJso
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — see what your London high street has today";
+export const DEFAULT_TITLE = "Unwrapped — the visual shopping marketplace";
 export const DEFAULT_DESCRIPTION =
-  "See what your London high street has today — from wherever you are. Photo or short video, claim in the app, collect in person. Launching across South London.";
+  "The visual shopping marketplace. See it, claim it, and collect it around your high street — photo or short video of the real thing, not a mystery bag. Launching across South London.";
 
-/** Merchant FAQ rendered on the homepage and in FAQPage JSON-LD. */
+/** Shopper FAQ for the homepage FAQPage JSON-LD. */
 export const HOME_FAQS: { q: string; a: string }[] = [
+  {
+    q: "What is Unwrapped?",
+    a: "A new way to shop your high street. Local shops post a photo or short video of what's ready. You see the real thing, claim and pay in the app, then collect in person with a QR.",
+  },
+  {
+    q: "Is this like Too Good To Go?",
+    a: "No. Those apps hide the product in a mystery bag. Unwrapped shows you the actual thing — a photo or short clip — so you choose what you want before you go.",
+  },
+  {
+    q: "How do I collect?",
+    a: "After you claim and pay, you get a QR. Walk into the shop in the collection window and get scanned at the counter.",
+  },
+  {
+    q: "Where is Unwrapped launching?",
+    a: "South London first — then neighbourhood by neighbourhood across London.",
+  },
+];
+
+/** Merchant FAQ for /business-apply. */
+export const MERCHANT_FAQS: { q: string; a: string }[] = [
   {
     q: "Is this another deep-discount app?",
     a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",

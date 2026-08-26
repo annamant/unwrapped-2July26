@@ -6,18 +6,21 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { HOME_FAQS } from "../lib/seo";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
-  "/landing/hero-shop-1.jpg",
-  "/landing/hero-shop-2.jpg",
-  "/samples/restaurant.jpg",
-  "/samples/clothing.jpg",
+  "/landing/hero-owner-bakery.jpg",
+  "/landing/hero-owner-florist.jpg",
+  "/landing/hero-owner-boutique.jpg",
+  "/landing/hero-owner-salon.jpg",
 ];
 
 /** Flip to false when real drops go live and the landing should show the live feed again. */
 const PRE_LAUNCH = true;
+/** Hero floating sample cards — muted for now. */
+const SHOW_HERO_FLOATING_CARDS = false;
+/** "What you see" sample carousel — muted; hero + How it works phones carry the proof. */
+const SHOW_WHAT_YOU_SEE = false;
 
 type SampleDrop = {
   category: string;
@@ -65,6 +68,40 @@ const SAMPLE_DROPS: SampleDrop[] = [
     imageUrl: "/samples/blowdry.jpg",
   },
 ];
+
+/** Whatnot-style phone screens for How it works — owner on camera + drop meta. */
+const HOW_IT_WORKS_PHONES: {
+  ownerImage: string;
+  dropLabel: string;
+  title: string;
+  business: string;
+  pricePence: number;
+}[] = [
+  {
+    ownerImage: "/landing/hero-owner-bakery.jpg",
+    dropLabel: "Dropping Tue · 4pm",
+    title: "Morning bake — country loaf",
+    business: "River Oven Bakery",
+    pricePence: 450,
+  },
+  {
+    ownerImage: "/landing/hero-owner-boutique.jpg",
+    dropLabel: "Dropping Sat · 11am",
+    title: "Weekend jacket — rail edit",
+    business: "North Lane Boutique",
+    pricePence: checkoutFromList(10800),
+  },
+  {
+    ownerImage: "/landing/hero-owner-salon.jpg",
+    dropLabel: "Dropping today · 2pm",
+    title: "Express blow-dry — afternoon",
+    business: "Marlow Hair Studio",
+    pricePence: 2800,
+  },
+];
+
+/** Keep the illustrated mission graphic, but parked below the phone proof for now. */
+const SHOW_MISSION_INFOGRAPHIC = true;
 
 const BUSINESS_TYPES = [
   "Charity shops",
@@ -148,8 +185,8 @@ const LANDING_CSS = `
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, rgba(107,18,9,0.88) 0%, rgba(158,28,14,0.72) 42%, rgba(201,34,16,0.45) 68%, rgba(107,18,9,0.55) 100%),
-    linear-gradient(180deg, rgba(18,10,8,0.25) 0%, transparent 35%, rgba(18,10,8,0.45) 100%);
+    linear-gradient(105deg, rgba(107,18,9,0.78) 0%, rgba(158,28,14,0.58) 42%, rgba(201,34,16,0.32) 72%, rgba(107,18,9,0.42) 100%),
+    linear-gradient(180deg, rgba(18,10,8,0.2) 0%, transparent 40%, rgba(18,10,8,0.4) 100%);
   pointer-events: none;
 }
 @keyframes uw-wiggle {
@@ -294,6 +331,46 @@ const LANDING_CSS = `
   box-shadow: 0 8px 20px rgba(255,45,18,0.3);
 }
 .uw-sticker:nth-child(even) { transform: rotate(2deg); }
+.uw-phone-frame {
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
+  background: #1a1210;
+  border-radius: 28px;
+  padding: 10px;
+  box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+  border: 2px solid rgba(255,247,242,0.18);
+}
+.uw-phone-screen {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  background: #0f0a09;
+}
+.uw-phone-notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 18px;
+  border-radius: 999px;
+  background: #1a1210;
+  z-index: 3;
+}
+.uw-phones-row {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+@media (min-width: 900px) {
+  .uw-phones-row .uw-phone-wrap:nth-child(2) {
+    transform: translateY(-18px);
+  }
+}
 .uw-page-wash {
   background: ${BG_WASH};
   background-attachment: fixed;
@@ -425,17 +502,6 @@ export default function Landing() {
               <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
             </svg>
           </a>
-          <a
-            href="/business-apply"
-            className="uw-link"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
-              textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
-            }}
-          >
-            {isMobile ? "Business" : "Partner your shop"}
-          </a>
           {!isMobile && (
             <a
               href="/recommend"
@@ -449,6 +515,17 @@ export default function Landing() {
               Recommend a shop
             </a>
           )}
+          <a
+            href="/business-apply"
+            className="uw-link"
+            style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
+              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
+              textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
+            }}
+          >
+            {isMobile ? "Business" : "For businesses"}
+          </a>
           <a
             href="/signin"
             className="uw-btn-ghost"
@@ -498,14 +575,16 @@ export default function Landing() {
         <div style={{
           position: "relative",
           display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) minmax(280px, 0.95fr)",
+          gridTemplateColumns: SHOW_HERO_FLOATING_CARDS && !isMobile
+            ? "minmax(0, 1fr) minmax(280px, 0.95fr)"
+            : "1fr",
           gap: isMobile ? 36 : 40,
           alignItems: "center",
           padding: isMobile ? "36px 20px 28px" : "48px 40px 40px",
           minHeight: isMobile ? undefined : "calc(100vh - 72px)",
           maxHeight: isMobile ? undefined : 820,
         }}>
-          <div>
+          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 560 }}>
             <div
               className="uw-fade-1"
               style={{
@@ -518,7 +597,7 @@ export default function Landing() {
                   className="uw-pulse-dot"
                   style={{ width: 8, height: 8, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
                 />
-                LONDON · PRE-LAUNCH · BUSINESSES BOARDING NOW
+                LONDON · PRE-LAUNCH
               </span>
             </div>
 
@@ -532,11 +611,7 @@ export default function Landing() {
                 marginBottom: 18,
               }}
             >
-              See what your London high street has today
-              <br />
-              <em style={{ fontStyle: "italic", fontWeight: 500, color: "#FFD2C2" }}>
-                From wherever you are.
-              </em>
+              The visual shopping marketplace
             </h1>
 
             <p
@@ -547,89 +622,44 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Shops publish what's ready in a photo or short video. You see the real thing,
-              claim and pay in the app, then collect in person with a QR.
-              Launching across South London first.
+              See it, claim it, and collect it around your high street.
             </p>
 
-            <div
-              className="uw-fade-4"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: isMobile ? 8 : 12,
-                maxWidth: 520,
-              }}
-            >
+            <div className="uw-fade-4" style={{ maxWidth: 420 }}>
+              <button
+                onClick={() => navigate("/signin")}
+                className="uw-btn-primary"
+                style={{
+                  background: "#fff", color: V,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 13 : 14,
+                  letterSpacing: "0.01em", padding: isMobile ? "14px 20px" : "16px 28px",
+                  border: "none", cursor: "pointer",
+                  borderRadius: RADIUS_SM, fontWeight: 800,
+                  boxShadow: "0 10px 28px rgba(0,0,0,0.2)",
+                }}
+              >
+                Join as a founding shopper
+              </button>
               <div style={{
-                background: isMobile ? "transparent" : "rgba(255,248,244,0.1)",
-                border: isMobile ? "none" : "1px solid rgba(255,248,244,0.18)",
-                borderRadius: isMobile ? 0 : 18,
-                padding: isMobile ? 0 : "16px 16px 18px",
-                backdropFilter: isMobile ? undefined : "blur(8px)",
+                marginTop: 14,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13,
+                color: "rgba(255,248,244,0.65)",
+                fontWeight: 500,
               }}>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 10 : 14, fontWeight: 600,
-                  marginBottom: isMobile ? 6 : 12, lineHeight: 1.35, color: CREAM,
-                  minHeight: isMobile ? 28 : 0,
-                  textAlign: isMobile ? "center" : "left",
-                }}>
-                  Look in. See it. Claim it. Collect it.
-                </div>
-                <button
-                  onClick={() => navigate("/signin")}
-                  className="uw-btn-primary"
-                  style={{
-                    background: "#fff", color: V,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
-                    letterSpacing: "0.01em", padding: isMobile ? "10px 8px" : "13px 16px",
-                    border: "none", cursor: "pointer", width: "100%",
-                    borderRadius: RADIUS_SM, fontWeight: 800,
-                    boxShadow: isMobile ? "none" : "0 10px 28px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  {isMobile ? "Join as shopper" : "Join as a founding shopper"}
-                </button>
-              </div>
-
-              <div style={{
-                background: isMobile ? "transparent" : "rgba(255,248,244,0.08)",
-                border: isMobile ? "none" : "1.5px dashed rgba(255,248,244,0.35)",
-                borderRadius: isMobile ? 0 : 18,
-                padding: isMobile ? 0 : "16px 16px 18px",
-              }}>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 9 : 12, fontWeight: 600,
-                  color: CREAM, marginBottom: isMobile ? 6 : 12, lineHeight: 1.2,
-                  minHeight: isMobile ? 28 : 0,
-                  textAlign: isMobile ? "center" : "left",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "clip",
-                }}>
-                  Get seen. Welcome customers in.
-                </div>
+                Own a shop?{" "}
                 <a
                   href="/business-apply"
-                  className="uw-btn-ghost uw-btn-ghost-dark"
-                  style={{
-                    border: "1.5px solid rgba(255,248,244,0.55)", color: CREAM,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
-                    letterSpacing: "0.01em", padding: isMobile ? "9px 8px" : "12px 16px",
-                    textDecoration: "none", display: "block",
-                    textAlign: "center",
-                    background: "transparent",
-                    borderRadius: RADIUS_SM, fontWeight: 800,
-                  }}
+                  style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
                 >
-                  {isMobile ? "Partner your shop" : "Apply to partner your shop"}
+                  Partner with us
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Floating drop collage — Whatnot-style product energy */}
-          {!isMobile && (
+          {/* Floating drop collage — muted; samples live in the section below */}
+          {SHOW_HERO_FLOATING_CARDS && !isMobile && (
             <div
               className="uw-fade-4"
               aria-hidden
@@ -731,53 +761,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. SAMPLES — desire ── */}
-      <section style={{ background: SECTION_WASH, position: "relative", zIndex: 1 }}>
-        <div style={{ padding: isMobile ? "40px 20px 12px" : "56px 40px 16px" }}>
-          <div className="uw-sticker" style={{ marginBottom: 16 }}>
-            WHAT A DROP FEELS LIKE
-          </div>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 30 : 40,
-            fontWeight: 800, color: FG, letterSpacing: "-1px",
-            lineHeight: 1.1, maxWidth: 560, marginBottom: 14,
-          }}>
-            See the real thing. Then collect it.
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
-            color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
-          }}>
-            Unwrapped turns your high street into something you can browse from the sofa —
-            then actually go and get.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
-          }}>
-            A bakery posts the loaf that just came out. A florist shows the bunch that just landed.
-            A boutique puts the jacket on the rail. You see it in a photo or short video, claim it in seconds,
-            pay in the app, and walk in with a QR. No mystery bag. No delivery wait.
-            Just something you chose — waiting for you at the counter.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-            color: MUTED_FG, lineHeight: 1.5, margin: 0, fontWeight: 500,
-          }}>
-            Mock examples · fictional shops — nothing here can be reserved yet.
-          </p>
-        </div>
-
-        <SampleDropsCarousel />
-      </section>
-
-      {/* ── 3. HOW IT WORKS — mission infographic ── */}
+      {/* ── 2. HOW IT WORKS — phone proof (Whatnot-style) ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1 }}>
         <div style={{
           background: BAND_WASH,
           color: BG,
-          padding: isMobile ? "28px 20px 22px" : "36px 40px 28px",
+          padding: isMobile ? "28px 20px 8px" : "36px 40px 12px",
         }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
@@ -796,10 +785,7 @@ export default function Landing() {
             fontWeight: 700, letterSpacing: "-0.8px",
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
           }}>
-            Unwrapped turns your local high street into a{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FFD2C2" }}>
-              map of what's ready right now.
-            </em>
+            How it works
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -810,11 +796,11 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            Look in from wherever you are. See what local shops have just made, opened up or chosen
-            to drop through real photos and short clips. Claim it. Collect it in person.
+            See what local shops have ready — real photos and short clips.
+            Claim it. Collect it in person.
           </p>
           <div style={{
-            display: "flex", flexWrap: "wrap", gap: 8,
+            display: "flex", flexWrap: "wrap", gap: 8, marginBottom: isMobile ? 8 : 4,
           }}>
             {[
               "Limited quantity",
@@ -840,102 +826,174 @@ export default function Landing() {
         </div>
 
         <div style={{
-          padding: isMobile ? "16px 16px 24px" : "20px 40px 32px",
-          background: "transparent",
+          padding: isMobile ? "20px 16px 28px" : "28px 40px 40px",
+          background: BAND_WASH,
         }}>
-          <div style={{
-            position: "relative",
-            width: "100%",
-            maxWidth: 900,
-            aspectRatio: "3.5 / 1",
-            margin: "0 auto 14px",
-            overflow: "hidden",
-            borderRadius: 12,
-            border: `1px solid ${BORDER}`,
-            background: CREAM,
+          <HowItWorksPhones />
+          <p style={{
+            margin: "18px auto 0",
+            maxWidth: 520,
+            textAlign: "center",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 12,
+            color: "rgba(255,247,242,0.55)",
+            fontWeight: 500,
           }}>
-            <img
-              src="/landing/mission-infographic.jpg"
-              alt="A phone showing local shop drops connects to an illustrated local high street."
-              style={{
-                position: "absolute",
-                display: "block",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "auto",
-                transform: "translateY(-12%)",
-              }}
-            />
-          </div>
+            Illustrative phone screens · fictional shops — nothing here can be claimed yet.
+          </p>
+        </div>
 
+        {SHOW_MISSION_INFOGRAPHIC && (
           <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) 250px",
-            gap: isMobile ? 14 : 18,
-            alignItems: "stretch",
-            width: "100%",
-            maxWidth: 1100,
-            margin: "0 auto",
+            padding: isMobile ? "24px 16px 28px" : "28px 40px 36px",
+            background: "transparent",
+            opacity: 0.72,
           }}>
-            <figure style={{
-              margin: 0,
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 9,
+              color: MUTED_FG,
+              letterSpacing: "0.06em",
+              marginBottom: 12,
+              textAlign: "center",
+            }}>
+              ILLUSTRATED OVERVIEW · PARKED
+            </div>
+            <div style={{
+              position: "relative",
               width: "100%",
-              overflowX: isMobile ? "auto" : "hidden",
+              maxWidth: 900,
+              aspectRatio: "3.5 / 1",
+              margin: "0 auto 14px",
+              overflow: "hidden",
               borderRadius: 12,
               border: `1px solid ${BORDER}`,
               background: CREAM,
-              boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
             }}>
-              <div style={{
-                position: "relative",
-                width: isMobile ? 820 : "100%",
-                aspectRatio: "3.2 / 1",
-                overflow: "hidden",
-              }}>
-                <img
-                  src="/landing/mission-infographic.jpg"
-                  alt="Four steps: peek into local shops from anywhere; see it, claim it and collect it; choose real stock with no mystery bags; bring life back to your neighbourhood."
-                  style={{
-                    position: "absolute",
-                    display: "block",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "auto",
-                    transform: "translateY(-52%)",
-                  }}
-                />
-              </div>
-            </figure>
+              <img
+                src="/landing/mission-infographic.jpg"
+                alt="A phone showing local shop drops connects to an illustrated local high street."
+                style={{
+                  position: "absolute",
+                  display: "block",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "auto",
+                  transform: "translateY(-12%)",
+                }}
+              />
+            </div>
 
             <div style={{
-              padding: isMobile ? "14px 16px" : "20px",
-              border: `1px solid ${BORDER}`,
-              background: "rgba(255,248,244,0.75)",
-              borderRadius: 12,
-              display: "flex",
-              alignItems: "center",
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) 250px",
+              gap: isMobile ? 14 : 18,
+              alignItems: "stretch",
+              width: "100%",
+              maxWidth: 1100,
+              margin: "0 auto",
             }}>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: 600,
-                color: FG,
-                lineHeight: 1.35,
+              <figure style={{
                 margin: 0,
+                width: "100%",
+                overflowX: isMobile ? "auto" : "hidden",
+                borderRadius: 12,
+                border: `1px solid ${BORDER}`,
+                background: CREAM,
+                boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
               }}>
-                Shops create drops for one-offs, limited stock, last-minute slots and exclusive local offers.{" "}
-                <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
-                  like being in the shop, wherever you are.
-                </em>
-              </p>
+                <div style={{
+                  position: "relative",
+                  width: isMobile ? 820 : "100%",
+                  aspectRatio: "3.2 / 1",
+                  overflow: "hidden",
+                }}>
+                  <img
+                    src="/landing/mission-infographic.jpg"
+                    alt="Four steps: peek into local shops from anywhere; see it, claim it and collect it; choose real stock with no mystery bags; bring life back to your neighbourhood."
+                    style={{
+                      position: "absolute",
+                      display: "block",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "auto",
+                      transform: "translateY(-52%)",
+                    }}
+                  />
+                </div>
+              </figure>
+
+              <div style={{
+                padding: isMobile ? "14px 16px" : "20px",
+                border: `1px solid ${BORDER}`,
+                background: "rgba(255,248,244,0.75)",
+                borderRadius: 12,
+                display: "flex",
+                alignItems: "center",
+              }}>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 16 : 18,
+                  fontWeight: 600,
+                  color: FG,
+                  lineHeight: 1.35,
+                  margin: 0,
+                }}>
+                  Shops create drops for one-offs, limited stock, last-minute slots and exclusive local offers.{" "}
+                  <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
+                    you see the real thing before you go.
+                  </em>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
-      {/* ── 4. FOUNDING — belonging + convert ── */}
+      {/* ── 3. SAMPLES — muted; hero + How it works phones carry the proof ── */}
+      {SHOW_WHAT_YOU_SEE && (
+      <section style={{ background: SECTION_WASH, position: "relative", zIndex: 1 }}>
+        <div style={{ padding: isMobile ? "40px 20px 12px" : "56px 40px 16px" }}>
+          <div className="uw-sticker" style={{ marginBottom: 16 }}>
+            WHAT YOU SEE
+          </div>
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 30 : 40,
+            fontWeight: 800, color: FG, letterSpacing: "-1px",
+            lineHeight: 1.1, maxWidth: 560, marginBottom: 14,
+          }}>
+            See the real thing. Then collect it.
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
+            color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
+          }}>
+            A bakery posts the loaf that just came out. A florist shows the bunch that just landed.
+            A boutique puts the jacket on the rail — in a photo or short video.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+            color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
+          }}>
+            You see it, claim it in seconds, pay in the app, and walk in with a QR.
+            No mystery bag. No delivery wait. Just something you chose — waiting at the counter.
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+            color: MUTED_FG, lineHeight: 1.5, margin: 0, fontWeight: 500,
+          }}>
+            Mock examples · fictional shops — nothing here can be reserved yet.
+          </p>
+        </div>
+
+        <SampleDropsCarousel />
+      </section>
+      )}
+
+      {/* ── 4. FOUNDING SHOPPERS ── */}
       {PRE_LAUNCH && (
         <section style={{
           padding: isMobile ? "44px 20px" : "64px 40px",
@@ -944,351 +1002,106 @@ export default function Landing() {
           position: "relative",
           zIndex: 1,
         }}>
-          <div style={{ width: "100%", maxWidth: 1180, margin: "0 auto" }}>
+          <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
             <div style={{
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              alignItems: isMobile ? "flex-start" : "center",
-              justifyContent: "space-between",
-              gap: isMobile ? 10 : 28,
-              padding: isMobile ? "18px 20px" : "22px 26px",
-              marginBottom: 20,
-              background: CREAM,
-              border: "1px solid rgba(58,22,16,0.25)",
-              borderRadius: 10,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 9,
+              fontWeight: 800,
+              color: CREAM,
+              letterSpacing: "0.09em",
+              marginBottom: 14,
             }}>
-              <div>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 9,
-                  fontWeight: 800,
-                  color: V,
-                  letterSpacing: "0.09em",
-                  marginBottom: 5,
-                }}>
-                  FOUNDING MEMBERS · PRE-LAUNCH
-                </div>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 27 : 34,
-                  fontWeight: 800,
-                  color: FG,
-                  letterSpacing: "-1px",
-                  lineHeight: 1,
-                }}>
-                  BE FIRST ON YOUR HIGH STREET
-                </div>
-              </div>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 14 : 16,
-                fontWeight: 500,
-                color: FG,
-                lineHeight: 1.45,
-                maxWidth: 600,
-                margin: 0,
-              }}>
-                Help bring the buzz back to your high street. One shop, one drop and one neighbourhood at a time.
-              </p>
+              FOUNDING SHOPPERS · PRE-LAUNCH
             </div>
+            <h2 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 28 : 36,
+              fontWeight: 800,
+              color: CREAM,
+              letterSpacing: "-1px",
+              lineHeight: 1.1,
+              marginBottom: 14,
+            }}>
+              Join as a founding shopper
+            </h2>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 15 : 17,
+              fontWeight: 500,
+              color: "rgba(255,247,242,0.9)",
+              lineHeight: 1.5,
+              marginBottom: 10,
+              maxWidth: 560,
+            }}>
+              The first 500 founding shoppers get special perks — sign up now to lock yours in.
+            </p>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 14 : 15,
+              fontWeight: 400,
+              color: "rgba(255,247,242,0.75)",
+              lineHeight: 1.5,
+              marginBottom: 28,
+              maxWidth: 560,
+            }}>
+              Your founder badge unlocks the benefits below before we open your neighbourhood.
+            </p>
 
             <div style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: 800,
               color: CREAM,
               letterSpacing: "0.08em",
-              marginBottom: 12,
+              marginBottom: 10,
             }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM }} />
               FOUNDING MEMBER BENEFITS
             </div>
-
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1.02fr 0.98fr",
-              gap: isMobile ? 18 : 22,
-              marginBottom: isMobile ? 22 : 26,
-            }}>
-              {/* Founding shops */}
-              <div style={{
-                background: BAND_WASH,
-                color: CREAM,
-                border: "1px solid rgba(255,247,242,0.22)",
-                borderRadius: 10,
-                padding: isMobile ? 18 : 22,
-                display: "flex",
-                flexDirection: "column",
-                boxShadow: "none",
-              }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 12,
-                  marginBottom: isMobile ? 8 : 12,
-                }}>
-                  <span style={{
-                    width: 28, height: 28,
-                    background: "transparent", color: V,
-                    display: "inline-flex",
-                    alignItems: "center", justifyContent: "center", flexShrink: 0,
-                  }} aria-hidden>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 10.5 6.5 5h11L20 10.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 20 : 24,
-                    fontWeight: 750, letterSpacing: "-0.4px", color: CREAM,
-                  }}>
-                    For founding shops
-                  </span>
-                </div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  flex: 1,
-                }}>
-                  {[
-                    {
-                      label: "0% fees — locked in for founding shops",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "We can shoot your first photo or short clip",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <rect x="3" y="6" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M17 10.5 21 8v8l-4-2.5V10.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "You set the price — never a mystery bag",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M2.5 12S6.5 5.5 12 5.5 21.5 12 21.5 12 17.5 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "Pioneer Partner priority on the map",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" strokeWidth="2"/>
-                          <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      ),
-                    },
-                  ].map(({ label, icon }) => (
-                    <div
-                      key={label}
-                      style={{
-                        borderTop: "1px solid rgba(255,247,242,0.2)",
-                        padding: "7px 2px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        minHeight: 0,
-                      }}
-                    >
-                      <span style={{
-                        width: 22, height: 22,
-                        background: "transparent", color: V,
-                        display: "inline-flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0,
-                      }}>
-                        {icon}
-                      </span>
-                      <span style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 13.5 : 14,
-                        fontWeight: 600, color: CREAM, lineHeight: 1.35,
-                      }}>
-                        {label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Founding shoppers */}
-              <div style={{
-                background: BAND_WASH,
-                color: CREAM,
-                border: "1px solid rgba(255,247,242,0.22)",
-                borderRadius: 10,
-                padding: isMobile ? 18 : 22,
-                display: "flex",
-                flexDirection: "column",
-                boxShadow: "none",
-                position: "relative",
-                overflow: "hidden",
-              }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 12,
-                  marginBottom: isMobile ? 8 : 12, position: "relative",
-                }}>
-                  <span style={{
-                    width: 28, height: 28,
-                    background: "transparent", color: V,
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  }} aria-hidden>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="8" r="3.2" stroke="currentColor" strokeWidth="2"/>
-                      <path d="M5 19.5c1.2-3.2 3.6-4.8 7-4.8s5.8 1.6 7 4.8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </span>
-                  <span style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 20 : 24,
-                    fontWeight: 750, letterSpacing: "-0.4px", color: CREAM,
-                  }}>
-                    For founding shoppers
-                  </span>
-                </div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                  flex: 1,
-                  position: "relative",
-                }}>
-                  {[
-                    {
-                      label: "Golden Ticket — claim drops before the public",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 4v3M12 17v3M4 12H7M17 12h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "Founding prices on premium local drops",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 3v18M8.5 8.2c.8-1.2 2-1.9 3.5-1.9 2.1 0 3.5 1.2 3.5 3.1S14.2 12.5 12 12.5 8.5 13.7 8.5 15.6c0 1.9 1.5 3.1 3.5 3.1 1.5 0 2.7-.7 3.5-1.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "Founding status and neighbourhood perks",
-                      icon: (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M12 3.5 14.2 8l4.8.7-3.5 3.4.8 4.8L12 14.8 7.7 16.9l.8-4.8L5 8.7 9.8 8 12 3.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        </svg>
-                      ),
-                    },
-                  ].map(({ label, icon }, index) => (
-                    <div
-                      key={label}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        background: "transparent",
-                        border: "none",
-                        borderTop: "1px solid rgba(255,247,242,0.2)",
-                        borderRadius: 0,
-                        padding: "8px 2px",
-                        minHeight: 0,
-                      }}
-                    >
-                      <span style={{
-                        width: 22,
-                        height: 22,
-                        background: "transparent", color: V,
-                        display: "inline-flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0,
-                      }}>
-                        {icon}
-                      </span>
-                      <span style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 13.5 : 14,
-                        fontWeight: index === 0 ? 700 : 600, lineHeight: 1.35,
-                        color: CREAM,
-                      }}>
-                        {index === 0 && (
-                          <small style={{
-                            display: "block", color: V, fontSize: 9, fontWeight: 850,
-                            letterSpacing: "0.09em", marginBottom: 2,
-                          }}>
-                            YOUR GOLDEN TICKET
-                          </small>
-                        )}
-                        {index === 0 ? "Claim drops before the public" : label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             <div style={{
               display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              alignItems: isMobile ? "stretch" : "center",
-              justifyContent: "space-between",
-              gap: isMobile ? 16 : 24,
-              padding: isMobile ? "2px 0 0" : "0 4px",
-              background: "transparent",
-              border: "none",
-              borderRadius: 0,
+              flexDirection: "column",
+              gap: 0,
+              marginBottom: 28,
+              border: "1px solid rgba(255,247,242,0.22)",
+              borderRadius: 10,
+              overflow: "hidden",
+              background: "rgba(0,0,0,0.12)",
             }}>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 14,
-                color: "rgba(255,247,242,0.9)",
-                lineHeight: 1.45,
-                margin: 0,
-                maxWidth: 480,
-              }}>
-                Join as a shopper or partner a shop — both help bring your high street to life.
-              </p>
-
-              <div style={{
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                gap: 8,
-                flexShrink: 0,
-              }}>
-                <button
-                  onClick={() => navigate("/signin")}
-                  className="uw-btn-primary"
+              {[
+                "Golden Ticket — claim drops before the public",
+                "Founding prices on premium local drops",
+                "Founding status and neighbourhood perks",
+              ].map((label) => (
+                <div
+                  key={label}
                   style={{
-                    background: FG, color: CREAM,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                    fontWeight: 700, letterSpacing: "0.02em", padding: "11px 18px",
-                    border: "none", cursor: "pointer",
-                    borderRadius: 999,
+                    borderTop: "1px solid rgba(255,247,242,0.18)",
+                    padding: "14px 18px",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: isMobile ? 14 : 15,
+                    fontWeight: 600,
+                    color: CREAM,
+                    lineHeight: 1.35,
                   }}
                 >
-                  JOIN AS A FOUNDING SHOPPER
-                </button>
-                <a
-                  href="/business-apply"
-                  className="uw-btn-ghost"
-                  style={{
-                    border: `1.5px solid ${FG}`, color: FG,
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                    fontWeight: 700, letterSpacing: "0.02em", padding: "10px 16px",
-                    textDecoration: "none", display: "inline-block", background: "#fff",
-                    textAlign: "center",
-                    borderRadius: 999,
-                  }}
-                >
-                  APPLY TO PARTNER YOUR SHOP
-                </a>
-              </div>
+                  {label}
+                </div>
+              ))}
             </div>
+
+            <button
+              onClick={() => navigate("/signin")}
+              className="uw-btn-primary"
+              style={{
+                background: FG, color: CREAM,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                fontWeight: 800, letterSpacing: "0.02em", padding: "14px 24px",
+                border: "none", cursor: "pointer",
+                borderRadius: RADIUS_SM,
+              }}
+            >
+              Claim my founder badge
+            </button>
           </div>
         </section>
       )}
@@ -1299,154 +1112,6 @@ export default function Landing() {
       ) : (
         <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
       )}
-
-      {/* ── 6. FOR BUSINESSES — help sell ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "72px 40px",
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1.05fr 0.95fr",
-        gap: isMobile ? 36 : 64,
-        alignItems: "center",
-        borderBottom: "none",
-      }}>
-        <div>
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: V, letterSpacing: "0.06em", marginBottom: 16,
-          }}>
-            FOR BUSINESSES · BOARDING NOW
-          </div>
-
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(28px, 3.6vw, 42px)",
-            fontWeight: 700, color: FG,
-            lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 18,
-          }}>
-            Get seen.
-            <br />
-            <em style={{ fontStyle: "italic", color: V }}>Sell and welcome customers through the door.</em>
-          </h2>
-
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-            color: MUTED_FG, lineHeight: 1.7, marginBottom: 14, maxWidth: 440, fontWeight: 300,
-          }}>
-            No catalog to build. When something's ready — a batch, a quiet slot, a limited edit —
-            publish a photo or short video, set price and quantity, and hit publish.
-          </p>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 420, fontWeight: 300,
-          }}>
-            Locals nearby see you, claim it, pay upfront, and collect with a QR.
-            You welcome customers at the counter — regulars and new faces alike.
-          </p>
-
-          <a
-            href="/business-apply"
-            className="uw-btn-primary"
-            style={{
-              background: V_DEEP, color: BG,
-              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-              letterSpacing: "0.04em", padding: "15px 28px",
-              textDecoration: "none", display: "inline-block", border: "none",
-            }}
-          >
-              APPLY TO PARTNER YOUR SHOP
-          </a>
-        </div>
-
-        <div style={{ border: `1px solid ${BORDER}`, boxShadow: `8px 8px 0 ${MUTED}` }}>
-          {[
-            {
-              label: "Show what's ready",
-              body: "Upload a photo or short clip. No product IDs. No endless catalog setup.",
-            },
-            {
-              label: "Paid claims, not maybe-laters",
-              body: "Shoppers pay when they claim. You set the collection window. No holding stock for no-shows.",
-            },
-            {
-              label: "Customers through your door",
-              body: "They must walk in and scan a QR. You welcome customers who already know what they came for.",
-            },
-          ].map(({ label, body }, i) => (
-            <div
-              key={label}
-              style={{
-                padding: isMobile ? "22px 20px" : "26px 28px",
-                background: i === 1 ? MUTED : BG,
-                borderBottom: i < 2 ? `1px solid ${BORDER}` : "none",
-              }}
-            >
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-                color: V, letterSpacing: "0.04em", marginBottom: 8,
-              }}>
-                0{i + 1}
-              </div>
-              <h3 style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 20,
-                fontWeight: 700, color: FG, marginBottom: 8, letterSpacing: "-0.3px",
-              }}>
-                {label}
-              </h3>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: MUTED_FG, lineHeight: 1.65, fontWeight: 300, margin: 0,
-              }}>
-                {body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 6a. MERCHANT FAQ ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "64px 40px",
-        borderBottom: "none",
-        background: BG,
-      }}>
-        <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-          color: MUTED_FG, letterSpacing: "0.06em", marginBottom: 12,
-        }}>
-          FOR BUSINESSES · FAQ
-        </div>
-        <h2 style={{
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: isMobile ? 26 : 32,
-          fontWeight: 700, color: FG, letterSpacing: "-0.6px",
-          lineHeight: 1.15, marginBottom: 28, maxWidth: 480,
-        }}>
-          Quick answers before you apply.
-        </h2>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-          gap: isMobile ? 20 : 28,
-          maxWidth: 920,
-        }}>
-          {HOME_FAQS.map(({ q, a }) => (
-            <div key={q}>
-              <h3 style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 18,
-                fontWeight: 600, color: FG, marginBottom: 8, lineHeight: 1.3,
-              }}>
-                {q}
-              </h3>
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                color: MUTED_FG, lineHeight: 1.65, fontWeight: 300, margin: 0,
-              }}>
-                {a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ── 6b. RECOMMEND A SHOP — neighbourhood nominations ── */}
       <section style={{
@@ -1518,7 +1183,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: V, letterSpacing: "0.06em", marginBottom: 16,
           }}>
-            TWO WAYS IN
+            SEE IT · CLAIM IT · COLLECT IT
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1534,10 +1199,10 @@ export default function Landing() {
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 440, fontWeight: 300,
           }}>
-            Shoppers: create a founding account to look in, see, claim, and collect.
-            Businesses: apply to get on the map so your high street can see you.
+            Create a founding shopper account. See the real thing from local shops,
+            claim it on your phone, collect in person.
           </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
               onClick={() => navigate("/signin")}
               className="uw-btn-primary"
@@ -1550,24 +1215,27 @@ export default function Landing() {
             >
               JOIN AS A FOUNDING SHOPPER
             </button>
+          </div>
+          <p style={{
+            marginTop: 18,
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 13,
+            color: "rgba(255,248,245,0.65)",
+            fontWeight: 500,
+          }}>
+            Own a shop?{" "}
             <a
               href="/business-apply"
-              className="uw-btn-ghost uw-btn-ghost-dark"
-              style={{
-                border: "1px solid rgba(255,248,245,0.4)", color: BG,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-                letterSpacing: "0.04em", padding: "14px 24px",
-                textDecoration: "none", display: "inline-block", background: "transparent",
-              }}
+              style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
             >
-              APPLY TO PARTNER YOUR SHOP
+              Partner with us
             </a>
-          </div>
+          </p>
           <a
             href="/london"
             style={{
               display: "inline-block",
-              marginTop: 18,
+              marginTop: 14,
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 13,
               fontWeight: 600,
@@ -1599,7 +1267,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Look in. See it. Claim it. Collect it — your high street, from wherever you are.
+            Look in. See it. Claim it. Collect it — your high street, on your phone.
           </p>
         </div>
 
@@ -1613,7 +1281,7 @@ export default function Landing() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
               { label: "Sign in", href: "/signin" },
-              { label: "Partner your shop", href: "/business-apply" },
+              { label: "For businesses", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
               { label: "London boroughs", href: "/london" },
               { label: "Resources", href: "/resources" },
@@ -1675,6 +1343,156 @@ export default function Landing() {
           </span>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function HowItWorksPhones() {
+  const isMobile = useIsMobile();
+  return (
+    <div className="uw-phones-row" style={{ gap: isMobile ? 14 : 22 }}>
+      {HOW_IT_WORKS_PHONES.map((phone) => (
+        <div
+          key={phone.title}
+          className="uw-phone-wrap"
+          style={{ flex: isMobile ? "0 0 min(200px, 72vw)" : "0 0 240px" }}
+        >
+          <div className="uw-phone-frame" style={{ maxWidth: isMobile ? 200 : 240 }}>
+            <div className="uw-phone-screen">
+              <div className="uw-phone-notch" aria-hidden />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `url(${phone.ownerImage}) center/cover no-repeat`,
+                }}
+              />
+              <div
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(180deg, rgba(10,6,5,0.15) 0%, transparent 28%, rgba(10,6,5,0.35) 55%, rgba(10,6,5,0.92) 100%)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 34,
+                  left: 12,
+                  right: 12,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                  zIndex: 2,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 10,
+                    fontWeight: 800,
+                    letterSpacing: "0.04em",
+                    color: "#fff",
+                    background: V,
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    boxShadow: "0 8px 18px rgba(255,45,18,0.35)",
+                  }}
+                >
+                  {phone.dropLabel}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: "#fff",
+                    background: "rgba(0,0,0,0.45)",
+                    padding: "5px 8px",
+                    borderRadius: 999,
+                    backdropFilter: "blur(6px)",
+                  }}
+                >
+                  EXAMPLE
+                </span>
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  right: 12,
+                  bottom: 14,
+                  zIndex: 2,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: "rgba(255,247,242,0.75)",
+                    marginBottom: 4,
+                  }}
+                >
+                  {phone.business}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: "#fff",
+                    lineHeight: 1.25,
+                    marginBottom: 10,
+                    letterSpacing: "-0.2px",
+                  }}
+                >
+                  {phone.title}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 8,
+                  }}
+                >
+                  <span
+                    style={{
+                      background: "#fff",
+                      color: FG,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 14,
+                      fontWeight: 800,
+                      padding: "8px 12px",
+                      borderRadius: 999,
+                    }}
+                  >
+                    £{(phone.pricePence / 100).toFixed(phone.pricePence % 100 === 0 ? 0 : 2)}
+                  </span>
+                  <span
+                    style={{
+                      background: V,
+                      color: "#fff",
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 12,
+                      fontWeight: 800,
+                      padding: "8px 14px",
+                      borderRadius: 999,
+                    }}
+                  >
+                    Claim
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -1925,7 +1743,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches — clear your search to see the full curated board."
-              : "Nominate a shop you love, or apply to be listed — help bring your high street onto Unwrapped."}
+              : "Browse shops coming onto Unwrapped. Nominate one you love."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1939,7 +1757,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
             <a
-              href="/business-apply"
+              href="/recommend"
               style={{
                 background: V_DEEP,
                 color: BG,
@@ -1956,10 +1774,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 alignItems: "center",
               }}
             >
-              PARTNER YOUR SHOP
+              NOMINATE A SHOP
             </a>
             <a
-              href="/recommend"
+              href="/business-apply"
               style={{
                 background: "transparent",
                 color: FG,
@@ -1975,7 +1793,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 alignItems: "center",
               }}
             >
-              NOMINATE A SHOP
+              FOR BUSINESSES
             </a>
           </div>
 

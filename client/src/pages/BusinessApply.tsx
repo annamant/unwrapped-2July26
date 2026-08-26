@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { trpc } from "../trpc";
+import { MERCHANT_FAQS } from "../lib/seo";
 import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
@@ -160,6 +161,27 @@ export default function BusinessApply() {
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textAlign: "center", lineHeight: 1.6 }}>
             By applying you agree to our business terms. We'll never share your information.
           </p>
+        </div>
+
+        <div style={{ marginTop: 56, paddingTop: 40, borderTop: `1px solid ${BORDER}` }}>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 12 }}>
+            QUICK ANSWERS
+          </div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: FG, marginBottom: 24, lineHeight: 1.15 }}>
+            Before you apply.
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+            {MERCHANT_FAQS.map(({ q, a }) => (
+              <div key={q}>
+                <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 600, color: FG, marginBottom: 6, lineHeight: 1.3 }}>
+                  {q}
+                </h3>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.65, margin: 0, fontWeight: 300 }}>
+                  {a}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
