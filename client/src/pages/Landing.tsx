@@ -76,6 +76,7 @@ const HOW_IT_WORKS_PHONES: {
   title: string;
   business: string;
   pricePence: number;
+  media: "video" | "photo";
 }[] = [
   {
     ownerImage: "/landing/hero-owner-bakery.jpg",
@@ -83,13 +84,15 @@ const HOW_IT_WORKS_PHONES: {
     title: "Morning bake — country loaf",
     business: "River Oven Bakery",
     pricePence: 450,
+    media: "video",
   },
   {
-    ownerImage: "/landing/hero-owner-boutique.jpg",
+    ownerImage: "/landing/drop-jacket-photo.jpg",
     dropLabel: "Dropping Sat · 11am",
     title: "Weekend jacket — rail edit",
     business: "North Lane Boutique",
     pricePence: checkoutFromList(10800),
+    media: "photo",
   },
   {
     ownerImage: "/landing/hero-owner-salon.jpg",
@@ -97,11 +100,9 @@ const HOW_IT_WORKS_PHONES: {
     title: "Express blow-dry — afternoon",
     business: "Marlow Hair Studio",
     pricePence: 2800,
+    media: "video",
   },
 ];
-
-/** Keep the illustrated mission graphic, but parked below the phone proof for now. */
-const SHOW_MISSION_INFOGRAPHIC = true;
 
 const BUSINESS_TYPES = [
   "Charity shops",
@@ -761,7 +762,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — phone proof (Whatnot-style) ── */}
+      {/* ── 2. HOW IT WORKS — phone proof ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1 }}>
         <div style={{
           background: BAND_WASH,
@@ -785,7 +786,7 @@ export default function Landing() {
             fontWeight: 700, letterSpacing: "-0.8px",
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
           }}>
-            How it works
+            See it. Claim it. Collect it.
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -796,37 +797,13 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            See what local shops have ready — real photos and short clips.
-            Claim it. Collect it in person.
+            Shops post short videos or images of product deals and offers.
+            All you have to do is claim it and collect it — no mystery bags, no surprise bags.
           </p>
-          <div style={{
-            display: "flex", flexWrap: "wrap", gap: 8, marginBottom: isMobile ? 8 : 4,
-          }}>
-            {[
-              "Limited quantity",
-              "Real photo or clip",
-              "Pay upfront · it's yours",
-              "Collect in person",
-            ].map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                  fontWeight: 600, letterSpacing: "0.02em", color: "#fff",
-                  background: "rgba(255,45,18,0.2)",
-                  border: "1px solid rgba(255,45,18,0.45)",
-                  padding: "6px 11px",
-                  borderRadius: 999,
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div style={{
-          padding: isMobile ? "20px 16px 28px" : "28px 40px 40px",
+          padding: isMobile ? "20px 16px 36px" : "28px 40px 48px",
           background: BAND_WASH,
         }}>
           <HowItWorksPhones />
@@ -842,114 +819,6 @@ export default function Landing() {
             Illustrative phone screens · fictional shops — nothing here can be claimed yet.
           </p>
         </div>
-
-        {SHOW_MISSION_INFOGRAPHIC && (
-          <div style={{
-            padding: isMobile ? "24px 16px 28px" : "28px 40px 36px",
-            background: "transparent",
-            opacity: 0.72,
-          }}>
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 9,
-              color: MUTED_FG,
-              letterSpacing: "0.06em",
-              marginBottom: 12,
-              textAlign: "center",
-            }}>
-              ILLUSTRATED OVERVIEW · PARKED
-            </div>
-            <div style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: 900,
-              aspectRatio: "3.5 / 1",
-              margin: "0 auto 14px",
-              overflow: "hidden",
-              borderRadius: 12,
-              border: `1px solid ${BORDER}`,
-              background: CREAM,
-            }}>
-              <img
-                src="/landing/mission-infographic.jpg"
-                alt="A phone showing local shop drops connects to an illustrated local high street."
-                style={{
-                  position: "absolute",
-                  display: "block",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "auto",
-                  transform: "translateY(-12%)",
-                }}
-              />
-            </div>
-
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) 250px",
-              gap: isMobile ? 14 : 18,
-              alignItems: "stretch",
-              width: "100%",
-              maxWidth: 1100,
-              margin: "0 auto",
-            }}>
-              <figure style={{
-                margin: 0,
-                width: "100%",
-                overflowX: isMobile ? "auto" : "hidden",
-                borderRadius: 12,
-                border: `1px solid ${BORDER}`,
-                background: CREAM,
-                boxShadow: "0 10px 28px rgba(158,28,14,0.08)",
-              }}>
-                <div style={{
-                  position: "relative",
-                  width: isMobile ? 820 : "100%",
-                  aspectRatio: "3.2 / 1",
-                  overflow: "hidden",
-                }}>
-                  <img
-                    src="/landing/mission-infographic.jpg"
-                    alt="Four steps: peek into local shops from anywhere; see it, claim it and collect it; choose real stock with no mystery bags; bring life back to your neighbourhood."
-                    style={{
-                      position: "absolute",
-                      display: "block",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "auto",
-                      transform: "translateY(-52%)",
-                    }}
-                  />
-                </div>
-              </figure>
-
-              <div style={{
-                padding: isMobile ? "14px 16px" : "20px",
-                border: `1px solid ${BORDER}`,
-                background: "rgba(255,248,244,0.75)",
-                borderRadius: 12,
-                display: "flex",
-                alignItems: "center",
-              }}>
-                <p style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 16 : 18,
-                  fontWeight: 600,
-                  color: FG,
-                  lineHeight: 1.35,
-                  margin: 0,
-                }}>
-                  Shops create drops for one-offs, limited stock, last-minute slots and exclusive local offers.{" "}
-                  <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
-                    you see the real thing before you go.
-                  </em>
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* ── 3. SAMPLES — muted; hero + How it works phones carry the proof ── */}
@@ -1376,6 +1245,30 @@ function HowItWorksPhones() {
                     "linear-gradient(180deg, rgba(10,6,5,0.15) 0%, transparent 28%, rgba(10,6,5,0.35) 55%, rgba(10,6,5,0.92) 100%)",
                 }}
               />
+              {phone.media === "video" && (
+                <div
+                  aria-hidden
+                  style={{
+                    position: "absolute",
+                    top: "42%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 2,
+                    width: 54,
+                    height: 54,
+                    borderRadius: "50%",
+                    background: "rgba(0,0,0,0.42)",
+                    border: "1.5px solid rgba(255,247,242,0.85)",
+                    display: "grid",
+                    placeItems: "center",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                    <path d="M6.2 3.8v10.4L14.6 9 6.2 3.8Z" fill="#FFF7F2" />
+                  </svg>
+                </div>
+              )}
               <div
                 style={{
                   position: "absolute",
@@ -1406,18 +1299,32 @@ function HowItWorksPhones() {
                 </span>
                 <span
                   style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 5,
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 9,
                     fontWeight: 700,
-                    letterSpacing: "0.06em",
+                    letterSpacing: "0.05em",
                     color: "#fff",
-                    background: "rgba(0,0,0,0.45)",
-                    padding: "5px 8px",
+                    background: "rgba(0,0,0,0.5)",
+                    padding: "5px 9px",
                     borderRadius: 999,
                     backdropFilter: "blur(6px)",
                   }}
                 >
-                  EXAMPLE
+                  {phone.media === "video" ? (
+                    <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden>
+                      <path d="M2.2 1.2v6.6L7.8 4.5 2.2 1.2Z" fill="#fff" />
+                    </svg>
+                  ) : (
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
+                      <rect x="1" y="2" width="8" height="6" rx="1" stroke="#fff" strokeWidth="1.2" />
+                      <circle cx="3.6" cy="4.2" r="0.9" fill="#fff" />
+                      <path d="M5.2 7.2 6.6 5.4 9 7.2" stroke="#fff" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                  {phone.media === "video" ? "VIDEO" : "PHOTO"}
                 </span>
               </div>
               <div
