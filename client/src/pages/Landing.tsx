@@ -1634,10 +1634,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            See your high street{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>
-              coming to life.
-            </em>
+            Search the map
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
