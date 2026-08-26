@@ -585,18 +585,30 @@ export default function Landing() {
           minHeight: isMobile ? undefined : "calc(100vh - 72px)",
           maxHeight: isMobile ? undefined : 820,
         }}>
-          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 560 }}>
+          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 580 }}>
             <div
               className="uw-fade-1"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
-                marginBottom: 22,
+                marginBottom: isMobile ? 16 : 20,
               }}
             >
-              <span className="uw-live-badge">
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 7,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 9 : 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  color: "rgba(255,248,244,0.78)",
+                  padding: isMobile ? "5px 0" : "6px 0",
+                }}
+              >
                 <span
                   className="uw-pulse-dot"
-                  style={{ width: 8, height: 8, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
+                  style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
                 />
                 LONDON · PRE-LAUNCH
               </span>
@@ -606,24 +618,45 @@ export default function Landing() {
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "clamp(30px, 4.6vw, 54px)",
-                fontWeight: 800, color: CREAM,
-                lineHeight: 1.02, letterSpacing: "-1.5px",
-                marginBottom: 18,
+                fontSize: isMobile ? 32 : "clamp(38px, 4.6vw, 52px)",
+                fontWeight: 800,
+                color: CREAM,
+                lineHeight: 1.02,
+                letterSpacing: isMobile ? "-1px" : "-1.5px",
+                marginBottom: isMobile ? 14 : 16,
+                maxWidth: 580,
               }}
             >
-              The visual shopping marketplace
+              The thrill of live shopping from local shops.
             </h1>
 
             <p
               className="uw-fade-3"
               style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
-                color: "rgba(255,248,244,0.82)", lineHeight: 1.5, marginBottom: 28, fontWeight: 500,
-                maxWidth: 520,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 15 : 17,
+                color: "rgba(255,248,244,0.82)",
+                lineHeight: 1.5,
+                marginBottom: isMobile ? 10 : 12,
+                fontWeight: 500,
+                maxWidth: 500,
               }}
             >
-              See it, claim it, and collect it around your high street.
+              As they post images and videos of limited drops and deals, you buy with a click and collect in person.
+            </p>
+            <p
+              className="uw-fade-3"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 15 : 17,
+                color: "rgba(255,248,244,0.7)",
+                lineHeight: 1.45,
+                marginBottom: isMobile ? 24 : 28,
+                fontWeight: 600,
+                maxWidth: 480,
+              }}
+            >
+              A new way to shop the high street from your phone, and discover the people and stories behind the windows.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
@@ -631,21 +664,26 @@ export default function Landing() {
                 onClick={() => navigate("/signin")}
                 className="uw-btn-primary"
                 style={{
-                  background: "#fff", color: V,
-                  fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 13 : 14,
-                  letterSpacing: "0.01em", padding: isMobile ? "14px 20px" : "16px 28px",
-                  border: "none", cursor: "pointer",
-                  borderRadius: RADIUS_SM, fontWeight: 800,
-                  boxShadow: "0 10px 28px rgba(0,0,0,0.2)",
+                  background: V,
+                  color: "#fff",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 14 : 15,
+                  letterSpacing: "0.01em",
+                  padding: isMobile ? "15px 24px" : "17px 30px",
+                  border: "none",
+                  cursor: "pointer",
+                  borderRadius: RADIUS_SM,
+                  fontWeight: 800,
+                  boxShadow: "0 12px 32px rgba(0,0,0,0.28)",
                 }}
               >
                 Join as a founding shopper
               </button>
               <div style={{
-                marginTop: 14,
+                marginTop: isMobile ? 12 : 14,
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 13,
-                color: "rgba(255,248,244,0.65)",
+                fontSize: isMobile ? 12 : 13,
+                color: "rgba(255,248,244,0.58)",
                 fontWeight: 500,
               }}>
                 Own a shop?{" "}
@@ -899,21 +937,10 @@ export default function Landing() {
               fontWeight: 500,
               color: "rgba(255,247,242,0.9)",
               lineHeight: 1.5,
-              marginBottom: 10,
-              maxWidth: 560,
-            }}>
-              The first 500 founding shoppers get special perks — sign up now to lock yours in.
-            </p>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 14 : 15,
-              fontWeight: 400,
-              color: "rgba(255,247,242,0.75)",
-              lineHeight: 1.5,
               marginBottom: 28,
               maxWidth: 560,
             }}>
-              Your founder badge unlocks the benefits below before we open your neighbourhood.
+              First 500 only. Special perks, unlocked before your neighbourhood opens.
             </p>
 
             <div style={{
