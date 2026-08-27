@@ -608,7 +608,7 @@ export default function Landing() {
               >
                 <span
                   className="uw-pulse-dot"
-                  style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
+                  style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
                 />
                 London · Opening soon
               </span>
@@ -650,8 +650,8 @@ export default function Landing() {
                 onClick={() => navigate("/signin")}
                 className="uw-btn-primary"
                 style={{
-                  background: V,
-                  color: "#fff",
+                  background: BG,
+                  color: FG,
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: isMobile ? 14 : 15,
                   letterSpacing: "0.01em",
