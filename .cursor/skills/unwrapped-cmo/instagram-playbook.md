@@ -29,10 +29,10 @@ Use Gamma when the human explicitly asks for Gamma, when making decks/presentati
 
 ## Gamma prompts (seed, when using Gamma)
 
-Always inject brand tokens and "editorial London local businesses, baby pink #FFE0E7, espresso #160703, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
+Always inject brand tokens and "editorial London local businesses, baby pink #FFE0E7, British Racing Green #244B36, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
 
 **Drop alert (1:1)**  
-Big Space-Mono number or LIVE mark; Playfair italic subline; espresso live dot; "Reserve in seconds".
+Big Space-Mono number or LIVE mark; Playfair italic subline; racing-green live dot; "Reserve in seconds".
 
 **Business spotlight (4:5)**  
 Business name as hero; neighbourhood label in mono; quiet cream field; single CTA.
@@ -93,8 +93,8 @@ Reusable `browser_cdp` expression template:
 
   const ctx = canvas.getContext("2d");
   const cream = "#FFE0E7";
-  const ink = "#160703";
-  const red = "#160703";
+  const ink = "#244B36";
+  const inkGreen = "#244B36";
   const border = "#E0DFD9";
 
   ctx.fillStyle = cream;
@@ -110,24 +110,24 @@ Reusable `browser_cdp` expression template:
   ctx.fillStyle = ink;
   ctx.fillRect(96, 86, 78, 78);
   text("U", 119, 146, 54, "Georgia, serif", cream, "700");
-  ctx.fillStyle = red;
+  ctx.fillStyle = inkGreen;
   ctx.beginPath();
   ctx.arc(172, 88, 13, 0, Math.PI * 2);
   ctx.fill();
 
   text("Unwrapped", 202, 143, 48, "Georgia, serif", ink, "700");
-  text("HOW IT WORKS", 96, 280, 25, "Menlo, monospace", red);
+  text("HOW IT WORKS", 96, 280, 25, "Menlo, monospace", inkGreen);
   text("A drop is simple.", 96, 430, 82, "Georgia, serif", ink, "700");
 
   ctx.strokeStyle = border;
   ctx.lineWidth = 2;
   ctx.roundRect(96, 535, 888, 260, 28);
   ctx.stroke();
-  text("01", 136, 620, 30, "Menlo, monospace", red);
+  text("01", 136, 620, 30, "Menlo, monospace", inkGreen);
   text("Find what is live.", 205, 620, 38, "Helvetica, Arial, sans-serif");
-  text("02", 136, 695, 30, "Menlo, monospace", red);
+  text("02", 136, 695, 30, "Menlo, monospace", inkGreen);
   text("Reserve in seconds.", 205, 695, 38, "Helvetica, Arial, sans-serif");
-  text("03", 136, 770, 30, "Menlo, monospace", red);
+  text("03", 136, 770, 30, "Menlo, monospace", inkGreen);
   text("Collect with QR.", 205, 770, 38, "Helvetica, Arial, sans-serif");
   text("SHOPUNWRAPPED.COM", 96, 970, 25, "Menlo, monospace");
 

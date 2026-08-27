@@ -31,9 +31,9 @@ Older themes in the workspace (`UNWRAPPED THEME`, `UNWRAPPED HOSTINGER`, importe
 
 | Gamma field | Hex | Brand token |
 |-------------|-----|-------------|
-| **Primary accent color** | `#160703` | Espresso |
+| **Primary accent color** | `#244B36` | British Racing Green |
 | **Secondary accent 1** | `#FFCEDA` | Muted surface |
-| **Secondary accent 2** | `#8B555E` | Muted text |
+| **Secondary accent 2** | `#5A6E62` | Muted text |
 | **Secondary accent 3** | `#F0B8C4` | Border |
 
 Add secondaries via **Add color** under **Secondary accent colors** — not under Text.
@@ -42,12 +42,12 @@ Add secondaries via **Add color** under **Secondary accent colors** — not unde
 
 | Gamma field | Hex |
 |-------------|-----|
-| Heading color | `#160703` |
-| Body color | `#160703` |
-| Link color | `#160703` |
-| Button color | `#160703` |
+| Heading color | `#244B36` |
+| Body color | `#244B36` |
+| Link color | `#244B36` |
+| Button color | `#244B36` |
 
-Muted caption grey (`#8B555E`) lives in the **palette**; pick it manually on slides when needed.
+Muted caption grey (`#5A6E62`) lives in the **palette**; pick it manually on slides when needed.
 
 ### Background
 
@@ -59,7 +59,7 @@ Muted caption grey (`#8B555E`) lives in the **palette**; pick it manually on sli
 Leave **Adjust colors for contrast** checked unless the human asks otherwise.
 
 **Paste string:**  
-`Background #FFE0E7 · Ink #160703 · Accent #160703 · Muted #FFCEDA · Muted text #8B555E · Border #F0B8C4`
+`Background #FFE0E7 · British Racing Green #244B36 · Accent #244B36 · Muted #FFCEDA · Muted text #5A6E62 · Border #F0B8C4`
 
 ---
 
@@ -131,7 +131,7 @@ Gamma colour fields are **readonly** in the UI. To set hex values via browser:
 2. Edit the **HEX** input (`placeholder="#FF0000"`) · press Enter.
 3. Escape or click away before setting the next colour (picker reuse can overwrite the wrong slot).
 
-Verify primary accent is `#160703` after each batch — it is easy to swap with background baby pink by mistake.
+Verify primary accent is `#244B36` after each batch — it is easy to swap with background baby pink by mistake.
 
 ### Blockers
 
@@ -155,9 +155,9 @@ Verify primary accent is `#160703` after each batch — it is easy to swap with 
 ## Checklist — theme complete
 
 ```
-- [ ] Primary accent #160703
-- [ ] Secondaries #FFCEDA, #8B555E, #F0B8C4
-- [ ] Text: heading/body/button #160703, link #160703
+- [ ] Primary accent #244B36
+- [ ] Secondaries #FFCEDA, #5A6E62, #F0B8C4
+- [ ] Text: heading/body/button #244B36, link #244B36
 - [ ] Background #FFE0E7
 - [ ] Fonts: Playfair Display + DM Sans
 - [ ] Logo: logo-lockup-horizontal.svg uploaded

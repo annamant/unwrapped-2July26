@@ -44,11 +44,11 @@ Designed for circular crop — keep icons/text centered.
 | Token | Hex | Use |
 |-------|-----|-----|
 | Baby Pink (background) | `#FFE0E7` | Page/card backgrounds |
-| Espresso (foreground) | `#160703` | Headlines, buttons, accents |
+| British Racing Green (foreground) | `#244B36` | Headlines, buttons, accents |
 | Muted | `#FFCEDA` | Secondary surfaces |
-| Muted text | `#8B555E` | Captions, labels |
+| Muted text | `#5A6E62` | Captions, labels |
 | Border | `#F0B8C4` | Dividers |
-| Cream (on dark) | `#FFF0F4` | Type / UI on espresso fields |
+| Cream (on dark) | `#FFF0F4` | Type / UI on racing-green fields |
 
 **Fonts:** Playfair Display (headlines), Space Mono (labels/stats), DM Sans (body)
 

@@ -20,7 +20,7 @@ Link in bio.
 
 ### Creative notes
 - Hero text: "Limited. Local. Gone when they're gone." (Playfair Display, ink #141210)
-- Vermillion dot (#E8341C) top-right as "live" spark
+- Racing Green dot (#E8341C) top-right as "live" spark
 - Wordmark (logo-lockup-horizontal.svg) bottom centre, small
 - No imagery, no product UI — pure brand statement
 

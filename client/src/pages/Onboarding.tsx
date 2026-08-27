@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "../trpc";
 
-const V = "#160703";
+const V = "#244B36";
 
 const CATEGORIES = [
   "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
@@ -47,7 +47,7 @@ export default function Onboarding() {
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: "#ABABAB", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
             Step 1 of 1
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: "#160703", letterSpacing: "-1px", marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: "#244B36", letterSpacing: "-1px", marginBottom: 12 }}>
             What are you into?
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.6 }}>
@@ -69,7 +69,7 @@ export default function Onboarding() {
                   cursor: "pointer",
                   border: active ? `2px solid ${V}` : "2px solid #E2E2E2",
                   background: active ? "#FFCEDA" : "#FFF0F4",
-                  color: active ? V : "#160703",
+                  color: active ? V : "#244B36",
                   transition: "all 0.1s",
                 }}
               >

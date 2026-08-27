@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trpc } from "../trpc";
 
-const V = "#160703";
+const V = "#244B36";
 const BORDER = "#E2E2E2";
 
 const inputStyle: React.CSSProperties = {
@@ -11,7 +11,7 @@ const inputStyle: React.CSSProperties = {
   fontSize: 15,
   border: `1px solid ${BORDER}`,
   background: "#FAFAFA",
-  color: "#160703",
+  color: "#244B36",
   outline: "none",
   boxSizing: "border-box",
   marginBottom: 12,
@@ -20,7 +20,7 @@ const inputStyle: React.CSSProperties = {
 const buttonStyle = (loading: boolean): React.CSSProperties => ({
   display: "block",
   width: "100%",
-  background: loading ? "#888" : "#160703",
+  background: loading ? "#888" : "#244B36",
   color: "#FFF0F4",
   fontFamily: "'DM Sans', sans-serif",
   fontSize: 16,
@@ -39,7 +39,7 @@ export default function ResetPassword() {
   return (
     <div style={{ minHeight: "100vh", background: "#FFF0F4", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 20px" }}>
       <div style={{ width: "100%", maxWidth: 380 }}>
-        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#160703", textDecoration: "none" }}>
+        <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: "#244B36", textDecoration: "none" }}>
           Unwrapped
         </a>
         <div style={{ marginTop: 40 }}>
@@ -62,7 +62,7 @@ function RequestReset() {
   if (sent) {
     return (
       <div>
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 12, color: "#160703" }}>Check your inbox</h1>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 12, color: "#244B36" }}>Check your inbox</h1>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#666", lineHeight: 1.6 }}>
           If an account exists for <strong>{email}</strong>, we've sent a reset link. It's valid for 1 hour.
           Nothing arriving? Check spam, or contact{" "}
@@ -74,7 +74,7 @@ function RequestReset() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 8, color: "#160703" }}>Reset your password</h1>
+      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 8, color: "#244B36" }}>Reset your password</h1>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 28, lineHeight: 1.5 }}>
         Enter your email and we'll send you a reset link.
       </p>
@@ -86,7 +86,7 @@ function RequestReset() {
         </button>
       </form>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB", marginTop: 24, textAlign: "center" }}>
-        Remembered it? <a href="/signin" style={{ color: "#160703", fontWeight: 500, textDecoration: "none" }}>Sign in →</a>
+        Remembered it? <a href="/signin" style={{ color: "#244B36", fontWeight: 500, textDecoration: "none" }}>Sign in →</a>
       </p>
     </div>
   );
@@ -105,7 +105,7 @@ function SetNewPassword({ token }: { token: string }) {
   if (done) {
     return (
       <div>
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 12, color: "#160703" }}>Password updated</h1>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 12, color: "#244B36" }}>Password updated</h1>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#666", lineHeight: 1.6, marginBottom: 24 }}>
           You've been signed out everywhere for security. Sign in with your new password.
         </p>
@@ -116,7 +116,7 @@ function SetNewPassword({ token }: { token: string }) {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 8, color: "#160703" }}>Choose a new password</h1>
+      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, marginBottom: 8, color: "#244B36" }}>Choose a new password</h1>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 28, lineHeight: 1.5 }}>
         Minimum 8 characters.
       </p>

@@ -30,7 +30,7 @@ interface DropMapProps {
 // ─── Custom SVG marker (branded, no image assets) ────────────────────────────
 
 function makeMarkerSVG(isLive: boolean, scarce: boolean): string {
-  const fill = scarce ? "#160703" : "#8B555E";
+  const fill = scarce ? "#244B36" : "#5A6E62";
   if (isLive) {
     return [
       '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">',
@@ -77,7 +77,7 @@ function formatPopupPrice(drop: DropPin): string {
   if (drop.originalPrice && checkoutFromList(drop.originalPrice) > drop.price) {
     const was = `£${(checkoutFromList(drop.originalPrice) / 100).toFixed(2)}`;
     const pct = Math.round((1 - drop.price / checkoutFromList(drop.originalPrice)) * 100);
-    return `${price} <span style="text-decoration:line-through;color:#7A7A7A;font-weight:400">${was}</span> <span style="color:#160703;font-size:10px">${pct}% off</span>`;
+    return `${price} <span style="text-decoration:line-through;color:#7A7A7A;font-weight:400">${was}</span> <span style="color:#244B36;font-size:10px">${pct}% off</span>`;
   }
   return price;
 }
@@ -87,7 +87,7 @@ function makePopupHTML(drop: DropPin): string {
   const endStr = end.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
   const scarce = drop.availableQuantity <= 3;
   const availBadge = scarce
-    ? `<span style="color:#160703;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} left</span>`
+    ? `<span style="color:#244B36;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} left</span>`
     : `<span style="color:#7A7A7A;font-size:10px;font-family:'Space Mono',monospace">${drop.availableQuantity} available</span>`;
 
   return `
@@ -95,11 +95,11 @@ function makePopupHTML(drop: DropPin): string {
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:4px">
         ${esc(drop.businessName.toUpperCase())}
       </div>
-      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#160703;margin-bottom:8px;line-height:1.2">
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#244B36;margin-bottom:8px;line-height:1.2">
         ${esc(drop.title)}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#160703">
+        <span style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#244B36">
           ${formatPopupPrice(drop)}
         </span>
         ${availBadge}
@@ -109,7 +109,7 @@ function makePopupHTML(drop: DropPin): string {
       </div>
       <button
         onclick="window.__unwrappedDropClick && window.__unwrappedDropClick('${esc(drop.id)}')"
-        style="background:#160703;color:#FFE0E7;border:none;font-family:'Space Mono',monospace;
+        style="background:#244B36;color:#FFE0E7;border:none;font-family:'Space Mono',monospace;
                font-size:10px;letter-spacing:0.1em;padding:9px 0;cursor:pointer;width:100%;display:block"
       >
         VIEW DROP

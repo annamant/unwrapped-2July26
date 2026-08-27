@@ -76,22 +76,22 @@ Social primary channel (phase 1): **shopper Instagram**. Business content is sec
 | Token | Hex | RGB | Role |
 |-------|-----|-----|------|
 | **Baby Pink (background)** | `#FFE0E7` | 255, 224, 231 | Page/card/creative field |
-| **Espresso (foreground / ink)** | `#160703` | 22, 7, 3 | Headlines, body, buttons, logo on light, accents |
-| **Cream (on dark)** | `#FFF0F4` | 255, 240, 244 | Type and UI on espresso fields |
+| **British Racing Green (foreground / ink)** | `#244B36` | 36, 75, 54 | Headlines, body, buttons, logo on light, accents |
+| **Cream (on dark)** | `#FFF0F4` | 255, 240, 244 | Type and UI on racing-green fields |
 | **Muted surface** | `#FFCEDA` | 255, 206, 218 | Secondary panels |
-| **Muted text** | `#8B555E` | 139, 85, 94 | Captions, labels, meta |
+| **Muted text** | `#5A6E62` | 90, 110, 98 | Captions, labels, meta |
 | **Border** | `#F0B8C4` | 240, 184, 196 | Dividers, hairlines |
 
 **Colour rules**
 
-- Default creative = baby pink `#FFE0E7` field + espresso `#160703` type
-- Two-colour system only: Espresso + Baby Pink (plus derived muted/border/cream)
-- Inverse lockup allowed: espresso `#160703` square + baby pink type (see logo mark); spark circle is baby pink on the mark
-- Full espresso field is allowed for high-impact storytelling / dark stories — use baby pink type, no gradients as the main look
+- Default creative = baby pink `#FFE0E7` field + British Racing Green `#244B36` type
+- Two-colour system only: British Racing Green + Baby Pink (plus derived muted/border/cream)
+- Inverse lockup allowed: British Racing Green `#244B36` square + baby pink type (see logo mark); spark circle is baby pink on the mark
+- Full racing-green field is allowed for high-impact storytelling / dark stories — use baby pink type, no gradients as the main look
 - Do **not** introduce purple, indigo, neon, vermillion/red washes, pure black `#000`, or pure white as brand field
 
 **Gamma / design tool paste string:**  
-`Background #FFE0E7 · Ink #160703 · Accent #160703 · Muted #FFCEDA · Muted text #8B555E · Border #F0B8C4`
+`Background #FFE0E7 · British Racing Green #244B36 · Accent #244B36 · Muted #FFCEDA · Muted text #5A6E62 · Border #F0B8C4`
 
 ## Fonts (non-negotiable)
 
@@ -124,14 +124,14 @@ Source files in `brand/svg/`. Export PNGs via `brand/preview.html` (open in brow
 
 | Asset | File | Use |
 |-------|------|-----|
-| **Mark** | `brand/svg/logo-mark.svg` | App icon, favicon, small avatars — espresso square, baby pink “U”, baby pink spark |
-| **Wordmark** | `brand/svg/logo-wordmark.svg` | “Unwrapped” text only — espresso on baby pink |
+| **Mark** | `brand/svg/logo-mark.svg` | App icon, favicon, small avatars — racing-green square, baby pink “U”, baby pink spark |
+| **Wordmark** | `brand/svg/logo-wordmark.svg` | “Unwrapped” text only — racing green on baby pink |
 | **Horizontal lockup** | `brand/svg/logo-lockup-horizontal.svg` | Mark + wordmark side by side |
 | **Profile picture** | `brand/svg/profile-picture.svg` | Instagram 512×512 |
 
 **Logo construction (mark)**
 
-- Field: `#160703` square
+- Field: `#244B36` square
 - Letter: baby pink `#FFE0E7` bold serif “U” (Playfair / Georgia fallback in SVG)
 - Accent: baby pink `#FFE0E7` circle (upper right) — the “live” spark
 
@@ -139,15 +139,15 @@ Source files in `brand/svg/`. Export PNGs via `brand/preview.html` (open in brow
 
 - Prefer official SVGs above; don’t redraw a different “U”
 - Keep clear space; don’t stretch, recolour arbitrarily, or add shadows/glow
-- On baby pink creatives: use espresso wordmark or full lockup
-- On espresso creatives: use mark or baby pink wordmark
+- On baby pink creatives: use racing-green wordmark or full lockup
+- On racing-green creatives: use mark or baby pink wordmark
 - Minimum: mark alone for tiny sizes; wordmark/lockup when name must read
 
 Also live on site: `client/public/icon-512.png` (and related icons) for product favicon/PWA.
 
 ## Look rules
 
-- Baby pink + espresso — that is the brand
+- Baby pink + British Racing Green — that is the brand
 - No purple gradients, neon glow, glassmorphism, or generic “AI social” templates
 - One idea per frame; generous whitespace; no sticker spam on creatives
 

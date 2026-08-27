@@ -23,7 +23,7 @@ function P({ children }: { children: React.ReactNode }) {
   return <p style={{ marginBottom: 14, color: "#3a3733" }}>{children}</p>;
 }
 
-const CONTACT = <a href="mailto:anna@shopunwrapped.com" style={{ color: "#160703" }}>anna@shopunwrapped.com</a>;
+const CONTACT = <a href="mailto:anna@shopunwrapped.com" style={{ color: "#244B36" }}>anna@shopunwrapped.com</a>;
 
 export function Privacy() {
   return (

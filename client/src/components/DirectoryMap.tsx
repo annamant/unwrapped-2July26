@@ -14,8 +14,8 @@ export interface DirectoryMapProps {
   onPinSelect?: (id: string) => void;
 }
 
-const CURATED_COLOR = "#160703";
-const MEMBER_COLOR = "#8B555E";
+const CURATED_COLOR = "#244B36";
+const MEMBER_COLOR = "#5A6E62";
 
 function makePinSVG(color: string): string {
   return [
@@ -65,18 +65,18 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
       : "";
     return `
       <div style="font-family:'DM Sans',sans-serif;min-width:220px">
-        <div style="font-size:10px;color:#160703;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
+        <div style="font-size:10px;color:#244B36;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
           UNWRAPPED MEMBER
         </div>
-        <div style="font-size:15px;font-weight:700;color:#160703;line-height:1.2;margin-bottom:8px">
+        <div style="font-size:15px;font-weight:700;color:#244B36;line-height:1.2;margin-bottom:8px">
           ${esc(pin.name)}
         </div>
-        <div style="font-size:13px;color:#160703;margin-bottom:10px;line-height:1.5">
+        <div style="font-size:13px;color:#244B36;margin-bottom:10px;line-height:1.5">
           ${addressLine}
         </div>
         ${categoryLine}
         <a href="/business/${esc(pin.slug)}"
-           style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
+           style="display:block;margin-top:12px;background:#244B36;color:#FFE0E7;
                   text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
                   letter-spacing:0.1em;padding:10px 0;text-align:center">
           VIEW PROFILE
@@ -94,15 +94,15 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
         DIRECTORY LISTING
       </div>
-      <div style="font-size:15px;font-weight:700;color:#160703;line-height:1.2;margin-bottom:8px">
+      <div style="font-size:15px;font-weight:700;color:#244B36;line-height:1.2;margin-bottom:8px">
         ${esc(pin.name)}
       </div>
-      <div style="font-size:13px;color:#160703;margin-bottom:10px;line-height:1.5">
+      <div style="font-size:13px;color:#244B36;margin-bottom:10px;line-height:1.5">
         ${addressLine}
       </div>
       ${trackLine}
       <a href="/business-apply"
-         style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
+         style="display:block;margin-top:12px;background:#244B36;color:#FFE0E7;
                 text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
                 letter-spacing:0.1em;padding:10px 0;text-align:center">
         APPLY TO PARTNER YOUR SHOP

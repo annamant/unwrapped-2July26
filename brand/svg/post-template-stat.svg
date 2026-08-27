@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
   <rect width="1080" height="1080" fill="#FFE0E7"/>
-  <text x="80" y="100" font-family="monospace" font-size="24" fill="#8B555E" letter-spacing="5">RIGHT NOW IN LONDON</text>
-  <text x="80" y="520" font-family="monospace" font-weight="700" font-size="280" fill="#160703" letter-spacing="-12">12</text>
-  <text x="80" y="680" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="52" fill="#160703">things dropping near you.</text>
-  <text x="80" y="760" font-family="sans-serif" font-size="32" fill="#8B555E">Limited. Local. Gone when they're gone.</text>
+  <text x="80" y="100" font-family="monospace" font-size="24" fill="#5A6E62" letter-spacing="5">RIGHT NOW IN LONDON</text>
+  <text x="80" y="520" font-family="monospace" font-weight="700" font-size="280" fill="#244B36" letter-spacing="-12">12</text>
+  <text x="80" y="680" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="52" fill="#244B36">things dropping near you.</text>
+  <text x="80" y="760" font-family="sans-serif" font-size="32" fill="#5A6E62">Limited. Local. Gone when they're gone.</text>
   <circle cx="80" cy="860" r="6" fill="#FFE0E7"/>
   <text x="100" y="868" font-family="monospace" font-size="22" fill="#FFE0E7" letter-spacing="3">3 ENDING IN THE NEXT HOUR</text>
 </svg>

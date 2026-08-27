@@ -22,7 +22,7 @@ function VideoBadge({ variant }: { variant: DropMediaProps["variant"] }) {
       borderRadius: 999,
       pointerEvents: "none",
       zIndex: 2,
-      boxShadow: "0 6px 16px rgba(22,7,3,0.35)",
+      boxShadow: "0 6px 16px rgba(36,75,54,0.35)",
     }}>
       <span aria-hidden style={{ fontSize: variant === "hero" ? 10 : 9 }}>▶</span>
       CLIP

@@ -27,7 +27,7 @@ Structure (kept sparse on purpose):
 2. One short sub — special finds, phone, till
 3. Proof chips (Bundles · Vintage · Books…)
 4. One how-row: See it → Reserve → Collect
-5. Big black CTA + espresso QR panel (**Scan me**)
+5. Big black CTA + racing-green QR panel (**Scan me**)
 
 No shop-manager pitch. No duplicated “benefits + how it works.” No production meta on the face.
 
@@ -47,7 +47,7 @@ Anna
 
 - Paper: A4, matte or soft cream stock if available
 - Scale: **100% / Actual size** — do not “fit to page”
-- Colour: full colour (espresso QR panel must print hot)
+- Colour: full colour (racing-green QR panel must print hot)
 - Leave clear space around the QR for glass scanning
 
 ## On the website

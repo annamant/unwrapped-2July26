@@ -40,6 +40,6 @@
 
 - Background: `#FAFAF8` (cream)
 - Foreground/Ink: `#141210`
-- Vermillion accent: `#E8341C`
+- Racing Green accent: `#E8341C`
 - Fonts: Playfair Display (headlines), Space Mono (labels), DM Sans (body)
 - Theme: **Unwrapped 2026** in Gamma workspace

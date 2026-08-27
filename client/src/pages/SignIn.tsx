@@ -85,7 +85,7 @@ export default function SignIn() {
           <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>
             {(["login", "register"] as const).map((m) => (
               <button key={m} onClick={() => { setMode(m); setError(""); }}
-                style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#160703" : "#888", cursor: "pointer" }}>
+                style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#244B36" : "#888", cursor: "pointer" }}>
                 {m === "login" ? "Sign in" : "Create account"}
               </button>
             ))}

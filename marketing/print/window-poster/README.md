@@ -19,14 +19,14 @@ One job from the street: **understand → want in → scan**.
 - Plain English first (no “drops” jargon in the hero)
 - Proof chips: Beauty · Clothes · Food · Cafés · Charities · Freelancers · Services
 - How it works in three concrete steps
-- Primary CTA: **Sign up** (espresso band + QR)
+- Primary CTA: **Sign up** (racing-green band + QR)
 - Business ask: one quiet footer line only
 
 ## Print tips
 
 - Paper: A4, ideally matte or soft cream stock if available
 - Scale: **100% / Actual size** — do not “fit to page”
-- Colour: full colour (espresso accent must print)
+- Colour: full colour (racing-green accent must print)
 - For shop windows: tape / suction mounts; laminate optional for rain
 - Leave clear space around the QR so phones can scan through glass
 
