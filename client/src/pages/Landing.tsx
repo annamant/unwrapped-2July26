@@ -610,7 +610,7 @@ export default function Landing() {
                   className="uw-pulse-dot"
                   style={{ width: 7, height: 7, borderRadius: "50%", background: V, display: "inline-block", flexShrink: 0 }}
                 />
-                LONDON · PRE-LAUNCH
+                London · Opening soon
               </span>
             </div>
 
@@ -627,7 +627,7 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              Claim the best of your high street before it's gone.
+              Your high street, live.
             </h1>
 
             <p
@@ -637,26 +637,12 @@ export default function Landing() {
                 fontSize: isMobile ? 15 : 17,
                 color: "rgba(255,248,244,0.82)",
                 lineHeight: 1.5,
-                marginBottom: isMobile ? 10 : 12,
+                marginBottom: isMobile ? 24 : 28,
                 fontWeight: 500,
                 maxWidth: 520,
               }}
             >
-              Local shops post photos and videos when fresh inventory arrives or limited deals go live. Claim what you want in seconds, pay in the app, collect in person.
-            </p>
-            <p
-              className="uw-fade-3"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 15 : 17,
-                color: "rgba(255,248,244,0.7)",
-                lineHeight: 1.45,
-                marginBottom: isMobile ? 24 : 28,
-                fontWeight: 600,
-                maxWidth: 520,
-              }}
-            >
-              No mystery bags. No shipping wait. Just real products from real shops, on your phone.
+              Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
@@ -677,7 +663,7 @@ export default function Landing() {
                   boxShadow: "0 12px 32px rgba(0,0,0,0.28)",
                 }}
               >
-                Join as a founding shopper
+                Get early access
               </button>
               <div style={{
                 marginTop: isMobile ? 12 : 14,
