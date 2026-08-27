@@ -75,23 +75,23 @@ Social primary channel (phase 1): **shopper Instagram**. Business content is sec
 
 | Token | Hex | RGB | Role |
 |-------|-----|-----|------|
-| **Background** | `#FAFAF8` | 250, 250, 248 | Cream paper — page/card/creative field |
-| **Foreground / Ink** | `#141210` | 20, 18, 16 | Headlines, body, buttons, logo on light |
-| **Vermillion** | `#E8341C` | 232, 52, 28 | Accent only — live dots, urgency, links, sparklight |
-| **Muted surface** | `#F5F4F0` | 245, 244, 240 | Secondary panels |
-| **Muted text** | `#7A7A7A` | 122, 122, 122 | Captions, labels, meta |
-| **Border** | `#E0DFD9` | 224, 223, 217 | Dividers, hairlines |
+| **Baby Pink (background)** | `#FFE0E7` | 255, 224, 231 | Page/card/creative field |
+| **Espresso (foreground / ink)** | `#160703` | 22, 7, 3 | Headlines, body, buttons, logo on light, accents |
+| **Cream (on dark)** | `#FFF0F4` | 255, 240, 244 | Type and UI on espresso fields |
+| **Muted surface** | `#FFCEDA` | 255, 206, 218 | Secondary panels |
+| **Muted text** | `#8B555E` | 139, 85, 94 | Captions, labels, meta |
+| **Border** | `#F0B8C4` | 240, 184, 196 | Dividers, hairlines |
 
 **Colour rules**
 
-- Default creative = cream `#FAFAF8` field + ink `#141210` type
-- Vermillion is a **spark**, not a wash — never flood backgrounds with red
-- Exception: a full vermillion field is allowed sparingly for high-impact storytelling / origin posts when the brief asks for a standout red background. Keep it editorial and minimal, with cream type and no gradients.
-- Inverse lockup allowed: ink `#141210` square + cream type (see logo mark)
-- Do **not** introduce purple, indigo, neon, pure black `#000`, pure white as brand field, or gradients as the main look
+- Default creative = baby pink `#FFE0E7` field + espresso `#160703` type
+- Two-colour system only: Espresso + Baby Pink (plus derived muted/border/cream)
+- Inverse lockup allowed: espresso `#160703` square + baby pink type (see logo mark); spark circle is baby pink on the mark
+- Full espresso field is allowed for high-impact storytelling / dark stories — use baby pink type, no gradients as the main look
+- Do **not** introduce purple, indigo, neon, vermillion/red washes, pure black `#000`, or pure white as brand field
 
 **Gamma / design tool paste string:**  
-`Background #FAFAF8 · Ink #141210 · Accent #E8341C · Muted #F5F4F0 · Muted text #7A7A7A · Border #E0DFD9`
+`Background #FFE0E7 · Ink #160703 · Accent #160703 · Muted #FFCEDA · Muted text #8B555E · Border #F0B8C4`
 
 ## Fonts (non-negotiable)
 
@@ -124,30 +124,30 @@ Source files in `brand/svg/`. Export PNGs via `brand/preview.html` (open in brow
 
 | Asset | File | Use |
 |-------|------|-----|
-| **Mark** | `brand/svg/logo-mark.svg` | App icon, favicon, small avatars — ink square, cream “U”, vermillion dot |
-| **Wordmark** | `brand/svg/logo-wordmark.svg` | “Unwrapped” text only — ink on cream |
+| **Mark** | `brand/svg/logo-mark.svg` | App icon, favicon, small avatars — espresso square, baby pink “U”, baby pink spark |
+| **Wordmark** | `brand/svg/logo-wordmark.svg` | “Unwrapped” text only — espresso on baby pink |
 | **Horizontal lockup** | `brand/svg/logo-lockup-horizontal.svg` | Mark + wordmark side by side |
 | **Profile picture** | `brand/svg/profile-picture.svg` | Instagram 512×512 |
 
 **Logo construction (mark)**
 
-- Field: `#141210` square
-- Letter: cream `#FAFAF8` bold serif “U” (Playfair / Georgia fallback in SVG)
-- Accent: vermillion `#E8341C` circle (upper right) — the “live” spark
+- Field: `#160703` square
+- Letter: baby pink `#FFE0E7` bold serif “U” (Playfair / Georgia fallback in SVG)
+- Accent: baby pink `#FFE0E7` circle (upper right) — the “live” spark
 
 **Logo rules**
 
 - Prefer official SVGs above; don’t redraw a different “U”
 - Keep clear space; don’t stretch, recolour arbitrarily, or add shadows/glow
-- On cream creatives: use ink wordmark or full lockup
-- On ink creatives: use mark or cream wordmark
+- On baby pink creatives: use espresso wordmark or full lockup
+- On espresso creatives: use mark or baby pink wordmark
 - Minimum: mark alone for tiny sizes; wordmark/lockup when name must read
 
 Also live on site: `client/public/icon-512.png` (and related icons) for product favicon/PWA.
 
 ## Look rules
 
-- Cream paper + black ink + vermillion spark — that is the brand
+- Baby pink + espresso — that is the brand
 - No purple gradients, neon glow, glassmorphism, or generic “AI social” templates
 - One idea per frame; generous whitespace; no sticker spam on creatives
 

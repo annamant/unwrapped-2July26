@@ -73,7 +73,7 @@ export default function SignIn() {
         )}
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FFF8F4" }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FFF0F4" }}>
         <div style={{ width: "100%", maxWidth: 380 }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: FG }}>
             {mode === "login" ? "Sign in" : "Create account"}
@@ -85,7 +85,7 @@ export default function SignIn() {
           <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>
             {(["login", "register"] as const).map((m) => (
               <button key={m} onClick={() => { setMode(m); setError(""); }}
-                style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#9E1C0E" : "#888", cursor: "pointer" }}>
+                style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#160703" : "#888", cursor: "pointer" }}>
                 {m === "login" ? "Sign in" : "Create account"}
               </button>
             ))}

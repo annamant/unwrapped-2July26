@@ -14,8 +14,8 @@ export interface DirectoryMapProps {
   onPinSelect?: (id: string) => void;
 }
 
-const CURATED_COLOR = "#FF2D12";
-const MEMBER_COLOR = "#3A1610";
+const CURATED_COLOR = "#160703";
+const MEMBER_COLOR = "#8B555E";
 
 function makePinSVG(color: string): string {
   return [
@@ -24,9 +24,9 @@ function makePinSVG(color: string): string {
     '<animate attributeName="r" from="14" to="20" dur="2.2s" repeatCount="indefinite"/>',
     '<animate attributeName="opacity" from="0.18" to="0" dur="2.2s" repeatCount="indefinite"/>',
     "</circle>",
-    `<circle cx="17" cy="17" r="9" fill="${color}" stroke="#FFF7F2" stroke-width="2" />`,
+    `<circle cx="17" cy="17" r="9" fill="${color}" stroke="#FFE0E7" stroke-width="2" />`,
     color === MEMBER_COLOR
-      ? `<circle cx="17" cy="17" r="3.5" fill="#FFF4EF" />`
+      ? `<circle cx="17" cy="17" r="3.5" fill="#FFE0E7" />`
       : "",
     "</svg>",
   ].join("");
@@ -65,18 +65,18 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
       : "";
     return `
       <div style="font-family:'DM Sans',sans-serif;min-width:220px">
-        <div style="font-size:10px;color:#141210;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
+        <div style="font-size:10px;color:#160703;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
           UNWRAPPED MEMBER
         </div>
-        <div style="font-size:15px;font-weight:700;color:#141210;line-height:1.2;margin-bottom:8px">
+        <div style="font-size:15px;font-weight:700;color:#160703;line-height:1.2;margin-bottom:8px">
           ${esc(pin.name)}
         </div>
-        <div style="font-size:13px;color:#141210;margin-bottom:10px;line-height:1.5">
+        <div style="font-size:13px;color:#160703;margin-bottom:10px;line-height:1.5">
           ${addressLine}
         </div>
         ${categoryLine}
         <a href="/business/${esc(pin.slug)}"
-           style="display:block;margin-top:12px;background:#141210;color:#FAFAF8;
+           style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
                   text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
                   letter-spacing:0.1em;padding:10px 0;text-align:center">
           VIEW PROFILE
@@ -94,15 +94,15 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
         DIRECTORY LISTING
       </div>
-      <div style="font-size:15px;font-weight:700;color:#141210;line-height:1.2;margin-bottom:8px">
+      <div style="font-size:15px;font-weight:700;color:#160703;line-height:1.2;margin-bottom:8px">
         ${esc(pin.name)}
       </div>
-      <div style="font-size:13px;color:#141210;margin-bottom:10px;line-height:1.5">
+      <div style="font-size:13px;color:#160703;margin-bottom:10px;line-height:1.5">
         ${addressLine}
       </div>
       ${trackLine}
       <a href="/business-apply"
-         style="display:block;margin-top:12px;background:#141210;color:#FAFAF8;
+         style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
                 text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
                 letter-spacing:0.1em;padding:10px 0;text-align:center">
         APPLY TO PARTNER YOUR SHOP
@@ -116,7 +116,7 @@ const POPUP_CSS = `
     border-radius: 0;
     box-shadow: 0 4px 20px rgba(0,0,0,0.10);
     padding: 0;
-    border: 1px solid #E0DFD9;
+    border: 1px solid #F0B8C4;
   }
   .uw-popup .leaflet-popup-content { margin: 16px; }
   .uw-popup .leaflet-popup-tip-container { display: none; }

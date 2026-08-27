@@ -43,12 +43,12 @@ Designed for circular crop — keep icons/text centered.
 
 | Token | Hex | Use |
 |-------|-----|-----|
-| Background | `#FAFAF8` | Page/card backgrounds |
-| Foreground | `#141210` | Headlines, buttons |
-| Vermillion | `#E8341C` | Accent, urgency, live indicators |
-| Muted | `#F5F4F0` | Secondary surfaces |
-| Muted text | `#7A7A7A` | Captions, labels |
-| Border | `#E0DFD9` | Dividers |
+| Baby Pink (background) | `#FFE0E7` | Page/card backgrounds |
+| Espresso (foreground) | `#160703` | Headlines, buttons, accents |
+| Muted | `#FFCEDA` | Secondary surfaces |
+| Muted text | `#8B555E` | Captions, labels |
+| Border | `#F0B8C4` | Dividers |
+| Cream (on dark) | `#FFF0F4` | Type / UI on espresso fields |
 
 **Fonts:** Playfair Display (headlines), Space Mono (labels/stats), DM Sans (body)
 

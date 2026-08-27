@@ -115,7 +115,7 @@ For Instagram single-image feed posts, prefer the direct canvas-to-`File` brand 
 Use Gamma when the creative truly benefits from Gamma's editor or theme system (larger decks, more complex visual layouts, exported presentations, or user-requested Gamma work). When using Gamma, always use workspace theme **Unwrapped 2026** ([gamma-theme-playbook.md](gamma-theme-playbook.md) for full spec). Never AI-generate a multi-slide “brand deck” to stand in for the theme.
 
 1. Match format (1:1, 4:5, 9:16).
-2. Tokens: cream `#FAFAF8`, ink `#141210`, vermillion `#E8341C`; Playfair / Space Mono / DM Sans.
+2. Tokens: baby pink `#FFE0E7`, espresso `#160703`; Playfair / Space Mono / DM Sans.
 3. Editorial, sparse, one idea per frame — no purple AI-startup look.
 4. For direct Instagram posts: generate via canvas, upload as an in-page `File`, verify with a fresh profile load, and update the calendar.
 5. Do not publish direct-web carousels with multi-file `DataTransfer`: Instagram can publish only the first file. For carousel ideas, either make a strong single image, use Meta/Gamma/manual export flow, or stop and explain the limitation.

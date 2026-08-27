@@ -8,12 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #FAFAF8;
-      --ink: #141210;
-      --vermillion: #E8341C;
-      --muted: #F5F4F0;
-      --muted-fg: #7A7A7A;
-      --border: #E0DFD9;
+      --bg: #FFE0E7;
+      --ink: #160703;
+      --espresso: #160703;
+      --muted: #FFCEDA;
+      --muted-fg: #8B555E;
+      --border: #F0B8C4;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -45,7 +45,7 @@
       position: absolute;
       left: 0; right: 0; bottom: 0;
       height: 3.5mm;
-      background: var(--vermillion);
+      background: var(--espresso);
     }
     .top {
       display: flex;
@@ -64,7 +64,7 @@
     }
     .mark i {
       position: absolute; top: 6px; right: 6px; width: 10px; height: 10px;
-      border-radius: 50%; background: var(--vermillion);
+      border-radius: 50%; background: var(--espresso);
     }
     .wordmark {
       font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
@@ -79,12 +79,12 @@
     }
     .live::before {
       content: ""; width: 9px; height: 9px; border-radius: 50%;
-      background: var(--vermillion); flex-shrink: 0;
+      background: var(--espresso); flex-shrink: 0;
     }
     .hook {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--vermillion); font-weight: 700;
+      color: var(--espresso); font-weight: 700;
       margin-bottom: 4mm;
     }
     .band-hero h1 {
@@ -141,7 +141,7 @@
     .arrow {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 18px; font-weight: 700;
-      color: var(--vermillion);
+      color: var(--espresso);
       line-height: 1;
     }
     .cta {
@@ -165,7 +165,7 @@
       font-family: 'Space Mono', ui-monospace, monospace;
       font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
       font-weight: 700;
-      color: var(--vermillion);
+      color: var(--espresso);
       margin-bottom: 3mm;
     }
     .cta-copy .ask {
@@ -187,7 +187,7 @@
       max-width: 28ch;
     }
     .qr-panel {
-      background: var(--vermillion);
+      background: var(--espresso);
       padding: 8mm 9mm;
       display: flex;
       flex-direction: column;

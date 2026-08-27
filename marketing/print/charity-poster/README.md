@@ -27,7 +27,7 @@ Structure (kept sparse on purpose):
 2. One short sub — special finds, phone, till
 3. Proof chips (Bundles · Vintage · Books…)
 4. One how-row: See it → Reserve → Collect
-5. Big black CTA + vermillion QR panel (**Scan me**)
+5. Big black CTA + espresso QR panel (**Scan me**)
 
 No shop-manager pitch. No duplicated “benefits + how it works.” No production meta on the face.
 

@@ -771,7 +771,7 @@ export default function Landing() {
                   fontSize: type === "Charity shops" ? 13 : 12,
                   fontStyle: type === "Charity shops" ? "italic" : "normal",
                   fontWeight: type === "Charity shops" ? 700 : 600,
-                  color: type === "Charity shops" ? V : "#FFF8F4",
+                  color: type === "Charity shops" ? V : "#FFF0F4",
                   background: type === "Charity shops" ? "rgba(255,45,18,0.18)" : "rgba(255,247,242,0.08)",
                   border: type === "Charity shops" ? "1px solid rgba(255,45,18,0.45)" : "1px solid rgba(255,247,242,0.12)",
                   padding: "8px 16px",

@@ -31,10 +31,10 @@ Older themes in the workspace (`UNWRAPPED THEME`, `UNWRAPPED HOSTINGER`, importe
 
 | Gamma field | Hex | Brand token |
 |-------------|-----|-------------|
-| **Primary accent color** | `#E8341C` | Vermillion |
-| **Secondary accent 1** | `#F5F4F0` | Muted surface |
-| **Secondary accent 2** | `#7A7A7A` | Muted text |
-| **Secondary accent 3** | `#E0DFD9` | Border |
+| **Primary accent color** | `#160703` | Espresso |
+| **Secondary accent 1** | `#FFCEDA` | Muted surface |
+| **Secondary accent 2** | `#8B555E` | Muted text |
+| **Secondary accent 3** | `#F0B8C4` | Border |
 
 Add secondaries via **Add color** under **Secondary accent colors** — not under Text.
 
@@ -42,24 +42,24 @@ Add secondaries via **Add color** under **Secondary accent colors** — not unde
 
 | Gamma field | Hex |
 |-------------|-----|
-| Heading color | `#141210` |
-| Body color | `#141210` |
-| Link color | `#E8341C` |
-| Button color | `#141210` |
+| Heading color | `#160703` |
+| Body color | `#160703` |
+| Link color | `#160703` |
+| Button color | `#160703` |
 
-Muted caption grey (`#7A7A7A`) lives in the **palette**; pick it manually on slides when needed.
+Muted caption grey (`#8B555E`) lives in the **palette**; pick it manually on slides when needed.
 
 ### Background
 
 | Gamma field | Hex |
 |-------------|-----|
-| Background color | `#FAFAF8` |
+| Background color | `#FFE0E7` |
 | Page background | **None** (unless a deliberate texture is requested) |
 
 Leave **Adjust colors for contrast** checked unless the human asks otherwise.
 
 **Paste string:**  
-`Background #FAFAF8 · Ink #141210 · Accent #E8341C · Muted #F5F4F0 · Muted text #7A7A7A · Border #E0DFD9`
+`Background #FFE0E7 · Ink #160703 · Accent #160703 · Muted #FFCEDA · Muted text #8B555E · Border #F0B8C4`
 
 ---
 
@@ -95,7 +95,7 @@ Editorial / minimal — match the product UI, not startup-purple Gamma defaults.
 |---------|--------|
 | Roundness | Lowest / sharpest option |
 | Shadow | None or minimal |
-| Border color | `#E0DFD9` |
+| Border color | `#F0B8C4` |
 
 Sub-tabs: **Slides** (page defaults), **Blocks & content**, **Buttons & links** — keep consistent with palette above.
 
@@ -131,7 +131,7 @@ Gamma colour fields are **readonly** in the UI. To set hex values via browser:
 2. Edit the **HEX** input (`placeholder="#FF0000"`) · press Enter.
 3. Escape or click away before setting the next colour (picker reuse can overwrite the wrong slot).
 
-Verify primary accent is `#E8341C` after each batch — it is easy to swap with background cream by mistake.
+Verify primary accent is `#160703` after each batch — it is easy to swap with background baby pink by mistake.
 
 ### Blockers
 
@@ -155,10 +155,10 @@ Verify primary accent is `#E8341C` after each batch — it is easy to swap with 
 ## Checklist — theme complete
 
 ```
-- [ ] Primary accent #E8341C
-- [ ] Secondaries #F5F4F0, #7A7A7A, #E0DFD9
-- [ ] Text: heading/body/button #141210, link #E8341C
-- [ ] Background #FAFAF8
+- [ ] Primary accent #160703
+- [ ] Secondaries #FFCEDA, #8B555E, #F0B8C4
+- [ ] Text: heading/body/button #160703, link #160703
+- [ ] Background #FFE0E7
 - [ ] Fonts: Playfair Display + DM Sans
 - [ ] Logo: logo-lockup-horizontal.svg uploaded
 - [ ] Design: minimal roundness/shadow

@@ -57,7 +57,7 @@ function formatDropPriceHtml(drop: DropPayload): string {
   if (drop.originalPrice && checkoutFromList(drop.originalPrice) > drop.price) {
     const was = `£${(checkoutFromList(drop.originalPrice) / 100).toFixed(2)}`;
     const pct = Math.round((1 - drop.price / checkoutFromList(drop.originalPrice)) * 100);
-    return `<strong style="font-family:monospace">${price}</strong> <span style="text-decoration:line-through;color:#7a7a7a">${was}</span> <span style="color:#E8341C">${pct}% off</span>`;
+    return `<strong style="font-family:monospace">${price}</strong> <span style="text-decoration:line-through;color:#8B555E">${was}</span> <span style="color:#160703">${pct}% off</span>`;
   }
   return `<strong style="font-family:monospace">${price}</strong>`;
 }
@@ -93,25 +93,25 @@ async function sendDropEmail(to: string, drop: DropPayload) {
         to,
         subject: `New drop near you: ${drop.title.replace(/[\r\n]/g, " ")}`,
         html: `
-          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FFE0E7;color:#160703">
+            <p style="font-family:monospace;font-size:11px;color:#8B555E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · New drop
             </p>
             <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:8px">${esc(drop.title)}</h1>
-            <p style="font-size:14px;color:#7a7a7a;margin-bottom:20px">${esc(drop.businessName)}</p>
-            <p style="font-size:15px;color:#141210;margin-bottom:24px">
+            <p style="font-size:14px;color:#8B555E;margin-bottom:20px">${esc(drop.businessName)}</p>
+            <p style="font-size:15px;color:#160703;margin-bottom:24px">
               ${formatDropPriceHtml(drop)}
               &nbsp;·&nbsp; Collect until ${endStr}
-              &nbsp;·&nbsp; <span style="color:#E8341C">${drop.availableQuantity} available</span>
+              &nbsp;·&nbsp; <span style="color:#160703">${drop.availableQuantity} available</span>
             </p>
             <a href="https://shopunwrapped.com/drop/${drop.id}"
-               style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
+               style="display:inline-block;background:#160703;color:#FFE0E7;font-family:monospace;
                       font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">
               CLAIM YOUR SPOT
             </a>
             <p style="font-size:12px;color:#b0a89e;margin-top:32px">
               You're receiving this because you follow ${esc(drop.businessName)} or have matching interests.
-              <a href="https://shopunwrapped.com/profile" style="color:#7a7a7a">Manage preferences</a>
+              <a href="https://shopunwrapped.com/profile" style="color:#8B555E">Manage preferences</a>
             </p>
           </div>
         `,
@@ -140,18 +140,18 @@ export async function sendApplicationApprovedEmail(to: string, businessName: str
         to,
         subject: "You're approved to list on Unwrapped",
         html: `
-          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FFE0E7;color:#160703">
+            <p style="font-family:monospace;font-size:11px;color:#8B555E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
               Unwrapped · Business application
             </p>
             <h1 style="font-size:28px;font-weight:700;line-height:1.15;margin-bottom:16px">You're approved!</h1>
-            <p style="font-size:15px;color:#141210;margin-bottom:24px;line-height:1.6">
+            <p style="font-size:15px;color:#160703;margin-bottom:24px;line-height:1.6">
               Good news — <strong>${esc(businessName)}</strong> has been approved to list on Unwrapped.
               Click below to set your password (this link is valid for 7 days), then sign in with this
               email address (${esc(to)}) to access your business dashboard.
             </p>
             <a href="${setupUrl}"
-               style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;
+               style="display:inline-block;background:#160703;color:#FFE0E7;font-family:monospace;
                       font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">
               SET YOUR PASSWORD
             </a>
@@ -232,19 +232,19 @@ export async function sendBusinessClaimFollowUpEmail(to: string, businessName: s
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#E8E7E2;">
             <tr>
               <td align="center" style="padding:40px 16px;">
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FAFAF8;border:1px solid #E0DFD9;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FFE0E7;border:1px solid #F0B8C4;">
                   <tr>
-                    <td style="padding:28px 32px 24px;border-bottom:3px solid #E8341C;">
+                    <td style="padding:28px 32px 24px;border-bottom:3px solid #160703;">
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                         <tr>
                           <td width="52" valign="middle" style="padding-right:14px;">
                             <img src="https://shopunwrapped.com/icon-192.png" width="48" height="48" alt="Unwrapped" style="display:block;border:0;border-radius:4px;" />
                           </td>
                           <td valign="middle">
-                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#141210;line-height:1.1;letter-spacing:-0.02em;">
+                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#160703;line-height:1.1;letter-spacing:-0.02em;">
                               Unwrapped
                             </div>
-                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
+                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#8B555E;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
                               Limited · Local · Worth sharing
                             </div>
                           </td>
@@ -254,11 +254,11 @@ export async function sendBusinessClaimFollowUpEmail(to: string, businessName: s
                   </tr>
                   <tr>
                     <td style="padding:28px 32px 0;">
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         Hi — I emailed recently about a free profile I made for <strong>${esc(businessName)}</strong> on
                         Unwrapped. The original claim link has expired, so here's a fresh one in case you missed it.
                       </p>
-                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         It takes about a minute: set a password, sign in as
                         <strong>${esc(to)}</strong>, and post your first drop whenever something's happening
                         — a new product, a discount, a one-off. Nothing goes live from your side until you do.
@@ -269,8 +269,8 @@ export async function sendBusinessClaimFollowUpEmail(to: string, businessName: s
                     <td style="padding:24px 32px 28px;">
                       <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                         <tr>
-                          <td style="background-color:#141210;border-radius:0;">
-                            <a href="${setupUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FAFAF8;">
+                          <td style="background-color:#160703;border-radius:0;">
+                            <a href="${setupUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FFE0E7;">
                               Claim your profile
                             </a>
                           </td>
@@ -279,11 +279,11 @@ export async function sendBusinessClaimFollowUpEmail(to: string, businessName: s
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding:0 32px 32px;border-top:1px solid #E0DFD9;">
-                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7A7A7A;">
+                    <td style="padding:0 32px 32px;border-top:1px solid #F0B8C4;">
+                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#8B555E;">
                         Not interested? Ignore this — nothing goes live until you claim. Don't want a profile at all?
                         Reply "REMOVE" and I'll delete it. Questions? Just reply, or email
-                        <a href="mailto:anna@shopunwrapped.com" style="color:#7A7A7A;">anna@shopunwrapped.com</a>.
+                        <a href="mailto:anna@shopunwrapped.com" style="color:#8B555E;">anna@shopunwrapped.com</a>.
                       </p>
                       <p style="margin:12px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:#ABABAB;letter-spacing:0.1em;text-transform:uppercase;">
                         © Unwrapped · shopunwrapped.com
@@ -337,19 +337,19 @@ export async function sendBusinessClaimThankYouEmail(to: string, businessName: s
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#E8E7E2;">
             <tr>
               <td align="center" style="padding:40px 16px;">
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FAFAF8;border:1px solid #E0DFD9;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background-color:#FFE0E7;border:1px solid #F0B8C4;">
                   <tr>
-                    <td style="padding:28px 32px 24px;border-bottom:3px solid #E8341C;">
+                    <td style="padding:28px 32px 24px;border-bottom:3px solid #160703;">
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                         <tr>
                           <td width="52" valign="middle" style="padding-right:14px;">
                             <img src="https://shopunwrapped.com/icon-192.png" width="48" height="48" alt="Unwrapped" style="display:block;border:0;border-radius:4px;" />
                           </td>
                           <td valign="middle">
-                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#141210;line-height:1.1;letter-spacing:-0.02em;">
+                            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:#160703;line-height:1.1;letter-spacing:-0.02em;">
                               Unwrapped
                             </div>
-                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
+                            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:#8B555E;letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;">
                               Limited · Local · Worth sharing
                             </div>
                           </td>
@@ -359,71 +359,71 @@ export async function sendBusinessClaimThankYouEmail(to: string, businessName: s
                   </tr>
                   <tr>
                     <td style="padding:28px 32px 0;">
-                      <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#7A7A7A;letter-spacing:0.14em;text-transform:uppercase;">
+                      <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:10px;color:#8B555E;letter-spacing:0.14em;text-transform:uppercase;">
                         Thank you
                       </p>
-                      <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;line-height:1.2;color:#141210;">
+                      <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;line-height:1.2;color:#160703;">
                         You're in — here's what happens next
                       </h1>
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         Hi, Anna here — I run Unwrapped. Thanks for claiming <strong>${esc(businessName)}</strong>.
                         You're one of the first businesses on the platform, which means you're helping shape what
                         this becomes. I really appreciate that.
                       </p>
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         Here's the short version of what to do next:
                       </p>
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         <strong style="font-family:'Courier New',monospace;font-size:13px;">1.</strong>
                         Sign in at
-                        <a href="${dashboardUrl}" style="color:#141210;font-weight:500;">${dashboardUrl}</a>
+                        <a href="${dashboardUrl}" style="color:#160703;font-weight:500;">${dashboardUrl}</a>
                         with this email address (${esc(to)}) and the password you just set.
                       </p>
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         <strong style="font-family:'Courier New',monospace;font-size:13px;">2.</strong>
                         Tidy up your profile — add a logo, a cover photo, your Instagram handle, and a one-line
                         description so nearby shoppers recognise you. Your public page is
-                        <a href="${profileUrl}" style="color:#141210;font-weight:500;">${profileUrl}</a>.
+                        <a href="${profileUrl}" style="color:#160703;font-weight:500;">${profileUrl}</a>.
                       </p>
-                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         <strong style="font-family:'Courier New',monospace;font-size:13px;">3.</strong>
                         Post your first <em>drop</em> — a new product, a discount, a one-off, a launch. Shoppers
                         within a couple of kilometres get an alert and can claim a QR ticket. That's the whole
                         point of Unwrapped: telling the neighbourhood when something's happening. You're welcome
                         to post one now, or just get your profile looking right first — entirely up to you.
                       </p>
-                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#141210;">
+                      <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#160703;">
                         A few honest things, since you're one of the first:
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td style="padding:8px 32px 0;">
-                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — <strong>This is a pilot, and we're still signing up businesses like you.</strong> So I want
                         to be straight with you: if you post a drop today, it won't reach a flood of shoppers
                         tomorrow. The shopper side grows once there's a critical mass of interesting local
                         businesses on the map — that's the part we're building right now, and you're helping build it.
                       </p>
-                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — We're not relying on the internet to do the work. We're planning a proper local campaign —
                         door-to-door, postcards, talking to people on the high street — to make sure the
                         neighbourhoods around your shops actually know about Unwrapped. That takes a little time,
                         and it's coming.
                       </p>
-                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — So please be patient with us. You're not just joining an app — you're helping build
                         something that doesn't quite exist yet. Your feedback in these early weeks genuinely
                         shapes what it becomes. Reply to this email with what's useful, what's missing, what's
                         confusing.
                       </p>
-                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — There's no cost to you during the pilot. We'll figure out pricing together later;
                         nothing changes without you saying yes.
                       </p>
-                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#141210;">
+                      <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — Your public profile is live now at
-                        <a href="${profileUrl}" style="color:#141210;font-weight:500;">${profileUrl}</a>.
+                        <a href="${profileUrl}" style="color:#160703;font-weight:500;">${profileUrl}</a>.
                         Shoppers can already follow you there.
                       </p>
                     </td>
@@ -432,8 +432,8 @@ export async function sendBusinessClaimThankYouEmail(to: string, businessName: s
                     <td style="padding:24px 32px 28px;">
                       <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                         <tr>
-                          <td style="background-color:#141210;border-radius:0;">
-                            <a href="${dashboardUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FAFAF8;">
+                          <td style="background-color:#160703;border-radius:0;">
+                            <a href="${dashboardUrl}" style="display:inline-block;padding:14px 28px;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:#FFE0E7;">
                               Sign in to your dashboard
                             </a>
                           </td>
@@ -442,14 +442,14 @@ export async function sendBusinessClaimThankYouEmail(to: string, businessName: s
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding:0 32px 32px;border-top:1px solid #E0DFD9;">
-                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#7A7A7A;">
+                    <td style="padding:0 32px 32px;border-top:1px solid #F0B8C4;">
+                      <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#8B555E;">
                         Thanks again for being one of the first — it genuinely matters.<br/>
                         Anna
                       </p>
-                      <p style="margin:16px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7A7A7A;">
+                      <p style="margin:16px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#8B555E;">
                         Questions? Just reply to this email, or write to
-                        <a href="mailto:anna@shopunwrapped.com" style="color:#7A7A7A;">anna@shopunwrapped.com</a>.
+                        <a href="mailto:anna@shopunwrapped.com" style="color:#8B555E;">anna@shopunwrapped.com</a>.
                       </p>
                       <p style="margin:12px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:#ABABAB;letter-spacing:0.1em;text-transform:uppercase;">
                         © Unwrapped · shopunwrapped.com
@@ -488,17 +488,17 @@ export async function sendApplicationRejectedEmail(to: string, businessName: str
                             to,
                             subject: "Update on your Unwrapped application",
                             html: `
-                                      <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-                                                  <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
+                                      <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FFE0E7;color:#160703">
+                                                  <p style="font-family:monospace;font-size:11px;color:#8B555E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">
                                                                 Unwrapped · Business application
                                                                             </p>
                                                                                         <h1 style="font-size:24px;font-weight:700;line-height:1.2;margin-bottom:16px">
                                                                                                       Thanks for applying, ${esc(businessName)}
                                                                                                                   </h1>
-                                                                                                                              <p style="font-size:15px;color:#141210;margin-bottom:16px;line-height:1.6">
+                                                                                                                              <p style="font-size:15px;color:#160703;margin-bottom:16px;line-height:1.6">
                                                                                                                                             We're not able to approve your application to list on Unwrapped at this time.
                                                                                                                                                         </p>
-                                                                                                                                                                    ${reason ? `<p style="font-size:14px;color:#7a7a7a;margin-bottom:24px;line-height:1.6">${esc(reason)}</p>` : ""}
+                                                                                                                                                                    ${reason ? `<p style="font-size:14px;color:#8B555E;margin-bottom:24px;line-height:1.6">${esc(reason)}</p>` : ""}
                                                                                                                                                                                 <p style="font-size:12px;color:#b0a89e;margin-top:32px">
                                                                                                                                                                                               Questions? Just reply to this email.
                                                                                                                                                                                                           </p>
@@ -671,12 +671,12 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string) {
         to,
         subject: "Reset your Unwrapped password",
         html: `
-          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Password reset</p>
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FFE0E7;color:#160703">
+            <p style="font-family:monospace;font-size:11px;color:#8B555E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Password reset</p>
             <h1 style="font-size:24px;font-weight:700;line-height:1.2;margin-bottom:12px">Reset your password</h1>
             <p style="font-size:15px;line-height:1.6;margin-bottom:24px">Someone (hopefully you) asked to reset the password for this email address. This link is valid for 1 hour and can be used once.</p>
-            <a href="${resetUrl}" style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">CHOOSE A NEW PASSWORD</a>
-            <p style="font-size:12px;color:#b0a89e;margin-top:32px">If you didn't request this, ignore this email — your password is unchanged. Questions: <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a></p>
+            <a href="${resetUrl}" style="display:inline-block;background:#160703;color:#FFE0E7;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">CHOOSE A NEW PASSWORD</a>
+            <p style="font-size:12px;color:#b0a89e;margin-top:32px">If you didn't request this, ignore this email — your password is unchanged. Questions: <a href="mailto:anna@shopunwrapped.com" style="color:#8B555E">anna@shopunwrapped.com</a></p>
           </div>
         `,
       }),
@@ -712,18 +712,18 @@ export async function sendReservationConfirmationEmail(params: {
         to: params.to,
         subject: `Reserved: ${params.dropTitle.replace(/[\r\n]/g, " ")} — ref ${params.referenceCode}`,
         html: `
-          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FAFAF8;color:#141210">
-            <p style="font-family:monospace;font-size:11px;color:#7a7a7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Reservation confirmed</p>
+          <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#FFE0E7;color:#160703">
+            <p style="font-family:monospace;font-size:11px;color:#8B555E;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px">Unwrapped · Reservation confirmed</p>
             <h1 style="font-size:26px;font-weight:700;line-height:1.15;margin-bottom:6px">${esc(params.dropTitle)}</h1>
-            <p style="font-size:14px;color:#7a7a7a;margin-bottom:24px">${esc(params.businessName)}</p>
+            <p style="font-size:14px;color:#8B555E;margin-bottom:24px">${esc(params.businessName)}</p>
             <table style="width:100%;font-size:14px;border-collapse:collapse;margin-bottom:24px">
-              <tr><td style="padding:8px 0;color:#7a7a7a">Reference</td><td style="padding:8px 0;font-family:monospace;font-weight:700">${esc(params.referenceCode)}</td></tr>
-              <tr><td style="padding:8px 0;color:#7a7a7a">Collect</td><td style="padding:8px 0">${fmt(params.collectionStart)} – ${params.collectionEnd.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</td></tr>
-              <tr><td style="padding:8px 0;color:#7a7a7a">Where</td><td style="padding:8px 0">${esc(params.address)}</td></tr>
-              <tr><td style="padding:8px 0;color:#7a7a7a">Paid</td><td style="padding:8px 0;font-family:monospace">£${(params.pricePence / 100).toFixed(2)}</td></tr>
+              <tr><td style="padding:8px 0;color:#8B555E">Reference</td><td style="padding:8px 0;font-family:monospace;font-weight:700">${esc(params.referenceCode)}</td></tr>
+              <tr><td style="padding:8px 0;color:#8B555E">Collect</td><td style="padding:8px 0">${fmt(params.collectionStart)} – ${params.collectionEnd.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</td></tr>
+              <tr><td style="padding:8px 0;color:#8B555E">Where</td><td style="padding:8px 0">${esc(params.address)}</td></tr>
+              <tr><td style="padding:8px 0;color:#8B555E">Paid</td><td style="padding:8px 0;font-family:monospace">£${(params.pricePence / 100).toFixed(2)}</td></tr>
             </table>
-            <a href="https://shopunwrapped.com/ticket/${params.reservationId}" style="display:inline-block;background:#141210;color:#FAFAF8;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">VIEW YOUR QR TICKET</a>
-            <p style="font-size:12px;color:#b0a89e;margin-top:32px">Show the QR code (or your reference) at the door during the collection window. Need help? <a href="mailto:anna@shopunwrapped.com" style="color:#7a7a7a">anna@shopunwrapped.com</a></p>
+            <a href="https://shopunwrapped.com/ticket/${params.reservationId}" style="display:inline-block;background:#160703;color:#FFE0E7;font-family:monospace;font-size:11px;letter-spacing:0.1em;padding:13px 28px;text-decoration:none">VIEW YOUR QR TICKET</a>
+            <p style="font-size:12px;color:#b0a89e;margin-top:32px">Show the QR code (or your reference) at the door during the collection window. Need help? <a href="mailto:anna@shopunwrapped.com" style="color:#8B555E">anna@shopunwrapped.com</a></p>
           </div>
         `,
       }),

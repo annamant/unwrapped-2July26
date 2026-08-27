@@ -66,17 +66,17 @@ export default function App() {
     return (
       <div style={{
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        height: "100vh", gap: 16, background: "#FFF4EF",
+        height: "100vh", gap: 16, background: "#FFE0E7",
       }}>
         <div style={{
-          width: 14, height: 14, borderRadius: "50%", background: "#FF2D12",
+          width: 14, height: 14, borderRadius: "50%", background: "#160703",
           boxShadow: "0 0 0 0 rgba(255,45,18,0.5)",
           animation: "uw-boot-pulse 1.2s ease-out infinite",
         }} />
         <style>{`@keyframes uw-boot-pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,45,18,.45)}70%{transform:scale(1.15);box-shadow:0 0 0 16px rgba(255,45,18,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,45,18,0)}}`}</style>
         <div style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700,
-          color: "#9E1C0E", letterSpacing: "0.04em",
+          color: "#160703", letterSpacing: "0.04em",
         }}>
           Unwrapping…
         </div>
@@ -132,7 +132,7 @@ export default function App() {
         <Route>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", gap: 16 }}>
             <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 64, color: "#E2E2E2" }}>404</span>
-            <a href="/" style={{ fontFamily: "'DM Sans', sans-serif", color: "#FF2D12", textDecoration: "none" }}>Back to Unwrapped</a>
+            <a href="/" style={{ fontFamily: "'DM Sans', sans-serif", color: "#160703", textDecoration: "none" }}>Back to Unwrapped</a>
           </div>
         </Route>
       </Switch>

@@ -19,7 +19,7 @@ One job from the street: **understand → want in → scan**.
 - Plain English first (no “drops” jargon in the hero)
 - Proof chips: Beauty · Clothes · Food · Cafés · Charities · Freelancers · Services
 - How it works in three concrete steps
-- Primary CTA: **Sign up** (vermillion band + QR)
+- Primary CTA: **Sign up** (espresso band + QR)
 - Business ask: one quiet footer line only
 
 ## Print tips

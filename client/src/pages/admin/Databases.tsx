@@ -336,7 +336,7 @@ function KindBadge({ kind }: { kind: string }) {
     <span style={{
       fontFamily: "'Space Mono', monospace", fontSize: 8,
       letterSpacing: "0.08em", padding: "4px 8px",
-      background: isAdmin ? "#FEF3C7" : isInvite ? "#FFE8DE" : MUTED,
+      background: isAdmin ? "#FEF3C7" : isInvite ? "#FFD5E0" : MUTED,
       color: isAdmin ? "#92400E" : isInvite ? V : MUTED_FG,
       display: "inline-block", width: "fit-content", maxWidth: "100%",
       lineHeight: 1.35,

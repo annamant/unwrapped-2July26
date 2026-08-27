@@ -29,10 +29,10 @@ Use Gamma when the human explicitly asks for Gamma, when making decks/presentati
 
 ## Gamma prompts (seed, when using Gamma)
 
-Always inject brand tokens and "editorial London local businesses, cream paper #FAFAF8, ink #141210, vermillion #E8341C accent, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
+Always inject brand tokens and "editorial London local businesses, baby pink #FFE0E7, espresso #160703, Playfair Display headline, Space Mono labels, sparse layout, no purple, no stock AI gradient".
 
 **Drop alert (1:1)**  
-Big Space-Mono number or LIVE mark; Playfair italic subline; vermillion live dot; "Reserve in seconds".
+Big Space-Mono number or LIVE mark; Playfair italic subline; espresso live dot; "Reserve in seconds".
 
 **Business spotlight (4:5)**  
 Business name as hero; neighbourhood label in mono; quiet cream field; single CTA.
@@ -92,9 +92,9 @@ Reusable `browser_cdp` expression template:
   canvas.height = H;
 
   const ctx = canvas.getContext("2d");
-  const cream = "#FAFAF8";
-  const ink = "#141210";
-  const red = "#E8341C";
+  const cream = "#FFE0E7";
+  const ink = "#160703";
+  const red = "#160703";
   const border = "#E0DFD9";
 
   ctx.fillStyle = cream;

@@ -1,7 +1,7 @@
 import { checkoutFromList, discountPercent, formatPounds } from "../lib/fees";
 
-const V = "#FF2D12";
-const FG = "#3A1610";
+const V = "#160703";
+const FG = "#160703";
 const MUTED_FG = "#7A7A7A";
 
 type DropPriceProps = {

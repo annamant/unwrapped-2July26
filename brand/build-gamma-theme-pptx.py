@@ -13,10 +13,10 @@ OUT = ROOT / "Unwrapped-Gamma-Theme-Source.pptx"
 LOGO = ROOT.parent / "client" / "public" / "icon-512.png"
 
 # Brand tokens
-BG = RGBColor(0xFA, 0xFA, 0xF8)
-INK = RGBColor(0x14, 0x12, 0x10)
-V = RGBColor(0xE8, 0x34, 0x1C)
-MUTED = RGBColor(0x7A, 0x7A, 0x7A)
+BG = RGBColor(0xFF, 0xE0, 0xE7)
+INK = RGBColor(0x16, 0x07, 0x03)
+V = RGBColor(0x16, 0x07, 0x03)
+MUTED = RGBColor(0x8B, 0x55, 0x5E)
 
 FONT_DISPLAY = "Playfair Display"
 FONT_LABEL = "Space Mono"
@@ -72,10 +72,10 @@ def main() -> None:
     set_slide_bg(s3, BG)
     add_textbox(s3, Inches(0.8), Inches(0.6), Inches(11), Inches(0.8), "Brand colours", font=FONT_DISPLAY, size=36, color=INK, bold=True)
     swatches = [
-        ("Background #FAFAF8", BG, INK),
-        ("Ink #141210", INK, BG),
-        ("Vermillion #E8341C", V, BG),
-        ("Muted text #7A7A7A", MUTED, BG),
+        ("Baby Pink #FFE0E7", BG, INK),
+        ("Espresso #160703", INK, BG),
+        ("Espresso #160703", V, BG),
+        ("Muted text #8B555E", MUTED, BG),
     ]
     x = Inches(0.8)
     for label, fill, text in swatches:
