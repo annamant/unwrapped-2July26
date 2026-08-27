@@ -47,7 +47,7 @@ Anna
 
 - Paper: A4, matte or soft cream stock if available
 - Scale: **100% / Actual size** — do not “fit to page”
-- Colour: full colour (vermillion QR panel must print hot)
+- Colour: full colour (espresso QR panel must print hot)
 - Leave clear space around the QR for glass scanning
 
 ## On the website

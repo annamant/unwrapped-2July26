@@ -70,10 +70,10 @@ export default function App() {
       }}>
         <div style={{
           width: 14, height: 14, borderRadius: "50%", background: "#160703",
-          boxShadow: "0 0 0 0 rgba(255,45,18,0.5)",
+          boxShadow: "0 0 0 0 rgba(22,7,3,0.5)",
           animation: "uw-boot-pulse 1.2s ease-out infinite",
         }} />
-        <style>{`@keyframes uw-boot-pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,45,18,.45)}70%{transform:scale(1.15);box-shadow:0 0 0 16px rgba(255,45,18,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,45,18,0)}}`}</style>
+        <style>{`@keyframes uw-boot-pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(22,7,3,.45)}70%{transform:scale(1.15);box-shadow:0 0 0 16px rgba(22,7,3,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(22,7,3,0)}}`}</style>
         <div style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700,
           color: "#160703", letterSpacing: "0.04em",

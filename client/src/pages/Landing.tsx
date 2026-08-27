@@ -123,8 +123,8 @@ const LANDING_CSS = `
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes uw-pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255,45,18,0.55); }
-  50% { transform: scale(1.15); opacity: 0.85; box-shadow: 0 0 0 10px rgba(255,45,18,0); }
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(22,7,3,0.55); }
+  50% { transform: scale(1.15); opacity: 0.85; box-shadow: 0 0 0 10px rgba(22,7,3,0); }
 }
 @keyframes uw-float {
   0%, 100% { transform: translateY(0) rotate(-2deg); }
@@ -186,8 +186,8 @@ const LANDING_CSS = `
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, rgba(107,18,9,0.78) 0%, rgba(158,28,14,0.58) 42%, rgba(201,34,16,0.32) 72%, rgba(107,18,9,0.42) 100%),
-    linear-gradient(180deg, rgba(18,10,8,0.2) 0%, transparent 40%, rgba(18,10,8,0.4) 100%);
+    linear-gradient(105deg, rgba(22,7,3,0.82) 0%, rgba(22,7,3,0.62) 42%, rgba(44,20,16,0.38) 72%, rgba(22,7,3,0.48) 100%),
+    linear-gradient(180deg, rgba(22,7,3,0.22) 0%, transparent 40%, rgba(22,7,3,0.45) 100%);
   pointer-events: none;
 }
 @keyframes uw-wiggle {
@@ -216,10 +216,10 @@ const LANDING_CSS = `
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
 }
 .uw-btn-primary:hover {
-  background: #ff4a32 !important;
-  color: #fff !important;
+  background: #2C1410 !important;
+  color: #FFE0E7 !important;
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 14px 32px rgba(255, 45, 18, 0.4);
+  box-shadow: 0 14px 32px rgba(22, 7, 3, 0.4);
 }
 .uw-btn-primary:active { transform: translateY(0) scale(0.98); }
 .uw-btn-ghost {
@@ -235,7 +235,7 @@ const LANDING_CSS = `
 }
 .uw-btn-ghost-dark:hover {
   border-color: ${CREAM} !important;
-  background: rgba(255,248,244,0.16) !important;
+  background: rgba(255,240,244,0.16) !important;
   color: ${CREAM} !important;
   transform: translateY(-3px) scale(1.02);
 }
@@ -251,7 +251,7 @@ const LANDING_CSS = `
 .uw-sample-card:hover {
   background: ${MUTED} !important;
   transform: translateY(-4px) rotate(-0.5deg);
-  box-shadow: 0 18px 40px rgba(158,28,14,0.14);
+  box-shadow: 0 18px 40px rgba(44,20,16,0.14);
 }
 .uw-sample-img {
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -329,7 +329,7 @@ const LANDING_CSS = `
   padding: 8px 14px;
   border-radius: 999px;
   transform: rotate(-2deg);
-  box-shadow: 0 8px 20px rgba(255,45,18,0.3);
+  box-shadow: 0 8px 20px rgba(22,7,3,0.3);
 }
 .uw-sticker:nth-child(even) { transform: rotate(2deg); }
 .uw-phone-frame {
@@ -340,7 +340,7 @@ const LANDING_CSS = `
   border-radius: 28px;
   padding: 10px;
   box-shadow: 0 24px 50px rgba(0,0,0,0.28);
-  border: 2px solid rgba(255,247,242,0.18);
+  border: 2px solid rgba(255,240,244,0.18);
 }
 .uw-phone-screen {
   position: relative;
@@ -427,7 +427,7 @@ export default function Landing() {
       }} />
       <div aria-hidden className="uw-blob" style={{
         bottom: "8%", left: "30%", width: 320, height: 320,
-        background: "rgba(255,45,18,0.18)",
+        background: "rgba(22,7,3,0.18)",
         animationDelay: "-11s",
       }} />
 
@@ -437,11 +437,11 @@ export default function Landing() {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         gap: isMobile ? 10 : 24,
         padding: isMobile ? "10px 12px" : "14px 40px",
-        borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid rgba(255,248,244,0.12)",
+        borderBottom: scrolled ? `1px solid ${BORDER}` : "1px solid rgba(255,240,244,0.12)",
         // At top the nav sits above the hero on the light page wash — must stay opaque
         // and high-contrast (cream on wine). Scrolled = cream glass + dark ink.
         background: scrolled
-          ? "linear-gradient(180deg, rgba(255,248,244,0.96), rgba(255,232,222,0.94))"
+          ? "linear-gradient(180deg, rgba(255,240,244,0.96), rgba(255,232,222,0.94))"
           : V_DEEP,
         backdropFilter: scrolled ? "blur(14px)" : undefined,
         WebkitBackdropFilter: scrolled ? "blur(14px)" : undefined,
@@ -489,7 +489,7 @@ export default function Landing() {
             aria-label="Instagram"
             title="Instagram"
             style={{
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
+              color: scrolled ? MUTED_FG : "rgba(255,240,244,0.88)",
               textDecoration: "none",
               display: "inline-flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
@@ -509,7 +509,7 @@ export default function Landing() {
               className="uw-link"
               style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
+                color: scrolled ? MUTED_FG : "rgba(255,240,244,0.88)",
                 textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
               }}
             >
@@ -521,7 +521,7 @@ export default function Landing() {
             className="uw-link"
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
-              color: scrolled ? MUTED_FG : "rgba(255,248,244,0.88)",
+              color: scrolled ? MUTED_FG : "rgba(255,240,244,0.88)",
               textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
             }}
           >
@@ -533,10 +533,10 @@ export default function Landing() {
             style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13,
               color: scrolled ? FG : CREAM, letterSpacing: "0.02em", fontWeight: 700,
-              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,248,244,0.65)",
+              border: scrolled ? `1.5px solid ${FG}` : "1.5px solid rgba(255,240,244,0.65)",
               padding: isMobile ? "6px 9px" : "9px 18px",
               textDecoration: "none",
-              background: scrolled ? "transparent" : "rgba(255,248,244,0.12)",
+              background: scrolled ? "transparent" : "rgba(255,240,244,0.12)",
               borderRadius: RADIUS_SM,
               whiteSpace: "nowrap",
             }}
@@ -602,7 +602,7 @@ export default function Landing() {
                   fontSize: isMobile ? 9 : 10,
                   fontWeight: 700,
                   letterSpacing: "0.08em",
-                  color: "rgba(255,248,244,0.78)",
+                  color: "rgba(255,240,244,0.78)",
                   padding: isMobile ? "5px 0" : "6px 0",
                 }}
               >
@@ -635,7 +635,7 @@ export default function Landing() {
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: isMobile ? 15 : 17,
-                color: "rgba(255,248,244,0.82)",
+                color: "rgba(255,240,244,0.82)",
                 lineHeight: 1.5,
                 marginBottom: isMobile ? 24 : 28,
                 fontWeight: 500,
@@ -669,7 +669,7 @@ export default function Landing() {
                 marginTop: isMobile ? 12 : 14,
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: isMobile ? 12 : 13,
-                color: "rgba(255,248,244,0.58)",
+                color: "rgba(255,240,244,0.58)",
                 fontWeight: 500,
               }}>
                 Own a shop?{" "}
@@ -707,8 +707,8 @@ export default function Landing() {
                     top, left, width: w, zIndex: z,
                     borderRadius: 22,
                     overflow: "hidden",
-                    boxShadow: "0 24px 50px rgba(158,28,14,0.4)",
-                    border: "2px solid rgba(255,247,242,0.15)",
+                    boxShadow: "0 24px 50px rgba(44,20,16,0.4)",
+                    border: "2px solid rgba(255,240,244,0.15)",
                     background: V_DEEP,
                   }}
                 >
@@ -719,7 +719,7 @@ export default function Landing() {
                   }}>
                     <div style={{
                       position: "absolute", top: 10, left: 10,
-                      background: "rgba(158,28,14,0.72)", color: "#fff",
+                      background: "rgba(44,20,16,0.72)", color: "#fff",
                       fontSize: 9, fontWeight: 700, letterSpacing: "0.06em",
                       padding: "5px 9px", borderRadius: 999,
                       backdropFilter: "blur(6px)",
@@ -732,7 +732,7 @@ export default function Landing() {
                       {sample.title}
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 12, color: "rgba(255,247,242,0.55)" }}>{sample.business}</span>
+                      <span style={{ fontSize: 12, color: "rgba(255,240,244,0.55)" }}>{sample.business}</span>
                       <span style={{
                         background: V, color: "#fff", fontSize: 12, fontWeight: 800,
                         padding: "5px 10px", borderRadius: 999,
@@ -754,7 +754,7 @@ export default function Landing() {
             position: "relative",
             overflow: "hidden",
             padding: "0 0 28px",
-            borderTop: "1px solid rgba(255,247,242,0.08)",
+            borderTop: "1px solid rgba(255,240,244,0.08)",
           }}
         >
           <div className="uw-marquee-track" aria-hidden style={{ paddingTop: 22 }}>
@@ -772,8 +772,8 @@ export default function Landing() {
                   fontStyle: type === "Charity shops" ? "italic" : "normal",
                   fontWeight: type === "Charity shops" ? 700 : 600,
                   color: type === "Charity shops" ? V : "#FFF0F4",
-                  background: type === "Charity shops" ? "rgba(255,45,18,0.18)" : "rgba(255,247,242,0.08)",
-                  border: type === "Charity shops" ? "1px solid rgba(255,45,18,0.45)" : "1px solid rgba(255,247,242,0.12)",
+                  background: type === "Charity shops" ? "rgba(22,7,3,0.18)" : "rgba(255,240,244,0.08)",
+                  border: type === "Charity shops" ? "1px solid rgba(22,7,3,0.45)" : "1px solid rgba(255,240,244,0.12)",
                   padding: "8px 16px",
                   borderRadius: 999,
                   letterSpacing: "0.02em",
@@ -795,7 +795,7 @@ export default function Landing() {
           width: 380,
           height: 380,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,120,80,0.12), transparent 65%)",
+          background: "radial-gradient(circle, rgba(255,192,205,0.12), transparent 65%)",
           filter: "blur(90px)",
           pointerEvents: "none",
         }} />
@@ -944,10 +944,10 @@ export default function Landing() {
               color: CREAM,
               letterSpacing: "0.09em",
               marginBottom: 16,
-              background: "rgba(255,247,242,0.12)",
+              background: "rgba(255,240,244,0.12)",
               padding: "6px 12px",
               borderRadius: 999,
-              border: "1px solid rgba(255,247,242,0.2)",
+              border: "1px solid rgba(255,240,244,0.2)",
             }}>
               <span
                 className="uw-pulse-dot"
@@ -972,7 +972,7 @@ export default function Landing() {
               fontFamily: "'DM Sans', sans-serif",
               fontSize: isMobile ? 16 : 18,
               fontWeight: 500,
-              color: "rgba(255,247,242,0.85)",
+              color: "rgba(255,240,244,0.85)",
               lineHeight: 1.5,
               marginBottom: 32,
               maxWidth: 540,
@@ -1006,21 +1006,21 @@ export default function Landing() {
                 <div
                   key={title}
                   style={{
-                    background: "rgba(255,247,242,0.08)",
+                    background: "rgba(255,240,244,0.08)",
                     backdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,247,242,0.18)",
+                    border: "1px solid rgba(255,240,244,0.18)",
                     borderRadius: 14,
                     padding: isMobile ? "18px 16px" : "20px 22px",
                     transition: "all 0.25s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255,247,242,0.14)";
-                    e.currentTarget.style.borderColor = "rgba(255,247,242,0.35)";
+                    e.currentTarget.style.background = "rgba(255,240,244,0.14)";
+                    e.currentTarget.style.borderColor = "rgba(255,240,244,0.35)";
                     e.currentTarget.style.transform = "translateX(4px)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,247,242,0.08)";
-                    e.currentTarget.style.borderColor = "rgba(255,247,242,0.18)";
+                    e.currentTarget.style.background = "rgba(255,240,244,0.08)";
+                    e.currentTarget.style.borderColor = "rgba(255,240,244,0.18)";
                     e.currentTarget.style.transform = "translateX(0)";
                   }}
                 >
@@ -1051,7 +1051,7 @@ export default function Landing() {
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: isMobile ? 14 : 15,
                         fontWeight: 400,
-                        color: "rgba(255,247,242,0.75)",
+                        color: "rgba(255,240,244,0.75)",
                         lineHeight: 1.5,
                       }}>
                         {desc}
@@ -1091,7 +1091,7 @@ export default function Landing() {
               <div style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 13,
-                color: "rgba(255,247,242,0.65)",
+                color: "rgba(255,240,244,0.65)",
                 fontWeight: 500,
                 textAlign: isMobile ? "center" : "left",
               }}>
@@ -1102,7 +1102,7 @@ export default function Landing() {
             <div style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 12,
-              color: "rgba(255,247,242,0.5)",
+              color: "rgba(255,240,244,0.5)",
               fontWeight: 500,
               textAlign: "center",
               fontStyle: "italic",
@@ -1395,7 +1395,7 @@ function HowItWorksPhones() {
                     height: 54,
                     borderRadius: "50%",
                     background: "rgba(0,0,0,0.42)",
-                    border: "1.5px solid rgba(255,247,242,0.85)",
+                    border: "1.5px solid rgba(255,240,244,0.85)",
                     display: "grid",
                     placeItems: "center",
                     backdropFilter: "blur(4px)",
@@ -1429,7 +1429,7 @@ function HowItWorksPhones() {
                     background: V,
                     padding: "6px 10px",
                     borderRadius: 999,
-                    boxShadow: "0 8px 18px rgba(255,45,18,0.35)",
+                    boxShadow: "0 8px 18px rgba(22,7,3,0.35)",
                   }}
                 >
                   {phone.dropLabel}
@@ -1478,7 +1478,7 @@ function HowItWorksPhones() {
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 11,
                     fontWeight: 600,
-                    color: "rgba(255,247,242,0.75)",
+                    color: "rgba(255,240,244,0.75)",
                     marginBottom: 4,
                   }}
                 >
@@ -1809,7 +1809,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 padding: "12px 18px",
                 border: "none",
                 borderRadius: 12,
-                boxShadow: "0 10px 26px rgba(158,28,14,0.10)",
+                boxShadow: "0 10px 26px rgba(44,20,16,0.10)",
                 cursor: "pointer",
                 display: "inline-flex",
                 alignItems: "center",
@@ -1923,7 +1923,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       borderBottom: `1px solid ${BORDER}`,
                       cursor: "pointer",
                       background: focused
-                        ? (p.isMember ? "rgba(158,28,14,0.08)" : "rgba(255,45,18,0.08)")
+                        ? (p.isMember ? "rgba(44,20,16,0.08)" : "rgba(22,7,3,0.08)")
                         : "transparent",
                     }}
                   >
@@ -2063,7 +2063,7 @@ function SampleDropsCarousel() {
               width: slideWidth,
               borderRadius: RADIUS,
               overflow: "hidden",
-              boxShadow: "0 16px 40px rgba(158,28,14,0.12)",
+              boxShadow: "0 16px 40px rgba(44,20,16,0.12)",
               border: `1px solid ${BORDER}`,
               background: "#fff",
             }}
@@ -2173,7 +2173,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
         />
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(180deg, transparent 45%, rgba(158,28,14,0.55) 100%)",
+          background: "linear-gradient(180deg, transparent 45%, rgba(44,20,16,0.55) 100%)",
           pointerEvents: "none",
         }} />
         <div style={{
@@ -2193,7 +2193,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
             fontFamily: "'DM Sans', sans-serif", fontSize: 11,
             fontWeight: 800, letterSpacing: "0.04em", padding: "6px 10px",
             borderRadius: 999,
-            boxShadow: "0 8px 18px rgba(255,45,18,0.35)",
+            boxShadow: "0 8px 18px rgba(22,7,3,0.35)",
           }}>
             {discountPct}% OFF
           </div>
@@ -2204,7 +2204,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
         }}>
           <span style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-            color: "rgba(255,247,242,0.9)", fontWeight: 600,
+            color: "rgba(255,240,244,0.9)", fontWeight: 600,
           }}>
             {sample.left}
           </span>
