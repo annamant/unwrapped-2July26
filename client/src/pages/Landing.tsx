@@ -1663,7 +1663,6 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
   const [search, setSearch] = useState("");
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
   const [focusedId, setFocusedId] = useState<string | undefined>(undefined);
-  const [focusedFromList, setFocusedFromList] = useState(false);
 
   const { data: members } = trpc.businesses.directoryMembers.useQuery();
 
@@ -1908,14 +1907,14 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                     key={p.id}
                     role="button"
                     tabIndex={0}
+                    aria-pressed={focused}
                     onClick={() => {
-                      setFocusedFromList(true);
-                      setFocusedId(p.id);
+                      setFocusedId((current) => (current === p.id ? undefined : p.id));
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
-                        setFocusedFromList(true);
-                        setFocusedId(p.id);
+                        e.preventDefault();
+                        setFocusedId((current) => (current === p.id ? undefined : p.id));
                       }
                     }}
                     style={{
@@ -1941,30 +1940,19 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {p.name}
                       </span>
-                      <span style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                        {p.isMember ? (
-                          <span style={{
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: 8,
-                            color: FG,
-                            letterSpacing: "0.04em",
-                            border: `1px solid ${FG}`,
-                            padding: "2px 6px",
-                          }}>
-                            MEMBER
-                          </span>
-                        ) : null}
-                        {focused ? (
-                          <span style={{
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: 9,
-                            color: p.isMember ? FG : V,
-                            letterSpacing: "0.05em",
-                          }}>
-                            FOCUSED
-                          </span>
-                        ) : null}
-                      </span>
+                      {p.isMember ? (
+                        <span style={{
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: 8,
+                          color: FG,
+                          letterSpacing: "0.04em",
+                          border: `1px solid ${FG}`,
+                          padding: "2px 6px",
+                          flexShrink: 0,
+                        }}>
+                          MEMBER
+                        </span>
+                      ) : null}
                     </div>
                     <div style={{
                       fontFamily: "'DM Sans', sans-serif",
@@ -1997,7 +1985,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             defaultLng={mapCenter.lng}
             zoom={13}
             height={isMobile ? "356px" : "760px"}
-            focusedId={focusedFromList ? focusedId : focusedId}
+            focusedId={focusedId}
+            onPinSelect={setFocusedId}
           />
         </div>
       </div>

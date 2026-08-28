@@ -11,7 +11,7 @@ export interface DirectoryMapProps {
   zoom?: number;
   height?: string;
   focusedId?: string;
-  onPinSelect?: (id: string) => void;
+  onPinSelect?: (id: string | undefined) => void;
 }
 
 const CURATED_COLOR = "#160703";
@@ -118,8 +118,18 @@ const POPUP_CSS = `
     padding: 0;
     border: 1px solid #F0B8C4;
   }
-  .uw-popup .leaflet-popup-content { margin: 16px; }
+  .uw-popup .leaflet-popup-content { margin: 16px; padding-right: 12px; }
   .uw-popup .leaflet-popup-tip-container { display: none; }
+  .uw-popup .leaflet-popup-close-button {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #141210;
+    top: 6px;
+    right: 6px;
+  }
+  .uw-popup .leaflet-popup-close-button:hover { color: #9E1C0E; }
   .leaflet-control-attribution { font-size: 9px !important; }
 `;
 
@@ -144,6 +154,11 @@ export default function DirectoryMap({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersByIdRef = useRef<Map<string, L.Marker>>(new Map());
+  const focusedIdRef = useRef(focusedId);
+  const onPinSelectRef = useRef(onPinSelect);
+  const replacingMarkersRef = useRef(false);
+  focusedIdRef.current = focusedId;
+  onPinSelectRef.current = onPinSelect;
 
   const pinById = useMemo(() => {
     const m = new Map<string, PrelaunchDirectoryPin>();
@@ -209,6 +224,7 @@ export default function DirectoryMap({
   useEffect(() => {
     if (!mapRef.current) return;
 
+    replacingMarkersRef.current = true;
     markersByIdRef.current.forEach((marker) => marker.remove());
     markersByIdRef.current.clear();
 
@@ -218,17 +234,30 @@ export default function DirectoryMap({
         zIndexOffset: pin.isMember ? 200 : 0,
       }).addTo(mapRef.current!);
       marker.bindPopup(makePopupHTML(pin), {
-        closeButton: false,
+        closeButton: true,
         className: "uw-popup",
         maxWidth: 260,
       });
+      marker.on("click", () => {
+        onPinSelectRef.current?.(pin.id);
+      });
+      marker.on("popupclose", () => {
+        if (replacingMarkersRef.current) return;
+        if (focusedIdRef.current === pin.id) {
+          onPinSelectRef.current?.(undefined);
+        }
+      });
       markersByIdRef.current.set(pin.id, marker);
     });
+    replacingMarkersRef.current = false;
   }, [pins]);
 
   useEffect(() => {
     if (!mapRef.current) return;
-    if (!focusedId) return;
+    if (!focusedId) {
+      mapRef.current.closePopup();
+      return;
+    }
     const marker = markersByIdRef.current.get(focusedId);
     const pin = pinById.get(focusedId);
     if (!marker || !pin) return;
