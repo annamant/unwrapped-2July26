@@ -44,7 +44,7 @@ This is the ACTIVE repository: `annamant/unwrapped-2July26`, branch `master`. Th
 - No payout mechanism (Stripe Connect vs manual — awaiting decision).
 - Media upload (`POST /api/upload`) uses Cloudinary (`CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET`). Photos ≤10 MB; clips ≤25 MB / 15s (client-enforced). Returns `{ url, mediaType }`.
 - No email verification on signup (UX decision pending).
-- Per-route OG tags for drop/business pages (SPA serves one shell — needs prerender/bot middleware).
+- Per-route OG for bots is live (`client/scripts/seo-server.mjs` + `/api/seo/meta`). SEO owner: `.cursor/skills/unwrapped-seo/SKILL.md`.
 
 ## Known pitfalls
 

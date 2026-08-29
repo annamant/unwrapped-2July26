@@ -87,7 +87,8 @@ Env: `GOOGLE_PLACES_API_KEY` in `server/.env` (gitignored).
 ## Admin map (do not pollute)
 
 `/admin/apparel-map` = **claimed Unwrapped businesses only**.  
-Outreach scrape lists stay in `tmp/places/` — **never** dump thousands of Places rows into the client bundle / `apparelMapData.ts`.
+Outreach scrape lists stay in `tmp/places/` — **never** dump thousands of Places rows into the client bundle / `apparelMapData.ts`.  
+Public sitemap / Google index = claimed partners only (see `.cursor/skills/unwrapped-seo/SKILL.md`). Unclaimed imports stay in the DB for claims — they must not go back on the sitemap.
 
 ## Email enrichment (later step)
 
