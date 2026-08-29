@@ -5,27 +5,27 @@ import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJso
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — the visual shopping marketplace";
+export const DEFAULT_TITLE = "Unwrapped — Your high street, live.";
 export const DEFAULT_DESCRIPTION =
-  "The visual shopping marketplace. See it, claim it, and collect it around your high street — photo or short video of the real thing, not a mystery bag. Launching across South London.";
+  "Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.";
 
-/** Shopper FAQ for the homepage FAQPage JSON-LD. */
+/** Shopper FAQ for the homepage FAQPage JSON-LD — matches live landing copy. */
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "A new way to shop your high street. Local shops post a photo or short video of what's ready. You see the real thing, claim and pay in the app, then collect in person with a QR.",
+    a: "Your high street, live. Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.",
   },
   {
-    q: "Is this like Too Good To Go?",
-    a: "No. Those apps hide the product in a mystery bag. Unwrapped shows you the actual thing — a photo or short clip — so you choose what you want before you go.",
+    q: "How does it work?",
+    a: "See it. Claim it. Collect it. A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.",
   },
   {
     q: "How do I collect?",
-    a: "After you claim and pay, you get a QR. Walk into the shop in the collection window and get scanned at the counter.",
+    a: "Claim and pay in the app, then walk in and collect in person. You get a QR for the collection window.",
   },
   {
     q: "Where is Unwrapped launching?",
-    a: "South London first — then neighbourhood by neighbourhood across London.",
+    a: "London. Opening soon — densest first in South London, neighbourhood by neighbourhood.",
   },
 ];
 
@@ -120,6 +120,21 @@ export function homeJsonLd(): Record<string, unknown>[] {
       })),
     },
   ];
+}
+
+export function merchantJsonLd(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: MERCHANT_FAQS.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
 }
 
 export function businessJsonLd(input: {
@@ -232,21 +247,22 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Apply to partner your shop — ${SITE_NAME}`,
         description:
-          "Get seen on your high street. Publish a photo or short clip, set your price, and welcome customers who already paid. Founding shops: 0% fees during the pilot.",
+          "Get seen — so you can sell and welcome customers through the door. Publish a photo or short clip, set your price, and welcome customers who already paid.",
         path,
+        jsonLd: merchantJsonLd(),
       };
     case "/recommend":
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Know a shop you'd love on your high street? Recommend a bakery, florist, bookshop, boutique, or charity shop for Unwrapped.",
+          "Know a shop you'd really love on Unwrapped? Recommend a bakery, florist, bookshop, boutique, or charity shop — you don't need to own the business.",
         path,
       };
     case "/instagram":
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "See what's live on Unwrapped right now — shareable drops from London high streets.",
+          "See what's live on Unwrapped right now — video and photos of what's just landed on London high streets. See it, claim it, collect it.",
         path,
       };
     case "/resources":

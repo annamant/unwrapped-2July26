@@ -1,7 +1,7 @@
 {
   "name": "Unwrapped",
   "short_name": "Unwrapped",
-  "description": "Limited local drops, reserved in seconds. Collect with a QR code.",
+  "description": "Your high street, live. Shops post what's just landed — claim it, pay in the app, collect in person.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFE0E7",

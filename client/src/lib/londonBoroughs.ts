@@ -346,15 +346,15 @@ export function boroughSeo(borough: LondonBorough): { title: string; description
   const title = south
     ? `${borough.name} high street drops — Unwrapped (South London)`
     : `${borough.name} high street drops — Unwrapped (London)`;
-  const description = `${borough.blurb} Not mystery bags — photo or short video, claim in the app, collect with QR. Launching across London from South London.`;
+  const description = `${borough.blurb} See it, claim it, collect it — video or photo of what's just landed, pay in the app, collect in person.`;
   return { title, description, path: `/london/${borough.slug}` };
 }
 
 export function londonHubSeo(): { title: string; description: string; path: string } {
   return {
-    title: "London boroughs — Unwrapped high street drops",
+    title: "London boroughs — Unwrapped",
     description:
-      "Unwrapped is launching across London, starting in South London. Browse borough pages for Lambeth, Wandsworth, Southwark and more — see local shops, claim drops, collect in person.",
+      "See what's ready on London high streets — photo or short video, claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
     path: "/london",
   };
 }

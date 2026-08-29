@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Limited local drops, reserved in seconds.
+          Your high street, live.
         </p>
 
         <p style={{
@@ -86,7 +86,7 @@ export default function Instagram() {
           letterSpacing: "0.12em",
           marginBottom: 32,
         }}>
-          LONDON · RESERVE IN SECONDS
+          LONDON · OPENING SOON
         </p>
 
         {liveDrops.length > 0 && (
