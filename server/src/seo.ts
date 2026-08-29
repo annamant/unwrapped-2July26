@@ -1,6 +1,7 @@
 import { and, eq, gte, sql } from "drizzle-orm";
-import { businesses, drops } from "./db/schema";
+import { businesses, drops, users } from "./db/schema";
 import { db } from "./db";
+import { claimedPartnerSql, isIndexablePartner, isTestShop } from "./seoIndexable";
 import {
   LONDON_BOROUGHS,
   boroughJsonLd,
@@ -214,28 +215,38 @@ export async function buildSitemapPayload(): Promise<{
   const bizRows = await db
     .select({
       slug: businesses.slug,
+      name: businesses.name,
       lastmod: sql<string>`coalesce(${businesses.approvedAt}, ${businesses.createdAt})`,
     })
     .from(businesses)
-    .where(eq(businesses.status, "active"));
+    .innerJoin(users, eq(businesses.ownerId, users.id))
+    .where(claimedPartnerSql);
 
   const dropRows = await db
     .select({
       id: drops.id,
       lastmod: drops.createdAt,
+      businessName: businesses.name,
+      businessSlug: businesses.slug,
     })
     .from(drops)
-    .where(and(eq(drops.status, "active"), gte(drops.collectionEnd, now)));
+    .innerJoin(businesses, eq(drops.businessId, businesses.id))
+    .innerJoin(users, eq(businesses.ownerId, users.id))
+    .where(and(eq(drops.status, "active"), gte(drops.collectionEnd, now), claimedPartnerSql));
 
   return {
-    businesses: bizRows.map((b) => ({
-      slug: b.slug,
-      lastmod: new Date(b.lastmod).toISOString(),
-    })),
-    drops: dropRows.map((d) => ({
-      id: d.id,
-      lastmod: new Date(d.lastmod).toISOString(),
-    })),
+    businesses: bizRows
+      .filter((b) => !isTestShop(b.name, b.slug))
+      .map((b) => ({
+        slug: b.slug,
+        lastmod: new Date(b.lastmod).toISOString(),
+      })),
+    drops: dropRows
+      .filter((d) => !isTestShop(d.businessName, d.businessSlug))
+      .map((d) => ({
+        id: d.id,
+        lastmod: new Date(d.lastmod).toISOString(),
+      })),
   };
 }
 
@@ -336,8 +347,12 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         city: businesses.city,
         website: businesses.website,
         instagramHandle: businesses.instagramHandle,
+        contactEmail: businesses.contactEmail,
+        passwordHash: users.passwordHash,
+        status: businesses.status,
       })
       .from(businesses)
+      .innerJoin(users, eq(businesses.ownerId, users.id))
       .where(and(eq(businesses.slug, slug), eq(businesses.status, "active")))
       .limit(1);
 
@@ -351,6 +366,14 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         robots: "noindex, follow",
       };
     }
+
+    const indexable = isIndexablePartner({
+      name: biz.name,
+      slug: biz.slug,
+      status: biz.status,
+      contactEmail: biz.contactEmail,
+      passwordHash: biz.passwordHash,
+    });
 
     const desc = truncate(
       biz.description ||
@@ -372,24 +395,26 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       canonical: abs(`/business/${biz.slug}`),
       image,
       type: "website",
-      robots: "index, follow",
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        name: biz.name,
-        url: abs(`/business/${biz.slug}`),
-        description: biz.description || undefined,
-        image,
-        category: biz.category || undefined,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: biz.address || undefined,
-          addressLocality: biz.city || "London",
-          postalCode: biz.postcode || undefined,
-          addressCountry: "GB",
-        },
-        ...(sameAs.length ? { sameAs } : {}),
-      },
+      robots: indexable ? "index, follow" : "noindex, follow",
+      jsonLd: indexable
+        ? {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: biz.name,
+            url: abs(`/business/${biz.slug}`),
+            description: biz.description || undefined,
+            image,
+            category: biz.category || undefined,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: biz.address || undefined,
+              addressLocality: biz.city || "London",
+              postalCode: biz.postcode || undefined,
+              addressCountry: "GB",
+            },
+            ...(sameAs.length ? { sameAs } : {}),
+          }
+        : undefined,
       bodyHtml: `<article><h1>${escapeHtml(biz.name)}</h1><p>${escapeHtml(desc)}</p><p><a href="${escapeHtml(abs(`/business/${biz.slug}`))}">View on Unwrapped</a></p></article>`,
     };
   }
@@ -408,9 +433,13 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         status: drops.status,
         businessName: businesses.name,
         businessSlug: businesses.slug,
+        contactEmail: businesses.contactEmail,
+        passwordHash: users.passwordHash,
+        businessStatus: businesses.status,
       })
       .from(drops)
       .innerJoin(businesses, eq(drops.businessId, businesses.id))
+      .innerJoin(users, eq(businesses.ownerId, users.id))
       .where(eq(drops.id, id))
       .limit(1);
 
@@ -432,14 +461,23 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     const image = row.imageUrl || DEFAULT_OG();
     const title = `${row.title} · ${row.businessName} — Unwrapped`;
 
+    const dropIndexable = isIndexablePartner({
+      name: row.businessName,
+      slug: row.businessSlug,
+      status: row.businessStatus,
+      contactEmail: row.contactEmail,
+      passwordHash: row.passwordHash,
+    });
+
     return {
       title,
       description: desc,
       canonical: abs(`/drop/${row.dropId}`),
       image,
       type: "product",
-      robots: "index, follow",
-      jsonLd: {
+      robots: dropIndexable ? "index, follow" : "noindex, follow",
+      jsonLd: dropIndexable
+        ? {
         "@context": "https://schema.org",
         "@type": "Product",
         name: row.title,
@@ -461,7 +499,8 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               ? "https://schema.org/InStock"
               : "https://schema.org/SoldOut",
         },
-      },
+      }
+        : undefined,
       bodyHtml: `<article><h1>${escapeHtml(row.title)}</h1><p>From ${escapeHtml(row.businessName)}</p><p>${escapeHtml(desc)}</p><p><a href="${escapeHtml(abs(`/drop/${row.dropId}`))}">Claim on Unwrapped</a></p></article>`,
     };
   }
@@ -491,10 +530,11 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         category: businesses.category,
       })
       .from(businesses)
-      .where(eq(businesses.status, "active"));
+      .innerJoin(users, eq(businesses.ownerId, users.id))
+      .where(claimedPartnerSql);
 
     const matched = bizRows
-      .filter((b) => shopMatchesBorough(b, borough))
+      .filter((b) => !isTestShop(b.name, b.slug) && shopMatchesBorough(b, borough))
       .slice(0, 40);
 
     const shopLinks = matched

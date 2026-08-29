@@ -4,6 +4,7 @@ import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, ad
 import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations, users } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive } from "../payments/fees";
+import { isIndexablePartner } from "../seoIndexable";
 
 const UNCLAIMED_OWNER_EMAIL = "unclaimed-directory@shopunwrapped.com";
 
@@ -88,8 +89,11 @@ export const businessesRouter = router({
           address: businesses.address,
           postcode: businesses.postcode,
           status: businesses.status,
+          contactEmail: businesses.contactEmail,
+          passwordHash: users.passwordHash,
         })
         .from(businesses)
+        .innerJoin(users, eq(businesses.ownerId, users.id))
         .where(eq(businesses.slug, input.slug))
         .limit(1);
 
@@ -131,7 +135,16 @@ export const businessesRouter = router({
         .orderBy(desc(drops.collectionStart))
         .limit(20);
 
-      return { business: biz, followCount: followCount.count, drops: bizDrops };
+      const { contactEmail, passwordHash, ...publicBiz } = biz;
+      const indexable = isIndexablePartner({
+        name: biz.name,
+        slug: biz.slug,
+        status: biz.status,
+        contactEmail,
+        passwordHash,
+      });
+
+      return { business: publicBiz, followCount: followCount.count, drops: bizDrops, indexable };
     }),
 
   // Shopper: follow a business

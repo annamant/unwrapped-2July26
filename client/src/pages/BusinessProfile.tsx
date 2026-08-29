@@ -82,7 +82,8 @@ export default function BusinessProfile() {
         description={seoDescription}
         path={`/business/${business.slug}`}
         image={business.coverUrl || business.logoUrl}
-        jsonLd={businessJsonLd({
+        noindex={!data.indexable}
+        jsonLd={data.indexable ? businessJsonLd({
           name: business.name,
           slug: business.slug,
           description: business.description,
@@ -93,7 +94,7 @@ export default function BusinessProfile() {
           city: business.city || borough?.name || "London",
           website: business.website,
           instagramHandle: business.instagramHandle,
-        })}
+        }) : undefined}
       />
       <Nav />
 
