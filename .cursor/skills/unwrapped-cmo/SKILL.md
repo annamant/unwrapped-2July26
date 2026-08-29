@@ -77,7 +77,18 @@ CMO does not own distribution, but assets exist for shop outreach:
 6. `marketing/linkedin/PAGE.md` — live page fields, overview copy, open items
 7. [gamma-theme-playbook.md](gamma-theme-playbook.md) — **Unwrapped 2026** Gamma theme (colours, fonts, logo, setup)
 8. `marketing/instagram/CONTENT_CALENDAR.md`
-9. Search/Google work is **not** CMO — use `.cursor/skills/unwrapped-seo/SKILL.md`
+9. Search/Google implementation is **not** CMO — full playbook: `.cursor/skills/unwrapped-seo/SKILL.md`
+
+### SEO already done — do not contradict (Aug 2026)
+
+CMO does not own Search Console or the sitemap. You **must** still match this in captions, bios, and creatives:
+
+- Live site line is **Your high street, live.** Loop: **See it. Claim it. Collect it.** London · Opening soon.
+- Do not use retired SEO lines: “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”
+- **No blog.** Do not propose a content/magazine SEO play.
+- Google indexes **claimed partner shops only**. Unclaimed scrape listings stay in admin for claims — they are not a public “we have 900 shops” story. Do not brag directory scale from Places imports.
+- Rankings climb from brand mentions + real drops, not more keywords. Every post should say **Unwrapped** and link `shopunwrapped.com` (right CTA: `/recommend` vs `/business-apply`).
+- First Instagram drop post still waits for a **live drop** on the site.
 
 Repo visuals: `brand/` + `brand/README.md`. Product thesis: **`brand/WHITE_PAPER_v1.md`**.
 
@@ -88,7 +99,7 @@ Repo visuals: `brand/` + `brand/README.md`. Product thesis: **`brand/WHITE_PAPER
 Unwrapped is an **eventized commerce engine for the high street**: look in from afar → see the real thing (photo / short async video) → claim & pay → collect in person with QR. Not a mystery-bag waste app. Not a static directory. Not deep-discount Groupon.
 
 ### Locked public framing
-- **Shopper:** A new way to shop your high street. See it. Claim it. Collect it. (Look into local shops from the sofa / bus.)
+- **Shopper:** Your high street, live. See it. Claim it. Collect it. (Look into local shops from the sofa / bus.)
 - **Merchant:** Get seen — so you can sell and welcome customers through the door.
 - **Vs Too Good To Go:** They hide product + cut price. We **show** product, preserve brand, convert screen time into a collection visit.
 - **Media roadmap:** Phase 1 = photos + short async clips. Phase 2 = live video (future only — never imply live broadcasts today).
