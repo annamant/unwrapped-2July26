@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Compose Unwrapped London High Streets episode slides — Rye Lane #01.
 
-Quieter editorial overlays (2026-09-03 iteration):
-- Soft gradient scrim only (top/bottom third) — no solid cards / thick bands
-- Smaller Space Mono labels · shorter Playfair · ≥80px safe margin
-- Espresso type on soft translucent light scrim; baby-pink used sparingly
-- Slide 5: tiny location only · Slide 6: light engage + thin espresso pill
+Layout (2026-09-03, Anna):
+- TOP: short beat title; slide 01 is a BOLD LARGE Playfair `Rye Lane`
+- BODY: next chunk of the FULL canonical script in readable story prose
+- Espresso #160703 solid panels behind titles + story chunks (readable on busy photos)
+- Soft scrim only as whisper; photos still support the narrative
+- 1080×1350 · espresso #160703 + baby pink #FFE0E7 sparingly
+- Script is split across 6 slides — do not invent a different story
+- Slide 01 cover = TODAY's high street photo (F-) with exact title `Rye Lane`
+- Slide 01 location under title (Space Mono): borough · South London + station
 """
 from __future__ import annotations
 
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageOps
+
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 PHOTOS = ROOT / "your-photos"
@@ -18,12 +23,15 @@ SLIDES = ROOT / "slides"
 FONTS = ROOT / "fonts"
 
 W, H = 1080, 1350
-MARGIN = 80  # safe margin from edges
+MARGIN = 72
+TITLE_Y = 56
+HERO_TITLE_Y = 48
+BODY_MAX_W = W - 2 * MARGIN
 
 PINK = (255, 224, 231, 255)  # #FFE0E7
 ESPRESSO = (22, 7, 3, 255)  # #160703
-# Soft warm ivory for rare accents / pill label
-IVORY = (255, 248, 245, 255)
+CREAM = (255, 244, 238, 255)
+WHITE = (255, 255, 255, 255)
 
 
 def font(name: str, size: int) -> ImageFont.FreeTypeFont:
@@ -36,12 +44,13 @@ def font(name: str, size: int) -> ImageFont.FreeTypeFont:
             "SpaceMono-Regular.ttf": "/System/Library/Fonts/Supplemental/Courier New.ttf",
             "SpaceMono-Bold.ttf": "/System/Library/Fonts/Supplemental/Courier New Bold.ttf",
         }
-        path = Path(alts.get(name, "/System/Library/Fonts/Supplemental/Georgia.ttf"))
+        path = Path(alts.get(name, "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"))
+        if not path.exists():
+            path = Path("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf")
     return ImageFont.truetype(str(path), size)
 
 
 def cover_crop(im: Image.Image, focus=(0.5, 0.45)) -> Image.Image:
-    """Center-crop to 4:5 covering full canvas."""
     im = ImageOps.exif_transpose(im).convert("RGB")
     tw, th = W, H
     target_ratio = tw / th
@@ -64,23 +73,52 @@ def region_cover(im: Image.Image, box, focus=(0.5, 0.45)) -> Image.Image:
     return cover_crop(im.crop(box), focus=focus)
 
 
-def soft_scrim_top(base: Image.Image, bottom=0.34, strength=0.38) -> Image.Image:
-    """Soft espresso gradient in the top third only — airy, not plate-like."""
+def text_size(draw, text, fnt):
+    bbox = draw.textbbox((0, 0), text, font=fnt)
+    return bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+
+def wrap_text(draw, text: str, fnt, max_w: int) -> list[str]:
+    """Word-wrap a paragraph; preserve intentional newlines as paragraph breaks."""
+    out: list[str] = []
+    paragraphs = text.split("\n")
+    for pi, para in enumerate(paragraphs):
+        words = para.split()
+        if not words:
+            if pi < len(paragraphs) - 1:
+                out.append("")
+            continue
+        line = words[0]
+        for w in words[1:]:
+            trial = f"{line} {w}"
+            tw, _ = text_size(draw, trial, fnt)
+            if tw <= max_w:
+                line = trial
+            else:
+                out.append(line)
+                line = w
+        out.append(line)
+        if pi < len(paragraphs) - 1:
+            out.append("")
+    return out
+
+
+def soft_scrim_top(base: Image.Image, bottom=0.18, strength=0.55) -> Image.Image:
+    """Whisper scrim under the title at the top."""
     overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
     h = base.size[1]
     y1 = int(h * bottom)
     r, g, b = ESPRESSO[:3]
     for y in range(0, y1):
-        t = y / max(1, y1 - 1)
-        # strongest at top edge, fades to transparent by bottom of band
-        a = int(255 * strength * (1 - t) ** 1.35)
+        t = 1.0 - (y / max(1, y1 - 1))
+        a = int(255 * strength * (t ** 1.1))
         draw.line([(0, y), (base.size[0], y)], fill=(r, g, b, a))
     return Image.alpha_composite(base.convert("RGBA"), overlay)
 
 
-def soft_scrim_bottom(base: Image.Image, top=0.66, strength=0.42) -> Image.Image:
-    """Soft espresso gradient in the bottom third only."""
+def soft_scrim_bottom(base: Image.Image, top=0.55, strength=0.62) -> Image.Image:
+    """Bottom/mid scrim for body prose."""
     overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
     h = base.size[1]
@@ -88,79 +126,208 @@ def soft_scrim_bottom(base: Image.Image, top=0.66, strength=0.42) -> Image.Image
     r, g, b = ESPRESSO[:3]
     for y in range(y0, h):
         t = (y - y0) / max(1, h - y0 - 1)
-        a = int(255 * strength * (t ** 1.1))
+        a = int(255 * strength * (t ** 0.85))
         draw.line([(0, y), (base.size[0], y)], fill=(r, g, b, a))
     return Image.alpha_composite(base.convert("RGBA"), overlay)
 
 
-def soft_light_wash(base: Image.Image, bottom=0.36, strength=0.42) -> Image.Image:
-    """Soft warm translucent wash under espresso type (top third).
-    Keeps photo visible — not a solid card."""
+def letter_glow(base, lines, fnt, x, y, gap, color, alpha=170, thicken=7, blur=5):
+    mask = Image.new("L", base.size, 0)
+    md = ImageDraw.Draw(mask)
+    yy = y
+    for line in lines:
+        if line == "":
+            yy += int(fnt.size * 0.55)
+            continue
+        _, th = text_size(md, line, fnt)
+        md.text((x, yy), line, font=fnt, fill=255)
+        yy += th + gap
+    if thicken >= 3:
+        k = thicken if thicken % 2 else thicken + 1
+        mask = mask.filter(ImageFilter.MaxFilter(k))
+    mask = mask.filter(ImageFilter.GaussianBlur(blur))
+    glow = Image.new("RGBA", base.size, (*color[:3], 0))
+    glow.putalpha(mask.point(lambda a: int(a * alpha / 255)))
+    return Image.alpha_composite(base.convert("RGBA"), glow)
+
+
+
+def espresso_panel(base: Image.Image, box, *, alpha=235, radius=18) -> Image.Image:
+    """Solid espresso #160703 panel behind type — readable on busy photos."""
+    x0, y0, x1, y1 = [int(v) for v in box]
+    x0 = max(0, x0)
+    y0 = max(0, y0)
+    x1 = min(base.size[0], x1)
+    y1 = min(base.size[1], y1)
+    if x1 <= x0 or y1 <= y0:
+        return base.convert("RGBA")
     overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-    h = base.size[1]
-    y1 = int(h * bottom)
-    # warm ivory wash
-    wr, wg, wb = 255, 244, 238
-    for y in range(0, y1):
-        t = y / max(1, y1 - 1)
-        a = int(255 * strength * (1 - t) ** 1.25)
-        draw.line([(0, y), (base.size[0], y)], fill=(wr, wg, wb, a))
+    d = ImageDraw.Draw(overlay)
+    fill = (*ESPRESSO[:3], alpha)
+    try:
+        d.rounded_rectangle([x0, y0, x1, y1], radius=radius, fill=fill)
+    except Exception:
+        d.rectangle([x0, y0, x1, y1], fill=fill)
     return Image.alpha_composite(base.convert("RGBA"), overlay)
 
 
-def text_size(draw, text, fnt):
-    bbox = draw.textbbox((0, 0), text, font=fnt)
-    return bbox[2] - bbox[0], bbox[3] - bbox[1]
+def compose_slide(
+    photo: Image.Image,
+    *,
+    title: str,
+    body: str,
+    focus=(0.5, 0.45),
+    region=None,
+    body_fill=CREAM,
+    title_fill=PINK,
+    ask_lines: list[str] | None = None,
+    location_lines: list[str] | None = None,
+    hero: bool = False,
+) -> Image.Image:
+    """Compose one slide. Type sits on solid espresso panels for readability."""
+    if region is not None:
+        base = region_cover(photo, region, focus=focus)
+    else:
+        base = cover_crop(photo, focus=focus)
 
+    # Light photo scrims only — legibility comes from espresso panels under type
+    if hero:
+        base = soft_scrim_top(base, bottom=0.22, strength=0.35)
+        base = soft_scrim_bottom(base, top=0.62, strength=0.40)
+        title_fnt = font("PlayfairDisplay-Bold.ttf", 108)
+        title_y = HERO_TITLE_Y
+    else:
+        base = soft_scrim_top(base, bottom=0.12, strength=0.28)
+        base = soft_scrim_bottom(base, top=0.58, strength=0.38)
+        title_fnt = font("SpaceMono-Bold.ttf", 22)
+        title_y = TITLE_Y
 
-def draw_centered(draw, y, text, fnt, fill=ESPRESSO):
-    tw, th = text_size(draw, text, fnt)
-    x = (W - tw) // 2
-    draw.text((x, y), text, font=fnt, fill=fill)
-    return y + th
+    body_fnt = font("PlayfairDisplay-Regular.ttf", 30)
+    body_gap = 10
+    loc_fnt = font("SpaceMono-Regular.ttf", 22 if hero else 18)
+    loc_gap = 6
+    ask_fnt = font("PlayfairDisplay-Medium.ttf", 28)
+    ask_gap = 8
 
+    probe = ImageDraw.Draw(base)
+    body_lines = wrap_text(probe, body, body_fnt, BODY_MAX_W)
 
-def wrap_lines(text, fnt, max_w, draw):
-    words = text.split()
-    lines, cur = [], ""
-    for w in words:
-        trial = (cur + " " + w).strip()
-        tw, _ = text_size(draw, trial, fnt)
-        if tw <= max_w:
-            cur = trial
+    # measure body block
+    heights = []
+    for line in body_lines:
+        if line == "":
+            heights.append(int(body_fnt.size * 0.55))
         else:
-            if cur:
-                lines.append(cur)
-            cur = w
-    if cur:
-        lines.append(cur)
-    return lines
+            _, th = text_size(probe, line, body_fnt)
+            heights.append(th)
+    body_h = sum(heights) + body_gap * max(0, len(heights) - 1)
 
+    ask_h = 0
+    ask_wrapped: list[str] = []
+    if ask_lines:
+        ask_text = "\n".join(ask_lines)
+        ask_wrapped = wrap_text(probe, ask_text, ask_fnt, BODY_MAX_W)
+        ah = []
+        for line in ask_wrapped:
+            if line == "":
+                ah.append(int(ask_fnt.size * 0.5))
+            else:
+                _, th = text_size(probe, line, ask_fnt)
+                ah.append(th)
+        ask_h = sum(ah) + ask_gap * max(0, len(ah) - 1) + 28
 
-def thin_espresso_pill(draw, cx, cy, label, fnt, pad_x=28, pad_y=12):
-    """Thin espresso CTA pill — pink label text. Not a heavy pink slab."""
-    tw, th = text_size(draw, label, fnt)
-    w = tw + pad_x * 2
-    h = th + pad_y * 2
-    x0 = cx - w // 2
-    y0 = cy - h // 2
-    r = h // 2
-    draw.rounded_rectangle([x0, y0, x0 + w, y0 + h], radius=r, fill=ESPRESSO)
-    draw.text((x0 + pad_x, y0 + pad_y - 1), label, font=fnt, fill=PINK)
-    return y0 + h
+    bottom_pad = 72 if not ask_lines else 56
+    total_h = body_h + ask_h
+    y_body = H - bottom_pad - total_h
+    y_body = max(y_body, (360 if location_lines else 300) if hero else 220)
 
+    title_x = MARGIN
+    tw, th = text_size(probe, title, title_fnt)
 
-def eyebrow(draw, y=MARGIN):
-    """Smaller Space Mono series eyebrow — espresso, quiet."""
-    f = font("SpaceMono-Bold.ttf", 16)
-    return draw_centered(draw, y, "LONDON HIGH STREETS", f, ESPRESSO)
+    # measure location block
+    loc_lines = location_lines or []
+    loc_block_h = 0
+    loc_max_w = 0
+    for line in loc_lines:
+        lw, lh = text_size(probe, line, loc_fnt)
+        loc_max_w = max(loc_max_w, lw)
+        loc_block_h += lh + loc_gap
+    if loc_lines:
+        loc_block_h -= loc_gap
 
+    rule_h = 3 if hero else 2
+    rule_gap_above = 18 if hero else 14
+    rule_gap_below = 16 if loc_lines else 0
+    title_block_h = th + rule_gap_above + rule_h + rule_gap_below + loc_block_h
+    title_pad_x = 28 if hero else 20
+    title_pad_y = 22 if hero else 16
+    title_panel_w = max(tw, loc_max_w) + title_pad_x * 2
+    title_panel_x0 = title_x - title_pad_x
+    title_panel_y0 = title_y - title_pad_y
+    title_panel_x1 = title_panel_x0 + title_panel_w
+    title_panel_y1 = title_y + title_block_h + title_pad_y
 
-def label(draw, text, y):
-    """Beat label — smaller Space Mono."""
-    f = font("SpaceMono-Bold.ttf", 18)
-    return draw_centered(draw, y, text, f, ESPRESSO)
+    base = espresso_panel(
+        base,
+        (title_panel_x0, title_panel_y0, title_panel_x1, title_panel_y1),
+        alpha=240,
+        radius=20 if hero else 14,
+    )
+
+    d = ImageDraw.Draw(base)
+    d.text((title_x, title_y), title, font=title_fnt, fill=title_fill)
+
+    rule_y = title_y + th + rule_gap_above
+    rule_w = min(tw if hero else 120, tw)
+    d.rectangle(
+        [title_x, rule_y, title_x + rule_w, rule_y + rule_h],
+        fill=PINK,
+    )
+
+    if loc_lines:
+        loc_y = rule_y + rule_h + rule_gap_below
+        yy = loc_y
+        for line in loc_lines:
+            _, lh = text_size(d, line, loc_fnt)
+            d.text((title_x, yy), line, font=loc_fnt, fill=PINK)
+            yy += lh + loc_gap
+
+    # body (+ ask) espresso panel
+    body_pad_x = 28
+    body_pad_y = 26
+    panel_x0 = MARGIN - body_pad_x
+    panel_y0 = y_body - body_pad_y
+    panel_x1 = W - MARGIN + body_pad_x
+    panel_y1 = y_body + total_h + body_pad_y
+    base = espresso_panel(
+        base,
+        (panel_x0, panel_y0, panel_x1, panel_y1),
+        alpha=238,
+        radius=18,
+    )
+
+    d = ImageDraw.Draw(base)
+    yy = y_body
+    for line in body_lines:
+        if line == "":
+            yy += int(body_fnt.size * 0.55)
+            continue
+        _, bh = text_size(d, line, body_fnt)
+        d.text((MARGIN, yy), line, font=body_fnt, fill=body_fill)
+        yy += bh + body_gap
+
+    if ask_wrapped:
+        yy += 18
+        for line in ask_wrapped:
+            if line == "":
+                yy += int(ask_fnt.size * 0.5)
+                continue
+            _, ah = text_size(d, line, ask_fnt)
+            d.text((MARGIN, yy), line, font=ask_fnt, fill=PINK)
+            yy += ah + ask_gap
+
+    return base
+
 
 
 def save(im: Image.Image, name: str):
@@ -175,115 +342,105 @@ def main():
     B = Image.open(PHOTOS / "B-wide-street-2014-mels.jpg")
     F = Image.open(PHOTOS / "F-rye-lane-2024ish-8189377.jpg")
     G = Image.open(PHOTOS / "G-peckham-plex.jpg")
+    H = Image.open(PHOTOS / "H-bussey-building.jpg")
+    K = Image.open(PHOTOS / "K-jones-higgins-c1900.jpg")
 
-    max_text_w = W - 2 * MARGIN
-
-    # --- 01 Cover ---
-    # Soft light wash + espresso type (no loud pink-on-plate)
-    base = cover_crop(F, focus=(0.48, 0.42))
-    base = soft_light_wash(base, bottom=0.32, strength=0.48)
-    d = ImageDraw.Draw(base)
-    y = eyebrow(d, MARGIN)
-    y += 28
-    y = draw_centered(d, y, "Rye Lane", font("PlayfairDisplay-Bold.ttf", 78), ESPRESSO)
-    y += 10
-    draw_centered(d, y, "Peckham", font("PlayfairDisplay-Regular.ttf", 36), ESPRESSO)
+    # --- 01  COVER  exactly `Rye Lane` · TODAY's high street (F-)
+    # Location under title: borough · South London + station (Overground, not Tube)
+    base = compose_slide(
+        F,
+        title="Rye Lane",
+        location_lines=[
+            "Peckham · Southwark · South London",
+            "Peckham Rye station · Overground",
+        ],
+        body=(
+            "Once upon a time, people called Rye Lane the Oxford Street "
+            "of South London. Stand under the railway bridge at Peckham Rye "
+            "today and you can still feel why."
+        ),
+        focus=(0.50, 0.44),
+        hero=True,
+    )
     save(base, "01.jpg")
 
-    # --- 02 WHERE ---
-    # Shorter copy · top-third wash · espresso type
-    base = cover_crop(B, focus=(0.55, 0.42))
-    base = soft_light_wash(base, bottom=0.38, strength=0.52)
-    d = ImageDraw.Draw(base)
-    y = eyebrow(d, MARGIN)
-    y += 18
-    y = label(d, "WHERE", y)
-    y += 22
-    body = font("PlayfairDisplay-Regular.ttf", 34)
-    for line in [
-        "Peckham Rye · SE15",
-        "Once the Oxford Street",
-        "of South London.",
-    ]:
-        y = draw_centered(d, y, line, body, ESPRESSO)
-        y += 10
+    # --- 02  Walk south
+    base = compose_slide(
+        B,
+        title="Walk south",
+        body=(
+            "The street runs south through Southwark SE15 in a tight, noisy "
+            "ribbon — buses, produce crates, fabric shops, fish on ice, "
+            "phone-repair stickers in the windows — a high street you walk, "
+            "not a mall you drive to."
+        ),
+        focus=(0.54, 0.42),
+    )
     save(base, "02.jpg")
 
-    # --- 03 NOW ---
-    # Keep Peckhamplex photo; short lines sit in sky / soft wash
-    base = cover_crop(G, focus=(0.50, 0.40))
-    base = soft_light_wash(base, bottom=0.30, strength=0.55)
-    d = ImageDraw.Draw(base)
-    y = eyebrow(d, MARGIN)
-    y += 18
-    y = label(d, "NOW", y)
-    y += 20
-    body = font("PlayfairDisplay-Regular.ttf", 34)
-    for line in [
-        "Butchers, markets, cafés —",
-        "and Peckhamplex.",
-    ]:
-        y = draw_centered(d, y, line, body, ESPRESSO)
-        y += 10
+    # --- 03  The golden mile  (Jones & Higgins, Rye Lane, Peckham, c. 1900)
+    # Ideal Homes / University of Greenwich · Southwark archive — NOT CC / NOT PD
+    base = compose_slide(
+        K,
+        title="The golden mile",
+        body=(
+            "After the station opened in 1865, this strip grew into a Victorian "
+            "“golden mile.” Grand stores lined the pavement; Jones & Higgins "
+            "became a local landmark; shoppers came from across the south for "
+            "the spectacle of it. Empires of retail rose and fell, but the habit "
+            "of coming here to buy something real never quite left."
+        ),
+        focus=(0.52, 0.45),
+    )
     save(base, "03.jpg")
 
-    # --- 04 DID YOU KNOW ---
-    # One short fact · drop support clutter
-    base = cover_crop(B, focus=(0.28, 0.48))
-    base = soft_light_wash(base, bottom=0.40, strength=0.54)
-    d = ImageDraw.Draw(base)
-    y = eyebrow(d, MARGIN)
-    y += 16
-    y = label(d, "DID YOU KNOW?", y)
-    y += 22
-    fact = font("PlayfairDisplay-Bold.ttf", 36)
-    lines = wrap_lines(
-        "The Bussey Building — once cricket-bat works, now studios.",
-        fact,
-        max_text_w,
-        d,
+    # --- 04  Today  (Peckhamplex) — today’s vibe, not a throwaway cinema mention
+    # No partnership claim. Plex photo (G-) stays.
+    base = compose_slide(
+        G,
+        title="Today",
+        body=(
+            "What’s left is not nostalgia — it’s life. Young, multicultural, loud "
+            "with markets and late cafés — and Peckhamplex at the centre of it: "
+            "the independent cinema where this street’s social crowd still gathers "
+            "after dark."
+        ),
+        focus=(0.50, 0.55),
     )
-    for line in lines:
-        y = draw_centered(d, y, line, fact, ESPRESSO)
-        y += 8
     save(base, "04.jpg")
 
-    # --- 05 Breath ---
-    # Almost no text — tiny location only; espresso on pale sky (no wash)
-    base = region_cover(G, (520, 40, 2500, 2515), focus=(0.50, 0.42))
-    d = ImageDraw.Draw(base)
-    tiny = font("SpaceMono-Regular.ttf", 15)
-    draw_centered(d, MARGIN + 8, "RYE LANE · SE15", tiny, ESPRESSO)
+    # --- 05  Behind the shopfronts  (Bussey Building / Copeland Park)
+    base = compose_slide(
+        H,
+        title="Behind the shopfronts",
+        body=(
+            "And here’s the twist most people miss while they’re looking at the "
+            "shopfronts: behind Rye Lane sits Copeland Park and the Bussey Building, "
+            "where George Gibson Bussey’s firm once made cricket bats (the famous "
+            "Demon Drivers, the kind associated with W.G. Grace) at Museum Works. "
+            "Victorian industry, folded into today’s studios and creative spaces — "
+            "still attached to the same street."
+        ),
+        focus=(0.50, 0.28),
+    )
     save(base, "05.jpg")
 
-    # --- 06 Engage ---
-    # Soft bottom scrim only — no full darken / thick band
-    # Thin espresso pill (pink label) — don't cover the whole photo
-    base = cover_crop(F, focus=(0.5, 0.5))
-    base = soft_scrim_bottom(base, top=0.58, strength=0.62)
-    # whisper top for eyebrow readability
-    base = soft_scrim_top(base, bottom=0.14, strength=0.22)
-    d = ImageDraw.Draw(base)
-    # eyebrow in soft pink — sparingly, against soft dark top
-    f_eye = font("SpaceMono-Bold.ttf", 16)
-    draw_centered(d, MARGIN, "LONDON HIGH STREETS", f_eye, PINK)
-
-    q = font("PlayfairDisplay-Bold.ttf", 38)
-    # sit question in bottom third with air
-    lines = wrap_lines("What's your favourite shop on Rye Lane?", q, max_text_w, d)
-    # measure block height to place above pill with margin
-    line_gap = 8
-    block_h = sum(text_size(d, ln, q)[1] + line_gap for ln in lines)
-    pill_h = 48
-    gap_q_pill = 28
-    bottom_pad = MARGIN + 12
-    y = H - bottom_pad - pill_h - gap_q_pill - block_h
-    for line in lines:
-        y = draw_centered(d, y, line, q, PINK)
-        y += line_gap
-    y += gap_q_pill
-    pill_font = font("SpaceMono-Bold.ttf", 17)
-    thin_espresso_pill(d, W // 2, y + pill_h // 2, "Recommend a shop →", pill_font)
+    # --- 06  Close + favourite-shop ask
+    base = compose_slide(
+        F,
+        title="One street, whole story",
+        body=(
+            "So Rye Lane isn’t just “Peckham.” It’s a whole South London story "
+            "in one strip: what the high street used to mean, what it still does, "
+            "and the strange histories hiding one door back from the pavement."
+        ),
+        focus=(0.62, 0.55),
+        region=(160, 260, 1681, 1509),
+        ask_lines=[
+            "What’s your favourite shop on Rye Lane?",
+            "Drop it in the comments — or recommend a shop → shopunwrapped.com/recommend",
+        ],
+    )
     save(base, "06.jpg")
 
     print("done")
