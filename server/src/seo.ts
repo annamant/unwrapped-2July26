@@ -18,18 +18,18 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped — Local shop drops on a neighbourhood map";
+const DEFAULT_TITLE = "Unwrapped — Your high street, live.";
 const DEFAULT_DESCRIPTION =
-  "Shops post what they're selling right now. See the item on a map, claim it in the app, pick it up in person.";
+  "Shops post a photo of the exact item. You see it, claim it in the app, collect in person.";
 
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "A neighbourhood map for local shop drops. Shops post what they're selling right now — you see the item, claim it in the app, and pick it up in person.",
+    a: "Your high street, live. Shops post a photo of the exact item. You see it, claim it in the app, and collect in person.",
   },
   {
     q: "How does it work?",
-    a: "Shops post a photo of the exact item. You see it on the map, claim it in the app, and pick it up at the shop.",
+    a: "See it. Claim it. Collect it. A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.",
   },
   {
     q: "How do I collect?",
@@ -578,7 +578,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>A neighbourhood map for local shop drops</h1><p>London · Opening soon</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><p>Shops post a photo of the exact item. You see it on the map, claim it in the app, and pick it up at the shop.</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>Your high street, live.</h1><p>London · Opening soon</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
             ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a> — ${escapeHtml(b.neighbourhoods.slice(0, 3).join(", "))}</li>`).join("")}</ul></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,

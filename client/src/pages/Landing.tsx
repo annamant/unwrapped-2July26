@@ -627,7 +627,7 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              A neighbourhood map for local shop drops
+              Your high street, live.
             </h1>
 
             <p
@@ -642,7 +642,7 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Shops post what they're selling right now — a photo of the exact item. You claim it in the app and pick it up in person.
+              Shops post a photo of the exact item. You see it, claim it in the app, collect in person.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
