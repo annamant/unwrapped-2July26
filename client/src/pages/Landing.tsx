@@ -1151,8 +1151,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Algorithms reward chains. Neighbours reward bakeries. Tip us a florist, bookshop, boutique, or charity shop —
-            we'll tell them someone asked for them by name. Few things are more persuasive than being wanted.
+            Algorithms reward chains. Neighbours reward the people behind each shop. Tip us a florist, bookshop, boutique, or charity shop and we'll tell them someone asked for them by name.
           </p>
           <a
             href="/recommend"
