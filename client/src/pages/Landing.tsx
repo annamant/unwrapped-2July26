@@ -952,7 +952,7 @@ export default function Landing() {
                 className="uw-pulse-dot"
                 style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
               />
-              FIRST 500 · BEFORE THE CROWD
+              FIRST 500 ONLY
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -963,9 +963,9 @@ export default function Landing() {
               lineHeight: 1.05,
               marginBottom: 16,
             }}>
-              People don't want early access.
+              Be a founding shopper.
               <br />
-              They want to have been there.
+              Get the specials before everyone else.
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -976,7 +976,7 @@ export default function Landing() {
               marginBottom: 32,
               maxWidth: 540,
             }}>
-              Founding shoppers aren't buying features. They're buying the status of knowing the street before everyone else does — first look at every drop, permanent privileges, and a real say in what Unwrapped becomes on your high street.
+              Join free now. When shops near you go live, you see limited deals first, claim them earlier, and help decide what lands on your street.
             </p>
 
             <div style={{
@@ -988,18 +988,18 @@ export default function Landing() {
               {[
                 {
                   num: "01",
-                  title: "First look — honestly",
-                  desc: "Claim 24 hours before the public. Scarcity is real; queue-jumping is just the polite admission that timing matters.",
+                  title: "First look at every special",
+                  desc: "Claim 24 hours before the public. The best stuff often won't make it to general release.",
                 },
                 {
                   num: "02",
-                  title: "Asymmetric rewards for early believers",
-                  desc: "Premium tools free for founders while later shoppers pay. Priority alerts, filters, saved searches — because being early should feel unfair in your favour.",
+                  title: "Premium tools, free forever",
+                  desc: "Priority alerts, filters, and saved searches stay unlocked for founding shoppers while later shoppers pay.",
                 },
                 {
                   num: "03",
-                  title: "Co-author the map",
-                  desc: "Vote shops onto your street. Request what we build next. The best neighbourhood products are never designed solely by people in an office.",
+                  title: "Help shape your street",
+                  desc: "Vote which shops join your neighbourhood and tell us what you want next.",
                 },
               ].map(({ num, title, desc }) => (
                 <div
@@ -1099,7 +1099,7 @@ export default function Landing() {
                 fontWeight: 500,
                 textAlign: isMobile ? "center" : "left",
               }}>
-                No payment · Just an email · And slightly better timing than everyone else
+                Free. Just your email.
               </div>
             </div>
 
@@ -1111,7 +1111,7 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              Cap of 500. After that, you're just another shopper — which is fine, if you enjoy queueing.
+              Only 500 spots. After that, you wait with everyone else.
             </div>
           </div>
         </section>
@@ -1788,8 +1788,8 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             marginBottom: 8,
           }}>
             {filteredPins.length === 0
-              ? "No matches — clear your search to see the full curated board."
-              : "Proximity without urgency is just a directory. This is the map of shops coming onto Unwrapped — nominate one you love."}
+              ? "No matches. Clear your search to see the full list."
+              : "Browse shops coming onto Unwrapped. Nominate one you love."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
