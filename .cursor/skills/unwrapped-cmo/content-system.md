@@ -8,16 +8,15 @@
 
 ## Content pillars (Instagram mix)
 
-Aim ~ weekly mix:
+**Until live drops exist:** the feed is **London High Streets** (~1 episode / week). Other pillars sit idle — do not fill the empty grid with old product explainers.
 
-| Pillar | % | Job | Example hooks |
-|--------|---|-----|---------------|
-| **Live drops** | 35% | Convert now | "Live near you." / "[VERIFY] ending in the next hour" |
-| **How it works** | 15% | Reduce friction | "Reserve → QR → collect." |
-| **Business spotlight** | 20% | Trust + local colour | Named local business + neighbourhood |
-| **Culture / neighbourhood** | 15% | Brand feel | London mornings, neighbourhood trade love |
-| **Business / supply** | 10% | Acquisition | "List a drop. Fill a quiet hour." |
-| **Social proof / stats** | 5% | Credibility | Real counts only — mark `[VERIFY]` if unsure |
+| Pillar | When | Job |
+|--------|------|-----|
+| **London High Streets** | Now (primary) | Editorial episode per street — see `marketing/instagram/LONDON_HIGH_STREETS.md` |
+| **Live drops** | After a real drop is on the site | Convert now — never invent counts |
+| **How it works** | Only if asked | Reduce friction — not the relaunch grid |
+| **Shop spotlight** | After first partner drops | Named local business + neighbourhood |
+| **Business / supply** | Occasional / LinkedIn | List a drop → `/business-apply` |
 
 ## Formats
 
@@ -55,23 +54,17 @@ First line of caption = hook. Soft CTA in last line. 3–8 hashtags max, niche-l
 
 ## Cadence (starter — Instagram)
 
-| Day | Default |
-|-----|---------|
-| Mon | How it works or culture |
-| Tue | Live drops / map energy |
-| Wed | Shop spotlight |
-| Thu | Live drops or ending-soon story |
-| Fri | Weekend preview / live drops |
-| Sat | Story-heavy / UGC-style if available |
-| Sun | Soft culture or business CTA |
+**Pre-drop:** ~**1 High Streets episode / week**. Quality over volume.
 
-Adjust volume to capacity; quality > daily spam. Minimum viable: **4 feed posts + 3–5 stories / week**.
+After live drops: mix drop alerts + the series. Minimum viable then: **4 feed posts + 3–5 stories / week**.
 
 ## Engagement tactics
 
-- Ask one specific question in caption comments (neighbourhood, favourite indie category)
-- Reply to comments in-brand voice within 24h when human is available
-- Stories: poll / quiz only when it serves discovery ("bakery or vinyl first?")
+**London High Streets (required):** Slide 6 question + Recommend CTA · caption invite · first comment with `shopunwrapped.com/recommend`. Spec: `marketing/instagram/LONDON_HIGH_STREETS.md`.
+
+- Default question: "What's your favourite shop on [street]?"
+- Reply to shop-name comments in-brand within 24h when human is available
+- Stories: reshare cover · poll / questions sticker · link sticker
 - Never buy engagement; never fake scarcity
 
 ## Approval gate

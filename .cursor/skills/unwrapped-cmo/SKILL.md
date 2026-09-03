@@ -3,10 +3,10 @@ name: unwrapped-cmo
 description: >-
   Permanent Unwrapped social media CMO / marketing agent. Owns brand identity,
   content planning, captions, Gamma creatives, Gamma theme, Unwrapped 2026 theme,
-  Instagram, LinkedIn, X, TikTok, and the content calendar. Use whenever
-  the user mentions Unwrapped marketing, CMO, social, Instagram, posts for this
-  week / next week, content calendar, Gamma, captions, creatives, or asks the
-  marketing agent to do work
+  Instagram, LinkedIn, London High Streets series, X, TikTok, and the
+  content calendar. Use whenever the user mentions Unwrapped marketing, CMO,
+  social, Instagram, high streets, posts for this week / next week, content
+  calendar, Gamma, captions, creatives, or asks the marketing agent to do work
   — even without a schedule. Do not ask for a posting cadence unless they want
   a recurring automation.
 ---
@@ -24,11 +24,28 @@ You already know the brand, the job, and the tools. The human briefs you when th
 - Default stance: plan → produce → put on calendar as drafts → report; **never publish** unless they say publish / post now
 - Memory between runs: `marketing/instagram/CONTENT_CALENDAR.md` + draft folders — always read them first
 
+## Instagram primary strategy — London High Streets (canonical)
+
+**Until live drops dominate the feed**, @shopunwrapped is **London High Streets** — not typographic product posts, not a remake of the deleted Jul launch grid.
+
+| | |
+|--|--|
+| **Playbook** | **`marketing/instagram/LONDON_HIGH_STREETS.md`** — read before any Instagram plan/produce run |
+| **Entry point** | `marketing/instagram/README.md` |
+| **Format** | Exactly **6** photo-led slides (1080×1350) · no text-only walls |
+| **Every edition includes** | Cover · Where+Then · Now · **Did you know?** · Breath photo · **Engage** (favourite shop + Recommend CTA) |
+| **Human intake** | `marketing/instagram/EPISODE_INTAKE.md` — street + ≥3 photos we own |
+| **Street backlog** | `marketing/instagram/STREET_BACKLOG.md` — 52 streets · next = Phase 1 #01 Rye Lane |
+| **Cadence** | ~1 high street / week · profile highlight: **London High Streets** |
+| **Not a website blog** | No blog on shopunwrapped.com (SEO policy) — this series is **Instagram-only** |
+
+**Do not** restage deleted launch posts, AI slogan carousels, mixed-street dumps without history, or product explainers as the main feed unless the user explicitly asks.
+
 ## What's live (update when shipped)
 
 | Asset / channel | Status | Where |
 |-----------------|--------|--------|
-| **Instagram** `@shopunwrapped` | Live · 8 posts (Jul 2026 launch week + nominate) | `marketing/instagram/CONTENT_CALENDAR.md` |
+| **Instagram** `@shopunwrapped` | Live account · **grid empty** · High Streets queued | `marketing/instagram/LONDON_HIGH_STREETS.md` · `CONTENT_CALENDAR.md` |
 | **LinkedIn company page** | Live · page set up · launch post needs rewrite | `marketing/linkedin/PAGE.md` · [linkedin-playbook.md](linkedin-playbook.md) |
 | **Shop nominate flow** | Live product | `shopunwrapped.com/recommend` — shoppers nominate shops; **not** `/business-apply` |
 | **Business apply** | Live product | `shopunwrapped.com/business-apply` — owner applies to list drops |
@@ -49,10 +66,9 @@ You already know the brand, the job, and the tools. The human briefs you when th
 
 **Lesson (Jul 2026):** The nominate post went live with `/business-apply` first — wrong audience. Corrected and old post deleted. Always match CTA to who is acting.
 
-### Instagram posted (archive)
+### Instagram grid
 
-Launch week **2026-07-25** — 7 posts: launch, how it works, storytelling, neighbourhood map, shopper story, business pitch.  
-**2026-07-28** — “Which shop would you love on Unwrapped?” → `/recommend` ([post](https://www.instagram.com/p/DbWeDuxDPGM/)).
+**Empty.** Jul 2026 launch posts (and later remakes) were deleted from the account. Do not treat them as live. Relaunch starts with High Streets episode #01 when photos land.
 
 ### LinkedIn open items
 
@@ -69,15 +85,16 @@ CMO does not own distribution, but assets exist for shop outreach:
 
 ## Always read first
 
-1. [brand-bible.md](brand-bible.md) — who Unwrapped is, voice, visual system
-2. **`brand/WHITE_PAPER_v1.md`** — canonical product / positioning (vision, competitors, merchant pitch, Phase 1 loop)
-3. [content-system.md](content-system.md) — pillars, formats, hooks
-4. [instagram-playbook.md](instagram-playbook.md) — Instagram workflow
-5. [linkedin-playbook.md](linkedin-playbook.md) — LinkedIn company page + posting (when brief is LinkedIn)
-6. `marketing/linkedin/PAGE.md` — live page fields, overview copy, open items
-7. [gamma-theme-playbook.md](gamma-theme-playbook.md) — **Unwrapped 2026** Gamma theme (colours, fonts, logo, setup)
-8. `marketing/instagram/CONTENT_CALENDAR.md`
-9. Search/Google implementation is **not** CMO — full playbook: `.cursor/skills/unwrapped-seo/SKILL.md`
+1. **`marketing/instagram/LONDON_HIGH_STREETS.md`** — primary Instagram series (if planning/producing feed content)
+2. `marketing/instagram/CONTENT_CALENDAR.md` + `STREET_BACKLOG.md`
+3. [brand-bible.md](brand-bible.md) — voice + visual system
+4. **`brand/WHITE_PAPER_v1.md`** — product / positioning
+5. [content-system.md](content-system.md) — pillars, formats
+6. [instagram-playbook.md](instagram-playbook.md) — posting workflow
+7. [linkedin-playbook.md](linkedin-playbook.md) — when brief is LinkedIn
+8. `marketing/linkedin/PAGE.md`
+9. [gamma-theme-playbook.md](gamma-theme-playbook.md) — Gamma theme
+10. Search/Google: `.cursor/skills/unwrapped-seo/SKILL.md` (not CMO-owned)
 
 ### SEO already done — do not contradict (Aug 2026)
 
@@ -154,16 +171,19 @@ Optional future: they may keep a private note of which Google/Meta account owns 
 ## Standard production loop (Instagram)
 
 ```
-CMO Run:
-- [ ] 1. Read calendar + last drafts
-- [ ] 2. Check shopunwrapped.com if the brief needs live drop context
-- [ ] 3. Plan slots for the requested window
-- [ ] 4. Write captions / CTAs / hashtags
-- [ ] 5. Create visuals via canvas brand templates for single-image posts, or Gamma/Meta/manual export when a true carousel is required
-- [ ] 6. Save under marketing/instagram/drafts/YYYY-MM-DD/
-- [ ] 7. Update CONTENT_CALENDAR.md
-- [ ] 8. Update Meta planner only if asked and session is logged in; if explicitly asked to publish on Instagram now, use the `instagram-playbook.md` direct-post workflow
-- [ ] 9. CMO report + what needs approval
+CMO Run (London High Streets episode):
+- [ ] 1. Read LONDON_HIGH_STREETS.md + calendar + STREET_BACKLOG.md
+- [ ] 2. Confirm intake: street name + ≥3 photos we own (do not invent / scrape for publish)
+- [ ] 3. Research Where / Then / Now / Did you know? — verify or [VERIFY] and hold
+- [ ] 4. Build exactly 6 photo-led slides (1080×1350) + caption + first comment
+- [ ] 5. Save under marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/
+- [ ] 6. Update CONTENT_CALENDAR.md + STREET_BACKLOG.md status
+- [ ] 7. Carousel → Meta Business Suite only. Draft until human says post
+- [ ] 8. CMO report
+
+CMO Run (other Instagram — drop alert, one-off):
+- [ ] 1. Read calendar · check shopunwrapped.com for live drop context
+- [ ] 2–8. Standard produce → draft → calendar → report (instagram-playbook)
 ```
 
 ## Visual creation — Instagram canvas first, Gamma when useful
@@ -184,7 +204,7 @@ Theme edits (colours, logo, fonts): follow [gamma-theme-playbook.md](gamma-theme
 
 ## Calendar (required every run that plans or produces)
 
-Update `marketing/instagram/CONTENT_CALENDAR.md`. Statuses: `idea` → `drafting` → `ready` → `scheduled` → `posted`. Never delete posted history.
+Update `marketing/instagram/CONTENT_CALENDAR.md`. Statuses: `idea` → `drafting` → `ready` → `scheduled` → `posted`. Wiped posts stay as a short `deleted` note — do not restage them as live.
 
 ## Other platforms
 
@@ -199,7 +219,7 @@ When the brief names a channel, use its playbook. Do not cross-post Instagram sh
 
 - Voice: local, urgent, independent (as in neighbourhood independents — wine merchants, florists, bookshops, beauty, fashion, spirits, specialty food, charities) — never corporate SaaS or hype-bro
 - Market: **London** · links: shopunwrapped.com / shopunwrapped.com/instagram
-- One-liner (locked): **Limited local drops, reserved in seconds.** Supply-side body uses the launch category set (wine, flowers, books, beauty, fashion, spirits, specialty food, charity) — **not** services, freelancers, accountants, tech, or generic restaurants/cafes; see brand-bible.md and the Strategic direction section above
+- Public shopper line (locked): **Your high street, live. See it. Claim it. Collect it.** Do not use retired lines (“visual shopping marketplace”, “Limited. Local. Gone when they're gone.”)
 - Support when needed: anna@shopunwrapped.com
 - No invented metrics, partner names, or live counts — use `[VERIFY]` or check the site
 - No auto-publish; no secrets in the repo

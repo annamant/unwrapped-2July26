@@ -1,22 +1,44 @@
 # Instagram playbook — Unwrapped
 
+## Primary content — London High Streets (read first)
+
+**Canonical playbook:** `marketing/instagram/LONDON_HIGH_STREETS.md`  
+**Intake:** `marketing/instagram/EPISODE_INTAKE.md`  
+**Streets:** `marketing/instagram/STREET_BACKLOG.md`
+
+**Grid is empty.** Do not remake deleted Jul launch posts.
+
+Until live drops dominate the feed, @shopunwrapped is **London High Streets**:
+
+- **One London high street per episode** — exactly **6** photo-led slides (1080×1350)
+- Cover · Where+Then · Now · **Did you know?** · Breath · **Engage** (favourite shop + Recommend a shop → `/recommend`)
+- Photos supplied by Anna (we own rights). Caption = the story
+- Carousels → **Meta Business Suite** only
+- Profile highlight: **London High Streets**
+
+**Not this series:** typographic explainers · photo dumps without history · mixed streets · implied partnerships.
+
+Edition drafts: `marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/`
+
+---
+
 ## Channel job
 
-Be the local FOMO feed for London independent drops. Convert profile visitors via link → `shopunwrapped.com/instagram`.
+Be the local discovery feed for London high streets — then convert to drops when live. Link → `shopunwrapped.com/instagram`.
 
 ## Profile checklist
 
 - [ ] PFP from `brand` profile-picture export
 - [ ] Bio = brand bible canonical text
 - [ ] Link = shopunwrapped.com/instagram
-- [ ] Highlights: Drops · How it works · Shops · For business
+- [ ] Highlights: **London High Streets** · Drops · How it works · For business
 
 ## Weekly CMO ritual
 
 1. Scan live site for real drop energy (do not invent counts).
-2. Fill next 7 days in `marketing/instagram/CONTENT_CALENDAR.md`.
-3. Produce creatives (canvas brand templates first for single-image feed posts; Gamma/Meta/manual export for carousel work).
-4. Save drafts to `marketing/instagram/drafts/YYYY-MM-DD/`.
+2. Next High Streets episode from `STREET_BACKLOG.md` if photos are in; otherwise wait.
+3. Produce per `LONDON_HIGH_STREETS.md` (or canvas workflow for one-off single images).
+4. Save drafts to `marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/`.
 5. Update calendar statuses.
 6. Optionally push drafts into Meta Business Suite planner (browser, logged-in session).
 7. Send CMO report; wait for publish approval unless told otherwise.
@@ -166,6 +188,16 @@ Reusable `browser_cdp` expression template:
   return { ok: true, file: file.name, size: file.size };
 })();
 ```
+
+## CTA banners & link stickers (conversion)
+
+Every **London High Streets** edition ends on slide 6. Full spec: `marketing/instagram/LONDON_HIGH_STREETS.md`.
+
+| Format | On-creative | At publish |
+|--------|-------------|------------|
+| **Carousel (feed)** | Slide 6: question + espresso band · `Recommend a shop →` | Caption + **first comment** with `shopunwrapped.com/recommend` |
+| **Reel** | Same banner on final frame | **Link sticker** → `/recommend` or `/instagram` |
+| **Story** | Reshare cover | Questions/Poll + link sticker |
 
 ## Meta Business Suite (schedule)
 

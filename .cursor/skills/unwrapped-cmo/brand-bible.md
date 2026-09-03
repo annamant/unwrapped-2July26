@@ -161,13 +161,19 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 
 ## Instagram profile (canonical)
 
+Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
+
 ```
-Limited local drops, reserved in seconds.
-Collect with QR · London
-shopunwrapped.com/instagram
+Your high street, live.
+Shop your high street from your phone — sofa, bus, wherever. Photos & videos from local shops. Don't miss a drop.
+London
 ```
 
-Highlights: Drops · How it works · Businesses · For business  
+Profile link: `shopunwrapped.com/instagram`
+
+**Primary feed series:** [London High Streets](../../marketing/instagram/LONDON_HIGH_STREETS.md) — one street per 6-slide photo-led carousel. Grid is empty; relaunch starts with episode #01 when photos land. Not a website blog.
+
+Highlights: **London High Streets** · Drops · How it works · For business  
 (covers in `brand/svg/story-highlight-*.svg`)
 
 ## Asset library

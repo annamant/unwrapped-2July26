@@ -9,6 +9,7 @@ alwaysApply: false
 When editing or creating files under `marketing/`:
 
 1. Read and follow the project skill **unwrapped-cmo** (`.cursor/skills/unwrapped-cmo/SKILL.md`).
-2. Obey `brand-bible.md` voice + visual tokens — no off-brand templates. Product positioning: **`brand/WHITE_PAPER_v1.md`**.
-3. Keep `marketing/instagram/CONTENT_CALENDAR.md` current when planning or producing posts.
-4. Default to drafts / scheduled — do not publish without explicit user approval.
+2. **Instagram primary strategy:** `marketing/instagram/LONDON_HIGH_STREETS.md` (exact episode rules) · human intake `marketing/instagram/EPISODE_INTAKE.md`. Entry: `marketing/instagram/README.md`. Grid is empty — do not restage deleted Jul launch content.
+3. Obey `brand-bible.md` voice + visual tokens. Product positioning: **`brand/WHITE_PAPER_v1.md`**.
+4. Keep `marketing/instagram/CONTENT_CALENDAR.md` current when planning or producing posts.
+5. Default to drafts / scheduled — do not publish without explicit user approval.
