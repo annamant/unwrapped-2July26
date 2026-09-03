@@ -13,14 +13,14 @@ Living calendar. The CMO agent updates this every run. Status: `idea` → `draft
 | Field | Status |
 |-------|--------|
 | Feed | Empty |
-| Next episode | **#01 Rye Lane, Peckham** — queued, needs ≥3 photos |
+| Next episode | **#01 Rye Lane, Peckham** — drafting (licensed look-dev; prefer Anna reshoot before ready) |
 | First real drop post | Idea only — wait for a live drop on shopunwrapped.com |
 
 ## Upcoming
 
 | Date | Time (London) | Pillar | Format | Hook / working title | Asset | Status | Notes |
 |------|---------------|--------|--------|----------------------|-------|--------|-------|
-| TBD | TBD | London High Streets | Carousel 4:5 ×6 | Rye Lane, Peckham | Waiting on Anna photos | queued | Episode #01 · playbook `LONDON_HIGH_STREETS.md` |
+| TBD | TBD | London High Streets | Carousel 4:5 ×6 | Rye Lane, Peckham | `drafts/2026-09-03-rye-lane/` | drafting | Episode #01 · licensed look-dev slides · prefer Anna-owned photos before ready/post |
 | TBD | TBD | Live drops | Feed 1:1 or 4:5 | "[Shop] just dropped. Limited." | — | idea | Only after a real drop is live on site |
 
 ## Deleted history (not live — do not restage)

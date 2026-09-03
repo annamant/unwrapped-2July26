@@ -14,7 +14,7 @@ Matches launch geography. Prioritise independent retail density + clear “high 
 
 | # | Street / strip | Area | Borough | Postcode | Notes for shoot | Status |
 |---|----------------|------|---------|----------|-----------------|--------|
-| 01 | **Rye Lane** | Peckham | Southwark | SE15 | Episode #1 default. Wide strip + produce shops. Optional: Bussey / Copeland for Did you know? | queued |
+| 01 | **Rye Lane** | Peckham | Southwark | SE15 | Episode #1 default. Wide strip + produce shops. Optional: Bussey / Copeland for Did you know? Draft: `drafts/2026-09-03-rye-lane/` | drafting |
 | 02 | **Lordship Lane** | East Dulwich / Goose Green | Southwark | SE22 | Bookshops, charity, independents. Quieter than Rye Lane. | queued |
 | 03 | **Bellenden Road** | Peckham | Southwark | SE15 | Village high street feel — cafés, bakers, small shops. | queued |
 | 04 | **North Cross Road** | East Dulwich | Southwark | SE22 | Saturday market energy + permanent shopfronts. | queued |

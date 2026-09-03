@@ -5,19 +5,19 @@ import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJso
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — Your high street, live.";
+export const DEFAULT_TITLE = "Unwrapped — Local shop drops on a neighbourhood map";
 export const DEFAULT_DESCRIPTION =
-  "Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.";
+  "Shops post what they're selling right now. See the item on a map, claim it in the app, pick it up in person.";
 
 /** Shopper FAQ for the homepage FAQPage JSON-LD — matches live landing copy. */
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Your high street, live. Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.",
+    a: "A neighbourhood map for local shop drops. Shops post what they're selling right now — you see the item, claim it in the app, and pick it up in person.",
   },
   {
     q: "How does it work?",
-    a: "See it. Claim it. Collect it. A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.",
+    a: "Shops post a photo of the exact item. You see it on the map, claim it in the app, and pick it up at the shop.",
   },
   {
     q: "How do I collect?",
