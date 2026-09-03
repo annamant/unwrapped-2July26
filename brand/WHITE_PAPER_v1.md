@@ -14,7 +14,9 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 |---|---|---|
 | Proximity, pins, walk there | See it → scarce qty → claim before it's gone | **Claim, pay, and collect in person** — the transaction completes at the counter, not in the post |
 
-**Public product loop (shopper):** Look in → See it → Claim it → Collect it.  
+**Public shopper line:** Grab specials from shops near you before they're gone.  
+**Public product loop (shopper):** See it → Claim it → Collect it.  
+**Public explanation:** Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.  
 **Public merchant promise:** Get seen — so you can sell and welcome customers through the door.
 
 ### What Unwrapped is not

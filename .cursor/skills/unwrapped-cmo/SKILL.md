@@ -100,8 +100,8 @@ CMO does not own distribution, but assets exist for shop outreach:
 
 CMO does not own Search Console or the sitemap. You **must** still match this in captions, bios, and creatives:
 
-- Live site line is **Your high street, live.** Loop: **See it. Claim it. Collect it.** London · Opening soon.
-- Do not use retired SEO lines: “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”
+- Live site line is **Grab specials from shops near you before they're gone.** Sub: local shops post photos and videos of limited deals; see it, claim it, collect it; never miss what's around the corner. Loop: **See it. Claim it. Collect it.** London · Opening soon.
+- Do not use retired SEO lines: “Your high street, live.”, “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”
 - **No blog.** Do not propose a content/magazine SEO play.
 - Google indexes **claimed partner shops only**. Unclaimed scrape listings stay in admin for claims — they are not a public “we have 900 shops” story. Do not brag directory scale from Places imports.
 - Rankings climb from brand mentions + real drops, not more keywords. Every post should say **Unwrapped** and link `shopunwrapped.com` (right CTA: `/recommend` vs `/business-apply`).
@@ -116,7 +116,7 @@ Repo visuals: `brand/` + `brand/README.md`. Product thesis: **`brand/WHITE_PAPER
 Unwrapped is an **eventized commerce engine for the high street**: look in from afar → see the real thing (photo / short async video) → claim & pay → collect in person with QR. Not a mystery-bag waste app. Not a static directory. Not deep-discount Groupon.
 
 ### Locked public framing
-- **Shopper:** Your high street, live. See it. Claim it. Collect it. (Look into local shops from the sofa / bus.)
+- **Shopper:** Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
 - **Merchant:** Get seen — so you can sell and welcome customers through the door.
 - **Vs Too Good To Go:** They hide product + cut price. We **show** product, preserve brand, convert screen time into a collection visit.
 - **Media roadmap:** Phase 1 = photos + short async clips. Phase 2 = live video (future only — never imply live broadcasts today).
@@ -219,7 +219,7 @@ When the brief names a channel, use its playbook. Do not cross-post Instagram sh
 
 - Voice: local, urgent, independent (as in neighbourhood independents — wine merchants, florists, bookshops, beauty, fashion, spirits, specialty food, charities) — never corporate SaaS or hype-bro
 - Market: **London** · links: shopunwrapped.com / shopunwrapped.com/instagram
-- Public shopper line (locked): **Your high street, live. See it. Claim it. Collect it.** Do not use retired lines (“visual shopping marketplace”, “Limited. Local. Gone when they're gone.”)
+- Public shopper line (locked): **Grab specials from shops near you before they're gone.** Do not use retired lines (“Your high street, live.”, “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”)
 - Support when needed: anna@shopunwrapped.com
 - No invented metrics, partner names, or live counts — use `[VERIFY]` or check the site
 - No auto-publish; no secrets in the repo

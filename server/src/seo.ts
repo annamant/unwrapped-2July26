@@ -18,22 +18,22 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped — Your high street, live.";
+const DEFAULT_TITLE = "Unwrapped · Grab specials from shops near you before they're gone.";
 const DEFAULT_DESCRIPTION =
-  "Shops post a photo of the exact item. You see it, claim it in the app, collect in person.";
+  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
 
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Your high street, live. Shops post a photo of the exact item. You see it, claim it in the app, and collect in person.",
+    a: "It's simple. Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.",
   },
   {
     q: "How does it work?",
-    a: "See it. Claim it. Collect it. A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.",
+    a: "See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.",
   },
   {
     q: "How do I collect?",
-    a: "Claim and pay in the app, then walk in and collect in person. You get a QR for the collection window.",
+    a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
     q: "Where is Unwrapped launching?",
@@ -44,15 +44,15 @@ const HOME_FAQS: { q: string; a: string }[] = [
 const MERCHANT_FAQS: { q: string; a: string }[] = [
   {
     q: "Is this another deep-discount app?",
-    a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
+    a: "No. Discount apps train people to wait for desperation. You set the price and quantity. Drops are about showing what's ready and getting people through your door — with the brand intact.",
   },
   {
     q: "Do I have to build a catalog?",
-    a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+    a: "No. Catalogues are for when everything is always available — which is rarely true on a high street. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
   },
   {
     q: "What if they don't show up?",
-    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
+    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
   },
   {
     q: "Who is Unwrapped for?",
@@ -102,21 +102,21 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/business-apply",
     title: "Apply to partner your shop — Unwrapped",
     description:
-      "Get seen — so you can sell and welcome customers through the door. Publish a photo or short clip, set your price, and welcome customers who already paid.",
+      "Get seen — so you can sell and welcome customers through your door. Not another discount app. Publish what's ready, keep your brand, and greet people who already paid.",
     type: "website",
   },
   "/recommend": {
     path: "/recommend",
     title: "Recommend a shop — Unwrapped",
     description:
-      "Know a shop you'd really love on Unwrapped? Recommend a bakery, florist, bookshop, boutique, or charity shop — you don't need to own the business.",
+      "Got a shop that deserves to be seen? Tip us a bakery, florist, bookshop, boutique, or charity shop — we'll tell them someone asked for them by name.",
     type: "website",
   },
   "/instagram": {
     path: "/instagram",
     title: "Live drops for Instagram — Unwrapped",
     description:
-      "See what's live on Unwrapped right now — video and photos of what's just landed on London high streets. See it, claim it, collect it.",
+      "What's just landed on London high streets — photo or video, claim it, collect it.",
     type: "website",
   },
   "/resources": {
@@ -578,7 +578,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>Your high street, live.</h1><p>London · Opening soon</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>Grab specials from shops near you before they're gone.</h1><p>London · Opening soon</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
             ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a> — ${escapeHtml(b.neighbourhoods.slice(0, 3).join(", "))}</li>`).join("")}</ul></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,

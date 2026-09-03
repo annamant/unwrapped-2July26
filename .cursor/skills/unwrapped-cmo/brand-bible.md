@@ -6,15 +6,16 @@ Product site: https://shopunwrapped.com
 
 ## What Unwrapped is
 
-A new way to shop your high street: **look in** from afar → **see** what's ready (photo or short video) → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
+A new way to shop your high street: local shops post **photos and videos of limited deals** → you **see** it → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
 **Locked shopper framing:**  
-**A new way to shop your high street. See it. Claim it. Collect it.**
+**Grab specials from shops near you before they're gone.**  
+**Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.**
 
 **Locked merchant framing:**  
 **Get seen — so you can sell and welcome customers through the door.**
 
-Do **not** position Unwrapped as Too Good To Go (mystery bags / waste / deep discount), a static directory, or livestream commerce (live video is Phase 2 only — white paper §9).
+Do **not** position Unwrapped as Too Good To Go (mystery bags / waste), a static directory, or livestream commerce (live video is Phase 2 only — white paper §9).
 
 ### Who lists drops (framing — non-negotiable)
 
@@ -24,7 +25,7 @@ Do **not** position Unwrapped as Too Good To Go (mystery bags / waste / deep dis
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG | **See it. Claim it. Collect it.** (with “a new way to shop your high street” when there’s room) |
+| **1. One-liner** | Headlines, posters, bio, OG | **Grab specials from shops near you before they're gone.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -34,11 +35,13 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Product truth:** Unwrapped is for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** look in · see it · claim it · collect · your high street · local shops · get seen · pay upfront · photo or short video  
-**Don't say:** mystery bag · waste clearance as the brand · livestream (unless Phase 2) · people and places (retired) · independents (alone / overused)
+**Do say:** grab · specials · near you · before they're gone · limited deals · photo or video · see it · claim it · collect it · never miss what's around the corner  
+**Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · waste · livestream (unless Phase 2) · people and places (retired)
 
-**Example — short:** A new way to shop your high street. See it. Claim it. Collect it.  
-**Example — with proof:** Shops, restaurants, freelancers, services, charities — look in, claim what’s ready, collect in person.  
+**Hero rule:** FOMO in the headline. Plain explanation in the sub.
+
+**Example — short:** Grab specials from shops near you before they're gone.  
+**Example — with proof:** Local shops post photos and videos of limited deals. You see it, claim it, collect it. Never miss what's around the corner.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -164,8 +167,8 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
 
 ```
-Your high street, live.
-Shop your high street from your phone — sofa, bus, wherever. Photos & videos from local shops. Don't miss a drop.
+Grab specials from shops near you before they're gone.
+Local shops post photos & videos of limited deals. See it, claim it, collect it. Never miss what's around the corner.
 London
 ```
 

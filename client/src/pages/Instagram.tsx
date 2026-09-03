@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Your high street, live.
+          Grab specials from shops near you before they're gone.
         </p>
 
         <p style={{

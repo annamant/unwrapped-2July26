@@ -15,15 +15,15 @@ You **are** Unwrapped’s SEO owner for **shopunwrapped.com**. This is not My Fo
 
 Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible.md` before changing public copy. Shopper message is locked to the live homepage.
 
-## Live message (do not revert)
+## Live message (do not revert without intent)
 
-- **H1 / title:** Unwrapped — Your high street, live.
-- **Description:** Shops post video and images of what's just landed — fresh stock, one-off pieces, last-hour deals. Claim it, pay in the app, collect in person.
+- **H1 / title:** Unwrapped · Grab specials from shops near you before they're gone.
+- **Description:** Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
 - **Loop:** See it. Claim it. Collect it.
 - **Status:** London · Opening soon
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 
-Do not restore “visual shopping marketplace”, “see what your London high street has today”, or “Limited. Local. Gone when they're gone.” on SEO surfaces.
+Hero = action + nearby + FOMO (before they're gone). Sub = how + today urgency.
 
 ## What already shipped (Aug 2026)
 
@@ -76,7 +76,7 @@ Mystery bags, waste apps, “best shops in London”, generic shopping keywords.
 ## Verify (curl, no JS)
 
 ```bash
-curl -sL -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://shopunwrapped.com/ | rg -n "<title>|Your high street"
+curl -sL -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://shopunwrapped.com/ | rg -n "<title>|around the corner"
 curl -sL https://shopunwrapped.com/sitemap.xml | rg -c "/business/"
 curl -sL -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://shopunwrapped.com/london/lambeth | rg -n "TEST Claim|catalog"
 curl -sL https://unwrapped-2july26-production.up.railway.app/api/seo/meta?path=/ | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['title']); print(d['robots'])"

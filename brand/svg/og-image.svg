@@ -2,8 +2,9 @@
   <rect width="1200" height="630" fill="#FFE0E7"/>
   <rect x="0" y="0" width="1200" height="4" fill="#160703"/>
   <text x="80" y="72" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#8B555E" letter-spacing="3.2">LONDON · OPENING SOON</text>
-  <text x="80" y="250" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="64" fill="#160703">Your high street, live.</text>
-  <text x="80" y="330" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="32" fill="#160703">See it. Claim it. Collect it.</text>
+  <text x="80" y="230" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="48" fill="#160703">Grab specials from shops</text>
+  <text x="80" y="290" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="48" fill="#160703">near you before they're gone.</text>
+  <text x="80" y="360" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="28" fill="#160703">See it. Claim it. Collect it.</text>
   <text x="80" y="390" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">Shops post what's just landed. Claim it, pay in the app, collect in person.</text>
   <rect x="80" y="500" width="260" height="48" fill="#160703"/>
   <text x="210" y="532" text-anchor="middle" font-family="Menlo, monospace" font-size="14" fill="#FFE0E7" letter-spacing="1.6">SHOPUNWRAPPED.COM</text>

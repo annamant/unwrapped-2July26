@@ -627,7 +627,7 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              Your high street, live.
+              Grab specials from shops near you before they're gone.
             </h1>
 
             <p
@@ -642,7 +642,7 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Shops post a photo of the exact item. You see it, claim it in the app, collect in person.
+              Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
             </p>
 
             <div className="uw-fade-4" style={{ maxWidth: 420 }}>
@@ -834,8 +834,7 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            A bakery posts the loaf that just came out. A boutique shows the jacket on the rail.
-            You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.
+            See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.
           </p>
         </div>
 
@@ -872,7 +871,7 @@ export default function Landing() {
             fontWeight: 800, color: FG, letterSpacing: "-1px",
             lineHeight: 1.1, maxWidth: 560, marginBottom: 14,
           }}>
-            See the real thing. Then collect it.
+            See the real thing. Then fetch it.
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
@@ -885,8 +884,8 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
           }}>
-            You see it, claim it in seconds, pay in the app, and walk in with a QR.
-            No mystery bag. No delivery wait. Just something you chose — waiting at the counter.
+            You look, you lock it in, you walk in with a QR.
+            No mystery bag. No courier who doesn't care about sourdough. Just something you chose — waiting at the counter.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 12,
@@ -953,7 +952,7 @@ export default function Landing() {
                 className="uw-pulse-dot"
                 style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
               />
-              FIRST 500 ONLY · CLOSING SOON
+              FIRST 500 · BEFORE THE CROWD
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -964,9 +963,9 @@ export default function Landing() {
               lineHeight: 1.05,
               marginBottom: 16,
             }}>
-              Be a founding shopper.
+              People don't want early access.
               <br />
-              Get in before the doors open.
+              They want to have been there.
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -977,7 +976,7 @@ export default function Landing() {
               marginBottom: 32,
               maxWidth: 540,
             }}>
-              When we launch your neighbourhood, you'll have access before anyone else. Free premium features, first dibs on every drop, and real influence over what happens next.
+              Founding shoppers aren't buying features. They're buying the status of knowing the street before everyone else does — first look at every drop, permanent privileges, and a real say in what Unwrapped becomes on your high street.
             </p>
 
             <div style={{
@@ -988,21 +987,21 @@ export default function Landing() {
             }}>
               {[
                 {
-                  icon: "⚡",
-                  title: "First access to every drop",
-                  desc: "Claim items 24 hours before the public — the best stuff won't even make it to general release",
+                  num: "01",
+                  title: "First look — honestly",
+                  desc: "Claim 24 hours before the public. Scarcity is real; queue-jumping is just the polite admission that timing matters.",
                 },
                 {
-                  icon: "✨",
-                  title: "Premium features, free forever",
-                  desc: "Get all the premium tools for free while regular shoppers pay. Priority notifications, advanced filters, saved searches — all unlocked",
+                  num: "02",
+                  title: "Asymmetric rewards for early believers",
+                  desc: "Premium tools free for founders while later shoppers pay. Priority alerts, filters, saved searches — because being early should feel unfair in your favour.",
                 },
                 {
-                  icon: "🎯",
-                  title: "Shape what happens next",
-                  desc: "Vote on which shops join your neighbourhood, request new features, and help build Unwrapped for your high street",
+                  num: "03",
+                  title: "Co-author the map",
+                  desc: "Vote shops onto your street. Request what we build next. The best neighbourhood products are never designed solely by people in an office.",
                 },
-              ].map(({ icon, title, desc }) => (
+              ].map(({ num, title, desc }) => (
                 <div
                   key={title}
                   style={{
@@ -1030,11 +1029,16 @@ export default function Landing() {
                     gap: 14,
                   }}>
                     <span style={{
-                      fontSize: 26,
-                      lineHeight: 1,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: "0.06em",
+                      color: "rgba(255,240,244,0.55)",
+                      lineHeight: 1.4,
                       flexShrink: 0,
+                      paddingTop: 2,
                     }}>
-                      {icon}
+                      {num}
                     </span>
                     <div>
                       <div style={{
@@ -1095,7 +1099,7 @@ export default function Landing() {
                 fontWeight: 500,
                 textAlign: isMobile ? "center" : "left",
               }}>
-                No payment required · Just your email
+                No payment · Just an email · And slightly better timing than everyone else
               </div>
             </div>
 
@@ -1107,7 +1111,7 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              Once we hit 500, this closes. Regular shoppers won't get early access or free premium features.
+              Cap of 500. After that, you're just another shopper — which is fine, if you enjoy queueing.
             </div>
           </div>
         </section>
@@ -1141,14 +1145,14 @@ export default function Landing() {
             fontWeight: 700, color: FG,
             lineHeight: 1.15, letterSpacing: "-0.8px", marginBottom: 16,
           }}>
-            Know a shop you'd really love on Unwrapped?
+            Got a shop that deserves to be seen?
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Recommend a bakery, florist, bookshop, boutique, or charity shop.
-            We'll reach out and let them know someone selected them — you don't need to own the business to nominate it.
+            Algorithms reward chains. Neighbours reward bakeries. Tip us a florist, bookshop, boutique, or charity shop —
+            we'll tell them someone asked for them by name. Few things are more persuasive than being wanted.
           </p>
           <a
             href="/recommend"
@@ -1188,25 +1192,27 @@ export default function Landing() {
         <div style={{ position: "relative", maxWidth: 640 }}>
           <div style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: V, letterSpacing: "0.06em", marginBottom: 16,
+            color: "rgba(255,224,231,0.72)", letterSpacing: "0.06em", marginBottom: 16,
           }}>
-            SEE IT · CLAIM IT · COLLECT IT
+            LOOK · LOCK · WALK IN
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(30px, 4.2vw, 48px)",
             fontWeight: 700, lineHeight: 1.1, letterSpacing: "-1.2px",
             marginBottom: 16,
+            color: BG,
           }}>
-            Be here when London{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: V }}>unwraps.</em>
+            Amazon will bring you anything.{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: CREAM }}>We bring you round the corner.</em>
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
-            marginBottom: 32, maxWidth: 440, fontWeight: 300,
+            marginBottom: 32, maxWidth: 480, fontWeight: 300,
           }}>
-            Create a founding shopper account. When London's best shops post fresh arrivals and limited deals, claim them instantly on your phone before they're gone.
+            Create a founding shopper account. When London shops post what just landed, you'll see it, claim it, and collect it —
+            before the people who only check their phones at midnight.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
@@ -1234,7 +1240,7 @@ export default function Landing() {
               href="/business-apply"
               style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
             >
-              Partner with us
+              Get seen on the map
             </a>
           </p>
           <a
@@ -1273,7 +1279,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            See what local shops just posted. Claim it before it's gone. Collect in person.
+            The high street never stopped being interesting. It stopped being visible.
           </p>
         </div>
 
@@ -1588,14 +1594,14 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             fontWeight: 700, color: FG, letterSpacing: "-0.6px",
             lineHeight: 1.15, marginBottom: 8,
           }}>
-            Pin by pin.
+            Pin by pin. Street by street.
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 420, fontWeight: 300,
           }}>
             {pins.length === 0
-              ? "No live drops yet. When businesses launch, their pins show up here."
+              ? "No live drops yet. When shops go live, their pins appear here — desire with a postcode."
               : `${pins.length} drops visible · click a pin to preview`}
           </p>
         </div>
@@ -1770,7 +1776,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            Search the map
+            The neighbourhood, pin by pin
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1783,7 +1789,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches — clear your search to see the full curated board."
-              : "Browse shops coming onto Unwrapped. Nominate one you love."}
+              : "Proximity without urgency is just a directory. This is the map of shops coming onto Unwrapped — nominate one you love."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",

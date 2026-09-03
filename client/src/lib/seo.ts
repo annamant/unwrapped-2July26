@@ -5,23 +5,23 @@ import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJso
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped — Your high street, live.";
+export const DEFAULT_TITLE = "Unwrapped · Grab specials from shops near you before they're gone.";
 export const DEFAULT_DESCRIPTION =
-  "Shops post a photo of the exact item. You see it, claim it in the app, collect in person.";
+  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
 
 /** Shopper FAQ for the homepage FAQPage JSON-LD — matches live landing copy. */
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Your high street, live. Shops post a photo of the exact item. You see it, claim it in the app, and collect in person.",
+    a: "It's simple. Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.",
   },
   {
     q: "How does it work?",
-    a: "See it. Claim it. Collect it. A bakery posts the loaf that just came out. A boutique shows the jacket on the rail. You see the actual item in a photo or video, claim it before someone else does, and walk in to collect it — no guessing, no waiting for delivery.",
+    a: "See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.",
   },
   {
     q: "How do I collect?",
-    a: "Claim and pay in the app, then walk in and collect in person. You get a QR for the collection window.",
+    a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
     q: "Where is Unwrapped launching?",
@@ -33,15 +33,15 @@ export const HOME_FAQS: { q: string; a: string }[] = [
 export const MERCHANT_FAQS: { q: string; a: string }[] = [
   {
     q: "Is this another deep-discount app?",
-    a: "No. You set the price and quantity. Drops are about showing what's ready and getting people through your door — not training locals to only buy on slash prices.",
+    a: "No. Discount apps train people to wait for desperation. You set the price and quantity. Drops are about showing what's ready and getting people through your door — with the brand intact.",
   },
   {
     q: "Do I have to build a catalog?",
-    a: "No. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+    a: "No. Catalogues are for when everything is always available — which is rarely true on a high street. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
   },
   {
     q: "What if they don't show up?",
-    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe.",
+    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
   },
   {
     q: "Who is Unwrapped for?",
@@ -247,7 +247,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Apply to partner your shop — ${SITE_NAME}`,
         description:
-          "Get seen — so you can sell and welcome customers through the door. Publish a photo or short clip, set your price, and welcome customers who already paid.",
+          "Get seen — so you can sell and welcome customers through your door. Not another discount app. Publish what's ready, keep your brand, and greet people who already paid.",
         path,
         jsonLd: merchantJsonLd(),
       };
@@ -255,14 +255,14 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Know a shop you'd really love on Unwrapped? Recommend a bakery, florist, bookshop, boutique, or charity shop — you don't need to own the business.",
+          "Got a shop that deserves to be seen? Tip us a bakery, florist, bookshop, boutique, or charity shop — we'll tell them someone asked for them by name.",
         path,
       };
     case "/instagram":
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "See what's live on Unwrapped right now — video and photos of what's just landed on London high streets. See it, claim it, collect it.",
+          "What's just landed on London high streets — photo or video, claim it, collect it.",
         path,
       };
     case "/resources":

@@ -72,7 +72,7 @@ export default function LondonHub() {
           maxWidth: 640,
           marginBottom: 24,
         }}>
-          Unwrapped lets you see what's ready on London high streets — a photo or short video, claim in the app, collect at the counter. We're launching densest in <strong style={{ color: FG }}>South London</strong>, with a page for every borough.
+          Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals. You see it, claim it, and collect it. We're launching densest in <strong style={{ color: FG }}>South London</strong>, with a page for every borough.
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           <Link

@@ -354,7 +354,7 @@ export function londonHubSeo(): { title: string; description: string; path: stri
   return {
     title: "London boroughs — Unwrapped",
     description:
-      "See what's ready on London high streets — photo or short video, claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
+      "Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals — claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
     path: "/london",
   };
 }
