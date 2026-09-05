@@ -34,8 +34,8 @@ The episode needs **six different pictures**. Crops of the same shot are a last 
 
 | Beat | Bring if you can |
 |------|------------------|
-| 1 Identity | Hero “this is the street” frame (shops OK as the opener) |
-| 2 Scale | Depth / stretch looking **down the road** or a long parade — not a second shopfront portrait |
+| 1 Identity (cover) | **Depth looking down the road** — the ribbon / stretch. **Not** a shopfront portrait |
+| 2 Scale (orient) | A **different** living-street or character angle — **not** a second depth twin |
 | 3 Then | Archive **or** the named historic landmark for that beat |
 | 4 Now | People / life / vibe (or the place that stands for today’s energy) |
 | 5 Twist | **The thing the curious fact is about** |

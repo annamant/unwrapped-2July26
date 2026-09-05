@@ -81,8 +81,8 @@ Split the locked paragraph into these jobs **before** opening a design tool. Do 
 
 | # | Beat | Words do | Photo must show |
 |---|------|----------|-----------------|
-| **1** | Cover = **identity** | Name + place + borough + South London (or the true compass) + station (Tube vs Overground accurate) + open hook | Hero “this is the street” frame (shops OK as opener) |
-| **2** | Orient = **scale / character** | Length / BID count / character of the ribbon | Depth / stretch looking **down the road** or a long parade — **not** another shopfront portrait like the cover |
+| **1** | Cover = **identity** | Name + place + borough + South London (or the true compass) + station (Tube vs Overground accurate) + open hook | **Depth looking down the road** — the ribbon / stretch. **Not** a shopfront portrait |
+| **2** | Orient = **scale / character** | Length / BID count / character of the ribbon | A **different** living-street or character angle — **not** a second depth twin, not another down-the-road shot |
 | **3** | Then = **history peak** | Past golden moment | Archive **or** the named landmark in that beat |
 | **4** | Now = **today’s social energy** | Young / vibrant / multicultural life | People / life / vibe (or the place that stands for it) — **not** a Then landmark |
 | **5** | Twist = **curious fact** | One specific odd/true fact | **The thing the fact is about** |
@@ -103,7 +103,8 @@ Rules for the map:
 
 - **One unique photo per slide.** Crops of the same frame are a last resort, never the plan.
 - The image must illustrate **that** beat’s copy. If the words name a landmark, that landmark gets the slide.
-- Slide 2 is a **ribbon / depth** shot, not a second cover portrait.
+- **Slide 1 is the depth photo** looking down the road. Do not open on a shopfront portrait.
+- **Slide 2 is not a second depth twin.** Use a different living-street or character angle. Scale / BID copy lives here; the long-ribbon picture lives on the cover.
 - Slide 4 is **life now**, not the Then building again.
 
 ---
@@ -235,6 +236,8 @@ drafts/YYYY-MM-DD-[street-slug]/
 - [ ] Photo–text map written **before** design  
 - [ ] One street only · 6 slides · photo on each · 1080×1350  
 - [ ] Beats 1 / 2 / 4 are distinct (identity ≠ scale ≠ today’s energy)  
+- [ ] Slide 1 = depth looking down the road · **not** a shopfront portrait  
+- [ ] Slide 2 = different living-street / character angle · **not** a second depth twin  
 - [ ] One unique photo per slide · image matches that beat’s copy  
 - [ ] Named landmarks have a slide  
 - [ ] On-image type = Streatham system (espresso banner / pink story panels) · **no** WHERE/NOW/DID YOU KNOW chrome  
