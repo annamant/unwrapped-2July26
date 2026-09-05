@@ -9,7 +9,7 @@
 Folder: `YYYY-MM-DD-[street-slug]/`
 
 ```
-your-photos/     ← human drop (≥3 photos)
+your-photos/     ← human drop (ideally 6 unique; one per beat)
 slides/          ← 01.jpg … 06.jpg (1080×1350)
 captions.md
 notes.md

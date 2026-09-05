@@ -1,7 +1,11 @@
-# London High Streets — exact guidelines
+# London High Streets — canonical playbook
 
-**Canonical playbook.** Any agent producing Instagram for Unwrapped must follow this file.  
+**Locked method (post-Streatham).** Any agent producing Instagram for Unwrapped must follow this file.  
 **Series:** London High Streets · @shopunwrapped · Instagram only (no website blog).
+
+This is a **6-slide documentary story**, not a set of titled photo cards. Write the street as one piece. Images support the story.
+
+**Do not invent product claims.** Do not imply a shop is on Unwrapped. Do not publish until a human says post.
 
 ---
 
@@ -10,22 +14,123 @@
 | | |
 |--|--|
 | **Unit** | One **episode** = one **London high street** = one **feed carousel** |
-| **Slides** | Exactly **6** |
-| **Size** | **1080 × 1350** (4:5) JPEG/PNG |
-| **Visual law** | **Photo on every slide.** No text-only full-bleed pink/espresso slides. |
-| **On-image copy** | Max **~25 words** per slide (except slide 6 question) |
-| **Full story** | Lives in the **caption** (150–280 words) |
+| **Form** | One **docu story**: lock a full narrative paragraph first, then split it across slides |
+| **Slides** | Exactly **6** · **1080 × 1350** (4:5) JPEG/PNG |
+| **Visual law** | **Photo on every slide.** Images support the story — not titled photo cards, not typographic product posts |
+| **On-image copy** | Story panels + street-name banner + optional beat/location chips. **No** WHERE / NOW / DID YOU KNOW label chrome. No hard ~25-word cap |
+| **Caption** | Carries the **full piece** |
+| **First comment** | Hashtags + credits (and the nominate URL) |
+| **CTA** | Favourite-shop ask + `shopunwrapped.com/recommend` **only** |
 | **Publish** | Meta Business Suite · **draft until human says post** |
 | **Cadence** | ~1 episode / week |
 | **Highlight** | Profile highlight named **London High Streets** |
 
-**Not allowed:** mixed streets in one carousel · typographic product explainers as the episode · implying a shop is on Unwrapped · `/business-apply` as the default CTA · inventing history.
+**Not allowed:** mixed streets in one carousel · typographic product explainers as the episode · implying a shop is on Unwrapped · `/business-apply` as the default CTA · inventing history or partner/live-drop counts.
 
 ---
 
-## 2. Episode conversion spine (required)
+## 2. Always consult (research — required every episode)
 
-Every episode must move the viewer through:
+Do this **before** locking the script. Every episode must consult these four sources:
+
+| Source | What to take |
+|--------|----------------|
+| **Local BID website** | Ballot tables, levy area, shop counts, stated length / character. Prefer **hard numbers** over marketing “500+” |
+| **Borough council website** | Conservation areas, high-street programmes, official place names, ward / neighbourhood language |
+| **Historic England / National Heritage List** | Listed buildings and official names on *this* street. (Anna may say “English Heritage” — same job: the list, not a vibe recap) |
+| **Wikipedia** | Orientation + leads to chase in the three sources above — not the last word |
+
+If a number, date, or “longest / first / only” claim is not pinned in a primary source, mark **`[VERIFY]`** and keep it off the slides until checked. Do not publish an episode with open `[VERIFY]` on-image.
+
+---
+
+## 3. Production order (required — do not skip or reorder)
+
+1. **Research pass** — BID · council · Historic England / National Heritage List · Wikipedia (see §2).
+2. **Lock one full story paragraph** — where → then → now → curious twist → favourite-shop ask. This is the piece. Do not design yet.
+3. **Split to 6 beats + photo–text map *before* design** — one unique photo per slide; the image must match that beat’s copy; named landmarks get a slide.
+4. **Rights pass** — CC / owned / Anna-supplied only. Council PR photography = **look-dev until cleared**.
+5. **Compose all 6**, show the full set, iterate on notes.
+6. **Caption package** + first comment.
+
+---
+
+## 4. Lock the story paragraph first
+
+Write **one** continuous paragraph (or a short run of paragraphs) that a Londoner could read aloud. Spine:
+
+```
+where → then → now → curious twist → favourite-shop ask
+```
+
+| Move | Job |
+|------|-----|
+| **Where** | Name the street, the place, the borough, South/East/North/West London as true, the station (**Tube vs Overground accurate**) |
+| **Then** | One past golden moment — a peak, not a Wikipedia dump |
+| **Now** | Today’s social energy — young / vibrant / multicultural life as it actually is on *this* street |
+| **Curious twist** | One specific odd/true fact (the thing, not a generic “did you know” tone) |
+| **Ask** | Close + **What's your favourite shop on [Street]?** |
+
+The caption is this piece (tightened, not a second invention). Slides are the same piece, cut into six beats.
+
+---
+
+## 5. Exact 6-beat jobs (do not blur 1 / 2 / 4)
+
+Split the locked paragraph into these jobs **before** opening a design tool. Do not merge cover identity with scale. Do not put today’s energy on the Then landmark.
+
+| # | Beat | Words do | Photo must show |
+|---|------|----------|-----------------|
+| **1** | Cover = **identity** | Name + place + borough + South London (or the true compass) + station (Tube vs Overground accurate) + open hook | Hero “this is the street” frame (shops OK as opener) |
+| **2** | Orient = **scale / character** | Length / BID count / character of the ribbon | Depth / stretch looking **down the road** or a long parade — **not** another shopfront portrait like the cover |
+| **3** | Then = **history peak** | Past golden moment | Archive **or** the named landmark in that beat |
+| **4** | Now = **today’s social energy** | Young / vibrant / multicultural life | People / life / vibe (or the place that stands for it) — **not** a Then landmark |
+| **5** | Twist = **curious fact** | One specific odd/true fact | **The thing the fact is about** |
+| **6** | Ask | Close + favourite-shop ask | Soft civic / atmosphere closer |
+
+**Photo–text map (required before design):**
+
+| Slide | Beat | Script chunk (from the locked paragraph) | Named photo | Why this frame matches |
+|-------|------|------------------------------------------|-------------|------------------------|
+| 01 | Identity | | | |
+| 02 | Scale | | | |
+| 03 | Then | | | |
+| 04 | Now | | | |
+| 05 | Twist | | | |
+| 06 | Ask | | | |
+
+Rules for the map:
+
+- **One unique photo per slide.** Crops of the same frame are a last resort, never the plan.
+- The image must illustrate **that** beat’s copy. If the words name a landmark, that landmark gets the slide.
+- Slide 2 is a **ribbon / depth** shot, not a second cover portrait.
+- Slide 4 is **life now**, not the Then building again.
+
+---
+
+## 6. Locked on-image type (Streatham look-dev — approved direction)
+
+| Element | Field | Type |
+|---------|--------|------|
+| **Street-name banner** (every slide) | Espresso `#160703` | Baby pink `#FFE0E7` · **Playfair Bold** |
+| **Long story panels** | Baby pink `#FFE0E7` | Espresso `#160703` |
+| **Beat / location chips** | Baby pink `#FFE0E7` | Espresso `#160703` |
+
+**Fonts:** Playfair Display + Space Mono only.
+
+**Do not use**
+
+- WHERE / NOW / DID YOU KNOW (or any equivalent section-label chrome)
+- A hard **~25 words per slide** cap — write enough story to carry the beat; keep it readable, not a wall
+- A mandatory eyebrow **`LONDON HIGH STREETS`** on every slide. Series mark is **optional, tiny**, or carried by the pink / espresso system alone
+
+**Still true:** photo under the type on every slide · no text-only full-bleed pink/espresso cards · no purple AI-startup look · no banner-ad CTA pill as the whole of slide 6.
+
+---
+
+## 7. Conversion spine
+
+Every episode still moves the viewer through:
 
 ```
 SEE (want the street) → KNOW (curious fact) → BELONG (opinion about a shop) → ACT (comment or /recommend)
@@ -34,161 +139,115 @@ SEE (want the street) → KNOW (curious fact) → BELONG (opinion about a shop) 
 | Rank | Conversion | How the episode gets it |
 |------|------------|-------------------------|
 | 1 | Comment shop name | Slide 6 question |
-| 2 | Nominate | CTA **Recommend a shop →** → `shopunwrapped.com/recommend` |
+| 2 | Nominate | Favourite-shop ask → `shopunwrapped.com/recommend` |
 | 3 | Follow / save | Series recognition + strong cover |
-| 4 | Soft product | One quiet line in caption only (optional) |
+| 4 | Soft product | One quiet line in the caption only (optional). **No invented live-drop / partner claims** |
 
 **One ask only** on slide 6. Do not stack follow + share + apply + nominate.
-
----
-
-## 3. Exact slide map
-
-| # | Beat | Photo source | On-image text (exact pattern) |
-|---|------|--------------|-------------------------------|
-| **1** | Cold open / Cover | Best wide street or shopfront | Eyebrow `LONDON HIGH STREETS` · **Street name** (Playfair) · Borough |
-| **2** | Orient | 2nd angle or crop of cover | Label `WHERE` · station · borough/postcode · **one** history line |
-| **3** | Proof of life | People / stalls / windows | Label `NOW` · 1–2 lines of what’s here today |
-| **4** | Twist | Detail or related shot | Label `DID YOU KNOW?` · **one** Playfair fact line · optional 1 support line |
-| **5** | Breath | Strongest atmosphere/detail | Tiny location label **or no text** |
-| **6** | Ask | 3rd photo, slightly darkened + espresso band | Question (below) + pill **Recommend a shop →** |
 
 **Default question (slide 6 + caption end):**  
 `What's your favourite shop on [Street]?`
 
-**Default CTA:**  
-`Recommend a shop →` → `https://shopunwrapped.com/recommend`
-
-**Brand tokens on slides:** baby pink `#FFE0E7` · espresso `#160703` · Playfair Display · Space Mono · soft espresso scrim under type · series eyebrow `LONDON HIGH STREETS` on every slide.
+**Default CTA (only this):**  
+`https://shopunwrapped.com/recommend`
 
 ---
 
-## 4. Exact caption structure
+## 8. Caption package
 
-Use this skeleton every time:
+**Caption = the full piece** (the locked paragraph, edited for Instagram — not a new story).
 
 ```
-[Street name] — [one-line hook]
+[Street name] — [one-line hook from the open]
 
-[Where: 2–3 sentences]
-
-[Then: 2–4 sentences — verified]
-
-[Now: 2–3 sentences]
-
-Did you know? [Curious fact expanded — 1–3 sentences]
+[The locked story: where → then → now → curious twist]
 
 What's your favourite shop on [Street]?
 
 Drop the name in the comments — or recommend a shop → shopunwrapped.com/recommend
-
-#london #[borough] #[streettag] #londonhighstreets #highstreet #shoplocal
 ```
 
-**Hashtags:** 5–8 max.  
-**First comment (required):**  
-`Nominate a shop: https://shopunwrapped.com/recommend`  
-(+ photo credit lines only if images are not owned by Unwrapped).
+Optional: one quiet Unwrapped line in the caption only, using locked public framing from `brand/WHITE_PAPER_v1.md` — never invented counts, never “we have N shops,” never a named partner unless they are live on the site.
 
-**Curious fact:** Required. Specific to this street. Past, present, or future. If unverified → mark `[VERIFY]` and **do not publish** until checked.
+**Hashtags and credits do not live in the caption.** Put them in the **first comment**:
 
----
+```
+Nominate a shop: https://shopunwrapped.com/recommend
 
-## 5. Field intake — what the human must bring
+#london #[borough] #[streettag] #londonhighstreets #highstreet #shoplocal
 
-### Required (every episode)
+[Credit lines — only if images are not Unwrapped-owned]
+```
 
-| # | Item | Exact requirement |
-|---|------|-------------------|
-| 1 | **Street name** | Official name (e.g. `Rye Lane`) |
-| 2 | **Place** | Neighbourhood + borough (e.g. `Peckham, Southwark`) |
-| 3 | **Photos** | **Minimum 3** distinct photos · **ideal 4–5** |
+Hashtags: 5–8 max.
 
-### Photo specifications (exact)
-
-| Spec | Rule |
-|------|------|
-| Count | Min **3** · ideal **4–5** · agent uses ≤4 unique frames (crops OK for 6 slides) |
-| Orientation | Portrait preferred, or landscape **croppable to 4:5** without cutting the subject |
-| Resolution | Long edge **≥ 1500px** (phone default is fine) |
-| Subject mix | At least: (A) wide street/shopfronts · (B) life on street · (C) detail |
-| Quality bar | Clear focus · usable light · not grey mush · not heavy motion blur |
-| Rights | Must be **ours to post** (shot by us / commissioned / licensed). No random Google grabs. |
-| Naming | Optional: `01-cover.jpg`, `02-now.jpg`, `03-detail.jpg` … |
-
-### Optional (helps, not required)
-
-| Item | Example |
-|------|---------|
-| Postcode area | `SE15` |
-| Nearest station | `Peckham Rye` |
-| One local tip | `Best before 11 on Saturdays` / `Fabric shops toward Nunhead` |
-| Curious-fact lead | `Bussey Building behind the lane` (agent still verifies) |
-| Custom question | Only if better than the default favourite-shop ask |
-
-### Do **not** bring
-
-- Full history essays  
-- Captions, hashtags, slide layouts  
-- Product / Unwrapped pitch copy  
-- Permission to call a shop a “partner” unless they are live on Unwrapped  
-
-### How to hand off
-
-**Option A — chat:** attach photos + one line  
-`Street: Rye Lane | Place: Peckham, Southwark | Tip: …`
-
-**Option B — folder:**  
-`marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/your-photos/`  
-Then message: street name + place.
-
-**Intake complete when:** street named + ≥3 usable photos in hand. Agent may not invent photos.
+**Curious fact:** Required. Specific to this street. If unverified → `[VERIFY]` and **do not publish** until checked.
 
 ---
 
-## 6. Agent production (exact)
+## 9. Field intake
 
-When intake is complete:
+Human brings street + photos. Agent does research + script + map + compose.
 
-1. Research Where / Then / Now / Did you know? (verify sources).  
-2. Assign photos to slides 1–6 (reuse crops if only 3 photos).  
-3. Write on-image lines (short) + full caption + first comment.  
-4. Export 6 × 1080×1350 assets into  
+**Full intake form:** [`EPISODE_INTAKE.md`](./EPISODE_INTAKE.md)
+
+| Required | Rule |
+|----------|------|
+| Street + place | Official name + neighbourhood + borough |
+| Photos | **Six unique frames** if possible (one per beat). Minimum **4** distinct photos — never invent or scrape Google for publish |
+| Rights | **Ours to post:** shot by us / commissioned / licensed CC with credit. Council PR = look-dev until cleared |
+
+**Intake complete when:** street named + usable photos in hand. Agent may not invent photos.
+
+---
+
+## 10. Agent production (after intake)
+
+1. Research pass (§2) — save sources in `notes.md`.  
+2. Lock the full story paragraph — show Anna before splitting if the brief is a new street.  
+3. Split to 6 beats + fill the photo–text map. Named landmarks get a slide.  
+4. Rights pass. Hold any uncleared council / archive stills as look-dev.  
+5. Compose all 6 × 1080×1350 into  
    `marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/slides/`  
-5. Save `captions.md` + `notes.md` (`[VERIFY]` list, photo map).  
-6. Update `CONTENT_CALENDAR.md` → status `ready`.  
-7. Show preview / assets to human.  
-8. **Do not publish** until explicit “post” / “publish” / “schedule”.  
-9. Carousel upload via **Meta Business Suite** only (not direct-web multi-file).
+6. Save `captions.md` (full piece + first comment) + `notes.md` (sources, `[VERIFY]`, photo–text map).  
+7. Show the **full set** of six. Iterate on notes.  
+8. Update `CONTENT_CALENDAR.md` → `drafting` / `ready`. Update `STREET_BACKLOG.md` status.  
+9. **Do not publish** until explicit “post” / “publish” / “schedule”.  
+10. Carousel upload via **Meta Business Suite** only (not direct-web multi-file).
 
 ### Draft folder layout
 
 ```
 drafts/YYYY-MM-DD-[street-slug]/
   your-photos/          ← human drop
-  slides/               ← 01.jpg … 06.jpg final
-  captions.md
-  notes.md
+  slides/               ← 01.jpg … 06.jpg
+  captions.md           ← full piece + first comment
+  notes.md              ← research, [VERIFY], photo–text map, rights
   preview.html          ← optional
 ```
 
 ---
 
-## 7. Done checklist (episode ship gate)
+## 11. Done checklist (episode ship gate)
 
-- [ ] One street only  
-- [ ] 6 slides · photo on each · 1080×1350  
-- [ ] Slide 4 = Did you know? (verified)  
-- [ ] Slide 6 = favourite-shop question + Recommend CTA  
-- [ ] Caption matches skeleton · ends with same ask + `/recommend`  
-- [ ] First comment has nominate URL  
-- [ ] No live-drop / partnership claims  
-- [ ] Calendar updated  
+- [ ] Four required sources consulted (BID · council · Historic England list · Wikipedia)  
+- [ ] One locked story paragraph (where → then → now → twist → ask)  
+- [ ] Photo–text map written **before** design  
+- [ ] One street only · 6 slides · photo on each · 1080×1350  
+- [ ] Beats 1 / 2 / 4 are distinct (identity ≠ scale ≠ today’s energy)  
+- [ ] One unique photo per slide · image matches that beat’s copy  
+- [ ] Named landmarks have a slide  
+- [ ] On-image type = Streatham system (espresso banner / pink story panels) · **no** WHERE/NOW/DID YOU KNOW chrome  
+- [ ] Slide 6 = favourite-shop ask only · CTA `/recommend` only  
+- [ ] Caption = full piece · hashtags + credits in first comment  
+- [ ] No live-drop / partnership / directory-scale claims  
+- [ ] Rights cleared or marked look-dev  
+- [ ] Calendar + backlog updated  
 - [ ] Human approved before publish  
 
 ---
 
-## 8. Street backlog (canonical list)
+## 12. Street backlog
 
 **Full numbered list + status:** [`STREET_BACKLOG.md`](./STREET_BACKLOG.md)
 
@@ -211,6 +270,7 @@ Update status in `STREET_BACKLOG.md` when photos arrive or an episode posts.
 
 - Jul 2026 typographic launch grid (deleted from Instagram and from `drafts/`)
 - Text-heavy 7–9 slide drafts
-- Geograph / AI look-dev as publishable street photos
+- Geograph / AI look-dev as **publishable** street photos (look-dev only until rights + Anna shots)
 - Mixed-street “high street stories” mood packs without history
 - Ad-hoc “pick any street” without the backlog
+- Pre-Streatham card method: WHERE / NOW / DID YOU KNOW labels · ~25-word slide cap as hard law · mandatory `LONDON HIGH STREETS` eyebrow · titled photo cards instead of a split docu paragraph
