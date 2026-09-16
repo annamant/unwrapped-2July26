@@ -17,6 +17,7 @@ import Recommend from "./pages/Recommend";
 import BusinessProfile from "./pages/BusinessProfile";
 import BusinessDashboard from "./pages/business/Dashboard";
 import BusinessCreateDrop from "./pages/business/CreateDrop";
+import BusinessShareDrop from "./pages/business/ShareDrop";
 import BusinessDrops from "./pages/business/Drops";
 import BusinessScanner from "./pages/business/Scanner";
 import BusinessSettings from "./pages/business/Settings";
@@ -113,6 +114,7 @@ export default function App() {
         {/* Business dashboard */}
         <Route path="/dashboard" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessDashboard />} />
         <Route path="/dashboard/drops/new" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessCreateDrop />} />
+        <Route path="/dashboard/drops/:id/share" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessShareDrop />} />
         <Route path="/dashboard/drops" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessDrops />} />
         <Route path="/dashboard/scanner" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessScanner />} />
         <Route path="/dashboard/settings" component={() => !user?.hasBusiness ? <Redirect to="/business/signin" /> : <BusinessSettings />} />

@@ -31,9 +31,9 @@ export default function CreateDrop() {
 
   const utils = trpc.useUtils();
   const create = trpc.drops.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (drop) => {
       utils.drops.myDrops.invalidate();
-      navigate("/dashboard/drops");
+      navigate(`/dashboard/drops/${drop.id}/share`);
     },
     onError: (e) => setError(e.message),
   });

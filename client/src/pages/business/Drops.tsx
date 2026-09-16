@@ -192,6 +192,16 @@ export default function Drops() {
                   >
                     VIEW
                   </a>
+                  <a
+                    href={`/dashboard/drops/${drop.id}/share`}
+                    style={{
+                      fontFamily: "'Space Mono', monospace", fontSize: 9,
+                      letterSpacing: "0.1em", color: MUTED_FG, textDecoration: "none",
+                      border: `1px solid ${BORDER}`, padding: "6px 12px",
+                    }}
+                  >
+                    SHARE
+                  </a>
                   {(drop.status === "active" || drop.status === "sold_out" || drop.status === "draft") && (
                     <button
                       onClick={() => editingId === drop.id ? setEditingId(null) : startEdit(drop)}
