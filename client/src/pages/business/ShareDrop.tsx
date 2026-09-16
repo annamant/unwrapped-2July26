@@ -1,33 +1,32 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRoute } from "wouter";
 import QRCode from "qrcode";
 import { trpc } from "../../trpc";
 import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import {
-  DROP_ID_RE,
   copyText,
   dropPublicUrl,
   dropShareNudge,
   formatCollectionWindow,
+  isDropId,
   whatsappShareUrl,
 } from "../../lib/dropShare";
 import { BG, FG, BORDER, MUTED, MUTED_FG } from "../../theme";
 
-type Copied = "link" | "nudge" | null;
+type Copied = "link" | "nudge" | "link-fail" | "nudge-fail" | null;
 
 export default function ShareDrop() {
   const isMobile = useIsMobile(768);
   const [, params] = useRoute("/dashboard/drops/:id/share");
   const id = params?.id ?? "";
-  const idOk = DROP_ID_RE.test(id);
+  const idOk = isDropId(id);
 
   const { data, isLoading, error } = trpc.drops.getById.useQuery(
     { id },
-    { enabled: idOk },
+    { enabled: idOk, retry: 1 },
   );
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const nudgeRef = useRef<HTMLTextAreaElement>(null);
   const [copied, setCopied] = useState<Copied>(null);
@@ -40,27 +39,21 @@ export default function ShareDrop() {
     return () => window.clearTimeout(t);
   }, [copied]);
 
-  useEffect(() => {
-    if (!dropUrl || !canvasRef.current) return;
-    QRCode.toCanvas(canvasRef.current, dropUrl, {
-      width: 240,
-      margin: 2,
-      color: { dark: FG, light: BG },
-    }).catch(() => {});
-  }, [dropUrl, data?.drop.id]);
-
   async function handleCopyLink() {
     if (!dropUrl) return;
     const ok = await copyText(dropUrl, urlInputRef.current);
-    if (ok) setCopied("link");
+    setCopied(ok ? "link" : "link-fail");
   }
 
   async function handleCopyNudge() {
     const text = nudgeRef.current?.value ?? "";
     if (!text) return;
     const ok = await copyText(text, nudgeRef.current);
-    if (ok) setCopied("nudge");
+    setCopied(ok ? "nudge" : "nudge-fail");
   }
+
+  const notFound = !idOk || error?.data?.code === "NOT_FOUND";
+  const loadFailed = Boolean(error) && !notFound;
 
   return (
     <BusinessShell>
@@ -69,10 +62,15 @@ export default function ShareDrop() {
           ← Drops
         </a>
 
-        {!idOk || error ? (
+        {notFound ? (
           <EmptyState
             title="Drop not found"
             body="This share page needs a live drop. Go back to Drops and open Share from there, or publish a new one."
+          />
+        ) : loadFailed ? (
+          <EmptyState
+            title="Couldn't load this drop"
+            body="Check your connection and try again. The drop is still published — open Share from Drops when you're back online."
           />
         ) : isLoading || !data ? (
           <div style={{ padding: 60, textAlign: "center", fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: "0.15em" }}>
@@ -87,7 +85,6 @@ export default function ShareDrop() {
             dropId={data.drop.id}
             dropUrl={dropUrl}
             copied={copied}
-            canvasRef={canvasRef}
             urlInputRef={urlInputRef}
             nudgeRef={nudgeRef}
             onCopyLink={handleCopyLink}
@@ -107,7 +104,6 @@ function ShareBody({
   dropId,
   dropUrl,
   copied,
-  canvasRef,
   urlInputRef,
   nudgeRef,
   onCopyLink,
@@ -120,9 +116,8 @@ function ShareBody({
   dropId: string;
   dropUrl: string;
   copied: Copied;
-  canvasRef: RefObject<HTMLCanvasElement>;
-  urlInputRef: RefObject<HTMLInputElement>;
-  nudgeRef: RefObject<HTMLTextAreaElement>;
+  urlInputRef: React.RefObject<HTMLInputElement>;
+  nudgeRef: React.RefObject<HTMLTextAreaElement>;
   onCopyLink: () => void;
   onCopyNudge: () => void;
 }) {
@@ -168,7 +163,7 @@ function ShareBody({
             fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.12em",
           }}
         >
-          {copied === "link" ? "LINK COPIED" : "COPY LINK"}
+          {copied === "link" ? "LINK COPIED" : copied === "link-fail" ? "COULDN'T COPY — SELECT LINK BELOW" : "COPY LINK"}
         </button>
       </div>
 
@@ -191,7 +186,7 @@ function ShareBody({
           border: `1px solid ${BORDER}`, background: MUTED,
           padding: isMobile ? 20 : 28, textAlign: "center",
         }}>
-          <canvas ref={canvasRef} style={{ display: "block", margin: "0 auto" }} />
+          <TillPosterQr url={dropUrl} />
         </div>
       </Section>
 
@@ -218,9 +213,13 @@ function ShareBody({
             letterSpacing: "0.1em", cursor: "pointer",
           }}
         >
-          {copied === "nudge" ? "CAPTION COPIED" : "COPY CAPTION"}
+          {copied === "nudge" ? "CAPTION COPIED" : copied === "nudge-fail" ? "COULDN'T COPY — SELECT TEXT ABOVE" : "COPY CAPTION"}
         </button>
       </Section>
+
+      <div aria-live="polite" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
+        {copied === "link" ? "Link copied" : copied === "nudge" ? "Caption copied" : ""}
+      </div>
 
       <a
         href="/dashboard/drops"
@@ -233,6 +232,54 @@ function ShareBody({
       >
         BACK TO DROPS
       </a>
+    </>
+  );
+}
+
+function TillPosterQr({ url }: { url: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !url) return;
+    let cancelled = false;
+    setFailed(false);
+    QRCode.toCanvas(canvas, url, {
+      width: 240,
+      margin: 2,
+      errorCorrectionLevel: "H",
+      color: { dark: FG, light: BG },
+    }).then(() => {
+      if (cancelled) return;
+      setFailed(false);
+    }).catch(() => {
+      if (!cancelled) setFailed(true);
+    });
+    return () => { cancelled = true; };
+  }, [url]);
+
+  return (
+    <>
+      <canvas
+        ref={canvasRef}
+        width={240}
+        height={240}
+        aria-label={`QR code for ${url}`}
+        style={{
+          display: failed ? "none" : "block",
+          margin: "0 auto",
+          width: 240,
+          height: 240,
+          maxWidth: "100%",
+          aspectRatio: "1",
+        }}
+      />
+      {failed && (
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, margin: 0, lineHeight: 1.5 }}>
+          Couldn't draw the QR. Use the drop link above.
+        </p>
+      )}
     </>
   );
 }

@@ -5,6 +5,10 @@ export const PUBLIC_SITE_ORIGIN = "https://shopunwrapped.com";
 export const DROP_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+export function isDropId(id: string): boolean {
+  return DROP_ID_RE.test(id);
+}
+
 export function dropPublicUrl(dropId: string): string {
   return `${PUBLIC_SITE_ORIGIN}/drop/${dropId}`;
 }
@@ -15,6 +19,9 @@ export function formatCollectionWindow(
 ): string {
   const start = new Date(collectionStart);
   const end = new Date(collectionEnd);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return "window TBC";
+  }
   const sameDay = start.toDateString() === end.toDateString();
   if (sameDay) {
     return `${format(start, "EEE d MMM")}, ${format(start, "h:mm a")} – ${format(end, "h:mm a")}`;
@@ -64,7 +71,7 @@ export async function copyText(
   text: string,
   input?: HTMLInputElement | HTMLTextAreaElement | null,
 ): Promise<boolean> {
-  if (navigator.clipboard?.writeText) {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
     try {
       await navigator.clipboard.writeText(text);
       return true;
@@ -72,20 +79,43 @@ export async function copyText(
       // HTTP, denied permission, or older WebViews — fall through to select/copy.
     }
   }
-  if (input) {
-    input.focus();
-    input.select();
-    input.setSelectionRange(0, text.length);
-    return document.execCommand("copy");
+  return copyTextFallback(text, input);
+}
+
+function copyTextFallback(
+  text: string,
+  input?: HTMLInputElement | HTMLTextAreaElement | null,
+): boolean {
+  const target = input ?? makeHiddenCopyField(text);
+  const borrowed = !input;
+  try {
+    const wasReadOnly = target.hasAttribute("readonly");
+    if (wasReadOnly) target.removeAttribute("readonly");
+    target.focus();
+    target.select();
+    target.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    if (wasReadOnly) target.setAttribute("readonly", "");
+    return ok;
+  } catch {
+    return false;
+  } finally {
+    if (borrowed) target.remove();
   }
+}
+
+function makeHiddenCopyField(text: string): HTMLTextAreaElement {
   const el = document.createElement("textarea");
   el.value = text;
   el.setAttribute("readonly", "");
+  el.setAttribute("aria-hidden", "true");
   el.style.position = "fixed";
-  el.style.left = "-9999px";
+  el.style.top = "0";
+  el.style.left = "0";
+  el.style.width = "1px";
+  el.style.height = "1px";
+  el.style.opacity = "0";
+  el.style.pointerEvents = "none";
   document.body.appendChild(el);
-  el.select();
-  const ok = document.execCommand("copy");
-  document.body.removeChild(el);
-  return ok;
+  return el;
 }

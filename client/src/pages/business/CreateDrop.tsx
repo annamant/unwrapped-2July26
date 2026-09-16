@@ -33,7 +33,13 @@ export default function CreateDrop() {
   const create = trpc.drops.create.useMutation({
     onSuccess: (drop) => {
       utils.drops.myDrops.invalidate();
-      navigate(`/dashboard/drops/${drop.id}/share`);
+      const dropId = drop?.id;
+      if (!dropId) {
+        navigate("/dashboard/drops");
+        return;
+      }
+      void utils.drops.getById.prefetch({ id: dropId });
+      navigate(`/dashboard/drops/${dropId}/share`);
     },
     onError: (e) => setError(e.message),
   });
