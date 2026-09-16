@@ -16,6 +16,21 @@ import { BG, FG, BORDER, MUTED, MUTED_FG } from "../../theme";
 
 type Copied = "link" | "nudge" | "link-fail" | "nudge-fail" | null;
 
+function isNotFoundError(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false;
+  const code = (error as { data?: { code?: string } }).data?.code;
+  if (code === "NOT_FOUND") return true;
+  const message = (error as { message?: string }).message ?? "";
+  return /not found/i.test(message);
+}
+
+function shareKicker(status: string): string {
+  if (status === "sold_out") return "SOLD OUT";
+  if (status === "cancelled") return "CANCELLED";
+  if (status === "expired") return "ENDED";
+  return "DROP LIVE";
+}
+
 export default function ShareDrop() {
   const isMobile = useIsMobile(768);
   const [, params] = useRoute("/dashboard/drops/:id/share");
@@ -40,8 +55,9 @@ export default function ShareDrop() {
   }, [copied]);
 
   async function handleCopyLink() {
-    if (!dropUrl) return;
-    const ok = await copyText(dropUrl, urlInputRef.current);
+    const text = urlInputRef.current?.value || dropUrl;
+    if (!text) return;
+    const ok = await copyText(text, urlInputRef.current);
     setCopied(ok ? "link" : "link-fail");
   }
 
@@ -52,7 +68,7 @@ export default function ShareDrop() {
     setCopied(ok ? "nudge" : "nudge-fail");
   }
 
-  const notFound = !idOk || error?.data?.code === "NOT_FOUND";
+  const notFound = !idOk || isNotFoundError(error);
   const loadFailed = Boolean(error) && !notFound;
 
   return (
@@ -83,7 +99,8 @@ export default function ShareDrop() {
             collectionStart={data.drop.collectionStart}
             collectionEnd={data.drop.collectionEnd}
             dropId={data.drop.id}
-            dropUrl={dropUrl}
+            status={data.drop.status}
+            dropUrl={dropPublicUrl(data.drop.id)}
             copied={copied}
             urlInputRef={urlInputRef}
             nudgeRef={nudgeRef}
@@ -102,6 +119,7 @@ function ShareBody({
   collectionStart,
   collectionEnd,
   dropId,
+  status,
   dropUrl,
   copied,
   urlInputRef,
@@ -114,6 +132,7 @@ function ShareBody({
   collectionStart: Date | string;
   collectionEnd: Date | string;
   dropId: string;
+  status: string;
   dropUrl: string;
   copied: Copied;
   urlInputRef: React.RefObject<HTMLInputElement>;
@@ -129,7 +148,7 @@ function ShareBody({
     <>
       <div style={{ marginTop: 12, marginBottom: 32 }}>
         <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 8 }}>
-          DROP LIVE
+          {shareKicker(status)}
         </div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: FG, lineHeight: 1.2 }}>
           Share this drop

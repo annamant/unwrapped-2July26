@@ -58,6 +58,7 @@ const nudge = dropShareNudge({ title, collectionStart, collectionEnd, dropId });
 check("nudge mentions Unwrapped", nudge, g => g.includes("Unwrapped"));
 check("nudge has drop URL", nudge, g => g.includes(`https://shopunwrapped.com/drop/${dropId}`));
 check("nudge is readonly-copy payload not a dashboard URL", nudge, g => !g.includes("/dashboard/"));
+check("nudge does not shadow collection window", dropShareNudge({ title, collectionStart, collectionEnd, dropId }), g => g.includes("Collect ") && g.includes(title));
 
 const qrUrl = dropPublicUrl(dropId);
 try {

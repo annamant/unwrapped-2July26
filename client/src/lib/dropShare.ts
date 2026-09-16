@@ -57,11 +57,11 @@ export function dropShareNudge(opts: {
   collectionEnd: Date | string;
   dropId: string;
 }): string {
-  const window = formatCollectionWindow(opts.collectionStart, opts.collectionEnd);
+  const windowLabel = formatCollectionWindow(opts.collectionStart, opts.collectionEnd);
   return [
     `We've just dropped ${opts.title} on Unwrapped.`,
     "",
-    `Collect ${window}. Limited quantity — reserve on the link, then come in.`,
+    `Collect ${windowLabel}. Limited quantity — reserve on the link, then come in.`,
     "",
     dropPublicUrl(opts.dropId),
   ].join("\n");
@@ -88,18 +88,17 @@ function copyTextFallback(
 ): boolean {
   const target = input ?? makeHiddenCopyField(text);
   const borrowed = !input;
+  const wasReadOnly = target.hasAttribute("readonly");
   try {
-    const wasReadOnly = target.hasAttribute("readonly");
     if (wasReadOnly) target.removeAttribute("readonly");
     target.focus();
     target.select();
     target.setSelectionRange(0, text.length);
-    const ok = document.execCommand("copy");
-    if (wasReadOnly) target.setAttribute("readonly", "");
-    return ok;
+    return document.execCommand("copy");
   } catch {
     return false;
   } finally {
+    if (wasReadOnly && !borrowed) target.setAttribute("readonly", "");
     if (borrowed) target.remove();
   }
 }

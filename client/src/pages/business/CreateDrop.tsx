@@ -5,6 +5,7 @@ import BusinessShell from "../../components/business/BusinessShell";
 import useIsMobile from "../../hooks/useIsMobile";
 import MediaUpload from "../../components/MediaUpload";
 import { resolveDropMediaType } from "../../lib/dropMedia";
+import { isDropId } from "../../lib/dropShare";
 import { receiveFromList, formatPounds, checkoutFromList, discountPercent } from "../../lib/fees";
 import DropPrice from "../../components/DropPrice";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../../theme";
@@ -34,7 +35,7 @@ export default function CreateDrop() {
     onSuccess: (drop) => {
       utils.drops.myDrops.invalidate();
       const dropId = drop?.id;
-      if (!dropId) {
+      if (!dropId || !isDropId(dropId)) {
         navigate("/dashboard/drops");
         return;
       }
