@@ -10,9 +10,10 @@
 
 Until live drops dominate the feed, @shopunwrapped is **London High Streets**:
 
-- **One London high street per episode** — exactly **6** photo-led slides (1080×1350)
-- Cover · Where+Then · Now · **Did you know?** · Breath · **Engage** (favourite shop + Recommend a shop → `/recommend`)
-- Photos supplied by Anna (we own rights). Caption = the story
+- **One London high street per episode** — exactly **6** photo-led **docu** slides (1080×1350)
+- Identity · scale/character · Then (history peak) · Now (today’s social energy) · curious twist · Ask (favourite shop + `/recommend` only)
+- **No** WHERE / NOW / DID YOU KNOW label chrome. Write the full paragraph first; images support the story
+- Photos supplied by Anna (we own rights). Caption = the full piece; hashtags/credits in the first comment
 - Carousels → **Meta Business Suite** only
 - Profile highlight: **London High Streets**
 
