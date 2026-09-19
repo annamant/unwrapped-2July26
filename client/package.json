@@ -8,7 +8,8 @@
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "start": "node scripts/seo-server.mjs",
-    "sitemap": "node scripts/generate-sitemap.mjs"
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "test:seo": "node scripts/seo-inject.test.mjs"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^2.8.0",
