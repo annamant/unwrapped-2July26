@@ -365,6 +365,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         image: DEFAULT_OG(),
         type: "website",
         robots: "noindex, follow",
+        status: 404,
       };
     }
 
@@ -458,6 +459,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         image: DEFAULT_OG(),
         type: "website",
         robots: "noindex, follow",
+        status: 404,
       };
     }
 

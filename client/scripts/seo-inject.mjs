@@ -29,6 +29,14 @@ export function upsertMetaTag(html, attr, key, content) {
   return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
 }
 
+/** Keep name=googlebot aligned with name=robots so Googlebot does not keep the homepage index tag. */
+export function googlebotFromRobots(robots) {
+  const value = String(robots || "").toLowerCase();
+  if (value.includes("noindex") && value.includes("nofollow")) return "noindex, nofollow";
+  if (value.includes("noindex")) return "noindex, follow";
+  return "index, follow, max-image-preview:large";
+}
+
 function escapeRegExp(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -98,6 +106,7 @@ export function fallbackSeo(pathname) {
       ...base,
       title: "Drop — Unwrapped",
       type: "product",
+      robots: "noindex, follow",
       bodyHtml: "<article><h1>Drop on Unwrapped</h1></article>",
     };
   }
@@ -120,6 +129,7 @@ export function injectSeo(html, seo) {
   }
   if (seo.robots) {
     out = upsertMetaTag(out, "name", "robots", seo.robots);
+    out = upsertMetaTag(out, "name", "googlebot", googlebotFromRobots(seo.robots));
   }
   if (seo.canonical) {
     out = out.replace(

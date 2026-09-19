@@ -2,6 +2,7 @@ import {
   DEFAULT_TITLE,
   SITE,
   fallbackSeo,
+  googlebotFromRobots,
   injectSeo,
   stripJsonLd,
 } from "./seo-inject.mjs";
@@ -11,6 +12,8 @@ const SHELL = `<!DOCTYPE html>
   <head>
     <title>${DEFAULT_TITLE}</title>
     <meta name="description" content="Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner." />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://shopunwrapped.com/" />
     <meta property="og:title" content="${DEFAULT_TITLE}" />
     <meta property="og:description" content="home desc" />
@@ -105,9 +108,34 @@ check("fallback /london canonical", fallbackSeo("/london").canonical, `${SITE}/l
 check("fallback borough canonical", fallbackSeo("/london/lambeth").canonical, `${SITE}/london/lambeth`);
 check("fallback business canonical", fallbackSeo("/business/foo-bar").canonical, `${SITE}/business/foo-bar`);
 check("fallback drop canonical", fallbackSeo("/drop/abc").canonical, `${SITE}/drop/abc`);
+check("fallback drop is noindex", fallbackSeo("/drop/abc").robots, "noindex, follow");
 check("fallback never uses home canonical on deep links", fallbackSeo("/london").canonical !== `${SITE}/`, true);
 check("fallback strips trailing slash", fallbackSeo("/london/").canonical, `${SITE}/london`);
 check("stripJsonLd removes both shell scripts", stripJsonLd(SHELL).includes("application/ld+json"), false);
+check("googlebot noindex follows robots", googlebotFromRobots("noindex, follow"), "noindex, follow");
+check("googlebot index keeps preview hint", googlebotFromRobots("index, follow"), "index, follow, max-image-preview:large");
+
+const missingDrop = injectSeo(SHELL, {
+  title: "Drop not found — Unwrapped",
+  description: "This drop is no longer available on Unwrapped.",
+  canonical: `${SITE}/drop/00000000-0000-0000-0000-000000000000`,
+  image: `${SITE}/og-image.png`,
+  type: "website",
+  robots: "noindex, follow",
+});
+check(
+  "missing drop does not keep homepage canonical",
+  /<link rel="canonical" href="https:\/\/shopunwrapped.com\/" \/>/.test(missingDrop),
+  false,
+);
+check(
+  "missing drop canonical is the drop URL",
+  missingDrop.includes(`rel="canonical" href="${SITE}/drop/00000000-0000-0000-0000-000000000000"`),
+  true,
+);
+check("missing drop robots is noindex", missingDrop.includes(`name="robots" content="noindex, follow"`), true);
+check("missing drop googlebot is noindex", missingDrop.includes(`name="googlebot" content="noindex, follow"`), true);
+check("missing drop googlebot is not homepage index", missingDrop.includes("max-image-preview:large"), false);
 
 if (failed > 0) {
   console.error(`\n${failed} failed`);
