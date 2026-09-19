@@ -3,8 +3,9 @@
  *
  * Serves Vite `dist/` with SPA fallback. For every HTML request except `/`,
  * fetches SEO payload from the API and injects title/description/canonical/OG/
- * JSON-LD into the HTML shell before responding — so `curl`, view-source,
- * Google, and social crawlers all see tags that match the actual URL.
+ * so curl, view-source, Googlebot, facebookexternalhit, WhatsApp, Twitter,
+ * Slack, and browsers all see tags that match the actual URL. There is no
+ * bot allowlist — coverage is every HTML request except `/`.
  *
  * The homepage (`/`) is served from `index.html` as-is (already correct).
  *
@@ -17,7 +18,7 @@ import http from "node:http";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { join, extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fallbackSeo, injectSeo } from "./seo-inject.mjs";
+import { fallbackSeo, injectSeo, cacheControlForAsset } from "./seo-inject.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -101,7 +102,7 @@ const server = http.createServer(async (req, res) => {
         const body = readFileSync(filePath);
         return send(res, 200, body, {
           "Content-Type": MIME[ext] || "application/octet-stream",
-          "Cache-Control": ext === ".html" ? "no-cache" : "public, max-age=31536000, immutable",
+          "Cache-Control": cacheControlForAsset(filePath, ext),
         });
       }
     }

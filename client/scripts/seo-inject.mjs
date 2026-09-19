@@ -37,6 +37,15 @@ export function googlebotFromRobots(robots) {
   return "index, follow, max-image-preview:large";
 }
 
+/** Cache-Control for files served from dist/. Robots/sitemap must stay refreshable. */
+export function cacheControlForAsset(filePath, ext) {
+  const name = String(filePath).split(/[/\\]/).pop().toLowerCase();
+  if (name === "robots.txt" || name === "sitemap.xml") {
+    return "public, max-age=300";
+  }
+  return ext === ".html" ? "no-cache" : "public, max-age=31536000, immutable";
+}
+
 function escapeRegExp(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

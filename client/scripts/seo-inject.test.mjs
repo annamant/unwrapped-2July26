@@ -1,6 +1,7 @@
 import {
   DEFAULT_TITLE,
   SITE,
+  cacheControlForAsset,
   fallbackSeo,
   googlebotFromRobots,
   injectSeo,
@@ -114,6 +115,9 @@ check("fallback strips trailing slash", fallbackSeo("/london/").canonical, `${SI
 check("stripJsonLd removes both shell scripts", stripJsonLd(SHELL).includes("application/ld+json"), false);
 check("googlebot noindex follows robots", googlebotFromRobots("noindex, follow"), "noindex, follow");
 check("googlebot index keeps preview hint", googlebotFromRobots("index, follow"), "index, follow, max-image-preview:large");
+check("robots.txt is not immutable 1y", cacheControlForAsset("dist/robots.txt", ".txt"), "public, max-age=300");
+check("sitemap.xml is not immutable 1y", cacheControlForAsset("/sitemap.xml", ".xml"), "public, max-age=300");
+check("hashed js stays immutable", cacheControlForAsset("dist/assets/index-abc.js", ".js"), "public, max-age=31536000, immutable");
 
 const missingDrop = injectSeo(SHELL, {
   title: "Drop not found — Unwrapped",
