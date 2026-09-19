@@ -70,15 +70,16 @@ export default function BusinessProfile() {
   const activeDrops = drops.filter(d => d.status === "active" || d.status === "sold_out");
   const isFollowing = followStatus?.following ?? false;
   const borough = findBoroughForShop(business);
+  const place = borough?.name || business.city;
   const seoDescription = truncateMeta(
     business.description ||
-      `${business.name} on Unwrapped — see drops from this ${business.city || borough?.name || "London"} shop, claim in the app, collect at the counter.`,
+      `${business.name} on Unwrapped — see drops from this ${place || "London"} shop, claim in the app, collect at the counter.`,
   );
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
       <SeoHead
-        title={`${business.name} — Unwrapped`}
+        title={place ? `${business.name} · ${place} — Unwrapped` : `${business.name} — Unwrapped`}
         description={seoDescription}
         path={`/business/${business.slug}`}
         image={business.coverUrl || business.logoUrl}

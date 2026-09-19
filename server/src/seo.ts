@@ -6,6 +6,7 @@ import {
   LONDON_BOROUGHS,
   boroughJsonLd,
   boroughSeo,
+  findBoroughForShop,
   getBoroughBySlug,
   londonHubJsonLd,
   londonHubSeo,
@@ -359,11 +360,12 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     if (!biz) {
       return {
         title: "Business not found — Unwrapped",
-        description: DEFAULT_DESCRIPTION,
+        description: "This shop is not listed on Unwrapped. Browse London boroughs for partner shops posting limited drops you can claim and collect in person.",
         canonical: abs(path),
         image: DEFAULT_OG(),
         type: "website",
         robots: "noindex, follow",
+        status: 404,
       };
     }
 
@@ -375,12 +377,18 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       passwordHash: biz.passwordHash,
     });
 
+    const borough = findBoroughForShop({
+      city: biz.city,
+      postcode: biz.postcode,
+      address: biz.address,
+    });
+    const place = borough?.name || biz.city;
     const desc = truncate(
       biz.description ||
-        `${biz.name} on Unwrapped — see drops from this ${biz.city || "London"} shop, claim in the app, collect at the counter.`,
+        `${biz.name} on Unwrapped — see drops from this ${place || "London"} shop, claim in the app, collect at the counter.`,
     );
     const image = biz.coverUrl || biz.logoUrl || DEFAULT_OG();
-    const title = `${biz.name} — Unwrapped`;
+    const title = place ? `${biz.name} · ${place} — Unwrapped` : `${biz.name} — Unwrapped`;
     const sameAs: string[] = [];
     if (biz.website) {
       sameAs.push(biz.website.startsWith("http") ? biz.website : `https://${biz.website}`);
@@ -446,11 +454,12 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     if (!row || (row.status !== "active" && row.status !== "sold_out")) {
       return {
         title: "Drop not found — Unwrapped",
-        description: DEFAULT_DESCRIPTION,
+        description: "This drop is no longer available on Unwrapped. See live specials from local shops — claim in the app, collect in person.",
         canonical: abs(path),
         image: DEFAULT_OG(),
         type: "website",
         robots: "noindex, follow",
+        status: 404,
       };
     }
 

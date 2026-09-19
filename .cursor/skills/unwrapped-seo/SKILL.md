@@ -29,7 +29,7 @@ Hero = action + nearby + FOMO (before they're gone). Sub = how + today urgency.
 
 | Item | Status |
 |------|--------|
-| Bot HTML via `client/scripts/seo-server.mjs` + `/api/seo/meta` | Live |
+| Per-route HTML for every UA via `client/scripts/seo-server.mjs` + `/api/seo/meta` | Unique title/canonical/`og:url` matching the URL |
 | Titles/OG/FAQ JSON-LD aligned to live hero | Live (`a42d3c8`) |
 | OG image `client/public/og-image.png` | Live — matches current message |
 | Search Console property `sc-domain:shopunwrapped.com` | Verified · sitemap Success |
@@ -71,11 +71,14 @@ Mystery bags, waste apps, “best shops in London”, generic shopping keywords.
 2. **Search Console:** confirm sitemap last-read updates. Do **not** Request indexing again on the homepage until the small sitemap is live. Optional: tidy unused verification tokens.
 3. **First live drop:** add the URL to the sitemap (already automatic if claimed + active), then Request indexing for that drop only.
 4. **CMO, not more meta:** every public mention uses the locked shopper line and links `shopunwrapped.com`.
-5. **Known leftover (low priority):** Googlebot homepage can duplicate Organization/WebSite JSON-LD (`index.html` shell + injector). Fix when touching `seo-server.mjs`; do not block on it.
+5. **Homepage JSON-LD:** `/` is served from `index.html` as-is (no injector), so Organization/WebSite is not duplicated. Deep links strip the shell JSON-LD before injecting route JSON-LD.
 
 ## Verify (curl, no JS)
 
 ```bash
+curl -sL https://shopunwrapped.com/london | rg -n "<title>|rel=\"canonical\"|og:url"
+curl -sL https://shopunwrapped.com/london/lambeth | rg -n "<title>|rel=\"canonical\""
+curl -sL https://shopunwrapped.com/business/brixton-village-market-iopq | rg -n "<title>|rel=\"canonical\""
 curl -sL -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://shopunwrapped.com/ | rg -n "<title>|around the corner"
 curl -sL https://shopunwrapped.com/sitemap.xml | rg -c "/business/"
 curl -sL -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://shopunwrapped.com/london/lambeth | rg -n "TEST Claim|catalog"
@@ -89,7 +92,8 @@ curl -sL https://unwrapped-2july26-production.up.railway.app/api/seo/meta?path=/
 | `client/index.html` | Default / noscript tags |
 | `client/src/lib/seo.ts` | Human SPA titles, shopper FAQs |
 | `client/src/components/SeoHead.tsx` | Runtime tag updates |
-| `client/scripts/seo-server.mjs` | Bot injection |
+| `client/scripts/seo-inject.mjs` | Title/canonical/OG injection helpers |
+| `client/scripts/seo-server.mjs` | Serves `dist/` and injects per-route meta for every HTML request except `/` |
 | `server/src/seo.ts` | Sitemap + `/api/seo/meta` |
 | `server/src/seoIndexable.ts` | Claimed-partner / test-shop rules |
 | `brand/svg/og-image.svg` | OG source |
