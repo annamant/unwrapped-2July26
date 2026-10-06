@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Grab specials from shops near you before they're gone.
+          Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.
         </p>
 
         <p style={{
@@ -86,7 +86,7 @@ export default function Instagram() {
           letterSpacing: "0.12em",
           marginBottom: 32,
         }}>
-          LONDON · OPENING SOON
+          BRIXTON VILLAGE · MARKET ROW · COLDHARBOUR
         </p>
 
         {liveDrops.length > 0 && (

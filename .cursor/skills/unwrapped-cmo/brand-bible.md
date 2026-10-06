@@ -8,9 +8,9 @@ Product site: https://shopunwrapped.com
 
 A new way to shop your high street: local shops post **photos and videos of limited deals** → you **see** it → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
-**Locked shopper framing:**  
-**Grab specials from shops near you before they're gone.**  
-**Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.**
+**Locked shopper framing (live pilot):**  
+**Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.**  
+**See the photo, claim it, collect it in person. Aries is on Acre Lane. Not a mystery bag. Not Opening soon.**
 
 **Locked merchant framing:**  
 **Get seen — so you can sell and welcome customers through the door.**
@@ -25,7 +25,7 @@ Do **not** position Unwrapped as Too Good To Go (mystery bags / waste), a static
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG | **Grab specials from shops near you before they're gone.** |
+| **1. One-liner** | Headlines, posters, bio, OG | **Photo specials in Brixton Village, Market Row and Coldharbour.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -40,8 +40,8 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Hero rule:** FOMO in the headline. Plain explanation in the sub.
 
-**Example — short:** Grab specials from shops near you before they're gone.  
-**Example — with proof:** Local shops post photos and videos of limited deals. You see it, claim it, collect it. Never miss what's around the corner.  
+**Example — short:** Photo specials in Brixton Village, Market Row and Coldharbour.  
+**Example — with proof:** Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, collect it. Aries is on Acre Lane.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -167,9 +167,9 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
 
 ```
-Grab specials from shops near you before they're gone.
-Local shops post photos & videos of limited deals. See it, claim it, collect it. Never miss what's around the corner.
-London
+Photo specials in Brixton Village, Market Row and Coldharbour.
+Bakeries and specialty food. See it, claim it, collect it. Aries is on Acre Lane.
+Brixton
 ```
 
 Profile link: `shopunwrapped.com/instagram`

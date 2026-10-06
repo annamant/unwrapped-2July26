@@ -17,13 +17,13 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 
 ## Live message (do not revert without intent)
 
-- **H1 / title:** Unwrapped · Grab specials from shops near you before they're gone.
-- **Description:** Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
+- **H1 / title:** Unwrapped · Photo specials in Brixton Village, Market Row and Coldharbour.
+- **Description:** Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, and collect it in person — Brixton Village, Market Row, Coldharbour, and Aries on Acre Lane.
 - **Loop:** See it. Claim it. Collect it.
-- **Status:** London · Opening soon
+- **Status:** Brixton Village · Market Row · Coldharbour (Acre Lane for Aries). Not “Opening soon”. Not a city-wide marketplace.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 
-Hero = action + nearby + FOMO (before they're gone). Sub = how + today urgency.
+Hero = the corridor + a photo of a chosen special. Sub = see it, claim it, collect it in person.
 
 ## What already shipped (Aug 2026)
 

@@ -6,9 +6,9 @@
 
 export const SITE = "https://shopunwrapped.com";
 export const DEFAULT_TITLE =
-  "Unwrapped · Grab specials from shops near you before they're gone.";
+  "Unwrapped · Photo specials in Brixton Village, Market Row and Coldharbour.";
 export const DEFAULT_DESCRIPTION =
-  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
+  "Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, and collect it in person — Brixton Village, Market Row, Coldharbour, and Aries on Acre Lane.";
 export const DEFAULT_OG = `${SITE}/og-image.png`;
 
 export function escapeHtml(s) {
@@ -84,11 +84,11 @@ export function fallbackSeo(pathname) {
   if (path === "/london") {
     return {
       ...base,
-      title: "London boroughs — Unwrapped",
+      title: "Brixton Village pilot — Unwrapped",
       description:
-        "Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals — claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
+        "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See the photo, claim it, collect it in person.",
       bodyHtml:
-        "<article><h1>London boroughs</h1><p>Neighbourhood pages for every London borough.</p></article>",
+        "<article><h1>Brixton Village, Market Row and Coldharbour</h1><p>The live pilot. Other borough pages are not a city-wide shop directory.</p></article>",
     };
   }
   const borough = path.match(/^\/london\/([^/]+)$/);
@@ -96,7 +96,7 @@ export function fallbackSeo(pathname) {
     const name = titleCaseSlug(borough[1]);
     return {
       ...base,
-      title: `${name} high street drops — Unwrapped (London)`,
+      title: `${name} — Unwrapped`,
       bodyHtml: `<article><h1>${escapeHtml(name)} on Unwrapped</h1></article>`,
     };
   }

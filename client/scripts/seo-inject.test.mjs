@@ -12,7 +12,7 @@ const SHELL = `<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <title>${DEFAULT_TITLE}</title>
-    <meta name="description" content="Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner." />
+    <meta name="description" content="Bakeries and specialty food shops post a photo of a chosen special." />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://shopunwrapped.com/" />
@@ -29,7 +29,7 @@ const SHELL = `<!DOCTYPE html>
   </head>
   <body>
     <div id="root"></div>
-    <noscript><h1>Grab specials from shops near you before they're gone.</h1></noscript>
+    <noscript><h1>Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.</h1></noscript>
   </body>
 </html>`;
 
@@ -65,7 +65,7 @@ check("london does not keep home canonical", london.includes(`href="${SITE}/"`) 
 check("london strips homepage JSON-LD", /"@type":"Organization"/.test(london), false);
 check("london injects route JSON-LD", london.includes('"@type":"CollectionPage"'), true);
 check("london replaces homepage noscript", london.includes("<h1>London boroughs</h1>"), true);
-check("london noscript is not the homepage hero", london.includes("Grab specials from shops near you"), false);
+check("london noscript is not the homepage hero", london.includes("Photo specials from bakeries and specialty food shops"), false);
 
 const biz = injectSeo(SHELL, {
   title: "Brixton Village Market · Lambeth — Unwrapped",
@@ -97,7 +97,7 @@ check(
 
 const homeInjected = injectSeo(SHELL, {
   title: DEFAULT_TITLE,
-  description: "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.",
+  description: "Bakeries and specialty food shops post a photo of a chosen special.",
   canonical: `${SITE}/`,
   image: `${SITE}/og-image.png`,
   type: "website",

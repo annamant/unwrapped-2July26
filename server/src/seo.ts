@@ -12,6 +12,7 @@ import {
   londonHubSeo,
   shopMatchesBorough,
 } from "./londonBoroughs";
+import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_TITLE, isPublicPilotShop } from "./pilotCorridor";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -19,26 +20,25 @@ const SITE = () =>
 
 const DEFAULT_OG = () => `${SITE()}/og-image.png`;
 
-const DEFAULT_TITLE = "Unwrapped · Grab specials from shops near you before they're gone.";
-const DEFAULT_DESCRIPTION =
-  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
+const DEFAULT_TITLE = PILOT_TITLE;
+const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "It's simple. Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.",
+    a: "Bakeries and specialty food shops post a photo of a chosen special. You see it, claim it on your phone, and collect it in person.",
   },
   {
     q: "How does it work?",
-    a: "See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.",
+    a: "See the photo. Claim it on your phone. Collect it in person. It is a chosen special, not a mystery bag.",
   },
   {
     q: "How do I collect?",
     a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "Where is Unwrapped launching?",
-    a: "London. Opening soon — densest first in South London, neighbourhood by neighbourhood.",
+    q: "Where is Unwrapped?",
+    a: "The pilot is Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane.",
   },
 ];
 
@@ -57,7 +57,7 @@ const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Local high-street shops — bakeries, florists, bookshops, beauty, fashion, wine, specialty food, and charity shops. If people can collect from you in person during a window, you can list a drop.",
+    a: "Bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour — and Aries on Acre Lane. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -110,14 +110,14 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/recommend",
     title: "Recommend a shop — Unwrapped",
     description:
-      "Got a shop that deserves to be seen? Tip us a bakery, florist, bookshop, boutique, or charity shop — we'll tell them someone asked for them by name.",
+      "Know a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane? Tell us and we'll say a neighbour asked for them.",
     type: "website",
   },
   "/instagram": {
     path: "/instagram",
     title: "Live drops for Instagram — Unwrapped",
     description:
-      "What's just landed on London high streets — photo or video, claim it, collect it.",
+      "Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour. See it, claim it, collect it.",
     type: "website",
   },
   "/resources": {
@@ -360,7 +360,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     if (!biz) {
       return {
         title: "Business not found — Unwrapped",
-        description: "This shop is not listed on Unwrapped. Browse London boroughs for partner shops posting limited drops you can claim and collect in person.",
+        description: "This shop is not listed on Unwrapped. The live pilot is bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour.",
         canonical: abs(path),
         image: DEFAULT_OG(),
         type: "website",
@@ -542,9 +542,13 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       .innerJoin(users, eq(businesses.ownerId, users.id))
       .where(claimedPartnerSql);
 
-    const matched = bizRows
-      .filter((b) => !isTestShop(b.name, b.slug) && shopMatchesBorough(b, borough))
-      .slice(0, 40);
+    const inBorough = bizRows.filter(
+      (b) => !isTestShop(b.name, b.slug) && shopMatchesBorough(b, borough),
+    );
+    const matched =
+      borough.slug === "lambeth"
+        ? inBorough.filter((b) => isPublicPilotShop(b)).slice(0, 40)
+        : [];
 
     const shopLinks = matched
       .map(
@@ -552,6 +556,12 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
           `<li><a href="${escapeHtml(abs(`/business/${b.slug}`))}">${escapeHtml(b.name)}</a>${b.city || b.postcode ? ` — ${escapeHtml([b.city, b.postcode].filter(Boolean).join(", "))}` : ""}</li>`,
       )
       .join("");
+
+    const pilotLink = `<p><a href="${escapeHtml(abs("/london"))}">Brixton Village pilot</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p>`;
+    const bodyHtml =
+      borough.slug === "lambeth"
+        ? `<article><h1>Brixton Village, Market Row and Coldharbour</h1><p>${escapeHtml(s.description)}</p>${matched.length ? `<h2>Bakeries and specialty food</h2><ul>${shopLinks}</ul>` : "<p>Photo specials from bakeries and specialty food shops in this corridor. Aries is on Acre Lane.</p>"}${pilotLink}</article>`
+        : `<article><h1>${escapeHtml(borough.name)}</h1><p>${escapeHtml(s.description)}</p>${pilotLink}</article>`;
 
     return {
       title: s.title,
@@ -564,7 +574,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         borough,
         matched.map((b) => ({ name: b.name, slug: b.slug })),
       ),
-      bodyHtml: `<article><h1>${escapeHtml(borough.name)} on Unwrapped</h1><p>${escapeHtml(borough.blurb)}</p><p>Neighbourhoods: ${escapeHtml(borough.neighbourhoods.join(", "))}</p>${matched.length ? `<h2>Shops in ${escapeHtml(borough.name)}</h2><ul>${shopLinks}</ul>` : `<p>We're onboarding ${escapeHtml(borough.name)} shops now.</p>`}<p><a href="${escapeHtml(abs("/london"))}">All London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`,
+      bodyHtml,
     };
   }
 
@@ -587,9 +597,9 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>Grab specials from shops near you before they're gone.</h1><p>London · Opening soon</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.</p><p><a href="${escapeHtml(abs("/london"))}">London boroughs</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>See the photo of a chosen special. Claim it on your phone. Collect it in person. Not a mystery bag.</p><p><a href="${escapeHtml(abs("/london"))}">Brixton Village pilot</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
-            ? `<article><h1>London boroughs</h1><p>${escapeHtml(staticPage.description)}</p><ul>${LONDON_BOROUGHS.map((b) => `<li><a href="${escapeHtml(abs(`/london/${b.slug}`))}">${escapeHtml(b.name)}</a> — ${escapeHtml(b.neighbourhoods.slice(0, 3).join(", "))}</li>`).join("")}</ul></article>`
+            ? `<article><h1>Brixton Village, Market Row and Coldharbour</h1><p>${escapeHtml(staticPage.description)}</p><p>Acre Lane is in this pilot for Aries. Other London borough pages are not a city-wide shop directory.</p><p><a href="${escapeHtml(abs("/london/lambeth"))}">Lambeth — the pilot corridor</a></p></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }

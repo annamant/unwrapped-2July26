@@ -342,19 +342,26 @@ export function findBoroughForShop(
 }
 
 export function boroughSeo(borough: LondonBorough): { title: string; description: string; path: string } {
-  const south = borough.region === "south";
-  const title = south
-    ? `${borough.name} high street drops — Unwrapped (South London)`
-    : `${borough.name} high street drops — Unwrapped (London)`;
-  const description = `${borough.blurb} See it, claim it, collect it — video or photo of what's just landed, pay in the app, collect in person.`;
-  return { title, description, path: `/london/${borough.slug}` };
+  if (borough.slug === "lambeth") {
+    return {
+      title: "Brixton Village, Market Row & Coldharbour — Unwrapped",
+      description:
+        "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See it, claim it, collect it in person.",
+      path: `/london/${borough.slug}`,
+    };
+  }
+  return {
+    title: `${borough.name} — Unwrapped`,
+    description: `The live pilot is bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour. ${borough.name} is not part of this pilot.`,
+    path: `/london/${borough.slug}`,
+  };
 }
 
 export function londonHubSeo(): { title: string; description: string; path: string } {
   return {
-    title: "London boroughs — Unwrapped",
+    title: "Brixton Village pilot — Unwrapped",
     description:
-      "Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals — claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
+      "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See the photo, claim it, collect it in person.",
     path: "/london",
   };
 }
@@ -425,7 +432,7 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "London boroughs on Unwrapped",
+      name: "Brixton Village pilot on Unwrapped",
       description: londonHubSeo().description,
       url: "https://shopunwrapped.com/london",
       isPartOf: {
@@ -450,14 +457,14 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      name: "London boroughs on Unwrapped",
-      numberOfItems: LONDON_BOROUGHS.length,
-      itemListElement: LONDON_BOROUGHS.map((b, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: b.name,
-        url: `https://shopunwrapped.com/london/${b.slug}`,
-      })),
+      name: "Brixton pilot corridor on Unwrapped",
+      numberOfItems: 4,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Brixton Village", url: "https://shopunwrapped.com/london/lambeth" },
+        { "@type": "ListItem", position: 2, name: "Market Row", url: "https://shopunwrapped.com/london/lambeth" },
+        { "@type": "ListItem", position: 3, name: "Coldharbour", url: "https://shopunwrapped.com/london/lambeth" },
+        { "@type": "ListItem", position: 4, name: "Aries Bakehouse, Acre Lane", url: "https://shopunwrapped.com/london/lambeth" },
+      ],
     },
   ];
 }

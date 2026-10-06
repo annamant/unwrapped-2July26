@@ -16,8 +16,8 @@ import {
   V_DEEP,
 } from "../theme";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS } from "../lib/prelaunch_wave1_directory_pins";
+import { isPublicPilotShop } from "../lib/pilotCorridor";
 import {
-  LONDON_BOROUGHS,
   boroughJsonLd,
   boroughSeo,
   getBoroughBySlug,
@@ -46,6 +46,7 @@ function shopsForBorough(borough: LondonBorough, members: {
 }[] | undefined): ListedShop[] {
   const memberMatches = (members ?? [])
     .filter((m) => shopMatchesBorough(m, borough))
+    .filter((m) => isPublicPilotShop(m))
     .map((m) => ({
       key: `m-${m.slug}`,
       name: m.name,
@@ -60,6 +61,7 @@ function shopsForBorough(borough: LondonBorough, members: {
   const memberNames = new Set(memberMatches.map((m) => m.name.toLowerCase()));
   const pinMatches = PRELAUNCH_WAVE1_DIRECTORY_PINS
     .filter((p) => shopMatchesBorough(p, borough))
+    .filter((p) => isPublicPilotShop(p))
     .filter((p) => !memberNames.has(p.name.toLowerCase()))
     .map((p) => ({
       key: `p-${p.id}`,
@@ -100,10 +102,10 @@ export default function BoroughLanding() {
             Borough not found
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", color: MUTED_FG, marginBottom: 24 }}>
-            We cover all London boroughs — pick one from the map of neighbourhoods.
+            The live pilot is Brixton Village, Market Row and Coldharbour.
           </p>
           <Link href="/london" style={{ color: V, fontWeight: 700, textDecoration: "none" }}>
-            Browse London boroughs →
+            See the Brixton pilot →
           </Link>
         </div>
       </div>
@@ -111,12 +113,8 @@ export default function BoroughLanding() {
   }
 
   const seo = boroughSeo(borough);
-  const shops = shopsForBorough(borough, members);
-  const membersCount = shops.filter((s) => s.isMember).length;
-  const southPeers = LONDON_BOROUGHS.filter((b) => b.region === "south" && b.slug !== borough.slug).slice(0, 8);
-  const peerStrip = borough.region === "south"
-    ? southPeers
-    : LONDON_BOROUGHS.filter((b) => b.region === borough.region && b.slug !== borough.slug).slice(0, 8);
+  const inPilot = borough.slug === "lambeth";
+  const shops = inPilot ? shopsForBorough(borough, members) : [];
 
   return (
     <div style={{ minHeight: "100vh", background: BG, backgroundImage: BG_WASH }}>
@@ -140,7 +138,7 @@ export default function BoroughLanding() {
           <span style={{ color: FG, fontWeight: 600 }}>{borough.name}</span>
         </nav>
         <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: V, marginBottom: 14 }}>
-          {borough.region === "south" ? "South London · Launch" : "London · Unwrapped"}
+          {inPilot ? "Pilot corridor · Lambeth" : "Not in this pilot"}
         </div>
         <h1 style={{
           fontFamily: "'Playfair Display', serif",
@@ -150,7 +148,7 @@ export default function BoroughLanding() {
           lineHeight: 1.05,
           marginBottom: 16,
         }}>
-          {borough.name}
+          {inPilot ? "Brixton Village, Market Row and Coldharbour" : borough.name}
         </h1>
         <p style={{
           fontFamily: "'DM Sans', sans-serif",
@@ -160,12 +158,15 @@ export default function BoroughLanding() {
           maxWidth: 620,
           marginBottom: 20,
         }}>
-          {borough.blurb} Unwrapped is filling London from South London outward — see the real thing, claim in the app, collect with QR.
+          {inPilot
+            ? "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See the photo, claim it, collect it in person."
+            : `The live pilot is bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour. ${borough.name} is not part of it.`}
         </p>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 28 }}>
-          Neighbourhoods: {borough.neighbourhoods.slice(0, 8).join(" · ")}
-          {borough.neighbourhoods.length > 8 ? " · …" : ""}
-        </p>
+        {inPilot && (
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 28 }}>
+            Brixton Village · Market Row · Coldharbour · Aries on Acre Lane
+          </p>
+        )}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           <Link
             href="/business-apply"
@@ -213,7 +214,7 @@ export default function BoroughLanding() {
               padding: "14px 8px",
             }}
           >
-            All London boroughs →
+            Back to the pilot →
           </Link>
         </div>
       </header>
@@ -222,10 +223,10 @@ export default function BoroughLanding() {
         <div style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "32px 20px 48px" : "44px 24px 64px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, flexWrap: "wrap", marginBottom: 20 }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: mobile ? 28 : 34, color: FG, margin: 0 }}>
-              Shops in {borough.name}
+              {inPilot ? "Bakeries and specialty food" : borough.name}
             </h2>
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG }}>
-              {isLoading ? "Loading…" : `${shops.length} listed · ${membersCount} on Unwrapped`}
+              {inPilot ? (isLoading ? "Loading…" : `${shops.length} in the corridor`) : "Outside this pilot"}
             </span>
           </div>
 
@@ -237,11 +238,14 @@ export default function BoroughLanding() {
               padding: mobile ? 24 : 32,
             }}>
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: FG, lineHeight: 1.6, marginBottom: 12 }}>
-                We’re onboarding {borough.name} shops now. Be first on the map — or tip us a favourite on your high street.
+                {inPilot
+                  ? "No bakery or specialty food shops from this corridor are listed yet. Nominate one, or check back when a photo special is up."
+                  : `${borough.name} is not in the Brixton Village pilot. Photo specials are in Brixton Village, Market Row and Coldharbour.`}
               </p>
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.6 }}>
-                Postcodes we match here include {borough.outcodes.slice(0, 6).join(", ")}
-                {borough.outcodes.length > 6 ? " and more" : ""}.
+                {inPilot
+                  ? "Acre Lane is included for Aries Bakehouse."
+                  : "Claim and collect still work on a special you already hold. This page is not a browse of the whole city."}
               </p>
             </div>
           ) : (
@@ -296,67 +300,15 @@ export default function BoroughLanding() {
                       fontWeight: 600,
                       color: MUTED_FG,
                     }}>
-                      Coming soon
+                      In the corridor
                     </span>
                   )}
                 </li>
               ))}
             </ul>
           )}
-          {shops.length > 60 && (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginTop: 16 }}>
-              Showing 60 of {shops.length}. More shops appear as they claim and go live.
-            </p>
-          )}
         </div>
       </section>
-
-      {peerStrip.length > 0 && (
-        <section style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "36px 20px 56px" : "48px 24px 72px" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 8 }}>
-            {borough.region === "south" ? "More South London" : `More ${borough.region} London`}
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 20 }}>
-            {borough.region === "south"
-              ? "We’re densifying South London first — then the rest of the city."
-              : "Explore neighbouring boroughs on Unwrapped."}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {peerStrip.map((b) => (
-              <Link
-                key={b.slug}
-                href={`/london/${b.slug}`}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: V_DEEP,
-                  background: CREAM,
-                  border: `1px solid ${BORDER}`,
-                  borderRadius: 999,
-                  padding: "10px 16px",
-                  textDecoration: "none",
-                }}
-              >
-                {b.name}
-              </Link>
-            ))}
-            <Link
-              href="/london"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 14,
-                fontWeight: 600,
-                color: V,
-                padding: "10px 16px",
-                textDecoration: "none",
-              }}
-            >
-              All boroughs →
-            </Link>
-          </div>
-        </section>
-      )}
     </div>
   );
 }

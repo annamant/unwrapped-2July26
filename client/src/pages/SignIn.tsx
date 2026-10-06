@@ -62,7 +62,7 @@ export default function SignIn() {
           </h1>
           {!isMobile && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-              Reserve limited local drops — bakeries, florists, bookshops, beauty, fashion, wine and charity shops. Your ticket, your QR code, your pick-up.
+              Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour. See it, claim it, collect it with your QR. Aries is on Acre Lane.
             </p>
           )}
         </div>
