@@ -123,7 +123,7 @@ export default function CreateDrop() {
           {/* ── Basics ── */}
           <Section label="BASICS">
             <Field label="Title *">
-              <input value={form.title} onChange={set("title")} placeholder="e.g. Sourdough surplus — Wednesday morning" style={inputStyle} />
+              <input value={form.title} onChange={set("title")} placeholder="e.g. Country loaf — Wednesday morning" style={inputStyle} />
             </Field>
             <Field label="Description">
               <textarea value={form.description} onChange={set("description")} rows={3}

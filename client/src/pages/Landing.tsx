@@ -6,11 +6,13 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { PILOT_H1, PILOT_LOOP, PILOT_MAP, PILOT_NOTE, PILOT_SHOP, PILOT_SUB } from "../lib/pilotCorridor";
+import { isObviousTestShop } from "../lib/testShop";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
-  "/landing/hero-owner-bakery.jpg",
   "/landing/hero-owner-florist.jpg",
+  "/landing/hero-owner-bakery.jpg",
   "/landing/hero-owner-boutique.jpg",
   "/landing/hero-owner-salon.jpg",
 ];
@@ -38,34 +40,34 @@ type SampleDrop = {
 
 const SAMPLE_DROPS: SampleDrop[] = [
   {
-    category: "Food & Drink",
-    neighbourhood: "Brixton",
-    title: "Morning bake — country loaf",
-    business: "River Oven Bakery",
+    category: "Bakery",
+    neighbourhood: "A shop you know",
+    title: "Country loaf — example",
+    business: "Example bakery",
     pricePence: 450,
-    window: "Example window · Sat morning",
+    window: "Example window · collect today",
     left: "e.g. 6 available",
-    imageUrl: "/samples/sourdough.jpg",
+    imageUrl: "/landing/hero-owner-bakery.jpg",
   },
   {
-    category: "Fashion & Retail",
-    neighbourhood: "Peckham",
-    title: "Weekend edit — 3-piece clothing bundle",
-    business: "North Lane Boutique",
-    pricePence: checkoutFromList(10800),
-    window: "Example window · Sat–Sun",
-    left: "e.g. 8 bundles",
-    imageUrl: "/samples/clothing.jpg",
+    category: "Florist",
+    neighbourhood: "A shop you know",
+    title: "This week's bunch — example",
+    business: "Example florist",
+    pricePence: 1800,
+    window: "Example window · this afternoon",
+    left: "e.g. 8 bunches",
+    imageUrl: "/landing/hero-owner-florist.jpg",
   },
   {
-    category: "Beauty & Wellness",
-    neighbourhood: "Clapham",
-    title: "Express blow-dry — afternoon slots",
-    business: "Marlow Hair Studio",
-    pricePence: 2800,
-    window: "Example window · same day",
-    left: "e.g. 4 spots",
-    imageUrl: "/samples/blowdry.jpg",
+    category: "Barber",
+    neighbourhood: "A shop you know",
+    title: "Cut before close — example",
+    business: "Example barber",
+    pricePence: 2200,
+    window: "Example window · before close",
+    left: "e.g. 3 chairs",
+    imageUrl: "/landing/hero-owner-salon.jpg",
   },
 ];
 
@@ -80,41 +82,46 @@ const HOW_IT_WORKS_PHONES: {
 }[] = [
   {
     ownerImage: "/landing/hero-owner-bakery.jpg",
-    dropLabel: "Dropping Tue · 4pm",
-    title: "Morning bake — country loaf",
-    business: "River Oven Bakery",
+    dropLabel: "Collect today · 4pm",
+    title: "Country loaf — example",
+    business: "A bakery you know · example",
     pricePence: 450,
-    media: "video",
+    media: "photo",
   },
   {
-    ownerImage: "/landing/drop-jacket-photo.jpg",
-    dropLabel: "Dropping Sat · 11am",
-    title: "Weekend jacket — rail edit",
-    business: "North Lane Boutique",
-    pricePence: checkoutFromList(10800),
+    ownerImage: "/landing/hero-owner-florist.jpg",
+    dropLabel: "Collect today · 2pm",
+    title: "This week's bunch — example",
+    business: "A florist you know · example",
+    pricePence: 1800,
     media: "photo",
   },
   {
     ownerImage: "/landing/hero-owner-salon.jpg",
-    dropLabel: "Dropping today · 2pm",
-    title: "Express blow-dry — afternoon",
-    business: "Marlow Hair Studio",
-    pricePence: 2800,
-    media: "video",
+    dropLabel: "Collect today · close",
+    title: "Cut before close — example",
+    business: "A barber you know · example",
+    pricePence: 2200,
+    media: "photo",
   },
 ];
 
-const BUSINESS_TYPES = [
-  "Charity shops",
-  "Florists",
-  "Bakeries",
-  "Bookshops",
-  "Wine merchants",
-  "Beauty",
-  "Fashion",
-  "Spirits",
-  "Boutiques",
-  "Specialty food",
+const HOW_IT_WORKS_STEPS = [
+  {
+    num: "01",
+    title: "Get notified",
+    desc: "We'll let you know when a shop you already like has something on.",
+  },
+  {
+    num: "02",
+    title: "Claim it",
+    desc: "It's yours while it's still available.",
+  },
+  {
+    num: "03",
+    title: "Collect it",
+    desc: "Walk into that shop and collect it in person.",
+  },
 ];
 
 const LANDING_CSS = `
@@ -525,7 +532,7 @@ export default function Landing() {
               textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap",
             }}
           >
-            {isMobile ? "Business" : "For businesses"}
+            For shops
           </a>
           <a
             href="/signin"
@@ -585,49 +592,21 @@ export default function Landing() {
           minHeight: isMobile ? undefined : "calc(100vh - 72px)",
           maxHeight: isMobile ? undefined : 820,
         }}>
-          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 580 }}>
-            <div
-              className="uw-fade-1"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                marginBottom: isMobile ? 16 : 20,
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 9 : 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  color: "rgba(255,240,244,0.78)",
-                  padding: isMobile ? "5px 0" : "6px 0",
-                }}
-              >
-                <span
-                  className="uw-pulse-dot"
-                  style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
-                />
-                London · Opening soon
-              </span>
-            </div>
-
+          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 680 }}>
             <h1
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 32 : "clamp(38px, 4.6vw, 52px)",
+                fontSize: isMobile ? 30 : "clamp(34px, 4.2vw, 48px)",
                 fontWeight: 800,
                 color: CREAM,
-                lineHeight: 1.02,
-                letterSpacing: isMobile ? "-1px" : "-1.5px",
+                lineHeight: 1.08,
+                letterSpacing: isMobile ? "-0.8px" : "-1.2px",
                 marginBottom: isMobile ? 14 : 16,
-                maxWidth: 580,
+                maxWidth: 640,
               }}
             >
-              Grab specials from shops near you before they're gone.
+              {PILOT_H1}
             </h1>
 
             <p
@@ -642,20 +621,35 @@ export default function Landing() {
                 maxWidth: 520,
               }}
             >
-              Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
+              {PILOT_SUB}
             </p>
 
-            <div className="uw-fade-4" style={{ maxWidth: 420 }}>
+            <p
+              className="uw-fade-3"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 14 : 15,
+                color: "rgba(255,240,244,0.62)",
+                lineHeight: 1.5,
+                marginBottom: isMobile ? 22 : 26,
+                fontWeight: 500,
+                maxWidth: 520,
+              }}
+            >
+              A bakery, a florist, a bookshop, a barber, a deli.
+            </p>
+
+            <div className="uw-fade-4" style={{ maxWidth: 460 }}>
               <button
-                onClick={() => navigate("/signin")}
+                onClick={() => navigate("/signin?mode=register")}
                 className="uw-btn-primary"
                 style={{
                   background: BG,
                   color: FG,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 14 : 15,
-                  letterSpacing: "0.01em",
-                  padding: isMobile ? "15px 24px" : "17px 30px",
+                  fontSize: isMobile ? 18 : 20,
+                  letterSpacing: "-0.2px",
+                  padding: isMobile ? "16px 28px" : "18px 34px",
                   border: "none",
                   cursor: "pointer",
                   borderRadius: RADIUS_SM,
@@ -663,8 +657,19 @@ export default function Landing() {
                   boxShadow: "0 12px 32px rgba(0,0,0,0.28)",
                 }}
               >
-                Get early access
+                Notify me
               </button>
+              <p style={{
+                marginTop: isMobile ? 12 : 14,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 13 : 14,
+                color: "rgba(255,240,244,0.72)",
+                fontWeight: 500,
+                lineHeight: 1.45,
+                maxWidth: 420,
+              }}>
+                {PILOT_NOTE}
+              </p>
               <div style={{
                 marginTop: isMobile ? 12 : 14,
                 fontFamily: "'DM Sans', sans-serif",
@@ -672,7 +677,7 @@ export default function Landing() {
                 color: "rgba(255,240,244,0.58)",
                 fontWeight: 500,
               }}>
-                Own a shop?{" "}
+                {PILOT_SHOP}{" "}
                 <a
                   href="/business-apply"
                   style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
@@ -747,46 +752,9 @@ export default function Landing() {
           )}
         </div>
 
-        {/* Category pills marquee */}
-        <div
-          className="uw-fade-4"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            padding: "0 0 28px",
-            borderTop: "1px solid rgba(255,240,244,0.08)",
-          }}
-        >
-          <div className="uw-marquee-track" aria-hidden style={{ paddingTop: 22 }}>
-            {[...BUSINESS_TYPES, ...BUSINESS_TYPES].map((type, i) => (
-              <div
-                key={`${type}-${i}`}
-                style={{
-                  display: "flex", alignItems: "center",
-                  padding: "0 8px", whiteSpace: "nowrap",
-                }}
-              >
-                <span style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: type === "Charity shops" ? 13 : 12,
-                  fontStyle: type === "Charity shops" ? "italic" : "normal",
-                  fontWeight: type === "Charity shops" ? 700 : 600,
-                  color: type === "Charity shops" ? V : "#FFF0F4",
-                  background: type === "Charity shops" ? "rgba(22,7,3,0.18)" : "rgba(255,240,244,0.08)",
-                  border: type === "Charity shops" ? "1px solid rgba(22,7,3,0.45)" : "1px solid rgba(255,240,244,0.12)",
-                  padding: "8px 16px",
-                  borderRadius: 999,
-                  letterSpacing: "0.02em",
-                }}>
-                  {type === "Charity shops" ? "Charity shops — we love them" : type}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — phone proof ── */}
+      {/* ── 2. HOW IT WORKS — below the fold, not the hook ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1, overflow: "hidden" }}>
         <div aria-hidden style={{
           position: "absolute",
@@ -823,7 +791,7 @@ export default function Landing() {
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
             color: FG,
           }}>
-            See it. Claim it. Collect it.
+            {PILOT_LOOP}
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -832,10 +800,53 @@ export default function Landing() {
             color: MUTED_FG,
             lineHeight: 1.55,
             maxWidth: 760,
-            margin: "0 0 16px",
+            margin: "0 0 22px",
           }}>
-            See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.
+            We'll let you know when a shop you like has something on. You claim it, then you collect it.
           </p>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
+            gap: 14,
+            maxWidth: 860,
+          }}>
+            {HOW_IT_WORKS_STEPS.map(({ num, title, desc }) => (
+              <div key={num} style={{
+                border: `1px solid ${BORDER}`,
+                borderRadius: 14,
+                padding: "16px 16px 18px",
+                background: BG,
+              }}>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 11,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  color: V,
+                  marginBottom: 8,
+                }}>
+                  {num}
+                </div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: FG,
+                  marginBottom: 6,
+                }}>
+                  {title}
+                </div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 14,
+                  color: MUTED_FG,
+                  lineHeight: 1.5,
+                }}>
+                  {desc}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div style={{
@@ -853,7 +864,7 @@ export default function Landing() {
             color: MUTED_FG,
             fontWeight: 500,
           }}>
-            Illustrative phone screens · fictional shops — nothing here can be claimed yet.
+            Examples from any kind of shop. Nothing here can be claimed yet.
           </p>
         </div>
       </section>
@@ -877,15 +888,13 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
             color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
           }}>
-            A bakery posts the loaf that just came out. A florist shows the bunch that just landed.
-            A boutique puts the jacket on the rail — in a photo or short video.
+            A shop you already like has something on. We'll let you know.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
           }}>
-            You look, you lock it in, you walk in with a QR.
-            No mystery bag. No courier who doesn't care about sourdough. Just something you chose — waiting at the counter.
+            Then you claim it, and collect it.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 12,
@@ -952,7 +961,7 @@ export default function Landing() {
                 className="uw-pulse-dot"
                 style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
               />
-              FIRST 500 ONLY
+              FOR SHOPS
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -963,9 +972,7 @@ export default function Landing() {
               lineHeight: 1.05,
               marginBottom: 16,
             }}>
-              Be a founding shopper.
-              <br />
-              Get the specials before everyone else.
+              {PILOT_SHOP}
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -973,155 +980,42 @@ export default function Landing() {
               fontWeight: 500,
               color: "rgba(255,240,244,0.85)",
               lineHeight: 1.5,
-              marginBottom: 32,
+              marginBottom: 28,
               maxWidth: 540,
             }}>
-              Join free now. When shops near you go live, you see limited deals first, claim them earlier, and help decide what lands on your street.
+              The people who already like your shop can hear about it. They claim it, and they come through the door.
             </p>
-
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: isMobile ? 14 : 16,
-              marginBottom: 36,
-            }}>
-              {[
-                {
-                  num: "01",
-                  title: "First look at every special",
-                  desc: "Claim 24 hours before the public. The best stuff often won't make it to general release.",
-                },
-                {
-                  num: "02",
-                  title: "Premium tools, free forever",
-                  desc: "Priority alerts, filters, and saved searches stay unlocked for founding shoppers while later shoppers pay.",
-                },
-                {
-                  num: "03",
-                  title: "Help shape your street",
-                  desc: "Vote which shops join your neighbourhood and tell us what you want next.",
-                },
-              ].map(({ num, title, desc }) => (
-                <div
-                  key={title}
-                  style={{
-                    background: "rgba(255,240,244,0.08)",
-                    backdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,240,244,0.18)",
-                    borderRadius: 14,
-                    padding: isMobile ? "18px 16px" : "20px 22px",
-                    transition: "all 0.25s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255,240,244,0.14)";
-                    e.currentTarget.style.borderColor = "rgba(255,240,244,0.35)";
-                    e.currentTarget.style.transform = "translateX(4px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,240,244,0.08)";
-                    e.currentTarget.style.borderColor = "rgba(255,240,244,0.18)";
-                    e.currentTarget.style.transform = "translateX(0)";
-                  }}
-                >
-                  <div style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 14,
-                  }}>
-                    <span style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 13,
-                      fontWeight: 800,
-                      letterSpacing: "0.06em",
-                      color: "rgba(255,240,244,0.55)",
-                      lineHeight: 1.4,
-                      flexShrink: 0,
-                      paddingTop: 2,
-                    }}>
-                      {num}
-                    </span>
-                    <div>
-                      <div style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 16 : 17,
-                        fontWeight: 700,
-                        color: CREAM,
-                        marginBottom: 6,
-                        letterSpacing: "-0.2px",
-                      }}>
-                        {title}
-                      </div>
-                      <div style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: isMobile ? 14 : 15,
-                        fontWeight: 400,
-                        color: "rgba(255,240,244,0.75)",
-                        lineHeight: 1.5,
-                      }}>
-                        {desc}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              gap: 14,
-              alignItems: isMobile ? "stretch" : "center",
-              marginBottom: 18,
-            }}>
-              <button
-                onClick={() => navigate("/signin")}
-                className="uw-btn-primary"
-                style={{
-                  background: CREAM,
-                  color: V_DEEP,
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 14 : 15,
-                  fontWeight: 800,
-                  letterSpacing: "0.01em",
-                  padding: isMobile ? "17px 28px" : "18px 32px",
-                  border: "none",
-                  cursor: "pointer",
-                  borderRadius: RADIUS_SM,
-                  boxShadow: "0 14px 38px rgba(0,0,0,0.35)",
-                }}
-              >
-                Become a founding shopper
-              </button>
-              <div style={{
+            <a
+              href="/business-apply"
+              className="uw-btn-primary"
+              style={{
+                background: CREAM,
+                color: V_DEEP,
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 13,
-                color: "rgba(255,240,244,0.65)",
-                fontWeight: 500,
-                textAlign: isMobile ? "center" : "left",
-              }}>
-                Free. Just your email.
-              </div>
-            </div>
-
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12,
-              color: "rgba(255,240,244,0.5)",
-              fontWeight: 500,
-              textAlign: "center",
-              fontStyle: "italic",
-            }}>
-              Only 500 spots. After that, you wait with everyone else.
-            </div>
+                fontSize: isMobile ? 16 : 18,
+                fontWeight: 800,
+                letterSpacing: "-0.2px",
+                padding: isMobile ? "17px 28px" : "18px 32px",
+                textDecoration: "none",
+                display: "inline-block",
+                borderRadius: RADIUS_SM,
+                boxShadow: "0 14px 38px rgba(0,0,0,0.35)",
+              }}
+            >
+              Partner with us
+            </a>
           </div>
         </section>
       )}
 
-      {/* ── 5. MAP — London is real ── */}
+      {/* Curated shop map and list. All 132 wave-1 pins, including unclaimed. */}
       {PRE_LAUNCH ? (
         <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS} />
       ) : (
-        <MapSection drops={drops ?? []} onDropClick={(id) => navigate(`/drop/${id}`)} />
+        <MapSection
+          drops={(drops ?? []).filter((row) => !isObviousTestShop(row.business?.name, row.business?.slug))}
+          onDropClick={(id) => navigate(`/drop/${id}`)}
+        />
       )}
 
       {/* ── 6b. RECOMMEND A SHOP — neighbourhood nominations ── */}
@@ -1145,13 +1039,13 @@ export default function Landing() {
             fontWeight: 700, color: FG,
             lineHeight: 1.15, letterSpacing: "-0.8px", marginBottom: 16,
           }}>
-            Got a shop that deserves to be seen?
+            A shop you already like isn't here yet?
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Algorithms reward chains. Neighbours reward the people behind each shop. Tip us a florist, bookshop, boutique, or charity shop and we'll tell them someone asked for them by name.
+            Tell us its name. A bakery, a florist, a bookshop, a barber, a deli — any local shop you already go to.
           </p>
           <a
             href="/recommend"
@@ -1193,29 +1087,27 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: "rgba(255,224,231,0.72)", letterSpacing: "0.06em", marginBottom: 16,
           }}>
-            LOOK · LOCK · WALK IN
+            NOTIFY ME
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(30px, 4.2vw, 48px)",
-            fontWeight: 700, lineHeight: 1.1, letterSpacing: "-1.2px",
+            fontSize: "clamp(28px, 3.6vw, 42px)",
+            fontWeight: 700, lineHeight: 1.12, letterSpacing: "-1px",
             marginBottom: 16,
             color: BG,
           }}>
-            Amazon will bring you anything.{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: CREAM }}>We bring you round the corner.</em>
+            Want to know when something's on?
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 480, fontWeight: 300,
           }}>
-            Create a founding shopper account. When London shops post what just landed, you'll see it, claim it, and collect it —
-            before the people who only check their phones at midnight.
+            {PILOT_NOTE}
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
-              onClick={() => navigate("/signin")}
+              onClick={() => navigate("/signin?mode=register")}
               className="uw-btn-primary"
               style={{
                 background: V, color: BG,
@@ -1224,7 +1116,7 @@ export default function Landing() {
                 border: "none", cursor: "pointer",
               }}
             >
-              JOIN AS A FOUNDING SHOPPER
+              NOTIFY ME
             </button>
           </div>
           <p style={{
@@ -1234,28 +1126,14 @@ export default function Landing() {
             color: "rgba(255,248,245,0.65)",
             fontWeight: 500,
           }}>
-            Own a shop?{" "}
+            {PILOT_SHOP}{" "}
             <a
               href="/business-apply"
               style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
             >
-              Get seen on the map
+              Partner with us
             </a>
           </p>
-          <a
-            href="/london"
-            style={{
-              display: "inline-block",
-              marginTop: 14,
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
-              fontWeight: 600,
-              color: "rgba(255,248,245,0.75)",
-              textDecoration: "none",
-            }}
-          >
-            Browse London boroughs →
-          </a>
         </div>
       </section>
 
@@ -1278,7 +1156,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            The high street never stopped being interesting. It stopped being visible.
+            {PILOT_H1}
           </p>
         </div>
 
@@ -1292,9 +1170,9 @@ export default function Landing() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
               { label: "Sign in", href: "/signin" },
-              { label: "For businesses", href: "/business-apply" },
+              { label: "For shops", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
-              { label: "London boroughs", href: "/london" },
+              { label: "Notify me", href: "/signin?mode=register" },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (
@@ -1548,44 +1426,21 @@ function HowItWorksPhones() {
 
 function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: string) => void }) {
   const isMobile = useIsMobile();
-  const [search, setSearch] = useState("");
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
-  const [focused, setFocused] = useState(false);
+  const mapCenter = { lat: PILOT_MAP.lat, lng: PILOT_MAP.lng };
 
   const pins = useMemo(() => drops.map(toDropPin), [drops]);
 
-  async function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (!search.trim()) return;
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
-        { headers: { "Accept-Language": "en" } }
-      );
-      const data = await resp.json();
-      if (data[0]) {
-        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-      }
-    } catch {
-      // silently ignore network errors
-    }
-  }
-
   return (
-    <section style={{ borderBottom: "none" }}>
+    <section id="pilot" style={{ borderBottom: "none" }}>
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
-        display: "flex", justifyContent: "space-between",
-        alignItems: isMobile ? "stretch" : "flex-end",
-        flexDirection: isMobile ? "column" : "row",
-        gap: 20,
       }}>
         <div>
           <div style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: MUTED_FG, letterSpacing: "0.06em", marginBottom: 12,
           }}>
-            LONDON · GETTING READY
+            WHAT'S ON DEAL RIGHT NOW
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1593,50 +1448,17 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             fontWeight: 700, color: FG, letterSpacing: "-0.6px",
             lineHeight: 1.15, marginBottom: 8,
           }}>
-            Pin by pin. Street by street.
+            Shops you already know
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 420, fontWeight: 300,
           }}>
             {pins.length === 0
-              ? "No live drops yet. When shops go live, their pins appear here — desire with a postcode."
-              : `${pins.length} drops visible · click a pin to preview`}
+              ? "Nothing on right now. We'll let you know when a shop you know has something on."
+              : `${pins.length} on right now · click a pin to preview`}
           </p>
         </div>
-
-        <form
-          onSubmit={handleSearch}
-          style={{
-            display: "flex", gap: 0,
-            width: isMobile ? "100%" : "auto",
-            boxShadow: focused ? `0 0 0 1px ${FG}` : "none",
-            transition: "box-shadow 0.15s ease",
-          }}
-        >
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder="Search an area or postcode…"
-            style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-              padding: "12px 16px", border: `1px solid ${BORDER}`,
-              borderRight: "none", background: BG, color: FG,
-              outline: "none", width: isMobile ? "100%" : 280, minWidth: 0, flex: isMobile ? 1 : "none",
-            }}
-          />
-          <button type="submit" className="uw-btn-primary" style={{
-            background: V_DEEP, color: BG,
-            fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-            letterSpacing: "0.04em", padding: "12px 22px",
-            border: "none", cursor: "pointer",
-          }}>
-            GO
-          </button>
-        </form>
       </div>
 
       <div style={{ borderTop: `1px solid ${BORDER}` }}>
@@ -1645,7 +1467,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
           onDropClick={onDropClick}
           defaultLat={mapCenter.lat}
           defaultLng={mapCenter.lng}
-          zoom={13}
+          zoom={PILOT_MAP.zoom}
           height={isMobile ? "360px" : "520px"}
         />
       </div>
@@ -1666,7 +1488,7 @@ function normalizeDirectoryName(name: string): string {
 function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.509865, lng: -0.118092 });
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: PILOT_MAP.lat, lng: PILOT_MAP.lng });
   const [focusedId, setFocusedId] = useState<string | undefined>(undefined);
 
   const { data: members } = trpc.businesses.directoryMembers.useQuery();
@@ -1694,7 +1516,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
     });
 
     const extras: PrelaunchDirectoryPin[] = memberRows
-      .filter((m) => !matchedMemberIds.has(m.id) && m.lat != null && m.lng != null)
+      .filter((m) => !matchedMemberIds.has(m.id) && m.lat != null && m.lng != null && !isObviousTestShop(m.name, m.slug))
       .map((m) => ({
         id: `member-${m.id}`,
         name: m.name,
@@ -1736,19 +1558,19 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
     try {
       const resp = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1`,
-        { headers: { "Accept-Language": "en" } }
+        { headers: { "Accept-Language": "en" } },
       );
       const data = await resp.json();
       if (data[0]) {
         setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
       }
     } catch {
-      // silently ignore network errors
+      // Search still filters the list if the geocoder is unavailable.
     }
   }
 
   return (
-    <section style={{ borderBottom: "none" }}>
+    <section id="pilot" style={{ borderBottom: "none" }}>
       <div style={{
         padding: isMobile ? "28px 20px" : "40px 40px 28px",
         display: "grid",
@@ -1764,7 +1586,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             letterSpacing: "0.06em",
             marginBottom: 12,
           }}>
-            LONDON · GETTING READY
+            SHOPS YOU ALREADY KNOW
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1775,7 +1597,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            The neighbourhood, pin by pin
+            We'll let you know when something's on
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1788,7 +1610,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches. Clear your search to see the full list."
-              : "Browse shops coming onto Unwrapped. Nominate one you love."}
+              : "Shops you already know. We'll let you know when something's on."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1866,7 +1688,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 outline: "none",
                 width: "100%",
               }}
-              placeholder="Search an area, postcode, or shop name…"
+              placeholder="Search a shop you know…"
             />
             <button
               type="submit"
@@ -1967,7 +1789,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       lineHeight: 1.45,
                     }}>
                       {p.postcode ? p.postcode : p.district ?? "—"}
-                      {p.isMember && p.category ? ` · ${p.category}` : p.track ? ` · ${p.track}` : ""}
+                      {p.type || p.category ? ` · ${p.type || p.category}` : ""}
                     </div>
                   </div>
                 );
@@ -1988,7 +1810,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             pins={filteredPins}
             defaultLat={mapCenter.lat}
             defaultLng={mapCenter.lng}
-            zoom={13}
+            zoom={PILOT_MAP.zoom}
             height={isMobile ? "356px" : "760px"}
             focusedId={focusedId}
             onPinSelect={setFocusedId}

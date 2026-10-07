@@ -10,14 +10,9 @@ import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import type { PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { PILOT_KICKER, PILOT_MAP, PILOT_NOTE, PILOT_SUB } from "../lib/pilotCorridor";
+import { isObviousTestShop } from "../lib/testShop";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
-
-
-const CATEGORIES = [
-  "All", "Fashion & Apparel", "Food & Drink", "Beauty & Wellness", "Home & Living",
-  "Art & Culture", "Books & Music", "Sports & Outdoor", "Tech & Gadgets",
-  "Kids & Family", "Services & Experiences",
-];
 
 type TimeWindow = "now" | "today" | "tomorrow";
 type PageTab = "drops" | "shops";
@@ -36,16 +31,14 @@ export default function Home() {
   const explicitTab = tabFromSearch(searchString);
 
   const [tab, setTab] = useState<PageTab>(explicitTab ?? "shops");
-  const [category, setCategory] = useState<string | undefined>(undefined);
   const [timeWindow, setTimeWindow] = useState<TimeWindow | undefined>(undefined);
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState("");
-  const [mapCenter, setMapCenter] = useState({ lat: 51.509865, lng: -0.118092 });
+  const mapCenter = { lat: PILOT_MAP.lat, lng: PILOT_MAP.lng };
   const [focusedShopId, setFocusedShopId] = useState<string | undefined>(undefined);
 
   const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({
-    category: category || undefined,
     timeWindow,
     limit: 60,
   });
@@ -75,42 +68,36 @@ export default function Home() {
     navigate(`/home?tab=${next}`, { replace: true });
   }
 
-  async function handleMapSearch(e: React.FormEvent) {
+  function handleMapSearch(e: React.FormEvent) {
     e.preventDefault();
     setSearchError("");
-    if (!search.trim()) return;
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(search + ", London, UK")}&format=json&limit=1&countrycodes=gb`,
-        { headers: { "Accept-Language": "en" } }
-      );
-      const data = await resp.json();
-      if (data[0]) {
-        setMapCenter({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-      } else {
-        setSearchError("Couldn't find that place — try a full postcode or area name.");
-      }
-    } catch {
-      setSearchError("Search failed — check your connection and try again.");
-    }
   }
 
-  const pins = useMemo(() => (drops ?? []).map(toDropPin), [drops]);
+  const pilotDrops = useMemo(
+    () => (drops ?? []).filter(({ business }) => !isObviousTestShop(business.name, business.slug)),
+    [drops],
+  );
+
+  const pins = useMemo(() => pilotDrops.map(toDropPin), [pilotDrops]);
 
   const followedIds = useMemo(
     () => new Set((follows ?? []).map((f) => f.business.id)),
     [follows],
   );
 
+  const pilotMembers = useMemo(
+    () => (members ?? []).filter((m) => !isObviousTestShop(m.name, m.slug)),
+    [members],
+  );
+
   const filteredShops = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return (members ?? []).filter((m) => {
-      if (category && m.category !== category) return false;
+    return pilotMembers.filter((m) => {
       if (!q) return true;
       const hay = `${m.name} ${m.address ?? ""} ${m.postcode ?? ""} ${m.city ?? ""} ${m.category ?? ""}`.toLowerCase();
       return hay.includes(q);
     });
-  }, [members, category, search]);
+  }, [pilotMembers, search]);
 
   const shopPins: PrelaunchDirectoryPin[] = useMemo(
     () =>
@@ -131,8 +118,8 @@ export default function Home() {
     [filteredShops],
   );
 
-  const dropCount = drops?.length ?? 0;
-  const shopCount = members?.length ?? 0;
+  const dropCount = pilotDrops.length;
+  const shopCount = pilotMembers.length;
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
@@ -182,35 +169,18 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Category filter bar ── */}
       <div style={{
         borderBottom: `1px solid ${BORDER}`,
-        padding: "0 24px",
-        position: "sticky", top: 56,
-        background: BG, zIndex: 90,
+        padding: "12px 24px",
+        background: BG,
       }}>
-        <div style={{ display: "flex", gap: 0, overflowX: "auto", scrollbarWidth: "none" }}>
-          {CATEGORIES.map(cat => {
-            const active = cat === "All" ? !category : category === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat === "All" ? undefined : cat)}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 13, fontWeight: active ? 500 : 400,
-                  padding: "14px 16px",
-                  background: "none", border: "none",
-                  borderBottom: active ? `2px solid ${V}` : "2px solid transparent",
-                  color: active ? V : MUTED_FG,
-                  cursor: "pointer", whiteSpace: "nowrap",
-                  transition: "all 0.1s", marginBottom: -1,
-                }}
-              >
-                {cat}
-              </button>
-            );
-          })}
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: V }}>
+            {PILOT_KICKER}
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 4, lineHeight: 1.5 }}>
+            {PILOT_SUB} {PILOT_NOTE}
+          </p>
         </div>
       </div>
 
@@ -279,7 +249,7 @@ export default function Home() {
                     setSearchError={setSearchError}
                     onSubmit={handleMapSearch}
                     isMobile={isMobile}
-                    placeholder="Search an area or postcode…"
+                    placeholder="Search a shop you know…"
                   />
                   <div style={{ border: `1px solid ${BORDER}` }}>
                     <DropMap
@@ -288,7 +258,7 @@ export default function Home() {
                       defaultLat={mapCenter.lat}
                       defaultLng={mapCenter.lng}
                       height={isMobile ? "420px" : "600px"}
-                      zoom={13}
+                      zoom={PILOT_MAP.zoom}
                     />
                   </div>
                 </div>
@@ -299,7 +269,7 @@ export default function Home() {
                     gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
                     gap: 1, background: BORDER,
                   }}>
-                    {drops?.map(({ drop, business, location }) => (
+                    {pilotDrops.map(({ drop, business, location }) => (
                       <DropCard
                         key={drop.id}
                         drop={drop}
@@ -326,7 +296,7 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif", fontSize: 15,
                 color: MUTED_FG, lineHeight: 1.6, margin: 0, maxWidth: 560,
               }}>
-                Neighbourhood shops already on Unwrapped. Follow the ones you love — we'll tell you when they drop.
+                Shops you already like. Follow one and we'll tell you when something's on.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: 1 }}>
@@ -343,7 +313,7 @@ export default function Home() {
               setSearchError={setSearchError}
               onSubmit={handleMapSearch}
               isMobile={isMobile}
-              placeholder="Search a shop, area, or postcode…"
+              placeholder="Search a shop you know…"
             />
 
             <div style={{ display: viewMode === "map" ? "block" : "none" }}>
@@ -353,7 +323,7 @@ export default function Home() {
                   defaultLat={mapCenter.lat}
                   defaultLng={mapCenter.lng}
                   height={isMobile ? "420px" : "600px"}
-                  zoom={13}
+                  zoom={PILOT_MAP.zoom}
                   focusedId={focusedShopId}
                   onPinSelect={(id) => setFocusedShopId(id)}
                 />
@@ -382,7 +352,7 @@ export default function Home() {
               ) : filteredShops.length === 0 ? (
                 <EmptyShops
                   hasMembers={shopCount > 0}
-                  onClear={() => { setSearch(""); setCategory(undefined); }}
+                  onClear={() => { setSearch(""); }}
                 />
               ) : (
                 <div style={{
@@ -508,7 +478,7 @@ function NominateBanner() {
           Don't see a shop you love?
         </p>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.55 }}>
-          Nominate them. We'll reach out and say a neighbour sent us.
+          Nominate a local shop you already like — a bakery, florist, bookshop, barber, or deli. We'll say a neighbour sent us.
         </p>
       </div>
       <a
@@ -529,10 +499,10 @@ function EmptyDrops({ onSeeShops }: { onSeeShops: () => void }) {
   return (
     <div style={{ textAlign: "center", padding: "64px 0 80px", maxWidth: 520, margin: "0 auto" }}>
       <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 12 }}>
-        Nothing dropping right now
+        Nothing on right now
       </p>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
-        We're filling London with neighbourhood shops first. Follow members so you're first in line — or nominate a shop you want on Unwrapped.
+        We'll let you know when a shop you know has something on.
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         <button
@@ -569,7 +539,7 @@ function EmptyShops({ hasMembers, onClear }: { hasMembers: boolean; onClear: () 
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
         {hasMembers
           ? "Try another name or neighbourhood — or nominate the shop you're looking for."
-          : "Know a café, salon, florist, or neighbourhood spot that should be here? Tell us. That's how the map fills."}
+          : "Know a local shop you already like? Tell us."}
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         {hasMembers && (

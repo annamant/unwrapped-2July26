@@ -32,7 +32,7 @@ export default function Instagram() {
     return start <= now && end >= now && drop.availableQuantity > 0;
   }) ?? [];
 
-  const browseHref = user ? "/home?tab=shops" : "/signin";
+  const browseHref = user ? "/home?tab=shops" : "/signin?mode=register";
 
   return (
     <div style={{
@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Grab specials from shops near you before they're gone.
+          Unwrapped lets you know when a shop you already know has something on.
         </p>
 
         <p style={{
@@ -86,7 +86,7 @@ export default function Instagram() {
           letterSpacing: "0.12em",
           marginBottom: 32,
         }}>
-          LONDON · OPENING SOON
+          SHOPS YOU ALREADY KNOW · NOTIFY ME
         </p>
 
         {liveDrops.length > 0 && (
@@ -104,9 +104,9 @@ export default function Instagram() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
           <a href={browseHref} style={{ ...linkBtn, background: FG, color: BG, border: `1px solid ${FG}` }}>
-            BROWSE DROPS
+            {user ? "WHAT'S ON NOW" : "NOTIFY ME"}
           </a>
-          <a href="/signin" style={linkBtn}>
+          <a href="/signin?mode=register" style={linkBtn}>
             {user ? "MY ACCOUNT" : "SIGN UP · FREE"}
           </a>
           <a href="/recommend" style={linkBtn}>

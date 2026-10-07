@@ -111,23 +111,24 @@ export default function Recommend() {
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px" }}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: V, letterSpacing: "0.15em", marginBottom: 16 }}>
-            NOMINATE · LONDON
+            NOMINATE · SHOPS YOU ALREADY KNOW
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
             Recommend a shop<br />you'd love on Unwrapped.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            Know a bakery, florist, bookshop, boutique, or charity shop that should be here?
+            Unwrapped lets you know when a shop you already know has something on.
+            Know a local shop you already like — a bakery, florist, bookshop, barber, or deli?
             Tell us — we'll reach out and let them know someone selected them.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Row label="Business name *">
-            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. Corner Bakery" style={inputStyle} />
+            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. the bookshop on your street" style={inputStyle} />
           </Row>
           <Row label="Neighbourhood / area *">
-            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. Hackney, Peckham, Notting Hill" style={inputStyle} />
+            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. the high street you already shop" style={inputStyle} />
           </Row>
           <Row label="Category">
             <select value={form.category} onChange={set("category")} style={inputStyle}>

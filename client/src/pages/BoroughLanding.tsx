@@ -100,10 +100,10 @@ export default function BoroughLanding() {
             Borough not found
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", color: MUTED_FG, marginBottom: 24 }}>
-            We cover all London boroughs — pick one from the map of neighbourhoods.
+            Unwrapped lets you know when a shop you already know has something on.
           </p>
           <Link href="/london" style={{ color: V, fontWeight: 700, textDecoration: "none" }}>
-            Browse London boroughs →
+            What's on →
           </Link>
         </div>
       </div>
@@ -124,10 +124,7 @@ export default function BoroughLanding() {
         title={seo.title}
         description={seo.description}
         path={seo.path}
-        jsonLd={boroughJsonLd(
-          borough,
-          shops.map((s) => ({ name: s.name, slug: s.slug })),
-        )}
+        jsonLd={boroughJsonLd(borough, shops.map((s) => ({ name: s.name, slug: s.slug })))}
       />
       <Nav />
 
@@ -135,22 +132,19 @@ export default function BoroughLanding() {
         <nav aria-label="Breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16 }}>
           <Link href="/" style={{ color: MUTED_FG, textDecoration: "none" }}>Home</Link>
           <span style={{ margin: "0 8px" }}>›</span>
-          <Link href="/london" style={{ color: MUTED_FG, textDecoration: "none" }}>London</Link>
+          <Link href="/london" style={{ color: MUTED_FG, textDecoration: "none" }}>What's on</Link>
           <span style={{ margin: "0 8px" }}>›</span>
           <span style={{ color: FG, fontWeight: 600 }}>{borough.name}</span>
         </nav>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: V, marginBottom: 14 }}>
-          {borough.region === "south" ? "South London · Launch" : "London · Unwrapped"}
-        </div>
         <h1 style={{
           fontFamily: "'Playfair Display', serif",
-          fontSize: mobile ? 40 : 56,
+          fontSize: mobile ? 36 : 48,
           fontWeight: 700,
           color: FG,
-          lineHeight: 1.05,
+          lineHeight: 1.08,
           marginBottom: 16,
         }}>
-          {borough.name}
+          Unwrapped lets you know when a shop you already know has something on.
         </h1>
         <p style={{
           fontFamily: "'DM Sans', sans-serif",
@@ -158,30 +152,26 @@ export default function BoroughLanding() {
           color: MUTED_FG,
           lineHeight: 1.65,
           maxWidth: 620,
-          marginBottom: 20,
+          marginBottom: 28,
         }}>
-          {borough.blurb} Unwrapped is filling London from South London outward — see the real thing, claim in the app, collect with QR.
+          It connects you with the local shops you already like. Sign up and we'll tell you when something's on.
         </p>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 28 }}>
-          Neighbourhoods: {borough.neighbourhoods.slice(0, 8).join(" · ")}
-          {borough.neighbourhoods.length > 8 ? " · …" : ""}
-        </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
           <Link
-            href="/business-apply"
+            href="/signin?mode=register"
             style={{
               display: "inline-block",
               background: V,
               color: CREAM,
               fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              padding: "14px 22px",
+              fontWeight: 800,
+              fontSize: 18,
+              padding: "16px 26px",
               borderRadius: 999,
               textDecoration: "none",
             }}
           >
-            Apply to partner your shop
+            Notify me
           </Link>
           <Link
             href="/recommend"
@@ -199,21 +189,6 @@ export default function BoroughLanding() {
             }}
           >
             Nominate a shop
-          </Link>
-          <Link
-            href="/london"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              color: V_DEEP,
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 600,
-              fontSize: 14,
-              textDecoration: "none",
-              padding: "14px 8px",
-            }}
-          >
-            All London boroughs →
           </Link>
         </div>
       </header>
@@ -237,16 +212,15 @@ export default function BoroughLanding() {
               padding: mobile ? 24 : 32,
             }}>
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: FG, lineHeight: 1.6, marginBottom: 12 }}>
-                We’re onboarding {borough.name} shops now. Be first on the map — or tip us a favourite on your high street.
+                Nothing from {borough.name} is on the list yet.
               </p>
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.6 }}>
-                Postcodes we match here include {borough.outcodes.slice(0, 6).join(", ")}
-                {borough.outcodes.length > 6 ? " and more" : ""}.
+                Nominate a shop you already like, and we'll tell you when something's on.
               </p>
             </div>
           ) : (
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {shops.slice(0, 60).map((shop) => (
+              {shops.map((shop) => (
                 <li
                   key={shop.key}
                   style={{
@@ -289,38 +263,19 @@ export default function BoroughLanding() {
                     }}>
                       On Unwrapped
                     </span>
-                  ) : (
-                    <span style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: MUTED_FG,
-                    }}>
-                      Coming soon
-                    </span>
-                  )}
+                  ) : null}
                 </li>
               ))}
             </ul>
-          )}
-          {shops.length > 60 && (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginTop: 16 }}>
-              Showing 60 of {shops.length}. More shops appear as they claim and go live.
-            </p>
           )}
         </div>
       </section>
 
       {peerStrip.length > 0 && (
         <section style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "36px 20px 56px" : "48px 24px 72px" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 8 }}>
-            {borough.region === "south" ? "More South London" : `More ${borough.region} London`}
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 16 }}>
+            Other boroughs
           </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 20 }}>
-            {borough.region === "south"
-              ? "We’re densifying South London first — then the rest of the city."
-              : "Explore neighbouring boroughs on Unwrapped."}
-          </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             {peerStrip.map((b) => (
               <Link
@@ -341,22 +296,23 @@ export default function BoroughLanding() {
                 {b.name}
               </Link>
             ))}
-            <Link
-              href="/london"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 14,
-                fontWeight: 600,
-                color: V,
-                padding: "10px 16px",
-                textDecoration: "none",
-              }}
-            >
-              All boroughs →
-            </Link>
           </div>
         </section>
       )}
+
+      <section style={{ borderTop: `1px solid ${BORDER}` }}>
+        <div style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "28px 20px 56px" : "36px 24px 72px" }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: MUTED_FG, marginBottom: 10 }}>
+            How it works
+          </div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: mobile ? 24 : 28, color: FG, marginBottom: 8 }}>
+            Get notified. Then claim. Then collect.
+          </h2>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
+            We'll let you know when a shop you like has something on. You claim it, then you collect it.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

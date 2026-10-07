@@ -75,9 +75,9 @@ export default function Nav() {
           </>
         ) : (
           <>
-            <a href="/london" style={styles.link}>London</a>
+            <a href="/london" style={styles.link}>What's on</a>
             <a href="/business-apply" style={styles.link}>Partner your shop</a>
-            <a href="/signin" style={styles.cta}>Get drops</a>
+            <a href="/signin?mode=register" style={styles.cta}>Notify me</a>
           </>
         )}
       </div>

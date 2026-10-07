@@ -17,13 +17,19 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 
 ## Live message (do not revert without intent)
 
-- **H1 / title:** Unwrapped · Grab specials from shops near you before they're gone.
-- **Description:** Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.
-- **Loop:** See it. Claim it. Collect it.
-- **Status:** London · Opening soon
+- **H1 / title:** Unwrapped lets you know when a shop you already know has something on.
+- **Description:** It connects you with the local shops you already like. Sign up and we'll tell you when something's on.
+- **Sub:** It connects you with the local shops you already like.
+- **Primary CTA:** Notify me
+- **Under the button:** Sign up and we'll tell you when a shop you know has something on.
+- **Shop line:** Tell your regulars when you've got something on. Links to `/business-apply`.
+- Alerts are not built. Do not write “we ping you” as if notifications already arrive. Use “we'll let you know”.
+- **Loop (secondary, below the fold):** Get notified. Then claim. Then collect.
+- **Category:** any local shop people already know. Notify-first. Not bakery or specialty food only. A bakery, florist, bookshop, barber, or deli may appear as examples. Do not write food-only or bakery-only meta.
+- **Do not:** define Unwrapped by what it is not (no “not a mystery bag” block). Do not lead with photographed specials. No “Opening soon”. No street names.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 
-Hero = action + nearby + FOMO (before they're gone). Sub = how + today urgency.
+Hero = the notification: Unwrapped lets you know when a shop you already know has something on. How it works sits below that.
 
 ## What already shipped (Aug 2026)
 

@@ -1,31 +1,31 @@
 /** Site-wide SEO constants and helpers for Unwrapped (shopunwrapped.com). */
 
 import { getBoroughBySlug, boroughSeo, londonHubSeo, boroughJsonLd, londonHubJsonLd } from "./londonBoroughs";
+import { PILOT_DESCRIPTION, PILOT_TITLE } from "./pilotCorridor";
 
 export const SITE_ORIGIN = "https://shopunwrapped.com";
 export const SITE_NAME = "Unwrapped";
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
-export const DEFAULT_TITLE = "Unwrapped · Grab specials from shops near you before they're gone.";
-export const DEFAULT_DESCRIPTION =
-  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
+export const DEFAULT_TITLE = PILOT_TITLE;
+export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 
 /** Shopper FAQ for the homepage FAQPage JSON-LD — matches live landing copy. */
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "It's simple. Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.",
+    a: "Unwrapped lets you know when a shop you already know has something on. It connects you with the local shops you already like.",
   },
   {
     q: "How does it work?",
-    a: "See a photo or short video from local shops. Claim it on your phone. Collect it in person before it's gone.",
+    a: "Get notified. Then claim it. Then collect it.",
   },
   {
     q: "How do I collect?",
     a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "Where is Unwrapped launching?",
-    a: "London. Opening soon — densest first in South London, neighbourhood by neighbourhood.",
+    q: "What will I be notified about?",
+    a: "We'll let you know when a shop you already know has something on.",
   },
 ];
 
@@ -45,7 +45,7 @@ export const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Local high-street shops — bakeries, florists, bookshops, beauty, fashion, wine, specialty food, and charity shops. If people can collect from you in person during a window, you can list a drop.",
+    a: "Shops people already know. Post what's on, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -255,14 +255,14 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Got a shop that deserves to be seen? Tip us a bakery, florist, bookshop, boutique, or charity shop — we'll tell them someone asked for them by name.",
+          "Know a local shop you already know? Tell us and we'll say a neighbour asked for them.",
         path,
       };
     case "/instagram":
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "What's just landed on London high streets — photo or video, claim it, collect it.",
+          "Unwrapped lets you know when a shop you already know has something on. Sign up and we'll tell you when something's on.",
         path,
       };
     case "/resources":

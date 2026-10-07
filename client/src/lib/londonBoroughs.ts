@@ -37,7 +37,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
       "Camberwell",
       "Waterloo",
     ],
-    blurb: "Brixton, Clapham, Streatham, Herne Hill and more — look into Lambeth high streets, claim drops, collect in person.",
+    blurb: "Unwrapped lets you know when a shop you already know has something on. Sign up and we'll tell you when something's on.",
   },
   {
     slug: "wandsworth",
@@ -342,19 +342,19 @@ export function findBoroughForShop(
 }
 
 export function boroughSeo(borough: LondonBorough): { title: string; description: string; path: string } {
-  const south = borough.region === "south";
-  const title = south
-    ? `${borough.name} high street drops — Unwrapped (South London)`
-    : `${borough.name} high street drops — Unwrapped (London)`;
-  const description = `${borough.blurb} See it, claim it, collect it — video or photo of what's just landed, pay in the app, collect in person.`;
-  return { title, description, path: `/london/${borough.slug}` };
+  return {
+    title: `${borough.name} — Unwrapped`,
+    description:
+      "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
+    path: `/london/${borough.slug}`,
+  };
 }
 
 export function londonHubSeo(): { title: string; description: string; path: string } {
   return {
-    title: "London boroughs — Unwrapped",
+    title: "Notify me when a shop you know has something on — Unwrapped",
     description:
-      "Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals — claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
+      "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
     path: "/london",
   };
 }
@@ -371,7 +371,7 @@ export function boroughJsonLd(
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: `${borough.name} on Unwrapped`,
-      description: borough.blurb,
+      description: boroughSeo(borough).description,
       url: pageUrl,
       isPartOf: {
         "@type": "WebSite",
@@ -425,7 +425,7 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "London boroughs on Unwrapped",
+      name: londonHubSeo().title,
       description: londonHubSeo().description,
       url: "https://shopunwrapped.com/london",
       isPartOf: {
@@ -446,18 +446,6 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
         { "@type": "ListItem", position: 1, name: "Home", item: "https://shopunwrapped.com/" },
         { "@type": "ListItem", position: 2, name: "London", item: "https://shopunwrapped.com/london" },
       ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      name: "London boroughs on Unwrapped",
-      numberOfItems: LONDON_BOROUGHS.length,
-      itemListElement: LONDON_BOROUGHS.map((b, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: b.name,
-        url: `https://shopunwrapped.com/london/${b.slug}`,
-      })),
     },
   ];
 }

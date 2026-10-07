@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useSearch } from "wouter";
 import { trpc, setSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
 import { BG, FG, BORDER, V, V_DEEP, CREAM } from "../theme";
+import { PILOT_NOTE } from "../lib/pilotCorridor";
 
 export default function SignIn() {
   const isMobile = useIsMobile(900);
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const search = useSearch();
+  const startRegister = new URLSearchParams(search.replace(/^\?/, "")).get("mode") === "register";
+  const [mode, setMode] = useState<"login" | "register">(startRegister ? "register" : "login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -62,7 +66,7 @@ export default function SignIn() {
           </h1>
           {!isMobile && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-              Reserve limited local drops — bakeries, florists, bookshops, beauty, fashion, wine and charity shops. Your ticket, your QR code, your pick-up.
+              {PILOT_NOTE}
             </p>
           )}
         </div>
@@ -79,7 +83,7 @@ export default function SignIn() {
             {mode === "login" ? "Sign in" : "Create account"}
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 32, lineHeight: 1.5 }}>
-            {mode === "login" ? "Welcome back." : "Join Unwrapped in seconds."}
+            {PILOT_NOTE}
           </p>
 
           <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>

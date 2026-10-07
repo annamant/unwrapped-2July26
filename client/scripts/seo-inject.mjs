@@ -6,9 +6,9 @@
 
 export const SITE = "https://shopunwrapped.com";
 export const DEFAULT_TITLE =
-  "Unwrapped · Grab specials from shops near you before they're gone.";
+  "Unwrapped lets you know when a shop you already know has something on.";
 export const DEFAULT_DESCRIPTION =
-  "Local shops post photos and videos of limited deals. You see it, claim it on your phone, and collect it in person. Never miss what's around the corner.";
+  "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.";
 export const DEFAULT_OG = `${SITE}/og-image.png`;
 
 export function escapeHtml(s) {
@@ -84,11 +84,11 @@ export function fallbackSeo(pathname) {
   if (path === "/london") {
     return {
       ...base,
-      title: "London boroughs — Unwrapped",
+      title: "Notify me when a shop you know has something on — Unwrapped",
       description:
-        "Grab specials from shops near you before they're gone. Local shops post photos and videos of limited deals — claim in the app, collect at the counter. Launching densest in South London, with a page for every borough.",
+        "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
       bodyHtml:
-        "<article><h1>London boroughs</h1><p>Neighbourhood pages for every London borough.</p></article>",
+        "<article><h1>Unwrapped lets you know when a shop you already know has something on.</h1><p>Notify me. Sign up and we'll tell you when something's on.</p></article>",
     };
   }
   const borough = path.match(/^\/london\/([^/]+)$/);
@@ -96,7 +96,7 @@ export function fallbackSeo(pathname) {
     const name = titleCaseSlug(borough[1]);
     return {
       ...base,
-      title: `${name} high street drops — Unwrapped (London)`,
+      title: `${name} — Unwrapped`,
       bodyHtml: `<article><h1>${escapeHtml(name)} on Unwrapped</h1></article>`,
     };
   }
