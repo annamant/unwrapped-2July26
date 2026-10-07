@@ -16,9 +16,10 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 
 **Public shopper line (live):** Unwrapped lets you know when a shop you already know has a deal on.  
 **Public ask:** Notify me.  
-**Public sub:** The connection between the shops you trust and you. We ping you when something's on.  
+**Public sub:** The connection between the shops you trust and you. We'll let you know when something's on.  
 **Public product loop (secondary — how it works):** Get notified → Claim it → Collect it.  
-**Public explanation:** Unwrapped is the connection between shops and people. We ping you when a shop you already know has a deal on. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
+**Under Notify me:** Sign up and we'll tell you when shops you know post a deal. Alerts are not live yet — do not write this as if pings already arrive.  
+**Public explanation:** Unwrapped is the connection between shops and people. We'll let you know when a shop you already know has a deal on. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
 **Public merchant promise:** Get seen — so you can sell and welcome customers through the door.
 
 ### What Unwrapped is not

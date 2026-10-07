@@ -6,7 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { PILOT_H1, PILOT_MAP, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
+import { PILOT_H1, PILOT_MAP, PILOT_NOTE, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
@@ -106,7 +106,7 @@ const BUSINESS_TYPES = [
   "Shops you already know",
   "A deal on",
   "Notify me",
-  "We ping you when something's on",
+  "We'll let you know when something's on",
 ];
 
 const LANDING_CSS = `
@@ -629,6 +629,17 @@ export default function Landing() {
               >
                 Notify me
               </button>
+              <p style={{
+                marginTop: isMobile ? 12 : 14,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: isMobile ? 13 : 14,
+                color: "rgba(255,240,244,0.72)",
+                fontWeight: 500,
+                lineHeight: 1.45,
+                maxWidth: 420,
+              }}>
+                {PILOT_NOTE}
+              </p>
               <div style={{
                 marginTop: isMobile ? 12 : 14,
                 fontFamily: "'DM Sans', sans-serif",
@@ -798,7 +809,7 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            We ping you when a shop you know has a deal on. Then you claim it, and collect it.
+            We'll let you know when a shop you know has a deal on. Then you claim it, and collect it.
           </p>
         </div>
 
@@ -841,7 +852,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
             color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
           }}>
-            A shop you already know has a deal on. We ping you.
+            A shop you already know has a deal on. We'll let you know.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
@@ -949,7 +960,7 @@ export default function Landing() {
                 {
                   num: "01",
                   title: "Get notified",
-                  desc: "We ping you when a shop you already know has a deal on.",
+                  desc: "We'll let you know when a shop you already know has a deal on.",
                 },
                 {
                   num: "02",
@@ -1071,7 +1082,7 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              We ping you when something's on.
+              We'll let you know when something's on.
             </div>
           </div>
         </section>
@@ -1669,7 +1680,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            We ping you when something's on
+            We'll let you know when something's on
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1682,7 +1693,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches. Clear your search to see the full list."
-              : "Shops you already know. We ping you when something's on."}
+              : "Shops you already know. We'll let you know when something's on."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",

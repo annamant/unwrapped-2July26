@@ -25,7 +25,7 @@ export const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What will I be notified about?",
-    a: "We ping you when a shop you already know has a deal on.",
+    a: "We'll let you know when a shop you already know has a deal on.",
   },
 ];
 
@@ -262,7 +262,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
+          "Unwrapped lets you know when a shop you already know has a deal on. We'll let you know when something's on.",
         path,
       };
     case "/resources":

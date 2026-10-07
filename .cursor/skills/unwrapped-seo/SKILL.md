@@ -18,8 +18,10 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 ## Live message (do not revert without intent)
 
 - **H1 / title:** Unwrapped lets you know when a shop you already know has a deal on.
-- **Description:** The connection between the shops you trust and you. We ping you when something's on.
+- **Description:** The connection between the shops you trust and you. We'll let you know when something's on.
 - **Primary CTA:** Notify me
+- **Under the button:** Sign up and we'll tell you when shops you know post a deal.
+- Alerts are not built. Do not write “we ping you” as if notifications already arrive. Use “we'll let you know”.
 - **Loop (secondary, below the fold):** Get notified. Then claim. Then collect.
 - **Do not:** define Unwrapped by what it is not (no “not a mystery bag” block). Do not lead with photographed specials. No “Opening soon”. No street names.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)

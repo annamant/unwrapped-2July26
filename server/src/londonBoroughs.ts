@@ -37,7 +37,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
       "Camberwell",
       "Waterloo",
     ],
-    blurb: "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
+    blurb: "Unwrapped lets you know when a shop you already know has a deal on. We'll let you know when something's on.",
   },
   {
     slug: "wandsworth",
@@ -345,7 +345,7 @@ export function boroughSeo(borough: LondonBorough): { title: string; description
   return {
     title: `${borough.name} — Unwrapped`,
     description:
-      "The connection between the shops you trust and you. We ping you when something's on.",
+      "The connection between the shops you trust and you. We'll let you know when something's on.",
     path: `/london/${borough.slug}`,
   };
 }
@@ -354,7 +354,7 @@ export function londonHubSeo(): { title: string; description: string; path: stri
   return {
     title: "Notify me when a shop you know has a deal on — Unwrapped",
     description:
-      "The connection between the shops you trust and you. We ping you when something's on.",
+      "The connection between the shops you trust and you. We'll let you know when something's on.",
     path: "/london",
   };
 }

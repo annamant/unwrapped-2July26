@@ -11,7 +11,7 @@ import {
   londonHubJsonLd,
   londonHubSeo,
 } from "./londonBoroughs";
-import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_TITLE } from "./pilotCorridor";
+import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_NOTE, PILOT_TITLE } from "./pilotCorridor";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -37,7 +37,7 @@ const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What will I be notified about?",
-    a: "We ping you when a shop you already know has a deal on.",
+    a: "We'll let you know when a shop you already know has a deal on.",
   },
 ];
 
@@ -116,7 +116,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/instagram",
     title: "Live drops for Instagram — Unwrapped",
     description:
-      "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
+      "Unwrapped lets you know when a shop you already know has a deal on. We'll let you know when something's on.",
     type: "website",
   },
   "/resources": {
@@ -562,7 +562,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>Get notified. Then claim. Then collect.</h2><p>We ping you when a shop you know has a deal on. Then you claim it, and collect it.</p><p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><p>${escapeHtml(PILOT_NOTE)}</p><h2>Get notified. Then claim. Then collect.</h2><p>We'll let you know when a shop you know has a deal on. Then you claim it, and collect it.</p><p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
             ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Get notified. Then claim. Then collect.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,

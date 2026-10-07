@@ -183,7 +183,7 @@ export default function Home() {
             {PILOT_KICKER}
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 4, lineHeight: 1.5 }}>
-            The connection between the shops you trust and you. We ping you when something's on.
+            The connection between the shops you trust and you. We'll let you know when something's on.
           </p>
         </div>
       </div>

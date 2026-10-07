@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trpc, setSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
 import { BG, FG, BORDER, V, V_DEEP, CREAM } from "../theme";
+import { PILOT_NOTE } from "../lib/pilotCorridor";
 
 export default function SignIn() {
   const isMobile = useIsMobile(900);
@@ -62,7 +63,7 @@ export default function SignIn() {
           </h1>
           {!isMobile && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-              Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.
+              {PILOT_NOTE}
             </p>
           )}
         </div>
@@ -79,7 +80,7 @@ export default function SignIn() {
             {mode === "login" ? "Sign in" : "Create account"}
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 32, lineHeight: 1.5 }}>
-            {mode === "login" ? "Welcome back." : "Join Unwrapped in seconds."}
+            {PILOT_NOTE}
           </p>
 
           <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>

@@ -53,9 +53,12 @@ export const PILOT_TITLE =
   "Unwrapped lets you know when a shop you already know has a deal on.";
 
 export const PILOT_DESCRIPTION =
-  "The connection between the shops you trust and you. We ping you when something's on.";
+  "The connection between the shops you trust and you. We'll let you know when something's on.";
 
 export const PILOT_H1 =
   "Unwrapped lets you know when a shop you already know has a deal on.";
 
 export const PILOT_KICKER = "Notify me";
+
+export const PILOT_NOTE =
+  "Sign up and we'll tell you when shops you know post a deal.";

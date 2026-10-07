@@ -11,7 +11,7 @@ A new way to shop your high street: local shops post **photos and videos of limi
 **Locked shopper framing (live):**  
 **Unwrapped lets you know when a shop you already know has a deal on.**  
 **Notify me.**  
-**The connection between the shops you trust and you. We ping you when something's on.**  
+**The connection between the shops you trust and you. We'll let you know when something's on.**  
 Get notified, then claim, then collect is how it works, below the hero. Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor. No Opening soon.
 
 **Locked merchant framing:**  
@@ -37,13 +37,13 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Product truth:** Unwrapped is for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** shops you already know · notify me · a deal on · we ping you when something's on · the connection between the shops you trust and you · get notified, then claim, then collect (below the hero)  
+**Do say:** shops you already know · notify me · a deal on · we'll let you know when something's on · sign up and we'll tell you when shops you know post a deal · the connection between the shops you trust and you · get notified, then claim, then collect (below the hero)  
 **Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · a “not this” block · photographed specials as the pitch · waste · livestream (unless Phase 2) · people and places (retired) · Opening soon · named streets or a corridor as the brand
 
 **Hero rule:** Unwrapped lets you know when a shop you already know has a deal on. Button: Notify me. Get notified → claim → collect is the section below, not the headline.
 
 **Example — short:** Unwrapped lets you know when a shop you already know has a deal on.  
-**Example — with proof:** The connection between the shops you trust and you. We ping you when something's on.  
+**Example — with proof:** The connection between the shops you trust and you. We'll let you know when something's on.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -170,7 +170,7 @@ Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-s
 
 ```
 Unwrapped lets you know when a shop you already know has a deal on.
-Notify me. We ping you when something's on.
+Notify me. We'll let you know when something's on.
 London
 ```
 

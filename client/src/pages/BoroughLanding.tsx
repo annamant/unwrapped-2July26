@@ -85,7 +85,7 @@ export default function BoroughLanding() {
           maxWidth: 620,
           marginBottom: 28,
         }}>
-          The connection between the shops you trust and you. We ping you when something's on.
+          The connection between the shops you trust and you. We'll let you know when something's on.
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
           <Link
@@ -133,7 +133,7 @@ export default function BoroughLanding() {
             Get notified. Then claim. Then collect.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
-            We ping you when a shop you know has a deal on. Then you claim it, and collect it.
+            We'll let you know when a shop you know has a deal on. Then you claim it, and collect it.
           </p>
         </div>
       </section>
