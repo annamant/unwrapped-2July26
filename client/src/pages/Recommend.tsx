@@ -125,10 +125,10 @@ export default function Recommend() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Row label="Business name *">
-            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. the bookshop on your street" style={inputStyle} />
+            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. the bookshop you already go to" style={inputStyle} />
           </Row>
           <Row label="Neighbourhood / area *">
-            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. the high street you already shop" style={inputStyle} />
+            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. the area you already shop" style={inputStyle} />
           </Row>
           <Row label="Category">
             <select value={form.category} onChange={set("category")} style={inputStyle}>
@@ -143,7 +143,7 @@ export default function Recommend() {
             <input value={form.businessWebsite} onChange={set("businessWebsite")} placeholder="https://…" style={inputStyle} />
           </Row>
           <Row label="Address (if you know it)">
-            <input value={form.businessAddress} onChange={set("businessAddress")} placeholder="Street or postcode" style={inputStyle} />
+            <input value={form.businessAddress} onChange={set("businessAddress")} placeholder="Address or postcode" style={inputStyle} />
           </Row>
           <Row label="Why do you love them?">
             <textarea
