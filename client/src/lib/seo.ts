@@ -13,11 +13,11 @@ export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
+    a: "Unwrapped lets you know when a shop you already know has a deal on. The connection between the shops you trust and you.",
   },
   {
     q: "How does it work?",
-    a: "See the photo. Claim it on your phone. Collect it in person. It is a chosen special, not a mystery bag.",
+    a: "Get notified. Then claim it. Then collect it.",
   },
   {
     q: "How do I collect?",
@@ -25,7 +25,7 @@ export const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What will I be notified about?",
-    a: "A shop you already know, when it has something on deal right now. Not a browse of every shop in the city.",
+    a: "We ping you when a shop you already know has a deal on.",
   },
 ];
 
@@ -45,7 +45,7 @@ export const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Shops people already know. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
+    a: "Shops people already know. Post what's on, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -262,7 +262,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
+          "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
         path,
       };
     case "/resources":

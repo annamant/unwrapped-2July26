@@ -37,7 +37,7 @@ export default function BoroughLanding() {
             Borough not found
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", color: MUTED_FG, marginBottom: 24 }}>
-            What's on deal right now is at shops you already know. This is not a city-wide directory.
+            Unwrapped lets you know when a shop you already know has a deal on.
           </p>
           <Link href="/london" style={{ color: V, fontWeight: 700, textDecoration: "none" }}>
             What's on →
@@ -67,18 +67,15 @@ export default function BoroughLanding() {
           <span style={{ margin: "0 8px" }}>›</span>
           <span style={{ color: FG, fontWeight: 600 }}>{borough.name}</span>
         </nav>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: mobile ? 20 : 26, fontWeight: 800, letterSpacing: "-0.4px", color: V, marginBottom: 12 }}>
-          Shops you already know
-        </div>
         <h1 style={{
           fontFamily: "'Playfair Display', serif",
-          fontSize: mobile ? 40 : 56,
+          fontSize: mobile ? 36 : 48,
           fontWeight: 700,
           color: FG,
-          lineHeight: 1.05,
+          lineHeight: 1.08,
           marginBottom: 16,
         }}>
-          What's on deal right now
+          Unwrapped lets you know when a shop you already know has a deal on.
         </h1>
         <p style={{
           fontFamily: "'DM Sans', sans-serif",
@@ -88,7 +85,7 @@ export default function BoroughLanding() {
           maxWidth: 620,
           marginBottom: 28,
         }}>
-          {borough.name} is not a city-wide shop directory. Notify me when a shop you already know has a photographed special on deal.
+          The connection between the shops you trust and you. We ping you when something's on.
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
           <Link
@@ -133,10 +130,10 @@ export default function BoroughLanding() {
             How it works
           </div>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: mobile ? 24 : 28, color: FG, marginBottom: 8 }}>
-            See it. Claim it. Collect it.
+            Get notified. Then claim. Then collect.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
-            When you go: see the photo, claim it on your phone, and collect it in person.
+            We ping you when a shop you know has a deal on. Then you claim it, and collect it.
           </p>
         </div>
       </section>

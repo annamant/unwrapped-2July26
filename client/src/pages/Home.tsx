@@ -183,7 +183,7 @@ export default function Home() {
             {PILOT_KICKER}
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 4, lineHeight: 1.5 }}>
-            What's on deal right now at shops you already know. Notify me when a photographed special is on deal.
+            The connection between the shops you trust and you. We ping you when something's on.
           </p>
         </div>
       </div>
@@ -506,7 +506,7 @@ function EmptyDrops({ onSeeShops }: { onSeeShops: () => void }) {
         Nothing dropping right now
       </p>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
-        Nothing on deal right now. Notify me by following a shop you already know, or nominate one.
+        Nothing on right now. We'll let you know when a shop you know has a deal.
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         <button

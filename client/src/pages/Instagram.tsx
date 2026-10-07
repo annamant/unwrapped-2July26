@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          What's on deal right now at shops you already know.
+          Unwrapped lets you know when a shop you already know has a deal on.
         </p>
 
         <p style={{

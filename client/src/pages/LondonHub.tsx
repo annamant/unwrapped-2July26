@@ -53,9 +53,6 @@ export default function LondonHub() {
           <span style={{ margin: "0 8px" }}>›</span>
           <span style={{ color: FG, fontWeight: 600 }}>What's on</span>
         </nav>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: mobile ? 22 : 28, fontWeight: 800, letterSpacing: "-0.5px", color: V, marginBottom: 12 }}>
-          Shops you already know
-        </div>
         <h1 style={{
           fontFamily: "'Playfair Display', serif",
           fontSize: mobile ? 40 : 56,
@@ -124,10 +121,10 @@ export default function LondonHub() {
             color: FG,
             marginBottom: 8,
           }}>
-            See it. Claim it. Collect it.
+            Get notified. Then claim. Then collect.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
-            When a shop you know has something on deal, you see the photo, claim it, and collect it in person.
+            We ping you when a shop you know has a deal on. Then you claim it, and collect it.
           </p>
         </div>
       </section>
@@ -150,10 +147,10 @@ export default function LondonHub() {
               textAlign: "left",
             }}
           >
-            {showBoroughs ? "Hide other London pages" : "Other London pages — not a city-wide directory"}
+            {showBoroughs ? "Hide other London pages" : "Other London pages"}
           </button>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.55, maxWidth: 560, marginTop: 8 }}>
-            These pages stay up. They are not a browse of every shop in the city.
+            These pages stay up for later. Unwrapped pings you when a shop you know has a deal on.
           </p>
           {showBoroughs && REGION_ORDER.map((region) => {
             const list = LONDON_BOROUGHS.filter((b) => b.region === region);

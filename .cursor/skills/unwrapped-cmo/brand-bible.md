@@ -9,9 +9,10 @@ Product site: https://shopunwrapped.com
 A new way to shop your high street: local shops post **photos and videos of limited deals** → you **see** it → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
 **Locked shopper framing (live):**  
-**What's on deal right now at shops you already know.**  
-**Notify me. A photo of the special — not a mystery bag. Not Opening soon. Not a city-wide marketplace.**  
-See it, claim it, collect it is how it works, under the hero. Do not name streets or a corridor.
+**Unwrapped lets you know when a shop you already know has a deal on.**  
+**Notify me.**  
+**The connection between the shops you trust and you. We ping you when something's on.**  
+Get notified, then claim, then collect is how it works, below the hero. Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor. No Opening soon.
 
 **Locked merchant framing:**  
 **Get seen — so you can sell and welcome customers through the door.**
@@ -26,7 +27,7 @@ Do **not** position Unwrapped as Too Good To Go (mystery bags / waste), a static
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG | **What's on deal right now at shops you already know. Notify me.** |
+| **1. One-liner** | Headlines, posters, bio, OG | **Unwrapped lets you know when a shop you already know has a deal on. Notify me.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -36,13 +37,13 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Product truth:** Unwrapped is for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** shops you already know · notify me · what's on deal right now · photographed special · see it · claim it · collect it (as how it works, under the hero)  
-**Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · waste · livestream (unless Phase 2) · people and places (retired) · Opening soon · a city-wide marketplace · named streets or a corridor as the brand
+**Do say:** shops you already know · notify me · a deal on · we ping you when something's on · the connection between the shops you trust and you · get notified, then claim, then collect (below the hero)  
+**Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · a “not this” block · photographed specials as the pitch · waste · livestream (unless Phase 2) · people and places (retired) · Opening soon · named streets or a corridor as the brand
 
-**Hero rule:** Shops you already know, and notify me / what's on deal right now. See → claim → collect is the section below, not the headline.
+**Hero rule:** Unwrapped lets you know when a shop you already know has a deal on. Button: Notify me. Get notified → claim → collect is the section below, not the headline.
 
-**Example — short:** What's on deal right now at shops you already know.  
-**Example — with proof:** Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.  
+**Example — short:** Unwrapped lets you know when a shop you already know has a deal on.  
+**Example — with proof:** The connection between the shops you trust and you. We ping you when something's on.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -53,7 +54,7 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 | **For** | Londoners who want scarce, real neighbourhood finds |
 | **Also for** | Neighbourhood operators (proof set) that want demand without endless promo noise |
 | **Against** | Generic delivery apps, endless scroll deals, "everything always available" |
-| **Promise** | What's on deal right now at shops you already know. Notify me. |
+| **Promise** | Unwrapped lets you know when a shop you already know has a deal on. |
 
 ## Audiences
 
@@ -168,8 +169,8 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
 
 ```
-What's on deal right now at shops you already know.
-Notify me. A photo of the special — not a mystery bag.
+Unwrapped lets you know when a shop you already know has a deal on.
+Notify me. We ping you when something's on.
 London
 ```
 

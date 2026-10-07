@@ -62,7 +62,7 @@ export default function SignIn() {
           </h1>
           {!isMobile && (
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "#888", lineHeight: 1.65, maxWidth: 360 }}>
-              What's on deal right now at shops you already know. Notify me when a photographed special is on deal.
+              Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.
             </p>
           )}
         </div>

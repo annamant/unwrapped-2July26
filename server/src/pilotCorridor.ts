@@ -50,11 +50,12 @@ export function isPublicPilotShop(shop: PilotPlace): boolean {
 }
 
 export const PILOT_TITLE =
-  "Unwrapped · What's on deal right now at shops you already know.";
+  "Unwrapped lets you know when a shop you already know has a deal on.";
 
 export const PILOT_DESCRIPTION =
-  "Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.";
+  "The connection between the shops you trust and you. We ping you when something's on.";
 
-export const PILOT_H1 = "What's on deal right now at shops you already know.";
+export const PILOT_H1 =
+  "Unwrapped lets you know when a shop you already know has a deal on.";
 
 export const PILOT_KICKER = "Notify me";

@@ -17,14 +17,14 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 
 ## Live message (do not revert without intent)
 
-- **H1 / title:** Unwrapped · What's on deal right now at shops you already know.
-- **Description:** Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.
-- **Hero lines:** Shops you already know. Notify me. What's on deal right now.
-- **Loop (secondary, under the hero):** See it. Claim it. Collect it.
-- **Status:** Not “Opening soon”. Not a city-wide marketplace. Do not name streets or a corridor in public copy.
+- **H1 / title:** Unwrapped lets you know when a shop you already know has a deal on.
+- **Description:** The connection between the shops you trust and you. We ping you when something's on.
+- **Primary CTA:** Notify me
+- **Loop (secondary, below the fold):** Get notified. Then claim. Then collect.
+- **Do not:** define Unwrapped by what it is not (no “not a mystery bag” block). Do not lead with photographed specials. No “Opening soon”. No street names.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 
-Hero = shops you already know + notify me / what's on deal right now. How it works (see → claim → collect) sits below that.
+Hero = the notification: Unwrapped lets you know when a shop you already know has a deal on. How it works sits below that.
 
 ## What already shipped (Aug 2026)
 

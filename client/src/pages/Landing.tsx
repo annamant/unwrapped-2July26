@@ -6,7 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { PILOT_MAP, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
+import { PILOT_H1, PILOT_MAP, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
@@ -104,9 +104,9 @@ const HOW_IT_WORKS_PHONES: {
 
 const BUSINESS_TYPES = [
   "Shops you already know",
-  "What's on deal right now",
+  "A deal on",
   "Notify me",
-  "Photographed specials",
+  "We ping you when something's on",
 ];
 
 const LANDING_CSS = `
@@ -577,52 +577,21 @@ export default function Landing() {
           minHeight: isMobile ? undefined : "calc(100vh - 72px)",
           maxHeight: isMobile ? undefined : 820,
         }}>
-          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 580 }}>
-            <div
-              className="uw-fade-1"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                marginBottom: isMobile ? 16 : 20,
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 22 : 28,
-                  fontWeight: 800,
-                  letterSpacing: "-0.6px",
-                  color: CREAM,
-                  lineHeight: 1.1,
-                  padding: isMobile ? "5px 0" : "6px 0",
-                }}
-              >
-                <span
-                  className="uw-pulse-dot"
-                  style={{ width: 8, height: 8, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
-                />
-                Shops you already know
-              </span>
-            </div>
-
+          <div style={{ maxWidth: SHOW_HERO_FLOATING_CARDS ? undefined : 680 }}>
             <h1
               className="uw-fade-2"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 32 : "clamp(38px, 4.6vw, 52px)",
+                fontSize: isMobile ? 30 : "clamp(34px, 4.2vw, 48px)",
                 fontWeight: 800,
                 color: CREAM,
-                lineHeight: 1.02,
-                letterSpacing: isMobile ? "-1px" : "-1.5px",
+                lineHeight: 1.08,
+                letterSpacing: isMobile ? "-0.8px" : "-1.2px",
                 marginBottom: isMobile ? 14 : 16,
-                maxWidth: 580,
+                maxWidth: 640,
               }}
             >
-              What's on deal right now
-              <br />
-              at shops you already know.
+              {PILOT_H1}
             </h1>
 
             <p
@@ -781,70 +750,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. NOTIFY — the job, before the mechanics ── */}
-      <section style={{
-        background: CREAM,
-        borderBottom: "none",
-        position: "relative",
-        zIndex: 1,
-        padding: isMobile ? "48px 20px" : "72px 40px",
-      }}>
-        <div style={{ maxWidth: 720 }}>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 28 : 40,
-            fontWeight: 800,
-            letterSpacing: "-1px",
-            lineHeight: 1.08,
-            color: FG,
-            marginBottom: 16,
-          }}>
-            Notify me
-          </p>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 22 : 28,
-            fontWeight: 700,
-            letterSpacing: "-0.6px",
-            lineHeight: 1.2,
-            color: FG,
-            marginBottom: 14,
-            maxWidth: 640,
-          }}>
-            What's on deal right now at shops you already know.
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 15 : 17,
-            color: MUTED_FG,
-            lineHeight: 1.55,
-            maxWidth: 560,
-            marginBottom: 28,
-          }}>
-            A photographed special, when a shop you know has something on deal. Not a browse of every shop in the city.
-          </p>
-          <button
-            onClick={() => navigate("/signin")}
-            className="uw-btn-primary"
-            style={{
-              background: FG,
-              color: BG,
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 16 : 18,
-              fontWeight: 800,
-              letterSpacing: "-0.2px",
-              padding: isMobile ? "16px 28px" : "18px 32px",
-              border: "none",
-              cursor: "pointer",
-              borderRadius: RADIUS_SM,
-            }}
-          >
-            Notify me
-          </button>
-        </div>
-      </section>
-
-      {/* ── 3. HOW IT WORKS — secondary to the job above ── */}
+      {/* ── 2. HOW IT WORKS — below the fold, not the hook ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1, overflow: "hidden" }}>
         <div aria-hidden style={{
           position: "absolute",
@@ -881,7 +787,7 @@ export default function Landing() {
             lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
             color: FG,
           }}>
-            See it. Claim it. Collect it.
+            Get notified. Then claim. Then collect.
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -892,7 +798,7 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            When you go: see a photo of a chosen special, claim it on your phone, and collect it at the counter.
+            We ping you when a shop you know has a deal on. Then you claim it, and collect it.
           </p>
         </div>
 
@@ -935,14 +841,13 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
             color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
           }}>
-            A shop you already know posts a photo of today's special. You see the loaf, the tin, the counter.
+            A shop you already know has a deal on. We ping you.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
           }}>
-            You look, you lock it in, you walk in with a QR.
-            No mystery bag. No courier who doesn't care about sourdough. Just something you chose — waiting at the counter.
+            Then you claim it, and collect it.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 12,
@@ -1020,9 +925,7 @@ export default function Landing() {
               lineHeight: 1.05,
               marginBottom: 16,
             }}>
-              Notify me.
-              <br />
-              What's on deal right now.
+              {PILOT_H1}
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -1033,7 +936,7 @@ export default function Landing() {
               marginBottom: 32,
               maxWidth: 540,
             }}>
-              Sign in free. A shop you already know posts a photo of a chosen special. You hear when it's on deal — then you claim it and collect it at the counter.
+              {PILOT_SUB}
             </p>
 
             <div style={{
@@ -1045,17 +948,17 @@ export default function Landing() {
               {[
                 {
                   num: "01",
-                  title: "See the photo",
-                  desc: "A chosen loaf, tin, or counter special — you know what you are claiming. Not a mystery bag.",
+                  title: "Get notified",
+                  desc: "We ping you when a shop you already know has a deal on.",
                 },
                 {
                   num: "02",
-                  title: "Claim it on your phone",
-                  desc: "Pay in the app and get a QR ticket for that special, while it is still available.",
+                  title: "Claim it",
+                  desc: "Pay in the app and get a QR ticket while it is still available.",
                 },
                 {
                   num: "03",
-                  title: "Collect it in person",
+                  title: "Collect it",
                   desc: "Walk into that shop and have the QR scanned at the counter.",
                 },
               ].map(({ num, title, desc }) => (
@@ -1168,7 +1071,7 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              Shops you already know. What's on deal right now.
+              We ping you when something's on.
             </div>
           </div>
         </section>
@@ -1255,24 +1158,23 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: "rgba(255,224,231,0.72)", letterSpacing: "0.06em", marginBottom: 16,
           }}>
-            SHOPS YOU ALREADY KNOW
+            NOTIFY ME
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(30px, 4.2vw, 48px)",
-            fontWeight: 700, lineHeight: 1.1, letterSpacing: "-1.2px",
+            fontSize: "clamp(28px, 3.6vw, 42px)",
+            fontWeight: 700, lineHeight: 1.12, letterSpacing: "-1px",
             marginBottom: 16,
             color: BG,
           }}>
-            Notify me.{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: CREAM }}>What's on deal right now.</em>
+            {PILOT_H1}
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 480, fontWeight: 300,
           }}>
-            A photographed special from a shop you already know. Sign in and we'll tell you when it's on deal.
+            {PILOT_SUB}
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
@@ -1300,7 +1202,7 @@ export default function Landing() {
               href="/business-apply"
               style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
             >
-              List a photo special
+              Partner with us
             </a>
           </p>
           <a
@@ -1339,7 +1241,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            What's on deal right now at shops you already know. Notify me.
+            Unwrapped lets you know when a shop you already know has a deal on.
           </p>
         </div>
 
@@ -1638,8 +1540,8 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 420, fontWeight: 300,
           }}>
             {pins.length === 0
-              ? "Nothing on deal right now. Notify me when a shop you know posts a photo."
-              : `${pins.length} photographed specials on deal · click a pin to preview`}
+              ? "Nothing on right now. We'll let you know when a shop you know has a deal."
+              : `${pins.length} on right now · click a pin to preview`}
           </p>
         </div>
       </div>
@@ -1767,7 +1669,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            What's on deal right now
+            We ping you when something's on
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1780,7 +1682,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches. Clear your search to see the full list."
-              : "Photographed specials from shops you already know. Not a browse of every shop in the city."}
+              : "Shops you already know. We ping you when something's on."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",

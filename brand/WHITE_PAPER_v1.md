@@ -14,10 +14,11 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 |---|---|---|
 | Proximity, pins, walk there | See it → scarce qty → claim before it's gone | **Claim, pay, and collect in person** — the transaction completes at the counter, not in the post |
 
-**Public shopper line (live):** What's on deal right now at shops you already know.  
+**Public shopper line (live):** Unwrapped lets you know when a shop you already know has a deal on.  
 **Public ask:** Notify me.  
-**Public product loop (secondary — how it works):** See it → Claim it → Collect it.  
-**Public explanation:** Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag. Not “Opening soon”. Not a city-wide marketplace.  
+**Public sub:** The connection between the shops you trust and you. We ping you when something's on.  
+**Public product loop (secondary — how it works):** Get notified → Claim it → Collect it.  
+**Public explanation:** Unwrapped is the connection between shops and people. We ping you when a shop you already know has a deal on. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
 **Public merchant promise:** Get seen — so you can sell and welcome customers through the door.
 
 ### What Unwrapped is not

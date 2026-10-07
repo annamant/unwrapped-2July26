@@ -25,11 +25,11 @@ const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
+    a: "Unwrapped lets you know when a shop you already know has a deal on. The connection between the shops you trust and you.",
   },
   {
     q: "How does it work?",
-    a: "See the photo. Claim it on your phone. Collect it in person. It is a chosen special, not a mystery bag.",
+    a: "Get notified. Then claim it. Then collect it.",
   },
   {
     q: "How do I collect?",
@@ -37,7 +37,7 @@ const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What will I be notified about?",
-    a: "A shop you already know, when it has something on deal right now. Not a browse of every shop in the city.",
+    a: "We ping you when a shop you already know has a deal on.",
   },
 ];
 
@@ -56,7 +56,7 @@ const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Shops people already know. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
+    a: "Shops people already know. Post what's on, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -116,7 +116,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/instagram",
     title: "Live drops for Instagram — Unwrapped",
     description:
-      "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
+      "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
     type: "website",
   },
   "/resources": {
@@ -529,7 +529,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     }
     const s = boroughSeo(borough);
     const hubLink = `<p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p>`;
-    const bodyHtml = `<article><h1>What's on deal right now at shops you already know.</h1><p>${escapeHtml(s.description)}</p><p>${escapeHtml(borough.name)} is not a city-wide shop directory.</p>${hubLink}</article>`;
+    const bodyHtml = `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(s.description)}</p><p>${escapeHtml(borough.name)}</p>${hubLink}</article>`;
 
     return {
       title: s.title,
@@ -562,9 +562,9 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>Shops you already know.</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>When you go: see the photo of a chosen special, claim it on your phone, and collect it in person.</p><p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>Get notified. Then claim. Then collect.</h2><p>We ping you when a shop you know has a deal on. Then you claim it, and collect it.</p><p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
-            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>Shops you already know. ${escapeHtml(PILOT_KICKER)}.</p><p>${escapeHtml(staticPage.description)}</p><p>Other London pages are not a city-wide shop directory.</p><h2>See it. Claim it. Collect it.</h2></article>`
+            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Get notified. Then claim. Then collect.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }

@@ -37,7 +37,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
       "Camberwell",
       "Waterloo",
     ],
-    blurb: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal. Not a city-wide directory.",
+    blurb: "Unwrapped lets you know when a shop you already know has a deal on. We ping you when something's on.",
   },
   {
     slug: "wandsworth",
@@ -345,16 +345,16 @@ export function boroughSeo(borough: LondonBorough): { title: string; description
   return {
     title: `${borough.name} — Unwrapped`,
     description:
-      "What's on deal right now at shops you already know. Notify me when a photographed special is on deal. This is not a city-wide directory.",
+      "The connection between the shops you trust and you. We ping you when something's on.",
     path: `/london/${borough.slug}`,
   };
 }
 
 export function londonHubSeo(): { title: string; description: string; path: string } {
   return {
-    title: "What's on now — Unwrapped",
+    title: "Notify me when a shop you know has a deal on — Unwrapped",
     description:
-      "Notify me when a shop you already know has something on deal right now. A photo of the special. Not a city-wide directory.",
+      "The connection between the shops you trust and you. We ping you when something's on.",
     path: "/london",
   };
 }
@@ -425,7 +425,7 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "What's on now — Unwrapped",
+      name: londonHubSeo().title,
       description: londonHubSeo().description,
       url: "https://shopunwrapped.com/london",
       isPartOf: {

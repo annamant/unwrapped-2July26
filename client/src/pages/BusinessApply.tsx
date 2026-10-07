@@ -72,7 +72,7 @@ export default function BusinessApply() {
             Get seen — so you can sell and welcome customers through the door.
           </p>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 16 }}>
-            Post a photo of a chosen special from a shop people already know. Set the price and how many, and they collect in person with a QR. Not a mystery bag.
+            Post what's on, set the price and how many, and people collect in person with a QR.
           </p>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
             We review every application to keep Unwrapped curated. Tell us about your shop and we'll be in touch within 2–3 working days.
