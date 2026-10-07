@@ -63,7 +63,7 @@ export default function BusinessApply() {
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px" }}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 16 }}>
-            BAKERIES · BRIXTON PILOT
+            SHOPS YOU ALREADY KNOW
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
             List a photo special<br />from your counter.
@@ -72,8 +72,7 @@ export default function BusinessApply() {
             Get seen — so you can sell and welcome customers through the door.
           </p>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 16 }}>
-            This pilot is bakeries and specialty food in Brixton Village, Market Row and Coldharbour — Aries is on Acre Lane.
-            Post a photo of a chosen special, set the price and how many, and people collect in person with a QR. Not a mystery bag.
+            Post a photo of a chosen special from a shop people already know. Set the price and how many, and they collect in person with a QR. Not a mystery bag.
           </p>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
             We review every application to keep Unwrapped curated. Tell us about your shop and we'll be in touch within 2–3 working days.
@@ -94,13 +93,13 @@ export default function BusinessApply() {
             </select>
           </Row>
           <Row label="City *">
-            <input value={form.city} onChange={set("city")} placeholder="Brixton" style={inputStyle} />
+            <input value={form.city} onChange={set("city")} placeholder="City" style={inputStyle} />
           </Row>
           <Row label="Address">
-            <input value={form.address} onChange={set("address")} placeholder="Brixton Village, Market Row, or Coldharbour Lane" style={inputStyle} />
+            <input value={form.address} onChange={set("address")} placeholder="Street address" style={inputStyle} />
           </Row>
           <Row label="Postcode">
-            <input value={form.postcode} onChange={set("postcode")} placeholder="SW9 8PR" style={inputStyle} />
+            <input value={form.postcode} onChange={set("postcode")} placeholder="Postcode" style={inputStyle} />
           </Row>
           <Row label="Instagram handle">
             <input value={form.instagramHandle} onChange={set("instagramHandle")} placeholder="@yourbusiness" style={inputStyle} />

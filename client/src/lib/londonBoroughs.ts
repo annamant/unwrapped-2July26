@@ -37,7 +37,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
       "Camberwell",
       "Waterloo",
     ],
-    blurb: "Brixton, Clapham, Streatham, Herne Hill and more — look into Lambeth high streets, claim drops, collect in person.",
+    blurb: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal. Not a city-wide directory.",
   },
   {
     slug: "wandsworth",
@@ -342,26 +342,19 @@ export function findBoroughForShop(
 }
 
 export function boroughSeo(borough: LondonBorough): { title: string; description: string; path: string } {
-  if (borough.slug === "lambeth") {
-    return {
-      title: "Brixton Village, Market Row & Coldharbour — Unwrapped",
-      description:
-        "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See it, claim it, collect it in person.",
-      path: `/london/${borough.slug}`,
-    };
-  }
   return {
     title: `${borough.name} — Unwrapped`,
-    description: `The live pilot is bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour. ${borough.name} is not part of this pilot.`,
+    description:
+      "What's on deal right now at shops you already know. Notify me when a photographed special is on deal. This is not a city-wide directory.",
     path: `/london/${borough.slug}`,
   };
 }
 
 export function londonHubSeo(): { title: string; description: string; path: string } {
   return {
-    title: "Brixton Village pilot — Unwrapped",
+    title: "What's on now — Unwrapped",
     description:
-      "Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane. See the photo, claim it, collect it in person.",
+      "Notify me when a shop you already know has something on deal right now. A photo of the special. Not a city-wide directory.",
     path: "/london",
   };
 }
@@ -378,7 +371,7 @@ export function boroughJsonLd(
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: `${borough.name} on Unwrapped`,
-      description: borough.blurb,
+      description: boroughSeo(borough).description,
       url: pageUrl,
       isPartOf: {
         "@type": "WebSite",
@@ -432,7 +425,7 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "Brixton Village pilot on Unwrapped",
+      name: "What's on now — Unwrapped",
       description: londonHubSeo().description,
       url: "https://shopunwrapped.com/london",
       isPartOf: {
@@ -452,18 +445,6 @@ export function londonHubJsonLd(): Record<string, unknown>[] {
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: "https://shopunwrapped.com/" },
         { "@type": "ListItem", position: 2, name: "London", item: "https://shopunwrapped.com/london" },
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      name: "Brixton pilot corridor on Unwrapped",
-      numberOfItems: 4,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Brixton Village", url: "https://shopunwrapped.com/london/lambeth" },
-        { "@type": "ListItem", position: 2, name: "Market Row", url: "https://shopunwrapped.com/london/lambeth" },
-        { "@type": "ListItem", position: 3, name: "Coldharbour", url: "https://shopunwrapped.com/london/lambeth" },
-        { "@type": "ListItem", position: 4, name: "Aries Bakehouse, Acre Lane", url: "https://shopunwrapped.com/london/lambeth" },
       ],
     },
   ];

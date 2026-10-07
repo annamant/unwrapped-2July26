@@ -1,27 +1,25 @@
 /**
- * Slice 1 public pilot — bakery + specialty food photo specials.
- * Streets: Brixton Village (incl. Granville Arcade), Market Row, Coldharbour.
- * Acre Lane is in the pilot only for Aries, not the rest of that road.
- * Keep this matcher aligned with server/src/pilotCorridor.ts.
+ * Shopper-facing lines for the public site.
+ * The place matcher below is an ops seed fence only. Do not put those place names in UI copy.
+ * Keep the matcher aligned with server/src/pilotCorridor.ts.
  */
 
 export const PILOT_TITLE =
-  "Unwrapped · Photo specials in Brixton Village, Market Row and Coldharbour.";
+  "Unwrapped · What's on deal right now at shops you already know.";
 
 export const PILOT_DESCRIPTION =
-  "Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, and collect it in person — Brixton Village, Market Row, Coldharbour, and Aries on Acre Lane.";
+  "Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.";
 
-export const PILOT_H1 =
-  "Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.";
+export const PILOT_H1 = "What's on deal right now at shops you already know.";
 
-export const PILOT_KICKER = "Brixton Village · Market Row · Coldharbour";
+export const PILOT_KICKER = "Notify me";
 
 export const PILOT_LOOP = "See it. Claim it. Collect it.";
 
 export const PILOT_SUB =
-  "A bakery or specialty food shop posts a photo of something chosen — the loaf, the tin, the counter special. You claim it on your phone and collect it in person. Aries is on Acre Lane. Not a mystery bag.";
+  "Shops you already know. Notify me when a photographed special is on deal — not a mystery bag, and not a browse of every shop in the city.";
 
-/** Map opens on Brixton Village, wide enough to include Acre Lane (Aries). */
+/** Internal map focus for the seed fence. Not a public label. */
 export const PILOT_MAP = { lat: 51.4613, lng: -0.1148, zoom: 15 };
 
 const CORRIDOR_MARKERS = [

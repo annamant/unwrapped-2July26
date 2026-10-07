@@ -50,12 +50,11 @@ export function isPublicPilotShop(shop: PilotPlace): boolean {
 }
 
 export const PILOT_TITLE =
-  "Unwrapped · Photo specials in Brixton Village, Market Row and Coldharbour.";
+  "Unwrapped · What's on deal right now at shops you already know.";
 
 export const PILOT_DESCRIPTION =
-  "Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, and collect it in person — Brixton Village, Market Row, Coldharbour, and Aries on Acre Lane.";
+  "Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.";
 
-export const PILOT_H1 =
-  "Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.";
+export const PILOT_H1 = "What's on deal right now at shops you already know.";
 
-export const PILOT_KICKER = "Brixton Village · Market Row · Coldharbour";
+export const PILOT_KICKER = "Notify me";

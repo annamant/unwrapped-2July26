@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
   <rect width="1200" height="630" fill="#FFE0E7"/>
   <rect x="0" y="0" width="1200" height="4" fill="#160703"/>
-  <text x="80" y="72" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#8B555E" letter-spacing="2.4">BRIXTON VILLAGE · MARKET ROW · COLDHARBOUR</text>
-  <text x="80" y="210" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="44" fill="#160703">Photo specials from bakeries</text>
-  <text x="80" y="268" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="44" fill="#160703">and specialty food shops.</text>
-  <text x="80" y="340" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="28" fill="#160703">See it. Claim it. Collect it.</text>
-  <text x="80" y="390" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">A photo of a chosen special. Claim it, collect it in person. Aries is on Acre Lane.</text>
+  <text x="80" y="78" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="28" font-weight="800" fill="#160703">Shops you already know</text>
+  <text x="80" y="210" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="52" fill="#160703">What's on deal</text>
+  <text x="80" y="274" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="52" fill="#160703">right now.</text>
+  <text x="80" y="350" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="32" fill="#160703">Notify me</text>
+  <text x="80" y="400" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">A photo of the special. Not a mystery bag.</text>
   <rect x="80" y="500" width="260" height="48" fill="#160703"/>
   <text x="210" y="532" text-anchor="middle" font-family="Menlo, monospace" font-size="14" fill="#FFE0E7" letter-spacing="1.6">SHOPUNWRAPPED.COM</text>
   <rect x="920" y="80" width="200" height="200" fill="#160703"/>

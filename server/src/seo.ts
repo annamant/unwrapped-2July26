@@ -10,9 +10,8 @@ import {
   getBoroughBySlug,
   londonHubJsonLd,
   londonHubSeo,
-  shopMatchesBorough,
 } from "./londonBoroughs";
-import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_TITLE, isPublicPilotShop } from "./pilotCorridor";
+import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_TITLE } from "./pilotCorridor";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -26,7 +25,7 @@ const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Bakeries and specialty food shops post a photo of a chosen special. You see it, claim it on your phone, and collect it in person.",
+    a: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
   },
   {
     q: "How does it work?",
@@ -37,8 +36,8 @@ const HOME_FAQS: { q: string; a: string }[] = [
     a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "Where is Unwrapped?",
-    a: "The pilot is Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane.",
+    q: "What will I be notified about?",
+    a: "A shop you already know, when it has something on deal right now. Not a browse of every shop in the city.",
   },
 ];
 
@@ -57,7 +56,7 @@ const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour — and Aries on Acre Lane. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
+    a: "Shops people already know. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -110,14 +109,14 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/recommend",
     title: "Recommend a shop — Unwrapped",
     description:
-      "Know a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane? Tell us and we'll say a neighbour asked for them.",
+      "Know a bakery or specialty food shop you already know? Tell us and we'll say a neighbour asked for them.",
     type: "website",
   },
   "/instagram": {
     path: "/instagram",
     title: "Live drops for Instagram — Unwrapped",
     description:
-      "Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour. See it, claim it, collect it.",
+      "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
     type: "website",
   },
   "/resources": {
@@ -360,7 +359,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     if (!biz) {
       return {
         title: "Business not found — Unwrapped",
-        description: "This shop is not listed on Unwrapped. The live pilot is bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour.",
+        description: "This shop is not listed on Unwrapped. Notify me when a shop you already know has something on deal.",
         canonical: abs(path),
         image: DEFAULT_OG(),
         type: "website",
@@ -529,39 +528,8 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       };
     }
     const s = boroughSeo(borough);
-    const bizRows = await db
-      .select({
-        name: businesses.name,
-        slug: businesses.slug,
-        city: businesses.city,
-        postcode: businesses.postcode,
-        address: businesses.address,
-        category: businesses.category,
-      })
-      .from(businesses)
-      .innerJoin(users, eq(businesses.ownerId, users.id))
-      .where(claimedPartnerSql);
-
-    const inBorough = bizRows.filter(
-      (b) => !isTestShop(b.name, b.slug) && shopMatchesBorough(b, borough),
-    );
-    const matched =
-      borough.slug === "lambeth"
-        ? inBorough.filter((b) => isPublicPilotShop(b)).slice(0, 40)
-        : [];
-
-    const shopLinks = matched
-      .map(
-        (b) =>
-          `<li><a href="${escapeHtml(abs(`/business/${b.slug}`))}">${escapeHtml(b.name)}</a>${b.city || b.postcode ? ` — ${escapeHtml([b.city, b.postcode].filter(Boolean).join(", "))}` : ""}</li>`,
-      )
-      .join("");
-
-    const pilotLink = `<p><a href="${escapeHtml(abs("/london"))}">Brixton Village pilot</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p>`;
-    const bodyHtml =
-      borough.slug === "lambeth"
-        ? `<article><h1>Brixton Village, Market Row and Coldharbour</h1><p>${escapeHtml(s.description)}</p>${matched.length ? `<h2>Bakeries and specialty food</h2><ul>${shopLinks}</ul>` : "<p>Photo specials from bakeries and specialty food shops in this corridor. Aries is on Acre Lane.</p>"}${pilotLink}</article>`
-        : `<article><h1>${escapeHtml(borough.name)}</h1><p>${escapeHtml(s.description)}</p>${pilotLink}</article>`;
+    const hubLink = `<p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p>`;
+    const bodyHtml = `<article><h1>What's on deal right now at shops you already know.</h1><p>${escapeHtml(s.description)}</p><p>${escapeHtml(borough.name)} is not a city-wide shop directory.</p>${hubLink}</article>`;
 
     return {
       title: s.title,
@@ -570,10 +538,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
       image: DEFAULT_OG(),
       type: "website",
       robots: "index, follow",
-      jsonLd: boroughJsonLd(
-        borough,
-        matched.map((b) => ({ name: b.name, slug: b.slug })),
-      ),
+      jsonLd: boroughJsonLd(borough, []),
       bodyHtml,
     };
   }
@@ -597,9 +562,9 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>See the photo of a chosen special. Claim it on your phone. Collect it in person. Not a mystery bag.</p><p><a href="${escapeHtml(abs("/london"))}">Brixton Village pilot</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>Shops you already know.</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(DEFAULT_DESCRIPTION)}</p><h2>See it. Claim it. Collect it.</h2><p>When you go: see the photo of a chosen special, claim it on your phone, and collect it in person.</p><p><a href="${escapeHtml(abs("/london"))}">What's on</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
           : path === "/london"
-            ? `<article><h1>Brixton Village, Market Row and Coldharbour</h1><p>${escapeHtml(staticPage.description)}</p><p>Acre Lane is in this pilot for Aries. Other London borough pages are not a city-wide shop directory.</p><p><a href="${escapeHtml(abs("/london/lambeth"))}">Lambeth — the pilot corridor</a></p></article>`
+            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>Shops you already know. ${escapeHtml(PILOT_KICKER)}.</p><p>${escapeHtml(staticPage.description)}</p><p>Other London pages are not a city-wide shop directory.</p><h2>See it. Claim it. Collect it.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }

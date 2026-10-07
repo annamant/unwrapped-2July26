@@ -6,7 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { PILOT_H1, PILOT_KICKER, PILOT_MAP, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
+import { PILOT_MAP, PILOT_SUB, isPublicPilotShop } from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
@@ -37,7 +37,7 @@ type SampleDrop = {
 const SAMPLE_DROPS: SampleDrop[] = [
   {
     category: "Bakery",
-    neighbourhood: "Brixton Village",
+    neighbourhood: "A shop you know",
     title: "Morning bake — country loaf",
     business: "Example bakery",
     pricePence: 450,
@@ -47,7 +47,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
   },
   {
     category: "Specialty food",
-    neighbourhood: "Market Row",
+    neighbourhood: "A shop you know",
     title: "Counter tin — chosen special",
     business: "Example specialty shop",
     pricePence: 650,
@@ -57,7 +57,7 @@ const SAMPLE_DROPS: SampleDrop[] = [
   },
   {
     category: "Bakery",
-    neighbourhood: "Coldharbour",
+    neighbourhood: "A shop you know",
     title: "Tray of buns — photo special",
     business: "Example bakery",
     pricePence: 350,
@@ -80,7 +80,7 @@ const HOW_IT_WORKS_PHONES: {
     ownerImage: "/landing/hero-owner-bakery.jpg",
     dropLabel: "Collect today · 4pm",
     title: "Morning bake — country loaf",
-    business: "Brixton Village · example",
+    business: "A shop you know · example",
     pricePence: 450,
     media: "photo",
   },
@@ -88,7 +88,7 @@ const HOW_IT_WORKS_PHONES: {
     ownerImage: "/samples/sourdough.jpg",
     dropLabel: "Collect today · 2pm",
     title: "Counter tin — chosen special",
-    business: "Market Row · example",
+    business: "A shop you know · example",
     pricePence: 650,
     media: "photo",
   },
@@ -96,19 +96,17 @@ const HOW_IT_WORKS_PHONES: {
     ownerImage: "/landing/hero-owner-bakery.jpg",
     dropLabel: "Collect today · close",
     title: "Tray of buns — photo special",
-    business: "Coldharbour · example",
+    business: "A shop you know · example",
     pricePence: 350,
     media: "photo",
   },
 ];
 
 const BUSINESS_TYPES = [
-  "Bakeries",
-  "Specialty food",
-  "Brixton Village",
-  "Market Row",
-  "Coldharbour",
-  "Aries · Acre Lane",
+  "Shops you already know",
+  "What's on deal right now",
+  "Notify me",
+  "Photographed specials",
 ];
 
 const LANDING_CSS = `
@@ -591,20 +589,21 @@ export default function Landing() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 7,
+                  gap: 10,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 9 : 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  color: "rgba(255,240,244,0.78)",
+                  fontSize: isMobile ? 22 : 28,
+                  fontWeight: 800,
+                  letterSpacing: "-0.6px",
+                  color: CREAM,
+                  lineHeight: 1.1,
                   padding: isMobile ? "5px 0" : "6px 0",
                 }}
               >
                 <span
                   className="uw-pulse-dot"
-                  style={{ width: 7, height: 7, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
+                  style={{ width: 8, height: 8, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
                 />
-                {PILOT_KICKER}
+                Shops you already know
               </span>
             </div>
 
@@ -621,7 +620,9 @@ export default function Landing() {
                 maxWidth: 580,
               }}
             >
-              {PILOT_H1}
+              What's on deal right now
+              <br />
+              at shops you already know.
             </h1>
 
             <p
@@ -647,9 +648,9 @@ export default function Landing() {
                   background: BG,
                   color: FG,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 14 : 15,
-                  letterSpacing: "0.01em",
-                  padding: isMobile ? "15px 24px" : "17px 30px",
+                  fontSize: isMobile ? 18 : 20,
+                  letterSpacing: "-0.2px",
+                  padding: isMobile ? "16px 28px" : "18px 34px",
                   border: "none",
                   cursor: "pointer",
                   borderRadius: RADIUS_SM,
@@ -657,7 +658,7 @@ export default function Landing() {
                   boxShadow: "0 12px 32px rgba(0,0,0,0.28)",
                 }}
               >
-                Sign in to claim
+                Notify me
               </button>
               <div style={{
                 marginTop: isMobile ? 12 : 14,
@@ -780,7 +781,70 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── 2. HOW IT WORKS — phone proof ── */}
+      {/* ── 2. NOTIFY — the job, before the mechanics ── */}
+      <section style={{
+        background: CREAM,
+        borderBottom: "none",
+        position: "relative",
+        zIndex: 1,
+        padding: isMobile ? "48px 20px" : "72px 40px",
+      }}>
+        <div style={{ maxWidth: 720 }}>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 28 : 40,
+            fontWeight: 800,
+            letterSpacing: "-1px",
+            lineHeight: 1.08,
+            color: FG,
+            marginBottom: 16,
+          }}>
+            Notify me
+          </p>
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 22 : 28,
+            fontWeight: 700,
+            letterSpacing: "-0.6px",
+            lineHeight: 1.2,
+            color: FG,
+            marginBottom: 14,
+            maxWidth: 640,
+          }}>
+            What's on deal right now at shops you already know.
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 15 : 17,
+            color: MUTED_FG,
+            lineHeight: 1.55,
+            maxWidth: 560,
+            marginBottom: 28,
+          }}>
+            A photographed special, when a shop you know has something on deal. Not a browse of every shop in the city.
+          </p>
+          <button
+            onClick={() => navigate("/signin")}
+            className="uw-btn-primary"
+            style={{
+              background: FG,
+              color: BG,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 16 : 18,
+              fontWeight: 800,
+              letterSpacing: "-0.2px",
+              padding: isMobile ? "16px 28px" : "18px 32px",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: RADIUS_SM,
+            }}
+          >
+            Notify me
+          </button>
+        </div>
+      </section>
+
+      {/* ── 3. HOW IT WORKS — secondary to the job above ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1, overflow: "hidden" }}>
         <div aria-hidden style={{
           position: "absolute",
@@ -828,7 +892,7 @@ export default function Landing() {
             maxWidth: 760,
             margin: "0 0 16px",
           }}>
-            See a photo of a chosen special from a bakery or specialty food shop. Claim it on your phone. Collect it in person in Brixton Village, Market Row or Coldharbour — Aries is on Acre Lane.
+            When you go: see a photo of a chosen special, claim it on your phone, and collect it at the counter.
           </p>
         </div>
 
@@ -847,7 +911,7 @@ export default function Landing() {
             color: MUTED_FG,
             fontWeight: 500,
           }}>
-            Illustrative phone screens · example specials in the pilot corridor — nothing here can be claimed yet.
+            Illustrative phone screens · example specials — nothing here can be claimed yet.
           </p>
         </div>
       </section>
@@ -871,8 +935,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 15 : 17,
             color: FG, lineHeight: 1.55, maxWidth: 560, fontWeight: 500, marginBottom: 8,
           }}>
-            A bakery in Brixton Village posts the loaf. A specialty shop on Market Row shows the tin.
-            Coldharbour puts today's counter special in a photo.
+            A shop you already know posts a photo of today's special. You see the loaf, the tin, the counter.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
@@ -946,7 +1009,7 @@ export default function Landing() {
                 className="uw-pulse-dot"
                 style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
               />
-              BRIXTON PILOT
+              SHOPS YOU ALREADY KNOW
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -957,9 +1020,9 @@ export default function Landing() {
               lineHeight: 1.05,
               marginBottom: 16,
             }}>
-              Claim a photo special
+              Notify me.
               <br />
-              in this corridor.
+              What's on deal right now.
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -970,7 +1033,7 @@ export default function Landing() {
               marginBottom: 32,
               maxWidth: 540,
             }}>
-              Sign in free. Bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour post a photo of a chosen special. You claim it, then collect it at the counter.
+              Sign in free. A shop you already know posts a photo of a chosen special. You hear when it's on deal — then you claim it and collect it at the counter.
             </p>
 
             <div style={{
@@ -993,7 +1056,7 @@ export default function Landing() {
                 {
                   num: "03",
                   title: "Collect it in person",
-                  desc: "Walk into the shop in this corridor and have the QR scanned at the counter.",
+                  desc: "Walk into that shop and have the QR scanned at the counter.",
                 },
               ].map(({ num, title, desc }) => (
                 <div
@@ -1074,9 +1137,9 @@ export default function Landing() {
                   background: CREAM,
                   color: V_DEEP,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 14 : 15,
+                  fontSize: isMobile ? 16 : 18,
                   fontWeight: 800,
-                  letterSpacing: "0.01em",
+                  letterSpacing: "-0.2px",
                   padding: isMobile ? "17px 28px" : "18px 32px",
                   border: "none",
                   cursor: "pointer",
@@ -1084,7 +1147,7 @@ export default function Landing() {
                   boxShadow: "0 14px 38px rgba(0,0,0,0.35)",
                 }}
               >
-                Sign in to claim
+                Notify me
               </button>
               <div style={{
                 fontFamily: "'DM Sans', sans-serif",
@@ -1105,16 +1168,14 @@ export default function Landing() {
               textAlign: "center",
               fontStyle: "italic",
             }}>
-              Brixton Village, Market Row, Coldharbour — and Aries on Acre Lane.
+              Shops you already know. What's on deal right now.
             </div>
           </div>
         </section>
       )}
 
-      {/* ── 5. MAP — London is real ── */}
-      {PRE_LAUNCH ? (
-        <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS.filter(isPublicPilotShop)} />
-      ) : (
+      {/* Live deals only. The pre-launch pin board is not the homepage. */}
+      {!PRE_LAUNCH && (
         <MapSection
           drops={(drops ?? []).filter((row) => isPublicPilotShop({
             name: row.business?.name,
@@ -1152,7 +1213,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Tip us a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane. We'll tell them someone asked for them by name.
+            Tip us a bakery or specialty food shop you already know. We'll tell them someone asked for them by name.
           </p>
           <a
             href="/recommend"
@@ -1194,7 +1255,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: "rgba(255,224,231,0.72)", letterSpacing: "0.06em", marginBottom: 16,
           }}>
-            SEE IT · CLAIM IT · COLLECT IT
+            SHOPS YOU ALREADY KNOW
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1203,15 +1264,15 @@ export default function Landing() {
             marginBottom: 16,
             color: BG,
           }}>
-            A photo of the special.{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: CREAM }}>Then you collect it in the corridor.</em>
+            Notify me.{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: CREAM }}>What's on deal right now.</em>
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
             marginBottom: 32, maxWidth: 480, fontWeight: 300,
           }}>
-            Sign in, claim a bakery or specialty food special from Brixton Village, Market Row or Coldharbour, and collect it in person with your QR.
+            A photographed special from a shop you already know. Sign in and we'll tell you when it's on deal.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
             <button
@@ -1224,7 +1285,7 @@ export default function Landing() {
                 border: "none", cursor: "pointer",
               }}
             >
-              SIGN IN TO CLAIM
+              NOTIFY ME
             </button>
           </div>
           <p style={{
@@ -1254,7 +1315,7 @@ export default function Landing() {
               textDecoration: "none",
             }}
           >
-            The Brixton corridor →
+            What's on →
           </a>
         </div>
       </section>
@@ -1278,7 +1339,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
           }}>
-            Bakery and specialty food photo specials in Brixton Village, Market Row and Coldharbour.
+            What's on deal right now at shops you already know. Notify me.
           </p>
         </div>
 
@@ -1294,7 +1355,7 @@ export default function Landing() {
               { label: "Sign in", href: "/signin" },
               { label: "For businesses", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
-              { label: "Brixton pilot", href: "/london" },
+              { label: "What's on", href: "/london" },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (
@@ -1562,7 +1623,7 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
             color: MUTED_FG, letterSpacing: "0.06em", marginBottom: 12,
           }}>
-            BRIXTON PILOT
+            WHAT'S ON DEAL RIGHT NOW
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1570,15 +1631,15 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
             fontWeight: 700, color: FG, letterSpacing: "-0.6px",
             lineHeight: 1.15, marginBottom: 8,
           }}>
-            Photo specials in the corridor
+            Shops you already know
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 14,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 420, fontWeight: 300,
           }}>
             {pins.length === 0
-              ? "No live specials in Brixton Village, Market Row or Coldharbour yet."
-              : `${pins.length} photo specials in the corridor · click a pin to preview`}
+              ? "Nothing on deal right now. Notify me when a shop you know posts a photo."
+              : `${pins.length} photographed specials on deal · click a pin to preview`}
           </p>
         </div>
       </div>
@@ -1695,7 +1756,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             letterSpacing: "0.06em",
             marginBottom: 12,
           }}>
-            BRIXTON PILOT
+            SHOPS YOU ALREADY KNOW
           </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1706,7 +1767,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            Bakeries and specialty food
+            What's on deal right now
           </h2>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1719,7 +1780,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
           }}>
             {filteredPins.length === 0
               ? "No matches. Clear your search to see the full list."
-              : "Shops in Brixton Village, Market Row and Coldharbour — plus Aries on Acre Lane. Photo specials from bakeries and specialty food, not a city-wide directory."}
+              : "Photographed specials from shops you already know. Not a browse of every shop in the city."}
           </p>
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1797,7 +1858,7 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                 outline: "none",
                 width: "100%",
               }}
-              placeholder="Search a shop in the corridor…"
+              placeholder="Search a shop you know…"
             />
             <button
               type="submit"

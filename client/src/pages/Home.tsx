@@ -183,7 +183,7 @@ export default function Home() {
             {PILOT_KICKER}
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 4, lineHeight: 1.5 }}>
-            Bakery and specialty food photo specials in this corridor. Aries is on Acre Lane.
+            What's on deal right now at shops you already know. Notify me when a photographed special is on deal.
           </p>
         </div>
       </div>
@@ -253,7 +253,7 @@ export default function Home() {
                     setSearchError={setSearchError}
                     onSubmit={handleMapSearch}
                     isMobile={isMobile}
-                    placeholder="Search a shop in the corridor…"
+                    placeholder="Search a shop you know…"
                   />
                   <div style={{ border: `1px solid ${BORDER}` }}>
                     <DropMap
@@ -300,7 +300,7 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif", fontSize: 15,
                 color: MUTED_FG, lineHeight: 1.6, margin: 0, maxWidth: 560,
               }}>
-                Bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour. Follow one and we'll tell you when a photo special is up.
+                Shops you already know. Follow one and we'll tell you when something is on deal right now.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: 1 }}>
@@ -317,7 +317,7 @@ export default function Home() {
               setSearchError={setSearchError}
               onSubmit={handleMapSearch}
               isMobile={isMobile}
-              placeholder="Search a shop in the corridor…"
+              placeholder="Search a shop you know…"
             />
 
             <div style={{ display: viewMode === "map" ? "block" : "none" }}>
@@ -482,7 +482,7 @@ function NominateBanner() {
           Don't see a shop you love?
         </p>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.55 }}>
-          Nominate a bakery or specialty food shop in the Brixton corridor. We'll say a neighbour sent us.
+          Nominate a bakery or specialty food shop you already know. We'll say a neighbour sent us.
         </p>
       </div>
       <a
@@ -506,7 +506,7 @@ function EmptyDrops({ onSeeShops }: { onSeeShops: () => void }) {
         Nothing dropping right now
       </p>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
-        No photo specials in Brixton Village, Market Row or Coldharbour right now. Follow a bakery or specialty food shop in the corridor, or nominate one.
+        Nothing on deal right now. Notify me by following a shop you already know, or nominate one.
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         <button
@@ -543,7 +543,7 @@ function EmptyShops({ hasMembers, onClear }: { hasMembers: boolean; onClear: () 
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
         {hasMembers
           ? "Try another name or neighbourhood — or nominate the shop you're looking for."
-          : "Know a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane? Tell us."}
+          : "Know a bakery or specialty food shop you already love? Tell us."}
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         {hasMembers && (

@@ -17,13 +17,14 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 
 ## Live message (do not revert without intent)
 
-- **H1 / title:** Unwrapped · Photo specials in Brixton Village, Market Row and Coldharbour.
-- **Description:** Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, and collect it in person — Brixton Village, Market Row, Coldharbour, and Aries on Acre Lane.
-- **Loop:** See it. Claim it. Collect it.
-- **Status:** Brixton Village · Market Row · Coldharbour (Acre Lane for Aries). Not “Opening soon”. Not a city-wide marketplace.
+- **H1 / title:** Unwrapped · What's on deal right now at shops you already know.
+- **Description:** Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.
+- **Hero lines:** Shops you already know. Notify me. What's on deal right now.
+- **Loop (secondary, under the hero):** See it. Claim it. Collect it.
+- **Status:** Not “Opening soon”. Not a city-wide marketplace. Do not name streets or a corridor in public copy.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 
-Hero = the corridor + a photo of a chosen special. Sub = see it, claim it, collect it in person.
+Hero = shops you already know + notify me / what's on deal right now. How it works (see → claim → collect) sits below that.
 
 ## What already shipped (Aug 2026)
 

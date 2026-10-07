@@ -75,7 +75,7 @@ export default function Instagram() {
           lineHeight: 1.5,
           marginBottom: 8,
         }}>
-          Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.
+          What's on deal right now at shops you already know.
         </p>
 
         <p style={{
@@ -86,7 +86,7 @@ export default function Instagram() {
           letterSpacing: "0.12em",
           marginBottom: 32,
         }}>
-          BRIXTON VILLAGE · MARKET ROW · COLDHARBOUR
+          SHOPS YOU ALREADY KNOW · NOTIFY ME
         </p>
 
         {liveDrops.length > 0 && (
@@ -104,7 +104,7 @@ export default function Instagram() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
           <a href={browseHref} style={{ ...linkBtn, background: FG, color: BG, border: `1px solid ${FG}` }}>
-            BROWSE DROPS
+            {user ? "WHAT'S ON NOW" : "NOTIFY ME"}
           </a>
           <a href="/signin" style={linkBtn}>
             {user ? "MY ACCOUNT" : "SIGN UP · FREE"}

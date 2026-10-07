@@ -111,13 +111,13 @@ export default function Recommend() {
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px" }}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: V, letterSpacing: "0.15em", marginBottom: 16 }}>
-            NOMINATE · BRIXTON PILOT
+            NOMINATE · SHOPS YOU ALREADY KNOW
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
             Recommend a shop<br />you'd love on Unwrapped.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            Know a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane?
+            Know a bakery or specialty food shop you already know?
             Tell us — we'll reach out and let them know someone selected them.
           </p>
         </div>
@@ -127,7 +127,7 @@ export default function Recommend() {
             <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. Corner Bakery" style={inputStyle} />
           </Row>
           <Row label="Neighbourhood / area *">
-            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. Brixton Village, Market Row, Coldharbour" style={inputStyle} />
+            <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. the high street you already shop" style={inputStyle} />
           </Row>
           <Row label="Category">
             <select value={form.category} onChange={set("category")} style={inputStyle}>

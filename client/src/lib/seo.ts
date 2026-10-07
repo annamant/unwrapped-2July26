@@ -13,7 +13,7 @@ export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Bakeries and specialty food shops post a photo of a chosen special. You see it, claim it on your phone, and collect it in person.",
+    a: "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
   },
   {
     q: "How does it work?",
@@ -24,8 +24,8 @@ export const HOME_FAQS: { q: string; a: string }[] = [
     a: "Claim and pay in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "Where is Unwrapped?",
-    a: "The pilot is Brixton Village, Market Row and Coldharbour, plus Aries on Acre Lane.",
+    q: "What will I be notified about?",
+    a: "A shop you already know, when it has something on deal right now. Not a browse of every shop in the city.",
   },
 ];
 
@@ -45,7 +45,7 @@ export const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who is Unwrapped for?",
-    a: "Bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour — and Aries on Acre Lane. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
+    a: "Shops people already know. Post a photo of a chosen special, set the price and quantity, and people collect in person.",
   },
 ];
 
@@ -255,14 +255,14 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Know a bakery or specialty food shop in Brixton Village, Market Row, Coldharbour, or Aries on Acre Lane? Tell us and we'll say a neighbour asked for them.",
+          "Know a bakery or specialty food shop you already know? Tell us and we'll say a neighbour asked for them.",
         path,
       };
     case "/instagram":
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour. See it, claim it, collect it.",
+          "What's on deal right now at shops you already know. Notify me when a photographed special is on deal.",
         path,
       };
     case "/resources":

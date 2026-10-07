@@ -20,7 +20,7 @@ import {
   londonHubSeo,
   type LondonRegion,
 } from "../lib/londonBoroughs";
-import { PILOT_KICKER, PILOT_SUB } from "../lib/pilotCorridor";
+import { PILOT_H1, PILOT_SUB } from "../lib/pilotCorridor";
 
 const REGION_LABEL: Record<LondonRegion, string> = {
   south: "South London",
@@ -31,13 +31,6 @@ const REGION_LABEL: Record<LondonRegion, string> = {
 };
 
 const REGION_ORDER: LondonRegion[] = ["south", "central", "east", "north", "west"];
-
-const CORRIDOR = [
-  { name: "Brixton Village", note: "Bakeries and specialty food inside the market." },
-  { name: "Market Row", note: "Photo specials from the row, collected at the counter." },
-  { name: "Coldharbour", note: "Coldharbour Lane shops in this same walk." },
-  { name: "Acre Lane — Aries", note: "Acre Lane is in the pilot for Aries Bakehouse." },
-];
 
 export default function LondonHub() {
   const mobile = useIsMobile();
@@ -58,10 +51,10 @@ export default function LondonHub() {
         <nav aria-label="Breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16 }}>
           <Link href="/" style={{ color: MUTED_FG, textDecoration: "none" }}>Home</Link>
           <span style={{ margin: "0 8px" }}>›</span>
-          <span style={{ color: FG, fontWeight: 600 }}>Brixton pilot</span>
+          <span style={{ color: FG, fontWeight: 600 }}>What's on</span>
         </nav>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: V, marginBottom: 14 }}>
-          {PILOT_KICKER}
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: mobile ? 22 : 28, fontWeight: 800, letterSpacing: "-0.5px", color: V, marginBottom: 12 }}>
+          Shops you already know
         </div>
         <h1 style={{
           fontFamily: "'Playfair Display', serif",
@@ -71,7 +64,7 @@ export default function LondonHub() {
           lineHeight: 1.05,
           marginBottom: 16,
         }}>
-          Brixton Village, Market Row and Coldharbour
+          {PILOT_H1}
         </h1>
         <p style={{
           fontFamily: "'DM Sans', sans-serif",
@@ -91,14 +84,14 @@ export default function LondonHub() {
               background: V,
               color: CREAM,
               fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              padding: "14px 22px",
+              fontWeight: 800,
+              fontSize: 18,
+              padding: "16px 26px",
               borderRadius: 999,
               textDecoration: "none",
             }}
           >
-            Sign in to claim
+            Notify me
           </Link>
           <Link
             href="/business-apply"
@@ -115,51 +108,27 @@ export default function LondonHub() {
               border: `1.5px solid ${BORDER}`,
             }}
           >
-            Bakeries — list a photo special
+            Partner your shop
           </Link>
         </div>
       </header>
 
       <section style={{ borderTop: `1px solid ${BORDER}` }}>
         <div style={{ maxWidth: 920, margin: "0 auto", padding: mobile ? "28px 20px 36px" : "36px 24px 48px" }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: MUTED_FG, marginBottom: 10 }}>
+            How it works
+          </div>
           <h2 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: mobile ? 24 : 28,
             color: FG,
             marginBottom: 8,
           }}>
-            This pilot
+            See it. Claim it. Collect it.
           </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginBottom: 18, maxWidth: 560 }}>
-            Chosen specials with photos. See it, claim it, collect it in person.
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
+            When a shop you know has something on deal, you see the photo, claim it, and collect it in person.
           </p>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: mobile ? "1fr" : "1fr 1fr",
-            gap: 10,
-          }}>
-            {CORRIDOR.map((place) => (
-              <Link
-                key={place.name}
-                href="/london/lambeth"
-                style={{
-                  display: "block",
-                  background: CREAM,
-                  border: `1px solid ${BORDER}`,
-                  borderRadius: 14,
-                  padding: "16px 18px",
-                  textDecoration: "none",
-                }}
-              >
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 16, color: FG, marginBottom: 6 }}>
-                  {place.name}
-                </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.5 }}>
-                  {place.note}
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -181,10 +150,10 @@ export default function LondonHub() {
               textAlign: "left",
             }}
           >
-            {showBoroughs ? "Hide other London pages" : "Other London pages — not this pilot"}
+            {showBoroughs ? "Hide other London pages" : "Other London pages — not a city-wide directory"}
           </button>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.55, maxWidth: 560, marginTop: 8 }}>
-            These pages stay up. They are not a city-wide shop directory and nothing is launching there in this pilot.
+            These pages stay up. They are not a browse of every shop in the city.
           </p>
           {showBoroughs && REGION_ORDER.map((region) => {
             const list = LONDON_BOROUGHS.filter((b) => b.region === region);

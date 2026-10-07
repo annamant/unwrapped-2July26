@@ -8,9 +8,10 @@ Product site: https://shopunwrapped.com
 
 A new way to shop your high street: local shops post **photos and videos of limited deals** → you **see** it → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
-**Locked shopper framing (live pilot):**  
-**Photo specials from bakeries and specialty food shops in Brixton Village, Market Row and Coldharbour.**  
-**See the photo, claim it, collect it in person. Aries is on Acre Lane. Not a mystery bag. Not Opening soon.**
+**Locked shopper framing (live):**  
+**What's on deal right now at shops you already know.**  
+**Notify me. A photo of the special — not a mystery bag. Not Opening soon. Not a city-wide marketplace.**  
+See it, claim it, collect it is how it works, under the hero. Do not name streets or a corridor.
 
 **Locked merchant framing:**  
 **Get seen — so you can sell and welcome customers through the door.**
@@ -25,7 +26,7 @@ Do **not** position Unwrapped as Too Good To Go (mystery bags / waste), a static
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG | **Photo specials in Brixton Village, Market Row and Coldharbour.** |
+| **1. One-liner** | Headlines, posters, bio, OG | **What's on deal right now at shops you already know. Notify me.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -35,13 +36,13 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 
 **Product truth:** Unwrapped is for anyone who serves the neighbourhood **in person** and can host a short collection window (door, studio, table, pop-up point).
 
-**Do say:** grab · specials · near you · before they're gone · limited deals · photo or video · see it · claim it · collect it · never miss what's around the corner  
-**Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · waste · livestream (unless Phase 2) · people and places (retired)
+**Do say:** shops you already know · notify me · what's on deal right now · photographed special · see it · claim it · collect it (as how it works, under the hero)  
+**Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · waste · livestream (unless Phase 2) · people and places (retired) · Opening soon · a city-wide marketplace · named streets or a corridor as the brand
 
-**Hero rule:** FOMO in the headline. Plain explanation in the sub.
+**Hero rule:** Shops you already know, and notify me / what's on deal right now. See → claim → collect is the section below, not the headline.
 
-**Example — short:** Photo specials in Brixton Village, Market Row and Coldharbour.  
-**Example — with proof:** Bakeries and specialty food shops post a photo of a chosen special. See it, claim it, collect it. Aries is on Acre Lane.  
+**Example — short:** What's on deal right now at shops you already know.  
+**Example — with proof:** Notify me when a shop you already know has something on deal. A photo of the special — not a mystery bag.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -52,7 +53,7 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 | **For** | Londoners who want scarce, real neighbourhood finds |
 | **Also for** | Neighbourhood operators (proof set) that want demand without endless promo noise |
 | **Against** | Generic delivery apps, endless scroll deals, "everything always available" |
-| **Promise** | Limited. Local. Gone when they're gone. |
+| **Promise** | What's on deal right now at shops you already know. Notify me. |
 
 ## Audiences
 
@@ -167,9 +168,9 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
 
 ```
-Photo specials in Brixton Village, Market Row and Coldharbour.
-Bakeries and specialty food. See it, claim it, collect it. Aries is on Acre Lane.
-Brixton
+What's on deal right now at shops you already know.
+Notify me. A photo of the special — not a mystery bag.
+London
 ```
 
 Profile link: `shopunwrapped.com/instagram`
