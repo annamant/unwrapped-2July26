@@ -10,7 +10,8 @@ import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import type { PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { PILOT_KICKER, PILOT_MAP, isPublicPilotShop } from "../lib/pilotCorridor";
+import { PILOT_KICKER, PILOT_MAP, PILOT_NOTE, PILOT_SUB } from "../lib/pilotCorridor";
+import { isObviousTestShop } from "../lib/testShop";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
 type TimeWindow = "now" | "today" | "tomorrow";
@@ -73,11 +74,7 @@ export default function Home() {
   }
 
   const pilotDrops = useMemo(
-    () => (drops ?? []).filter(({ drop, business, location }) => isPublicPilotShop({
-      name: business.name,
-      address: location.address,
-      category: drop.category,
-    })),
+    () => (drops ?? []).filter(({ business }) => !isObviousTestShop(business.name, business.slug)),
     [drops],
   );
 
@@ -89,7 +86,7 @@ export default function Home() {
   );
 
   const pilotMembers = useMemo(
-    () => (members ?? []).filter((m) => isPublicPilotShop(m)),
+    () => (members ?? []).filter((m) => !isObviousTestShop(m.name, m.slug)),
     [members],
   );
 
@@ -182,7 +179,7 @@ export default function Home() {
             {PILOT_KICKER}
           </div>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, marginTop: 4, lineHeight: 1.5 }}>
-            The connection between the shops you trust and you. We'll let you know when something's on.
+            {PILOT_SUB} {PILOT_NOTE}
           </p>
         </div>
       </div>
@@ -299,7 +296,7 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif", fontSize: 15,
                 color: MUTED_FG, lineHeight: 1.6, margin: 0, maxWidth: 560,
               }}>
-                Shops you already know. Follow one and we'll tell you when something is on deal right now.
+                Shops you already like. Follow one and we'll tell you when something's on.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: 1 }}>
@@ -481,7 +478,7 @@ function NominateBanner() {
           Don't see a shop you love?
         </p>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.55 }}>
-          Nominate a local shop you already know — a bakery, florist, bookshop, barber, or deli. We'll say a neighbour sent us.
+          Nominate a local shop you already like — a bakery, florist, bookshop, barber, or deli. We'll say a neighbour sent us.
         </p>
       </div>
       <a
@@ -502,10 +499,10 @@ function EmptyDrops({ onSeeShops }: { onSeeShops: () => void }) {
   return (
     <div style={{ textAlign: "center", padding: "64px 0 80px", maxWidth: 520, margin: "0 auto" }}>
       <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: FG, marginBottom: 12 }}>
-        Nothing dropping right now
+        Nothing on right now
       </p>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
-        Nothing on right now. We'll let you know when a shop you know has a deal.
+        We'll let you know when a shop you know has something on.
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         <button
@@ -542,7 +539,7 @@ function EmptyShops({ hasMembers, onClear }: { hasMembers: boolean; onClear: () 
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
         {hasMembers
           ? "Try another name or neighbourhood — or nominate the shop you're looking for."
-          : "Know a local shop you already love? Tell us."}
+          : "Know a local shop you already like? Tell us."}
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         {hasMembers && (

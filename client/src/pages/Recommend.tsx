@@ -117,7 +117,8 @@ export default function Recommend() {
             Recommend a shop<br />you'd love on Unwrapped.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            Know a local shop you already know — a bakery, florist, bookshop, barber, or deli?
+            Unwrapped lets you know when a shop you already know has something on.
+            Know a local shop you already like — a bakery, florist, bookshop, barber, or deli?
             Tell us — we'll reach out and let them know someone selected them.
           </p>
         </div>

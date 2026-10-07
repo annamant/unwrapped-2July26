@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearch } from "wouter";
 import { trpc, setSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
 import { BG, FG, BORDER, V, V_DEEP, CREAM } from "../theme";
@@ -6,7 +7,9 @@ import { PILOT_NOTE } from "../lib/pilotCorridor";
 
 export default function SignIn() {
   const isMobile = useIsMobile(900);
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const search = useSearch();
+  const startRegister = new URLSearchParams(search.replace(/^\?/, "")).get("mode") === "register";
+  const [mode, setMode] = useState<"login" | "register">(startRegister ? "register" : "login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

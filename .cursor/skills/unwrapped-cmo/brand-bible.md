@@ -9,9 +9,9 @@ Product site: https://shopunwrapped.com
 A new way to shop your high street: local shops post **photos and videos of limited deals** → you **see** it → **claim** & pay → **collect** in person with a QR. Merchants **get seen** so they can sell and welcome customers through the door.
 
 **Locked shopper framing (live):**  
-**Unwrapped lets you know when a shop you already know has a deal on.**  
+**Unwrapped lets you know when a shop you already know has something on.**  
 **Notify me.**  
-**The connection between the shops you trust and you. We'll let you know when something's on.**  
+**It connects you with the local shops you already like.**  
 Get notified, then claim, then collect is how it works, below the hero. Any local shop people already know, notify-first — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor. No Opening soon.
 
 **Locked merchant framing:**  
@@ -27,7 +27,7 @@ Do **not** position Unwrapped as Too Good To Go (mystery bags / waste), a static
 
 | Layer | Use when | Line |
 |-------|----------|------|
-| **1. One-liner** | Headlines, posters, bio, OG | **Unwrapped lets you know when a shop you already know has a deal on. Notify me.** |
+| **1. One-liner** | Headlines, posters, bio, OG | **Unwrapped lets you know when a shop you already know has something on. Notify me.** |
 | **2. Proof set** | Body copy, landing, apply pages, emails | Concrete types (below) |
 | **3. Eligibility** | Business pitch / apply | **If people can collect from you in person during a window, you can list a drop.** |
 
@@ -40,10 +40,10 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 **Do say:** shops you already know · notify me · a deal on · we'll let you know when something's on · sign up and we'll tell you when shops you know post a deal · the connection between the shops you trust and you · get notified, then claim, then collect (below the hero)  
 **Don't say:** pick up at your convenience · drops (as the lead) · mystery bag · a “not this” block · photographed specials as the pitch · waste · livestream (unless Phase 2) · people and places (retired) · Opening soon · named streets or a corridor as the brand
 
-**Hero rule:** Unwrapped lets you know when a shop you already know has a deal on. Button: Notify me. Get notified → claim → collect is the section below, not the headline.
+**Hero rule:** Unwrapped lets you know when a shop you already know has something on. Button: Notify me. Get notified → claim → collect is the section below, not the headline.
 
-**Example — short:** Unwrapped lets you know when a shop you already know has a deal on.  
-**Example — with proof:** The connection between the shops you trust and you. We'll let you know when something's on.  
+**Example — short:** Unwrapped lets you know when a shop you already know has something on.  
+**Example — with proof:** It connects you with the local shops you already like.  
 **Example — business CTA:** Get seen. Sell and welcome customers through the door.
 
 ## Positioning
@@ -54,7 +54,7 @@ shops · restaurants · cafés · salons · freelancers · services · charities
 | **For** | Londoners who want scarce, real neighbourhood finds |
 | **Also for** | Neighbourhood operators (proof set) that want demand without endless promo noise |
 | **Against** | Generic delivery apps, endless scroll deals, "everything always available" |
-| **Promise** | Unwrapped lets you know when a shop you already know has a deal on. |
+| **Promise** | Unwrapped lets you know when a shop you already know has something on. |
 
 ## Audiences
 
@@ -169,7 +169,7 @@ Also live on site: `client/public/icon-512.png` (and related icons) for product 
 Aligned to live homepage + SEO (`client/index.html`, `.cursor/skills/unwrapped-seo/SKILL.md`):
 
 ```
-Unwrapped lets you know when a shop you already know has a deal on.
+Unwrapped lets you know when a shop you already know has something on.
 Notify me. We'll let you know when something's on.
 London
 ```

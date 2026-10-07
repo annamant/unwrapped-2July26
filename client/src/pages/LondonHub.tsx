@@ -75,7 +75,7 @@ export default function LondonHub() {
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           <Link
-            href="/signin"
+            href="/signin?mode=register"
             style={{
               display: "inline-block",
               background: V,
@@ -124,7 +124,7 @@ export default function LondonHub() {
             Get notified. Then claim. Then collect.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
-            We'll let you know when a shop you know has a deal on. Then you claim it, and collect it.
+            We'll let you know when a shop you like has something on. You claim it, then you collect it.
           </p>
         </div>
       </section>
@@ -150,7 +150,7 @@ export default function LondonHub() {
             {showBoroughs ? "Hide other London pages" : "Other London pages"}
           </button>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, lineHeight: 1.55, maxWidth: 560, marginTop: 8 }}>
-            These pages stay up for later. We'll let you know when a shop you know has a deal on.
+            These pages stay up for later. We'll let you know when a shop you know has something on.
           </p>
           {showBoroughs && REGION_ORDER.map((region) => {
             const list = LONDON_BOROUGHS.filter((b) => b.region === region);

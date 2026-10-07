@@ -3,10 +3,10 @@
   <rect x="0" y="0" width="1200" height="4" fill="#160703"/>
   <text x="80" y="150" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="42" fill="#160703">Unwrapped lets you know</text>
   <text x="80" y="210" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="42" fill="#160703">when a shop you already</text>
-  <text x="80" y="270" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="42" fill="#160703">know has a deal on.</text>
+  <text x="80" y="270" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="42" fill="#160703">know has something on.</text>
   <text x="80" y="350" font-family="Helvetica Neue, Helvetica, sans-serif" font-weight="800" font-size="32" fill="#160703">Notify me</text>
-  <text x="80" y="410" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">The connection between the shops you trust and you.</text>
-  <text x="80" y="444" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">We'll let you know when something's on.</text>
+  <text x="80" y="410" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">It connects you with the local shops you already like.</text>
+  <text x="80" y="444" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="22" fill="#8B555E">Sign up and we'll tell you when something's on.</text>
   <rect x="80" y="520" width="260" height="48" fill="#160703"/>
   <text x="210" y="552" text-anchor="middle" font-family="Menlo, monospace" font-size="14" fill="#FFE0E7" letter-spacing="1.6">SHOPUNWRAPPED.COM</text>
   <rect x="920" y="80" width="200" height="200" fill="#160703"/>

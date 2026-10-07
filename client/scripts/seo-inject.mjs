@@ -6,9 +6,9 @@
 
 export const SITE = "https://shopunwrapped.com";
 export const DEFAULT_TITLE =
-  "Unwrapped lets you know when a shop you already know has a deal on.";
+  "Unwrapped lets you know when a shop you already know has something on.";
 export const DEFAULT_DESCRIPTION =
-  "The connection between the shops you trust and you. We'll let you know when something's on.";
+  "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.";
 export const DEFAULT_OG = `${SITE}/og-image.png`;
 
 export function escapeHtml(s) {
@@ -84,11 +84,11 @@ export function fallbackSeo(pathname) {
   if (path === "/london") {
     return {
       ...base,
-      title: "Notify me when a shop you know has a deal on — Unwrapped",
+      title: "Notify me when a shop you know has something on — Unwrapped",
       description:
-        "The connection between the shops you trust and you. We'll let you know when something's on.",
+        "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
       bodyHtml:
-        "<article><h1>Unwrapped lets you know when a shop you already know has a deal on.</h1><p>Notify me. We'll let you know when something's on.</p></article>",
+        "<article><h1>Unwrapped lets you know when a shop you already know has something on.</h1><p>Notify me. Sign up and we'll tell you when something's on.</p></article>",
     };
   }
   const borough = path.match(/^\/london\/([^/]+)$/);

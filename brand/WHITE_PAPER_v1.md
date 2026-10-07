@@ -14,13 +14,14 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 |---|---|---|
 | Proximity, pins, walk there | See it → scarce qty → claim before it's gone | **Claim, pay, and collect in person** — the transaction completes at the counter, not in the post |
 
-**Public shopper line (live):** Unwrapped lets you know when a shop you already know has a deal on.  
+**Public shopper line (live):** Unwrapped lets you know when a shop you already know has something on.  
 **Public ask:** Notify me.  
-**Public sub:** The connection between the shops you trust and you. We'll let you know when something's on.  
+**Public sub:** It connects you with the local shops you already like.  
 **Public product loop (secondary — how it works):** Get notified → Claim it → Collect it.  
-**Under Notify me:** Sign up and we'll tell you when shops you know post a deal. Alerts are not live yet — do not write this as if pings already arrive.  
-**Public explanation:** Unwrapped is the connection between shops and people. We'll let you know when a shop you already know has a deal on. Any kind of local shop — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Notify-first. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
-**Public merchant promise:** Get seen — so you can sell and welcome customers through the door.
+**Under Notify me:** Sign up and we'll tell you when a shop you know has something on. Alerts are not live yet — do not write this as if pings already arrive.  
+**Public shop line:** Tell your regulars when you've got something on. Links to the partner application.  
+**Public explanation:** Unwrapped connects people with the local shops they already like. Any kind of local shop — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Notify-first. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names. No city-wide directory.  
+**Public merchant promise:** Tell your regulars when you've got something on.
 
 ### What Unwrapped is not
 
@@ -43,7 +44,7 @@ Unwrapped resolves this visibility crisis by merging a **hyperlocal map** with *
 
 Unwrapped covers **any kind of local shop people already know**. It is not a food-only or bakery-only product. A bakery, florist, bookshop, barber, or deli are examples of the same job: a place someone already trusts, with a deal on for a short window.
 
-The shopper hook is the notification. Unwrapped lets you know when that shop has a deal on. Sign up, and we'll tell you when they post one. Alerts are not live yet — do not write this as if pings already arrive.
+The shopper hook is the notification. Unwrapped lets you know when that shop has something on. Sign up, and we'll tell you when they do. Alerts are not live yet — do not write this as if pings already arrive.
 
 **Launch focus:** local shops posting **named, limited deals** — a loaf, a bunch, a book, a cut, a tin. The rule is the same in every category: limited, specific, time-bound. Neighbourhood density still matters more than listing every shop in the city.
 

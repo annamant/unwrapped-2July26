@@ -13,7 +13,7 @@ export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Unwrapped lets you know when a shop you already know has a deal on. The connection between the shops you trust and you.",
+    a: "Unwrapped lets you know when a shop you already know has something on. It connects you with the local shops you already like.",
   },
   {
     q: "How does it work?",
@@ -25,7 +25,7 @@ export const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What will I be notified about?",
-    a: "We'll let you know when a shop you already know has a deal on.",
+    a: "We'll let you know when a shop you already know has something on.",
   },
 ];
 
@@ -262,7 +262,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Live drops for Instagram — ${SITE_NAME}`,
         description:
-          "Unwrapped lets you know when a shop you already know has a deal on. We'll let you know when something's on.",
+          "Unwrapped lets you know when a shop you already know has something on. Sign up and we'll tell you when something's on.",
         path,
       };
     case "/resources":

@@ -100,7 +100,7 @@ CMO does not own distribution, but assets exist for shop outreach:
 
 CMO does not own Search Console or the sitemap. You **must** still match this in captions, bios, and creatives:
 
-- Live site line is **Unwrapped lets you know when a shop you already know has a deal on.** Ask: **Notify me.** Under the button: **Sign up and we'll tell you when shops you know post a deal.** Sub: **The connection between the shops you trust and you. We'll let you know when something's on.** Alerts are not live — do not say “we ping you” as if they already arrive. How it works, below that: **Get notified. Then claim. Then collect.** The shop is **any local shop** people already know, notify-first — not bakery or specialty food only. A bakery, florist, bookshop, barber, or deli are examples. Do not define the brand by what it is not. Do not lead with photos. No “Opening soon”. Do not name streets or a corridor.
+- Live site line is **Unwrapped lets you know when a shop you already know has something on.** Ask: **Notify me.** Under the button: **Sign up and we'll tell you when a shop you know has something on.** Sub: **It connects you with the local shops you already like.** Alerts are not live — do not say “we ping you” as if they already arrive. How it works, below that: **Get notified. Then claim. Then collect.** The shop is **any local shop** people already know, notify-first — not bakery or specialty food only. A bakery, florist, bookshop, barber, or deli are examples. Do not define the brand by what it is not. Do not lead with photos. No “Opening soon”. Do not name streets or a corridor.
 - Do not use retired SEO lines: “Your high street, live.”, “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”
 - **No blog.** Do not propose a content/magazine SEO play.
 - Google indexes **claimed partner shops only**. Unclaimed scrape listings stay in admin for claims — they are not a public “we have 900 shops” story. Do not brag directory scale from Places imports.
@@ -116,7 +116,7 @@ Repo visuals: `brand/` + `brand/README.md`. Product thesis: **`brand/WHITE_PAPER
 Unwrapped is an **eventized commerce engine for the high street**: look in from afar → see the real thing (photo / short async video) → claim & pay → collect in person with QR. Not a mystery-bag waste app. Not a static directory. Not deep-discount Groupon.
 
 ### Locked public framing
-- **Shopper:** Unwrapped lets you know when a shop you already know has a deal on. Notify me. The connection between the shops you trust and you. We'll let you know when something's on. Get notified, then claim, then collect is how it works, not the headline. Any local shop, notify-first — not a food-only or bakery-only product.
+- **Shopper:** Unwrapped lets you know when a shop you already know has something on. Notify me. It connects you with the local shops you already like. Get notified, then claim, then collect is how it works, not the headline. Any local shop, notify-first — not a food-only or bakery-only product.
 - **Merchant:** Get seen — so you can sell and welcome customers through the door.
 - **Vs Too Good To Go:** They hide product + cut price. We **show** product, preserve brand, convert screen time into a collection visit.
 - **Media roadmap:** Phase 1 = photos + short async clips. Phase 2 = live video (future only — never imply live broadcasts today).
@@ -219,7 +219,7 @@ When the brief names a channel, use its playbook. Do not cross-post Instagram sh
 
 - Voice: local, urgent, independent (as in neighbourhood independents — wine merchants, florists, bookshops, beauty, fashion, spirits, specialty food, charities) — never corporate SaaS or hype-bro
 - Market: **London** · links: shopunwrapped.com / shopunwrapped.com/instagram
-- Public shopper line (locked): **Unwrapped lets you know when a shop you already know has a deal on. Notify me.** Sub: **The connection between the shops you trust and you. We'll let you know when something's on.** Any local shop, notify-first. Do not write food-only or bakery-and-specialty-only product copy. Do not use retired lines (“Grab specials from shops near you before they're gone.”, “Opening soon”, “Your high street, live.”, “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”). Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor.
+- Public shopper line (locked): **Unwrapped lets you know when a shop you already know has something on. Notify me.** Sub: **It connects you with the local shops you already like.** Any local shop, notify-first. Do not write food-only or bakery-and-specialty-only product copy. Do not use retired lines (“Grab specials from shops near you before they're gone.”, “Opening soon”, “Your high street, live.”, “visual shopping marketplace”, “Limited. Local. Gone when they're gone.”). Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor.
 - Support when needed: anna@shopunwrapped.com
 - No invented metrics, partner names, or live counts — use `[VERIFY]` or check the site
 - No auto-publish; no secrets in the repo
