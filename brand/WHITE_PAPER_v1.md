@@ -19,7 +19,7 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 **Public sub:** The connection between the shops you trust and you. We'll let you know when something's on.  
 **Public product loop (secondary — how it works):** Get notified → Claim it → Collect it.  
 **Under Notify me:** Sign up and we'll tell you when shops you know post a deal. Alerts are not live yet — do not write this as if pings already arrive.  
-**Public explanation:** Unwrapped is the connection between shops and people. We'll let you know when a shop you already know has a deal on. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
+**Public explanation:** Unwrapped is the connection between shops and people. We'll let you know when a shop you already know has a deal on. Any kind of local shop — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Notify-first. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names.  
 **Public merchant promise:** Get seen — so you can sell and welcome customers through the door.
 
 ### What Unwrapped is not
@@ -39,16 +39,13 @@ Modern urban commerce is defined by a staggering paradox: while macro retail dat
 
 Unwrapped resolves this visibility crisis by merging a **hyperlocal map** with **limited product drops** — converting passive scrolling into intentional foot traffic. Independent shops hold stock and daily batches that **you cannot know are there unless someone shows you**. Unwrapped makes that invisible inventory visible, claimable, and collectible.
 
-### Why food leads (launch wedge, not the whole business)
+### Any local shop, notify-first
 
-Food is the **strongest first proof** of the concept — not because Unwrapped is a food-waste or leftover app, but because food has properties no other category matches at launch:
+Unwrapped covers **any kind of local shop people already know**. It is not a food-only or bakery-only product. A bakery, florist, bookshop, barber, or deli are examples of the same job: a place someone already trusts, with a deal on for a short window.
 
-1. **Real expiry dates.** Butchers, fishmongers, bakeries, delis, greengrocers, and cafés all run stock with a built-in countdown. Scarcity is operational reality, not something the platform has to invent.
-2. **Daily need.** People eat every day. A map that might have something worth claiming today is worth opening again tomorrow — habit forms from repetition, not from one-off vintage finds.
-3. **Invisible until you're inside.** The exact batch, the catch of the day, the six loaves left at 2pm — none of this appears on Instagram as commerce. Even when a café posts, it's ambience or advertising, not "claim this, pay, collect by 5."
-4. **Before TGTG, not instead of it.** Unwrapped occupies the hour when a shop still wants to **promote a named item** — photo, price, quantity — not bag it as a mystery surplus. Same claim-and-collect muscle as adjacent products; different frame entirely.
+The shopper hook is the notification. Unwrapped lets you know when that shop has a deal on. Sign up, and we'll tell you when they post one. Alerts are not live yet — do not write this as if pings already arrive.
 
-**Launch focus:** independent food shops (butcher, baker, deli, greengrocer, café) posting **named, limited drops** — e.g. "today's batch," "this catch," "six burgers — collect today." The platform is cross-category long-term; food proves the loop first because expiry and daily demand create natural drop cadence.
+**Launch focus:** local shops posting **named, limited deals** — a loaf, a bunch, a book, a cut, a tin. The rule is the same in every category: limited, specific, time-bound. Neighbourhood density still matters more than listing every shop in the city.
 
 ---
 
@@ -80,7 +77,7 @@ By shifting the commercial format from a blind, depreciated clear-out to an imme
 
 ## 4. The Closed-Loop Operational Flow
 
-1. **The Drop Trigger:** A merchant identifies a time-sensitive asset (e.g., 6 sourdough loaves from today's batch, 2 fillets of today's catch, or a limited café special) and creates a drop via a simple 30-second image or pre-recorded video upload.
+1. **The Drop Trigger:** A merchant identifies a time-sensitive asset (e.g., today's country loaf, this week's bunch from the florist, a signed book, or a cancelled chair at the barber) and creates a drop via a simple 30-second image or pre-recorded video upload.
 2. **Spatial Interception:** Nearby consumers open a real-time neighborhood map populated with pulsing, proximity-based drop pins containing raw visual updates.
 3. **The Instant Claim & In-App Payment:** The user secures the drop via a seamless in-app payment gateway (e.g., Apple Pay or Stripe) before the inventory sells out. Unwrapped securely holds these funds in escrow, eliminating no-shows and guaranteeing immediate merchant payout.
 4. **The Physical Handshake:** The app generates a dynamic QR code. The consumer must walk into the brick-and-mortar storefront to get scanned at the counter within the specified collection window. This guarantees face-to-face foot traffic, opening an immediate avenue for high-margin secondary basket upsells while the customer is inside the shop.
@@ -129,7 +126,7 @@ To defend its position against incumbent platforms, Unwrapped differentiates its
 Unwrapped establishes a unique competitive position by operating precisely at the intersection of High Brand Preservation and Real-Time Spatial Urgency.
 
 - **Protecting Premium Margins:** Unlike discount aggregators, an Unwrapped "drop" is positioned as an exclusive reward, an artisanal batch release, or a premium calendar slot availability. This strategy preserves the merchant's high-street brand status while still moving product at strong profit margins.
-- **Cross-Category by Design, Food-Led at Launch:** Too Good To Go is trapped in food waste. Unwrapped uses the same map and drop mechanics across categories — but **food independents lead at launch** because daily expiry creates natural drop cadence and repeat shopper habit. Later categories (charity one-offs, florists, fashion rail pieces, empty chairs) share the same rule: **limited, specific, time-bound** — never a full catalogue.
+- **Any local shop, notify-first:** Too Good To Go is trapped in food waste. Unwrapped uses the same map and drop mechanics for any shop people already know — a bakery, florist, bookshop, barber, deli, and the rest. The shopper hook is the notification, not a food category. Every drop stays **limited, specific, time-bound** — never a full catalogue.
 - **The Proximity Engine:** While TikTok Shop and Instagram keep users glued to their screens waiting for mail delivery packages, Unwrapped utilizes short, localized video to immediately release consumer energy back onto the physical street. It directly connects digital screen time to guaranteed, real-world foot traffic.
 
 ### 6.3 Structural Barriers to Entry (Defensive Moats Against Copycats)
@@ -153,7 +150,7 @@ Phase 1: Free Pilot ➔ Phase 2: Micro-SaaS Subscription ➔ Phase 3: Premium Va
 ```
 
 - **Phase 1: The "0% Commission Shield" (The Pilot Guarantee):** Complete freemium access. Zero platform fees or commissions are levied on any transaction. This completely bypasses merchant resistance and establishes absolute trust during software testing.
-- **Phase 2: The Micro-SaaS Subscription (The Flat-Rate Anchor):** A low-cost, fixed monthly subscription tiered by business volume (e.g., £29/month for micro-shops, £79/month for high-volume boutiques). Whether a bakery sells 10 or 1,000 sourdough loaves via a drop, their platform cost remains predictable and fixed, encouraging high transaction frequencies.
+- **Phase 2: The Micro-SaaS Subscription (The Flat-Rate Anchor):** A low-cost, fixed monthly subscription tiered by business volume (e.g., £29/month for micro-shops, £79/month for high-volume boutiques). Whether a shop moves 10 or 1,000 of the same deal, their platform cost remains predictable and fixed, encouraging high transaction frequencies.
 - **Phase 3: The "Value-Add" Multiplier (Premium Features):** Once a merchant views Unwrapped as their primary local engine, the platform unlocks high-margin, optional premium features:
   - **The "In-Basket" Attribution Share:** A minor performance fee (e.g., 2–3%) specifically tracking the verified secondary full-price items up-sold to the customer when scanning the counter QR code.
   - **Algorithmic Ad Boosts:** Paid local map placements, allowing a shop to place a flashing "Featured Drop" pin at the top of neighborhood map feeds during specific peak hours.
@@ -172,7 +169,7 @@ Unwrapped's monetization design naturally stops platform leakage because the app
 To eliminate the classic "chicken-and-egg" liquidity problem of two-sided marketplaces, Unwrapped is executing a disciplined, hyper-localized launch playbook modeled after the early indexing strategies of Google Maps:
 
 - **Geographic Micro-Clustering:** The platform restricts its launch phase to a singular, high-density urban pilot area (e.g., Hackney, London) rather than scaling thinly.
-- **Curated Data Seeding:** The founding team hand-picks a foundational network of 20–30 highly reputable independent food shops (butcher, baker, deli, greengrocer, café) in the pilot zone, posting named daily drops. Density and daily cadence matter more than category breadth at launch.
+- **Curated Data Seeding:** The founding team hand-picks a foundational network of 20–30 local shops people already know in the pilot zone — a bakery, a florist, a bookshop, a barber, a deli are examples, not a food-only list — posting named deals. Density matters. The product is not bakery-and-specialty only.
 
 ### 8.1 Symmetrical Founder Incentives Matrix
 

@@ -10,7 +10,10 @@ import { PILOT_H1, PILOT_MAP, PILOT_NOTE, PILOT_SUB, isPublicPilotShop } from ".
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
+  "/landing/hero-owner-florist.jpg",
   "/landing/hero-owner-bakery.jpg",
+  "/landing/hero-owner-boutique.jpg",
+  "/landing/hero-owner-salon.jpg",
 ];
 
 /** Flip to false when real drops go live and the landing should show the live feed again. */
@@ -38,32 +41,32 @@ const SAMPLE_DROPS: SampleDrop[] = [
   {
     category: "Bakery",
     neighbourhood: "A shop you know",
-    title: "Morning bake — country loaf",
+    title: "Country loaf — example",
     business: "Example bakery",
     pricePence: 450,
     window: "Example window · collect today",
     left: "e.g. 6 available",
-    imageUrl: "/samples/sourdough.jpg",
-  },
-  {
-    category: "Specialty food",
-    neighbourhood: "A shop you know",
-    title: "Counter tin — chosen special",
-    business: "Example specialty shop",
-    pricePence: 650,
-    window: "Example window · this afternoon",
-    left: "e.g. 8 tins",
-    imageUrl: "/samples/sourdough.jpg",
-  },
-  {
-    category: "Bakery",
-    neighbourhood: "A shop you know",
-    title: "Tray of buns — photo special",
-    business: "Example bakery",
-    pricePence: 350,
-    window: "Example window · before close",
-    left: "e.g. 4 left",
     imageUrl: "/landing/hero-owner-bakery.jpg",
+  },
+  {
+    category: "Florist",
+    neighbourhood: "A shop you know",
+    title: "This week's bunch — example",
+    business: "Example florist",
+    pricePence: 1800,
+    window: "Example window · this afternoon",
+    left: "e.g. 8 bunches",
+    imageUrl: "/landing/hero-owner-florist.jpg",
+  },
+  {
+    category: "Barber",
+    neighbourhood: "A shop you know",
+    title: "Cut before close — example",
+    business: "Example barber",
+    pricePence: 2200,
+    window: "Example window · before close",
+    left: "e.g. 3 chairs",
+    imageUrl: "/landing/hero-owner-salon.jpg",
   },
 ];
 
@@ -79,25 +82,25 @@ const HOW_IT_WORKS_PHONES: {
   {
     ownerImage: "/landing/hero-owner-bakery.jpg",
     dropLabel: "Collect today · 4pm",
-    title: "Morning bake — country loaf",
-    business: "A shop you know · example",
+    title: "Country loaf — example",
+    business: "A bakery you know · example",
     pricePence: 450,
     media: "photo",
   },
   {
-    ownerImage: "/samples/sourdough.jpg",
+    ownerImage: "/landing/hero-owner-florist.jpg",
     dropLabel: "Collect today · 2pm",
-    title: "Counter tin — chosen special",
-    business: "A shop you know · example",
-    pricePence: 650,
+    title: "This week's bunch — example",
+    business: "A florist you know · example",
+    pricePence: 1800,
     media: "photo",
   },
   {
-    ownerImage: "/landing/hero-owner-bakery.jpg",
+    ownerImage: "/landing/hero-owner-salon.jpg",
     dropLabel: "Collect today · close",
-    title: "Tray of buns — photo special",
-    business: "A shop you know · example",
-    pricePence: 350,
+    title: "Cut before close — example",
+    business: "A barber you know · example",
+    pricePence: 2200,
     media: "photo",
   },
 ];
@@ -1127,7 +1130,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 16,
             color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
           }}>
-            Tip us a bakery or specialty food shop you already know. We'll tell them someone asked for them by name.
+            Tip us a local shop you already know — a bakery, florist, bookshop, barber, or deli. We'll tell them someone asked for them by name.
           </p>
           <a
             href="/recommend"

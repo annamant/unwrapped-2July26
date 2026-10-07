@@ -255,7 +255,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Recommend a shop — ${SITE_NAME}`,
         description:
-          "Know a bakery or specialty food shop you already know? Tell us and we'll say a neighbour asked for them.",
+          "Know a local shop you already know? Tell us and we'll say a neighbour asked for them.",
         path,
       };
     case "/instagram":

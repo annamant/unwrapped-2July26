@@ -23,6 +23,7 @@ Read **`brand/WHITE_PAPER_v1.md`** and `.cursor/skills/unwrapped-cmo/brand-bible
 - **Under the button:** Sign up and we'll tell you when shops you know post a deal.
 - Alerts are not built. Do not write “we ping you” as if notifications already arrive. Use “we'll let you know”.
 - **Loop (secondary, below the fold):** Get notified. Then claim. Then collect.
+- **Category:** any local shop people already know. Notify-first. Not bakery or specialty food only. A bakery, florist, bookshop, barber, or deli may appear as examples. Do not write food-only or bakery-only meta.
 - **Do not:** define Unwrapped by what it is not (no “not a mystery bag” block). Do not lead with photographed specials. No “Opening soon”. No street names.
 - Canonical host: `https://shopunwrapped.com` (apex, not www)
 

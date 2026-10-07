@@ -34,13 +34,6 @@ const CORRIDOR_MARKERS = [
   "coldharbour",
 ];
 
-const PILOT_FOOD_TYPES = new Set([
-  "bakery",
-  "specialty food",
-  "deli",
-  "food & drink",
-]);
-
 export type PilotPlace = {
   name?: string | null;
   address?: string | null;
@@ -65,16 +58,7 @@ export function isPilotCorridorPlace(shop: PilotPlace): boolean {
   return name.includes("aries") && acre;
 }
 
-export function isPilotFoodShop(shop: PilotPlace): boolean {
-  const type = (shop.type || shop.category || "").trim().toLowerCase();
-  if (PILOT_FOOD_TYPES.has(type)) return true;
-  const name = (shop.name ?? "").toLowerCase();
-  if (/\b(bakery|bakehouse|patisserie)\b/.test(name)) return true;
-  if (name.includes("aries")) return true;
-  return false;
-}
-
-/** Public discovery: in the corridor and bakery / specialty food (or a claimed food shop there). */
+/** Public discovery: any shop inside the ops seed fence. Category is not a gate. */
 export function isPublicPilotShop(shop: PilotPlace): boolean {
-  return isPilotCorridorPlace(shop) && isPilotFoodShop(shop);
+  return isPilotCorridorPlace(shop);
 }

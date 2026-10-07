@@ -117,14 +117,14 @@ export default function Recommend() {
             Recommend a shop<br />you'd love on Unwrapped.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
-            Know a bakery or specialty food shop you already know?
+            Know a local shop you already know — a bakery, florist, bookshop, barber, or deli?
             Tell us — we'll reach out and let them know someone selected them.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Row label="Business name *">
-            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. Corner Bakery" style={inputStyle} />
+            <input value={form.businessName} onChange={set("businessName")} placeholder="e.g. the bookshop on your street" style={inputStyle} />
           </Row>
           <Row label="Neighbourhood / area *">
             <input value={form.neighbourhood} onChange={set("neighbourhood")} placeholder="e.g. the high street you already shop" style={inputStyle} />

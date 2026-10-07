@@ -5,8 +5,16 @@ import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
 const CATEGORIES = [
-  "Bakery",
-  "Specialty food",
+  "Fashion & Apparel",
+  "Food & Drink",
+  "Beauty & Wellness",
+  "Home & Living",
+  "Art & Culture",
+  "Books & Music",
+  "Sports & Outdoor",
+  "Tech & Gadgets",
+  "Kids & Family",
+  "Services & Experiences",
 ];
 
 export default function BusinessApply() {
@@ -66,7 +74,7 @@ export default function BusinessApply() {
             SHOPS YOU ALREADY KNOW
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
-            List a photo special<br />from your counter.
+            Post a deal from<br />your shop.
           </h1>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: FG, lineHeight: 1.6, marginBottom: 14, fontWeight: 500 }}>
             Get seen — so you can sell and welcome customers through the door.
@@ -81,7 +89,7 @@ export default function BusinessApply() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Row label="Business name *">
-            <input value={form.name} onChange={set("name")} placeholder="e.g. Maison Blanc Pâtisserie" style={inputStyle} />
+            <input value={form.name} onChange={set("name")} placeholder="e.g. the bookshop on your street" style={inputStyle} />
           </Row>
           <Row label="Contact email *">
             <input type="email" value={form.contactEmail} onChange={set("contactEmail")} placeholder="hello@yourbusiness.com" style={inputStyle} />

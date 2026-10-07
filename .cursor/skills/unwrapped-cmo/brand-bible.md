@@ -12,7 +12,7 @@ A new way to shop your high street: local shops post **photos and videos of limi
 **Unwrapped lets you know when a shop you already know has a deal on.**  
 **Notify me.**  
 **The connection between the shops you trust and you. We'll let you know when something's on.**  
-Get notified, then claim, then collect is how it works, below the hero. Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor. No Opening soon.
+Get notified, then claim, then collect is how it works, below the hero. Any local shop people already know, notify-first — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Do not define Unwrapped by what it is not. Do not lead with photos. Do not name streets or a corridor. No Opening soon.
 
 **Locked merchant framing:**  
 **Get seen — so you can sell and welcome customers through the door.**

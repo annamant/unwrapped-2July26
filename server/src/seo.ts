@@ -109,7 +109,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/recommend",
     title: "Recommend a shop — Unwrapped",
     description:
-      "Know a bakery or specialty food shop you already know? Tell us and we'll say a neighbour asked for them.",
+      "Know a local shop you already know? Tell us and we'll say a neighbour asked for them.",
     type: "website",
   },
   "/instagram": {

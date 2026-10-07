@@ -38,7 +38,6 @@ export default function Home() {
   const [focusedShopId, setFocusedShopId] = useState<string | undefined>(undefined);
 
   const { data: drops, isLoading: dropsLoading } = trpc.drops.list.useQuery({
-    category: "Food & Drink",
     timeWindow,
     limit: 60,
   });
@@ -482,7 +481,7 @@ function NominateBanner() {
           Don't see a shop you love?
         </p>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG, lineHeight: 1.55 }}>
-          Nominate a bakery or specialty food shop you already know. We'll say a neighbour sent us.
+          Nominate a local shop you already know — a bakery, florist, bookshop, barber, or deli. We'll say a neighbour sent us.
         </p>
       </div>
       <a
@@ -543,7 +542,7 @@ function EmptyShops({ hasMembers, onClear }: { hasMembers: boolean; onClear: () 
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 28 }}>
         {hasMembers
           ? "Try another name or neighbourhood — or nominate the shop you're looking for."
-          : "Know a bakery or specialty food shop you already love? Tell us."}
+          : "Know a local shop you already love? Tell us."}
       </p>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         {hasMembers && (
