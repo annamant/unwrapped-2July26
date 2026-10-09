@@ -30,7 +30,8 @@ export const reservationsRouter = router({
         throw new TRPCError({ code: "CONFLICT", message: "Just missed it — this drop is sold out" });
       }
       if (drop.price <= 0) {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "This drop is free — reserve it directly" });
+        // Legacy rows stored at £0. New drops cannot be created at £0.
+        throw new TRPCError({ code: "BAD_REQUEST", message: "This drop does not take a payment — reserve it directly" });
       }
       if (!stripeEnabled()) {
         throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Payments are not configured yet. Try again later." });
@@ -44,8 +45,9 @@ export const reservationsRouter = router({
       return { clientSecret: pi.client_secret, paymentIntentId: pi.id, amount: drop.price };
     }),
 
-  // Step 2: create the reservation. Free drops skip payment; paid drops
-  // require a succeeded PaymentIntent that matches this drop/user/amount.
+  // Step 2: create the reservation. Paid drops require a succeeded
+  // PaymentIntent that matches this drop/user/amount. Rows already stored
+  // at £0 (no new ones can be created) still reserve without a payment.
   create: protectedProcedure
     .input(z.object({
       dropId: z.string().uuid(),

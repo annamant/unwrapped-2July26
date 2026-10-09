@@ -28,7 +28,6 @@ export default function DropPrice({
   layout = "inline",
 }: DropPriceProps) {
   const s = sizes[size];
-  const isFree = price === 0;
   const hasDiscount =
     originalPrice != null &&
     originalPrice > 0 &&
@@ -36,14 +35,6 @@ export default function DropPrice({
 
   const pct = hasDiscount ? discountPercent(originalPrice!, price) : null;
   const wasCheckout = hasDiscount ? checkoutFromList(originalPrice!) : null;
-
-  if (isFree) {
-    return (
-      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: s.current, fontWeight: 700, color: FG }}>
-        Free
-      </span>
-    );
-  }
 
   if (!hasDiscount) {
     return (
@@ -93,7 +84,6 @@ export default function DropPrice({
 }
 
 export function formatDropPriceLabel(price: number, originalPrice?: number | null): string {
-  if (price === 0) return "FREE";
   const pct = originalPrice ? discountPercent(originalPrice, price) : null;
   const base = formatPounds(price);
   return pct != null && pct > 0 ? `${base} (${pct}% off)` : base;

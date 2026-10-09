@@ -5,7 +5,7 @@ import { drops, businesses, locations, reservations, waitlist } from "../db/sche
 import { TRPCError } from "@trpc/server";
 import { dispatchDropNotifications } from "../notifications/dispatch";
 import { stripeEnabled, refundPaymentIntent } from "../payments/stripe";
-import { checkoutFromList, receiveFromList } from "../payments/fees";
+import { checkoutFromList, paidListPriceError, receiveFromList, MIN_LIST_PRICE_MESSAGE, MIN_LIST_PRICE_PENCE } from "../payments/fees";
 import { geocodeAddress, haversineKm } from "../geo";
 import { resolveDropMediaType } from "../media";
 
@@ -112,8 +112,8 @@ export const dropsRouter = router({
       description: z.string().max(1000).optional(),
       imageUrl: z.string().url().optional(),
       mediaType: z.enum(["image", "video"]).optional(),
-      /** Business list price per unit (pence) — what they're selling at. 0 = free. */
-      listPrice: z.number().int().min(0),
+      /** Business list price per unit (pence). New drops are paid; minimum is Stripe's GBP charge floor. */
+      listPrice: z.number().int().min(MIN_LIST_PRICE_PENCE, MIN_LIST_PRICE_MESSAGE),
       /** Original list price (pence) — required for clearance/discount drops. */
       originalListPrice: z.number().int().positive().optional(),
       totalQuantity: z.number().int().positive().max(999),
@@ -130,6 +130,11 @@ export const dropsRouter = router({
       }
       if (windowEnd <= new Date()) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Collection window is entirely in the past" });
+      }
+
+      const priceError = paidListPriceError(input.listPrice);
+      if (priceError) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: priceError });
       }
 
       if (input.format === "clearance_discount") {
@@ -256,9 +261,11 @@ export const dropsRouter = router({
     }),
 
   // Business: edit a drop's presentational fields (safe — doesn't touch
-  // inventory or existing reservations). Quantity can only be increased;
-  // the collection window can only be extended, never shortened, so existing
-  // ticket-holders are never stranded.
+  // inventory, price, or existing reservations). Quantity can only be
+  // increased; the collection window can only be extended, never shortened,
+  // so existing ticket-holders are never stranded.
+  // Price is intentionally absent: a live drop cannot be changed to £0, and
+  // a legacy £0 drop keeps its price until it expires.
   update: businessOwnerProcedure
     .input(z.object({
       dropId: z.string().uuid(),

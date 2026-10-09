@@ -6,7 +6,7 @@ import useIsMobile from "../../hooks/useIsMobile";
 import MediaUpload from "../../components/MediaUpload";
 import { resolveDropMediaType } from "../../lib/dropMedia";
 import { isDropId } from "../../lib/dropShare";
-import { receiveFromList, formatPounds, checkoutFromList, discountPercent } from "../../lib/fees";
+import { receiveFromList, formatPounds, checkoutFromList, discountPercent, paidListPriceError, MIN_LIST_PRICE_MESSAGE } from "../../lib/fees";
 import DropPrice from "../../components/DropPrice";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../../theme";
 
@@ -53,13 +53,15 @@ export default function CreateDrop() {
   const listPence = form.price === "" ? null : Math.round(parseFloat(form.price) * 100);
   const originalListPence = form.originalPrice === "" ? null : Math.round(parseFloat(form.originalPrice) * 100);
   const isDiscount = form.format === "clearance_discount";
-  const checkoutPreview = listPence != null && !isNaN(listPence) && listPence >= 0 ? checkoutFromList(listPence) : null;
+  const priceError =
+    listPence == null || Number.isNaN(listPence) ? null : paidListPriceError(listPence);
+  const checkoutPreview = priceError == null && listPence != null ? checkoutFromList(listPence) : null;
   const discountPreview =
     isDiscount && originalListPence != null && checkoutPreview != null && !isNaN(originalListPence)
       ? discountPercent(originalListPence, checkoutPreview)
       : null;
   const youReceivePreview =
-    listPence != null && !isNaN(listPence) && listPence >= 0
+    priceError == null && listPence != null
       ? receiveFromList(listPence)
       : null;
 
@@ -70,7 +72,8 @@ export default function CreateDrop() {
       return;
     }
     const listPricePence = Math.round(parseFloat(form.price) * 100);
-    if (isNaN(listPricePence) || listPricePence < 0) { setError("Invalid amount."); return; }
+    const listPriceError = paidListPriceError(listPricePence);
+    if (listPriceError) { setError(listPriceError); return; }
     let originalListPrice: number | undefined;
     if (form.format === "clearance_discount") {
       if (!form.originalPrice) { setError("Enter the original price for discount drops."); return; }
@@ -182,14 +185,14 @@ export default function CreateDrop() {
                 <Field label="Original price (£) *">
                   <input
                     value={form.originalPrice} onChange={set("originalPrice")}
-                    type="number" min="0" step="0.01" placeholder="20.00"
+                    type="number" min="0.30" step="0.01" placeholder="20.00"
                     style={inputStyle}
                   />
                 </Field>
                 <Field label="Sale price (£) *">
                   <input
                     value={form.price} onChange={set("price")}
-                    type="number" min="0" step="0.01" placeholder="10.00"
+                    type="number" min="0.30" step="0.01" placeholder="10.00"
                     style={inputStyle}
                   />
                 </Field>
@@ -199,7 +202,7 @@ export default function CreateDrop() {
                 <Field label="Your price (£) *">
                   <input
                     value={form.price} onChange={set("price")}
-                    type="number" min="0" step="0.01" placeholder="0.00"
+                    type="number" min="0.30" step="0.01" placeholder="4.50"
                     style={inputStyle}
                   />
                 </Field>
@@ -253,10 +256,15 @@ export default function CreateDrop() {
                 </div>
               </div>
             )}
+            {priceError && (
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 8 }}>
+                {priceError}
+              </p>
+            )}
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 8 }}>
               {isDiscount
-                ? "Enter what the item normally costs and what you're offering it for in this drop. Shoppers see the discounted checkout price."
-                : "Enter the price of your goods. You'll see what you receive before you publish. Set to 0 for a free drop."}
+                ? `Enter what the item normally costs and what you're offering it for in this drop. Shoppers see the discounted checkout price. ${MIN_LIST_PRICE_MESSAGE}`
+                : `Enter the price of your goods. You'll see what you receive before you publish. ${MIN_LIST_PRICE_MESSAGE}`}
             </p>
           </Section>
 

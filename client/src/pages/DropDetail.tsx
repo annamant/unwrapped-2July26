@@ -98,7 +98,7 @@ export default function DropDetail() {
     if (!user) { navigate("/signin"); return; }
     setReserveError("");
     if (drop.price === 0) {
-      // Free drop — no payment needed
+      // Legacy drops already stored at £0. New drops cannot be created at £0.
       reserve.mutate({ dropId: id });
       return;
     }
@@ -333,7 +333,7 @@ export default function DropDetail() {
                   {reserving
                     ? "PROCESSING…"
                     : drop.price === 0
-                    ? "RESERVE — FREE"
+                    ? "RESERVE"
                     : `RESERVE — ${formatDropPriceLabel(drop.price, drop.originalPrice)}`}
                 </button>
                 {reserveError && (
