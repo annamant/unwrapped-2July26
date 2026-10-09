@@ -12,11 +12,11 @@ export type PublishedDropAlert = DropPayload & {
   businessSlug: string;
 };
 
-function clientOrigin(): string {
+export function clientOrigin(): string {
   return (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "");
 }
 
-function apiOrigin(): string {
+export function apiOrigin(): string {
   const explicit = process.env.PUBLIC_API_URL?.trim();
   if (explicit) return explicit.replace(/\/$/, "");
   const domain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();
@@ -27,6 +27,17 @@ function apiOrigin(): string {
 async function sendViaResend(email: AlertEmail): Promise<void> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return;
+  await deliverViaResend(key, email);
+}
+
+/** Same Resend path as follower alerts, but fails loud when the key is missing. */
+export async function sendAlertEmailViaResend(email: AlertEmail): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) throw new Error("RESEND_API_KEY missing");
+  await deliverViaResend(key, email);
+}
+
+async function deliverViaResend(key: string, email: AlertEmail): Promise<void> {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {

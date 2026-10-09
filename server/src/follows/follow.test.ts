@@ -4,6 +4,11 @@ import {
   fanOutFollowerAlerts,
   formatAlertPrice,
 } from "./alerts";
+import {
+  planAdminTestAlert,
+  sampleAdminTestDrop,
+  sendPlannedAdminTestAlert,
+} from "./adminTestAlert";
 import { buildFollowCountRows } from "./counts";
 import { carryOverFollows, planFollow, planUnfollow, type StoredFollow } from "./model";
 import { resetRateLimits, takeRateLimit } from "./rateLimit";
@@ -246,6 +251,83 @@ const curated = counts.find((shop) => shop.pinId === pin);
 check("curated shop counts both pin follows once each", curated?.followers, 2);
 check("signup requests are counted separately", curated?.requestedAtSignup, 1);
 check("unmatched live business is still listed", counts.some((shop) => shop.businessId === "22222222-2222-2222-2222-222222222222" && shop.followers === 1), true);
+
+const adminDrop = sampleAdminTestDrop("https://shopunwrapped.com");
+const adminPlan = planAdminTestAlert({
+  adminUserId: "admin-1",
+  adminEmail: "anna@shopunwrapped.com",
+  adminEmailsEnv: "anna@shopunwrapped.com,ops@example.com",
+  drop: adminDrop,
+  sample: true,
+  secret,
+  clientOrigin: "https://shopunwrapped.com",
+  apiOrigin: "https://api.example",
+});
+check("admin test alert plans for the signed-in admin only", adminPlan.ok && adminPlan.email.to, "anna@shopunwrapped.com");
+check("admin test alert marks the sample title", adminPlan.ok && adminPlan.email.html.includes("[TEST] Sample drop"), true);
+check("admin test alert includes one-click unsubscribe", adminPlan.ok && adminPlan.email.headers["List-Unsubscribe"]?.includes("/api/alerts/unsubscribe?token="), true);
+
+const refusedOther = planAdminTestAlert({
+  adminUserId: "admin-1",
+  adminEmail: "anna@shopunwrapped.com",
+  adminEmailsEnv: "anna@shopunwrapped.com",
+  drop: adminDrop,
+  sample: true,
+  secret,
+  clientOrigin: "https://shopunwrapped.com",
+  apiOrigin: "https://api.example",
+  forbiddenTo: "someone-else@example.com",
+});
+check("admin test alert refuses a different recipient", refusedOther.ok, false);
+
+const refusedEnv = planAdminTestAlert({
+  adminUserId: "admin-1",
+  adminEmail: "not-listed@example.com",
+  adminEmailsEnv: "anna@shopunwrapped.com",
+  drop: adminDrop,
+  sample: true,
+  secret,
+  clientOrigin: "https://shopunwrapped.com",
+  apiOrigin: "https://api.example",
+});
+check("admin test alert refuses emails outside ADMIN_EMAILS", refusedEnv.ok, false);
+
+const mailedAdmin: string[] = [];
+if (adminPlan.ok) {
+  await sendPlannedAdminTestAlert({
+    plan: adminPlan,
+    adminEmail: "anna@shopunwrapped.com",
+    mailer: async (message) => {
+      mailedAdmin.push(message.to);
+    },
+  });
+}
+check("admin test alert mails only the admin", mailedAdmin, ["anna@shopunwrapped.com"]);
+
+let refusedTamper = false;
+if (adminPlan.ok) {
+  try {
+    await sendPlannedAdminTestAlert({
+      plan: {
+        ...adminPlan,
+        email: { ...adminPlan.email, to: "someone-else@example.com" },
+      },
+      adminEmail: "anna@shopunwrapped.com",
+      mailer: async () => {
+        throw new Error("mailer must not run for a tampered recipient");
+      },
+    });
+  } catch (err) {
+    refusedTamper = err instanceof Error && /anyone else/i.test(err.message);
+  }
+}
+check("admin test alert send refuses a tampered recipient", refusedTamper, true);
+check(
+  "admin test alert never fans out through drop_alert_sends",
+  // The admin path calls sendPlannedAdminTestAlert + mailer only — no claimSend API exists on it.
+  !("claimSend" in (adminPlan.ok ? adminPlan : {})),
+  true,
+);
 
 if (failed > 0) {
   console.error(`\n${failed} failed`);

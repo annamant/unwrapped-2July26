@@ -17,6 +17,19 @@ export default function AdminFollows() {
   const { data, isLoading } = trpc.admin.followCounts.useQuery();
   const [sortKey, setSortKey] = useState<SortKey>("followers");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [testMessage, setTestMessage] = useState<string | null>(null);
+  const sendSelfTestAlert = trpc.admin.sendSelfTestAlert.useMutation({
+    onSuccess: (result) => {
+      setTestMessage(
+        result.sample
+          ? `Test alert sent to ${result.to} (sample drop — ${result.shopName}).`
+          : `Test alert sent to ${result.to} (${result.shopName} · ${result.dropTitle}).`,
+      );
+    },
+    onError: (err) => {
+      setTestMessage(err.message || "Could not send test alert.");
+    },
+  });
 
   const rows = useMemo(() => {
     const list = [...(data ?? [])];
@@ -91,24 +104,55 @@ export default function AdminFollows() {
               {isLoading ? "Loading shops…" : `${rows.length} shops, including curated pins.`}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={!rows.length}
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 11,
-              letterSpacing: "0.1em",
-              padding: "12px 16px",
-              background: FG,
-              color: BG,
-              border: "none",
-              cursor: rows.length ? "pointer" : "not-allowed",
-            }}
-          >
-            EXPORT CSV
-          </button>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={() => {
+                setTestMessage(null);
+                sendSelfTestAlert.mutate();
+              }}
+              disabled={sendSelfTestAlert.isPending}
+              style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 11,
+                letterSpacing: "0.1em",
+                padding: "12px 16px",
+                background: BG,
+                color: FG,
+                border: `1px solid ${FG}`,
+                cursor: sendSelfTestAlert.isPending ? "not-allowed" : "pointer",
+              }}
+            >
+              {sendSelfTestAlert.isPending ? "SENDING…" : "SEND ME A TEST ALERT"}
+            </button>
+            <button
+              type="button"
+              onClick={exportCsv}
+              disabled={!rows.length}
+              style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 11,
+                letterSpacing: "0.1em",
+                padding: "12px 16px",
+                background: FG,
+                color: BG,
+                border: "none",
+                cursor: rows.length ? "pointer" : "not-allowed",
+              }}
+            >
+              EXPORT CSV
+            </button>
+          </div>
         </div>
+
+        {testMessage && (
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, marginBottom: 16, lineHeight: 1.5 }}>
+            {testMessage}
+          </p>
+        )}
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16, lineHeight: 1.5, maxWidth: 560 }}>
+          Send me a test alert emails only your signed-in admin address (must be in ADMIN_EMAILS), using the live drop-alert template. It never emails followers and never records a send.
+        </p>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
           {([
