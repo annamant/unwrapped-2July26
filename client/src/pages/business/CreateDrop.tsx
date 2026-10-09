@@ -185,14 +185,14 @@ export default function CreateDrop() {
                 <Field label="Original price (£) *">
                   <input
                     value={form.originalPrice} onChange={set("originalPrice")}
-                    type="number" min="5" step="0.01" placeholder="20.00"
+                    type="number" min="0.30" step="0.01" placeholder="20.00"
                     style={inputStyle}
                   />
                 </Field>
                 <Field label="Sale price (£) *">
                   <input
                     value={form.price} onChange={set("price")}
-                    type="number" min="5" step="0.01" placeholder="10.00"
+                    type="number" min="0.30" step="0.01" placeholder="10.00"
                     style={inputStyle}
                   />
                 </Field>
@@ -202,7 +202,7 @@ export default function CreateDrop() {
                 <Field label="Your price (£) *">
                   <input
                     value={form.price} onChange={set("price")}
-                    type="number" min="5" step="0.01" placeholder="8.00"
+                    type="number" min="0.30" step="0.01" placeholder="4.50"
                     style={inputStyle}
                   />
                 </Field>

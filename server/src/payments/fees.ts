@@ -15,15 +15,16 @@ export const SELLER_FEE_RATE = 0.075;
 /**
  * Stripe's minimum PaymentIntent for GBP is £0.30.
  * https://docs.stripe.com/currencies#minimum-and-maximum-charge-amounts
- * Unwrapped's own floor is higher: a shop must enter at least £5.
+ * The shop types a list price. Shoppers are charged checkoutFromList(list),
+ * which is above the list price, so a £0.30 list price always clears this floor.
  * Keep in sync with client/src/lib/fees.ts.
  */
 export const STRIPE_GBP_MIN_CHARGE_PENCE = 30;
 
-/** Smallest list price (pence) a shop can publish. Anna's decision: £5.00. */
-export const MIN_LIST_PRICE_PENCE = 500;
+/** Smallest list price (pence) a shop can publish. */
+export const MIN_LIST_PRICE_PENCE = STRIPE_GBP_MIN_CHARGE_PENCE;
 
-export const MIN_LIST_PRICE_MESSAGE = "Enter a price of at least £5.";
+export const MIN_LIST_PRICE_MESSAGE = "Enter a price of at least £0.30.";
 
 /** Shopper-facing checkout (pence) from the business list price. */
 export function checkoutFromList(listPence: number): number {

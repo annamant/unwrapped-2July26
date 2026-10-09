@@ -8,15 +8,15 @@ export const SELLER_FEE_RATE = 0.075;
 
 /**
  * Stripe's minimum PaymentIntent for GBP is £0.30.
- * Unwrapped's own floor is higher: a shop must enter at least £5.
+ * The shop types a list price; shoppers pay checkoutFromList(list), which sits
+ * above that list price, so £0.30 on the field always clears Stripe's floor.
  * Keep in sync with server/src/payments/fees.ts.
  */
 export const STRIPE_GBP_MIN_CHARGE_PENCE = 30;
 
-/** Anna's decision: £5.00. */
-export const MIN_LIST_PRICE_PENCE = 500;
+export const MIN_LIST_PRICE_PENCE = STRIPE_GBP_MIN_CHARGE_PENCE;
 
-export const MIN_LIST_PRICE_MESSAGE = "Enter a price of at least £5.";
+export const MIN_LIST_PRICE_MESSAGE = "Enter a price of at least £0.30.";
 
 export function checkoutFromList(listPence: number): number {
   if (listPence <= 0) return 0;

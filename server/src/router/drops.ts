@@ -112,7 +112,7 @@ export const dropsRouter = router({
       description: z.string().max(1000).optional(),
       imageUrl: z.string().url().optional(),
       mediaType: z.enum(["image", "video"]).optional(),
-      /** Business list price per unit (pence). New drops are paid; minimum is £5. */
+      /** Business list price per unit (pence). New drops are paid; minimum is Stripe's GBP charge floor. */
       listPrice: z.number().int().min(MIN_LIST_PRICE_PENCE, MIN_LIST_PRICE_MESSAGE),
       /** Original list price (pence) — required for clearance/discount drops. */
       originalListPrice: z.number().int().positive().optional(),
