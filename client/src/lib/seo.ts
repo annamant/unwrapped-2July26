@@ -260,7 +260,7 @@ export function seoForPath(pathname: string): SeoProps {
       };
     case "/instagram":
       return {
-        title: `Live drops for Instagram — ${SITE_NAME}`,
+        title: PILOT_TITLE,
         description:
           "Unwrapped lets you know when a shop you already know has something on. Sign up and we'll tell you when something's on.",
         path,
