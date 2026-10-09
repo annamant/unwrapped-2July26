@@ -1,4 +1,4 @@
-import pins from "../../../server/src/data/wave1DirectoryPins.json";
+import pins from "../data/wave1DirectoryPins.json";
 
 export type PrelaunchDirectoryPin = {
   id: string;

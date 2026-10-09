@@ -10,7 +10,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "node scripts/migrate.mjs",
     "db:studio": "drizzle-kit studio",
-    "test": "tsx src/follows/follow.test.ts && tsx src/auth/resolveLoginRedirect.test.ts"
+    "test": "tsx src/follows/follow.test.ts && tsx src/auth/resolveLoginRedirect.test.ts && node scripts/check-wave1-pins-sync.mjs"
   },
   "dependencies": {
     "@trpc/server": "^11.0.0",

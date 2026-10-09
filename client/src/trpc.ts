@@ -1,6 +1,6 @@
 import { createTRPCReact } from "@trpc/react-query";
 import { httpBatchLink } from "@trpc/client";
-import type { AppRouter } from "../../server/src/router";
+import type { AppRouter } from "./appRouter";
 
 const TOKEN_KEY = "uw_session";
 
