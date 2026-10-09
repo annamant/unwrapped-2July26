@@ -89,7 +89,7 @@ export default function DropDetail() {
   const scarce = !soldOut && drop.availableQuantity <= 3;
   const seoDescription = truncateMeta(
     drop.description ||
-      `${drop.title} from ${business.name} on Unwrapped — see it, claim it, collect it on your high street.`,
+      `${drop.title} from ${business.name} on Unwrapped — a shop you already know has something on. Claim it, then collect it in store.`,
   );
 
   const reserving = createPI.isPending || reserve.isPending;

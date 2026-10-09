@@ -407,9 +407,8 @@ export async function sendBusinessClaimThankYouEmail(to: string, businessName: s
                       </p>
                       <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — We're not relying on the internet to do the work. We're planning a proper local campaign —
-                        door-to-door, postcards, talking to people on the high street — to make sure the
-                        neighbourhoods around your shops actually know about Unwrapped. That takes a little time,
-                        and it's coming.
+                        door-to-door and postcards — so regulars hear when you've got something on.
+                        That takes a little time, and it's coming.
                       </p>
                       <p style="margin:0 0 12px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#160703;">
                         — So please be patient with us. You're not just joining an app — you're helping build

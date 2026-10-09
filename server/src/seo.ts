@@ -48,7 +48,7 @@ const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Do I have to build a catalog?",
-    a: "No. Catalogues are for when everything is always available — which is rarely true on a high street. When you have something to drop, upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
+    a: "No. Catalogues are for when everything is always available. Tell your regulars when you've got something on: upload a photo or short video, add a title, price, and quantity, and publish. Under a minute.",
   },
   {
     q: "What if they don't show up?",
@@ -464,7 +464,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
 
     const desc = truncate(
       row.description ||
-        `${row.title} from ${row.businessName} on Unwrapped — see it, claim it, collect it on your high street.`,
+        `${row.title} from ${row.businessName} on Unwrapped — a shop you already know has something on. Claim it, then collect it in store.`,
     );
     const image = row.imageUrl || DEFAULT_OG();
     const title = `${row.title} · ${row.businessName} — Unwrapped`;
