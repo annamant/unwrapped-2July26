@@ -2,7 +2,8 @@
 
 **Canonical street list for production.** Work top to bottom within the active phase unless Anna reorders.  
 **Rules:** one street = one episode · ~1 / week · mark status when photos land / posted.  
-**Format:** [LONDON_HIGH_STREETS.md](./LONDON_HIGH_STREETS.md) · **Intake:** [EPISODE_INTAKE.md](./EPISODE_INTAKE.md)
+**Format:** [LONDON_HIGH_STREETS.md](./LONDON_HIGH_STREETS.md) — post-Streatham **docu** method (identity · scale · then · now · twist · ask). No WHERE/NOW/DID YOU KNOW labels.  
+**Intake:** [EPISODE_INTAKE.md](./EPISODE_INTAKE.md)
 
 Status: `queued` → `photos_in` → `drafting` → `ready` → `posted` · or `skip`
 
@@ -14,7 +15,7 @@ Matches launch geography. Prioritise independent retail density + clear “high 
 
 | # | Street / strip | Area | Borough | Postcode | Notes for shoot | Status |
 |---|----------------|------|---------|----------|-----------------|--------|
-| 01 | **Rye Lane** | Peckham | Southwark | SE15 | Episode #1 default. Wide strip + produce shops. Optional: Bussey / Copeland for Did you know? Draft: `drafts/2026-09-03-rye-lane/` | drafting |
+| 01 | **Rye Lane** | Peckham | Southwark | SE15 | Episode #1 default. Wide strip + produce shops. Twist lead: Bussey / Copeland. Draft: `drafts/2026-09-03-rye-lane/` | drafting |
 | 02 | **Lordship Lane** | East Dulwich / Goose Green | Southwark | SE22 | Bookshops, charity, independents. Quieter than Rye Lane. | queued |
 | 03 | **Bellenden Road** | Peckham | Southwark | SE15 | Village high street feel — cafés, bakers, small shops. | queued |
 | 04 | **North Cross Road** | East Dulwich | Southwark | SE22 | Saturday market energy + permanent shopfronts. | queued |
@@ -114,7 +115,7 @@ Tourist-heavy — only when the story is neighbourhood retail, not landmarks.
 
 | Order | Street | Why |
 |-------|--------|-----|
-| 1 | Rye Lane | Series pilot · dense · clear Did you know? (Bussey / Copeland) |
+| 1 | Rye Lane | Series pilot · dense · clear curious twist (Bussey / Copeland) |
 | 2 | Electric Avenue, Brixton | Famous name + built-in curious fact |
 | 3 | Lordship Lane | Contrasting quieter South London parade |
 | 4 | Clapham High Street | Classic linear high street · familiar to many Londoners |
