@@ -110,36 +110,82 @@ export default function AdminFollows() {
           </button>
         </div>
 
-        <div style={{ overflowX: "auto", border: `1px solid ${BORDER}` }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", background: BG, minWidth: 640 }}>
-            <thead>
-              <tr>
-                <th style={th("name")} onClick={() => toggleSort("name")}>SHOP</th>
-                <th style={{ ...th("followers"), textAlign: "left" }}>KIND</th>
-                <th style={th("followers")} onClick={() => toggleSort("followers")}>FOLLOWERS</th>
-                <th style={th("requestedAtSignup")} onClick={() => toggleSort("requestedAtSignup")}>REQUESTED AT SIGNUP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.key}>
-                  <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>
-                    {row.name}
-                  </td>
-                  <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
-                    {row.kind === "curated" ? "CURATED" : "LIVE"}
-                  </td>
-                  <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, textAlign: "right", fontFamily: "'Space Mono', monospace", fontSize: 13, color: FG }}>
-                    {row.followers}
-                  </td>
-                  <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, textAlign: "right", fontFamily: "'Space Mono', monospace", fontSize: 13, color: FG }}>
-                    {row.requestedAtSignup}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+          {([
+            ["followers", "FOLLOWERS"],
+            ["requestedAtSignup", "SIGNUP"],
+            ["name", "NAME"],
+          ] as const).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => toggleSort(key)}
+              style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                padding: "8px 10px",
+                border: `1px solid ${BORDER}`,
+                background: sortKey === key ? FG : BG,
+                color: sortKey === key ? BG : MUTED_FG,
+                cursor: "pointer",
+              }}
+            >
+              {label}{sortKey === key ? (sortDir === "desc" ? " ↓" : " ↑") : ""}
+            </button>
+          ))}
         </div>
+
+        {isMobile ? (
+          <div style={{ border: `1px solid ${BORDER}`, background: BG }}>
+            {rows.map((row) => (
+              <div key={row.key} style={{ padding: "14px 12px", borderBottom: `1px solid ${BORDER}` }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG, fontWeight: 600, marginBottom: 6 }}>
+                  {row.name}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
+                    {row.kind === "curated" ? "CURATED" : "LIVE"}
+                  </span>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, color: FG }}>
+                    {row.followers} followers · {row.requestedAtSignup} signup
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ overflowX: "auto", border: `1px solid ${BORDER}` }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", background: BG, minWidth: 640 }}>
+              <thead>
+                <tr>
+                  <th style={th("name")} onClick={() => toggleSort("name")}>SHOP</th>
+                  <th style={{ ...th("followers"), textAlign: "left" }}>KIND</th>
+                  <th style={th("followers")} onClick={() => toggleSort("followers")}>FOLLOWERS</th>
+                  <th style={th("requestedAtSignup")} onClick={() => toggleSort("requestedAtSignup")}>REQUESTED AT SIGNUP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => (
+                  <tr key={row.key}>
+                    <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG }}>
+                      {row.name}
+                    </td>
+                    <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG }}>
+                      {row.kind === "curated" ? "CURATED" : "LIVE"}
+                    </td>
+                    <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, textAlign: "right", fontFamily: "'Space Mono', monospace", fontSize: 13, color: FG }}>
+                      {row.followers}
+                    </td>
+                    <td style={{ padding: "12px", borderBottom: `1px solid ${BORDER}`, textAlign: "right", fontFamily: "'Space Mono', monospace", fontSize: 13, color: FG }}>
+                      {row.requestedAtSignup}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

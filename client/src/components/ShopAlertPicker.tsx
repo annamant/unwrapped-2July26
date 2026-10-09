@@ -34,13 +34,13 @@ export default function ShopAlertPicker({
 
   useEffect(() => {
     const root = listRef.current;
-    if (!root) return;
+    if (!root || selected.length === 0) return;
     const selectedEl = root.querySelector('[aria-selected="true"]');
     if (!(selectedEl instanceof HTMLElement)) return;
-    const top = selectedEl.offsetTop;
-    const bottom = top + selectedEl.offsetHeight;
-    if (top < root.scrollTop || bottom > root.scrollTop + root.clientHeight) {
-      root.scrollTop = Math.max(0, top - 8);
+    const rootRect = root.getBoundingClientRect();
+    const elRect = selectedEl.getBoundingClientRect();
+    if (elRect.top < rootRect.top || elRect.bottom > rootRect.bottom) {
+      selectedEl.scrollIntoView({ block: "nearest" });
     }
   }, [filtered, selected]);
 
