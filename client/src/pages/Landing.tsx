@@ -771,6 +771,17 @@ export default function Landing() {
             />
             HOW IT WORKS
           </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 15 : 17,
+            color: MUTED_FG,
+            lineHeight: 1.5,
+            margin: "0 0 14px",
+            maxWidth: 560,
+            fontWeight: 500,
+          }}>
+            {LOCAL_COLLECT_LINE}
+          </p>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 24 : 32,
@@ -833,18 +844,6 @@ export default function Landing() {
             fontWeight: 500,
           }}>
             Examples from any kind of shop. Nothing here can be claimed yet.
-          </p>
-          <p style={{
-            margin: "10px auto 0",
-            maxWidth: 460,
-            textAlign: "center",
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 13 : 14,
-            color: MUTED_FG,
-            fontWeight: 400,
-            lineHeight: 1.5,
-          }}>
-            {LOCAL_COLLECT_LINE}
           </p>
         </div>
       </section>
