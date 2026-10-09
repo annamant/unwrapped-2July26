@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { trpc } from "../trpc";
 import { MERCHANT_FAQS } from "../lib/seo";
+import useIsMobile from "../hooks/useIsMobile";
+import { LOCAL_COLLECT_LINE, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
@@ -18,6 +20,7 @@ const CATEGORIES = [
 ];
 
 export default function BusinessApply() {
+  const isMobile = useIsMobile();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "", contactEmail: "", city: "", address: "", postcode: "",
@@ -59,7 +62,15 @@ export default function BusinessApply() {
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
       {/* Header */}
-      <div style={{ borderBottom: `1px solid ${BORDER}`, padding: "18px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{
+        borderBottom: `1px solid ${BORDER}`,
+        padding: isMobile ? "16px 16px" : "18px 40px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 12,
+        flexWrap: "wrap",
+      }}>
         <a href="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: FG, textDecoration: "none" }}>
           Unwrapped
         </a>
@@ -68,21 +79,39 @@ export default function BusinessApply() {
         </a>
       </div>
 
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px" }}>
-        <div style={{ marginBottom: 48 }}>
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: isMobile ? "32px 16px 48px" : "56px 24px" }}>
+        <div style={{ marginBottom: 40 }}>
           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.15em", marginBottom: 16 }}>
-            SHOPS YOU ALREADY KNOW
+            FOR SHOPS
           </div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, fontWeight: 700, color: FG, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 16 }}>
-            Post a deal from<br />your shop.
+          <h1 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 28 : 40,
+            fontWeight: 700,
+            color: FG,
+            lineHeight: 1.15,
+            letterSpacing: isMobile ? "-0.6px" : "-1px",
+            marginBottom: 20,
+          }}>
+            {SHOP_VALUE_HEAD}
           </h1>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: FG, lineHeight: 1.6, marginBottom: 14, fontWeight: 500 }}>
-            Get seen — so you can sell and welcome customers through the door.
-          </p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, marginBottom: 16 }}>
-            Post what's on, set the price and how many, and people collect in person with a QR.
-          </p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7 }}>
+          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+            {SHOP_VALUE_POINTS.map((point) => (
+              <li key={point} style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "flex-start",
+                border: `1px solid ${BORDER}`,
+                padding: "12px 14px",
+              }}>
+                <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: V, marginTop: 8, flexShrink: 0 }} />
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG, lineHeight: 1.5 }}>
+                  {point}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, margin: 0 }}>
             We review every application to keep Unwrapped curated. Tell us about your shop and we'll be in touch within 2–3 working days.
           </p>
         </div>
@@ -163,6 +192,36 @@ export default function BusinessApply() {
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textAlign: "center", lineHeight: 1.6 }}>
             By applying you agree to our business terms. We'll never share your information.
           </p>
+        </div>
+
+        <div style={{ marginTop: 48, paddingTop: 36, borderTop: `1px solid ${BORDER}` }}>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 14,
+            color: MUTED_FG,
+            lineHeight: 1.6,
+            margin: "0 0 28px",
+            maxWidth: 520,
+          }}>
+            {LOCAL_COLLECT_LINE}
+          </p>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: isMobile ? 24 : 28,
+            fontWeight: 700,
+            color: FG,
+            lineHeight: 1.2,
+            marginBottom: 16,
+          }}>
+            {SHOPPER_VALUE_HEAD}
+          </h2>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+            {SHOPPER_VALUE_POINTS.map((point) => (
+              <li key={point} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG, lineHeight: 1.5 }}>
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div style={{ marginTop: 56, paddingTop: 40, borderTop: `1px solid ${BORDER}` }}>

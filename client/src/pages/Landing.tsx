@@ -6,7 +6,7 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { PILOT_H1, PILOT_LOOP, PILOT_MAP, PILOT_NOTE, PILOT_SHOP, PILOT_SUB } from "../lib/pilotCorridor";
+import { LOCAL_COLLECT_LINE, PILOT_H1, PILOT_MAP, PILOT_NOTE, PILOT_SHOP, PILOT_SUB, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
@@ -106,23 +106,10 @@ const HOW_IT_WORKS_PHONES: {
   },
 ];
 
-const HOW_IT_WORKS_STEPS = [
-  {
-    num: "01",
-    title: "Get notified",
-    desc: "We'll let you know when a shop you already like has something on.",
-  },
-  {
-    num: "02",
-    title: "Claim it",
-    desc: "It's yours while it's still available.",
-  },
-  {
-    num: "03",
-    title: "Collect it",
-    desc: "Walk into that shop and collect it in person.",
-  },
-];
+const HOW_IT_WORKS_STEPS = SHOPPER_VALUE_POINTS.map((text, i) => ({
+  num: String(i + 1).padStart(2, "0"),
+  text,
+}));
 
 const LANDING_CSS = `
 @keyframes uw-fade-up {
@@ -788,29 +775,18 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 24 : 32,
             fontWeight: 700, letterSpacing: "-0.8px",
-            lineHeight: 1.1, marginBottom: 14, maxWidth: 560,
+            lineHeight: 1.15, marginBottom: 18, maxWidth: 640,
             color: FG,
           }}>
-            {PILOT_LOOP}
+            {SHOPPER_VALUE_HEAD}
           </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 14 : 16,
-            fontWeight: 400,
-            color: MUTED_FG,
-            lineHeight: 1.55,
-            maxWidth: 760,
-            margin: "0 0 22px",
-          }}>
-            We'll let you know when a shop you like has something on. You claim it, then you collect it.
-          </p>
           <div style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
             gap: 14,
             maxWidth: 860,
           }}>
-            {HOW_IT_WORKS_STEPS.map(({ num, title, desc }) => (
+            {HOW_IT_WORKS_STEPS.map(({ num, text }) => (
               <div key={num} style={{
                 border: `1px solid ${BORDER}`,
                 borderRadius: 14,
@@ -829,20 +805,12 @@ export default function Landing() {
                 </div>
                 <div style={{
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 16,
-                  fontWeight: 700,
+                  fontSize: isMobile ? 15 : 16,
+                  fontWeight: 500,
                   color: FG,
-                  marginBottom: 6,
+                  lineHeight: 1.45,
                 }}>
-                  {title}
-                </div>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14,
-                  color: MUTED_FG,
-                  lineHeight: 1.5,
-                }}>
-                  {desc}
+                  {text}
                 </div>
               </div>
             ))}
@@ -865,6 +833,18 @@ export default function Landing() {
             fontWeight: 500,
           }}>
             Examples from any kind of shop. Nothing here can be claimed yet.
+          </p>
+          <p style={{
+            margin: "10px auto 0",
+            maxWidth: 460,
+            textAlign: "center",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 13 : 14,
+            color: MUTED_FG,
+            fontWeight: 400,
+            lineHeight: 1.5,
+          }}>
+            {LOCAL_COLLECT_LINE}
           </p>
         </div>
       </section>
@@ -965,26 +945,39 @@ export default function Landing() {
             </div>
             <h2 style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 32 : 44,
+              fontSize: isMobile ? 26 : 36,
               fontWeight: 800,
               color: CREAM,
-              letterSpacing: "-1.2px",
-              lineHeight: 1.05,
-              marginBottom: 16,
+              letterSpacing: isMobile ? "-0.6px" : "-1px",
+              lineHeight: 1.12,
+              marginBottom: 18,
             }}>
-              {PILOT_SHOP}
+              {SHOP_VALUE_HEAD}
             </h2>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 16 : 18,
-              fontWeight: 500,
-              color: "rgba(255,240,244,0.85)",
-              lineHeight: 1.5,
-              marginBottom: 28,
-              maxWidth: 540,
+            <ul style={{
+              listStyle: "none",
+              padding: 0,
+              margin: "0 0 28px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
             }}>
-              The people who already like your shop can hear about it. They claim it, and they come through the door.
-            </p>
+              {SHOP_VALUE_POINTS.map((point) => (
+                <li key={point} style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 15 : 16,
+                  fontWeight: 500,
+                  color: "rgba(255,240,244,0.92)",
+                  lineHeight: 1.45,
+                  padding: isMobile ? "12px 14px" : "14px 16px",
+                  border: "1px solid rgba(255,240,244,0.18)",
+                  borderRadius: 12,
+                  background: "rgba(255,240,244,0.06)",
+                }}>
+                  {point}
+                </li>
+              ))}
+            </ul>
             <a
               href="/business-apply"
               className="uw-btn-primary"

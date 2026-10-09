@@ -109,7 +109,7 @@ export function Terms() {
 
       <H>6. Price and payment</H>
       <P>
-        Prices are shown in pounds sterling (GBP) as the all-in amount due at reservation. Where VAT or other tax applies and is included, it will form part of the price shown unless we state otherwise. Some drops may be free; free drops do not require payment.
+        Prices are shown in pounds sterling (GBP) as the all-in amount due at reservation. Where VAT or other tax applies and is included, it will form part of the price shown unless we state otherwise. You pay the price shown when you reserve.
       </P>
       <P>
         Payments are processed by Stripe. Card details go to Stripe and are not stored on our servers. We may store a payment reference needed to operate the Platform (for example refunds). Completing a paid reservation authorises us to charge the listed price through Stripe.

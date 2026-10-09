@@ -6,9 +6,32 @@
 export const BUYER_FEE_RATE = 0.075;
 export const SELLER_FEE_RATE = 0.075;
 
+/**
+ * Stripe's minimum PaymentIntent for GBP is £0.30.
+ * The shop types a list price; shoppers pay checkoutFromList(list), which sits
+ * above that list price, so £0.30 on the field always clears Stripe's floor.
+ * Keep in sync with server/src/payments/fees.ts.
+ */
+export const STRIPE_GBP_MIN_CHARGE_PENCE = 30;
+
+export const MIN_LIST_PRICE_PENCE = STRIPE_GBP_MIN_CHARGE_PENCE;
+
+export const MIN_LIST_PRICE_MESSAGE = "Enter a price of at least £0.30.";
+
 export function checkoutFromList(listPence: number): number {
   if (listPence <= 0) return 0;
   return Math.round(listPence * (1 + BUYER_FEE_RATE));
+}
+
+/** Null when a new drop's list price can be charged. */
+export function paidListPriceError(listPence: number): string | null {
+  if (!Number.isInteger(listPence) || listPence < MIN_LIST_PRICE_PENCE) {
+    return MIN_LIST_PRICE_MESSAGE;
+  }
+  if (checkoutFromList(listPence) < STRIPE_GBP_MIN_CHARGE_PENCE) {
+    return MIN_LIST_PRICE_MESSAGE;
+  }
+  return null;
 }
 
 export function receiveFromList(listPence: number): number {

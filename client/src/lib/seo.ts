@@ -17,7 +17,7 @@ export const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How does it work?",
-    a: "Get notified. Then claim it. Then collect it.",
+    a: "The shop comes to you, so there's nothing to browse or hunt for. Book it and it's yours before it sells out. Collect it in store.",
   },
   {
     q: "How do I collect?",
@@ -247,7 +247,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Apply to partner your shop — ${SITE_NAME}`,
         description:
-          "Get seen — so you can sell and welcome customers through your door. Not another discount app. Publish what's ready, keep your brand, and greet people who already paid.",
+          "Tell your regulars when you've got something on, and they come through the door. Customers pay before they arrive. Free to join.",
         path,
         jsonLd: merchantJsonLd(),
       };

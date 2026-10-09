@@ -11,7 +11,7 @@ import {
   londonHubJsonLd,
   londonHubSeo,
 } from "./londonBoroughs";
-import { PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_NOTE, PILOT_SHOP, PILOT_SUB, PILOT_TITLE } from "./pilotCorridor";
+import { LOCAL_COLLECT_LINE, PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_NOTE, PILOT_SHOP, PILOT_SUB, PILOT_TITLE, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "./pilotCorridor";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -29,7 +29,7 @@ const HOME_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How does it work?",
-    a: "Get notified. Then claim it. Then collect it.",
+    a: "The shop comes to you, so there's nothing to browse or hunt for. Book it and it's yours before it sells out. Collect it in store.",
   },
   {
     q: "How do I collect?",
@@ -102,7 +102,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/business-apply",
     title: "Apply to partner your shop — Unwrapped",
     description:
-      "Get seen — so you can sell and welcome customers through your door. Not another discount app. Publish what's ready, keep your brand, and greet people who already paid.",
+      "Tell your regulars when you've got something on, and they come through the door. Customers pay before they arrive. Free to join.",
     type: "website",
   },
   "/recommend": {
@@ -562,8 +562,10 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_NOTE)}</p><p>${escapeHtml(PILOT_SHOP)}</p><h2>Get notified. Then claim. Then collect.</h2><p>We'll let you know when a shop you like has something on. You claim it, then you collect it.</p><p><a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
-          : path === "/london"
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_NOTE)}</p><p>${escapeHtml(PILOT_SHOP)}</p><h2>${escapeHtml(SHOPPER_VALUE_HEAD)}</h2><ul>${SHOPPER_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_VALUE_HEAD)}</h2><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p><a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          : path === "/business-apply"
+            ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOPPER_VALUE_HEAD)}</h2><ul>${SHOPPER_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul></article>`
+            : path === "/london"
             ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Get notified. Then claim. Then collect.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
