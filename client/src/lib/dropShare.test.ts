@@ -2,6 +2,7 @@ import QRCode from "qrcode";
 import {
   DROP_ID_RE,
   dropPublicUrl,
+  shopFollowUrl,
   dropShareNudge,
   dropShareText,
   formatCollectionWindow,
@@ -28,6 +29,12 @@ function check(name: string, got: string | boolean, want: string | boolean | ((g
 
 check("drop URL is production /drop/:id", dropPublicUrl(dropId), `https://shopunwrapped.com/drop/${dropId}`);
 check("drop URL is never the scanner", dropPublicUrl(dropId), g => !g.includes("scanner"));
+check(
+  "shop follow URL is the shop page",
+  shopFollowUrl("michaels-meat-ab12"),
+  "https://shopunwrapped.com/business/michaels-meat-ab12",
+);
+check("shop follow URL is not the drop URL", shopFollowUrl("michaels-meat-ab12"), (g) => !g.includes("/drop/"));
 
 check("UUID id is accepted", isDropId(dropId), true);
 check("uppercase UUID is accepted", isDropId(dropId.toUpperCase()), true);

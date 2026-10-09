@@ -15,7 +15,7 @@ export const PILOT_H1 =
 export const PILOT_KICKER = "Notify me";
 
 export const PILOT_NOTE =
-  "Sign up and we'll tell you when a shop you know has something on.";
+  "Follow the shops you like and we'll email you when they post something.";
 
 export const PILOT_SUB =
   "It connects you with the local shops you already like.";

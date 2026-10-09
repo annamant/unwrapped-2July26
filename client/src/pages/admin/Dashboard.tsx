@@ -20,6 +20,7 @@ function AdminLayout({ children }: { children: ReactNode }) {
     { href: "/admin/applications", label: "Applications" },
     { href: "/admin/recommendations", label: "Recommendations" },
     { href: "/admin/apparel-map", label: "Claimed map" },
+    { href: "/admin/follows", label: "Followers" },
   ];
 
   if (isMobile) {

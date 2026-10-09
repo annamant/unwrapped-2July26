@@ -9,7 +9,8 @@ import DropMedia from "../components/DropMedia";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
-import type { PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { mergeDirectoryShops, shopPublicPath, type DirectoryShop } from "../lib/directoryShops";
 import { PILOT_KICKER, PILOT_MAP, PILOT_NOTE, PILOT_SUB } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
@@ -80,46 +81,34 @@ export default function Home() {
 
   const pins = useMemo(() => pilotDrops.map(toDropPin), [pilotDrops]);
 
-  const followedIds = useMemo(
-    () => new Set((follows ?? []).map((f) => f.business.id)),
-    [follows],
-  );
-
-  const pilotMembers = useMemo(
-    () => (members ?? []).filter((m) => !isObviousTestShop(m.name, m.slug)),
+  const directoryShops = useMemo(
+    () => mergeDirectoryShops(PRELAUNCH_WAVE1_DIRECTORY_PINS, members ?? [], { isTest: isObviousTestShop }),
     [members],
   );
 
   const filteredShops = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return pilotMembers.filter((m) => {
+    return directoryShops.filter((shop) => {
       if (!q) return true;
-      const hay = `${m.name} ${m.address ?? ""} ${m.postcode ?? ""} ${m.city ?? ""} ${m.category ?? ""}`.toLowerCase();
+      const hay = `${shop.name} ${shop.address ?? ""} ${shop.postcode ?? ""} ${shop.district ?? ""} ${shop.category ?? ""} ${shop.type ?? ""}`.toLowerCase();
       return hay.includes(q);
     });
-  }, [pilotMembers, search]);
+  }, [directoryShops, search]);
 
   const shopPins: PrelaunchDirectoryPin[] = useMemo(
-    () =>
-      filteredShops
-        .filter((m) => m.lat != null && m.lng != null)
-        .map((m) => ({
-          id: m.id,
-          name: m.name,
-          lat: m.lat as number,
-          lng: m.lng as number,
-          postcode: m.postcode ?? undefined,
-          address: m.address ?? undefined,
-          district: m.city ?? undefined,
-          category: m.category,
-          isMember: true,
-          slug: m.slug,
-        })),
+    () => filteredShops.filter((shop) => Number.isFinite(shop.lat) && Number.isFinite(shop.lng)),
     [filteredShops],
   );
 
+  function shopIsFollowed(shop: DirectoryShop) {
+    return (follows ?? []).some((followRow) =>
+      (shop.businessId && followRow.businessId === shop.businessId) ||
+      (shop.directoryPinId && followRow.directoryPinId === shop.directoryPinId),
+    );
+  }
+
   const dropCount = pilotDrops.length;
-  const shopCount = pilotMembers.length;
+  const shopCount = directoryShops.length;
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
@@ -296,11 +285,11 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif", fontSize: 15,
                 color: MUTED_FG, lineHeight: 1.6, margin: 0, maxWidth: 560,
               }}>
-                Shops you already like. Follow one and we'll tell you when something's on.
+                Follow the shops you like and we'll email you when they post something.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: MUTED_FG, letterSpacing: 1 }}>
-                  {membersLoading ? "..." : `${filteredShops.length} SHOPS`}
+                  {`${filteredShops.length} SHOPS`}
                 </span>
                 <ListMapToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
@@ -339,17 +328,7 @@ export default function Home() {
             </div>
 
             {viewMode === "list" && (
-              membersLoading ? (
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                  gap: 1, background: BORDER,
-                }}>
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} style={{ background: BG, height: 180 }} />
-                  ))}
-                </div>
-              ) : filteredShops.length === 0 ? (
+              filteredShops.length === 0 ? (
                 <EmptyShops
                   hasMembers={shopCount > 0}
                   onClear={() => { setSearch(""); }}
@@ -364,13 +343,14 @@ export default function Home() {
                     <ShopCard
                       key={shop.id}
                       shop={shop}
-                      following={followedIds.has(shop.id)}
+                      following={shopIsFollowed(shop)}
                       followPending={follow.isPending || unfollow.isPending}
-                      onOpen={() => navigate(`/business/${shop.slug}`)}
+                      onOpen={() => navigate(shopPublicPath(shop))}
                       onToggleFollow={(e) => {
                         e.stopPropagation();
-                        if (followedIds.has(shop.id)) unfollow.mutate({ businessId: shop.id });
-                        else follow.mutate({ businessId: shop.id });
+                        const target = { businessId: shop.businessId, directoryPinId: shop.directoryPinId };
+                        if (shopIsFollowed(shop)) unfollow.mutate(target);
+                        else follow.mutate(target);
                       }}
                     />
                   ))}
@@ -570,20 +550,17 @@ function EmptyShops({ hasMembers, onClear }: { hasMembers: boolean; onClear: () 
 }
 
 function ShopCard({ shop, following, followPending, onOpen, onToggleFollow }: {
-  shop: {
-    id: string; name: string; slug: string; category: string;
-    description: string | null; logoUrl: string | null;
-    city: string | null; address: string | null; postcode: string | null;
-  };
+  shop: DirectoryShop;
   following: boolean;
   followPending: boolean;
   onOpen: () => void;
   onToggleFollow: (e: React.MouseEvent) => void;
 }) {
-  const place = [shop.address?.split(",")[0], shop.city, shop.postcode].filter(Boolean).join(" · ");
+  const place = [shop.address?.split(",")[0], shop.district, shop.postcode].filter(Boolean).join(" · ");
   const blurb = shop.description
     ? (shop.description.length > 110 ? shop.description.slice(0, 107).trimEnd() + "…" : shop.description)
     : null;
+  const kind = shop.type || shop.category || "Shop";
 
   return (
     <div
@@ -610,7 +587,7 @@ function ShopCard({ shop, following, followPending, onOpen, onToggleFollow }: {
             fontFamily: "'Space Mono', monospace", fontSize: 8,
             color: MUTED_FG, letterSpacing: "0.12em", marginBottom: 4,
           }}>
-            MEMBER · {shop.category.toUpperCase()}
+            {shop.isMember ? "MEMBER" : "SHOP"} · {kind.toUpperCase()}
           </div>
           <h3 style={{
             fontFamily: "'Playfair Display', serif",

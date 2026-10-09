@@ -319,7 +319,9 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     path === "/onboarding" ||
     path === "/signin" ||
     path === "/business/signin" ||
-    path === "/reset-password"
+    path === "/reset-password" ||
+    path === "/unsubscribe" ||
+    path.startsWith("/shop/")
   ) {
     return {
       title: "Unwrapped",

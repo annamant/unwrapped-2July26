@@ -8,6 +8,8 @@ import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 import { PILOT_H1, PILOT_LOOP, PILOT_MAP, PILOT_NOTE, PILOT_SHOP, PILOT_SUB } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
+import { mergeDirectoryShops } from "../lib/directoryShops";
+import { rememberPendingFollow } from "../lib/shopFollow";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
 
 const HERO_SHOP_IMAGES = [
@@ -1475,16 +1477,6 @@ function MapSection({ drops, onDropClick }: { drops: any[]; onDropClick: (id: st
   );
 }
 
-function normalizeDirectoryName(name: string): string {
-  return name
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
 function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
@@ -1493,50 +1485,10 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
 
   const { data: members } = trpc.businesses.directoryMembers.useQuery();
 
-  const directoryPins = useMemo(() => {
-    const memberRows = members ?? [];
-    const memberByName = new Map(
-      memberRows.map((m) => [normalizeDirectoryName(m.name), m]),
-    );
-    const matchedMemberIds = new Set<string>();
-
-    const curated: PrelaunchDirectoryPin[] = pins.map((p) => {
-      const match = memberByName.get(normalizeDirectoryName(p.name));
-      if (!match) return p;
-      matchedMemberIds.add(match.id);
-      return {
-        ...p,
-        isMember: true,
-        slug: match.slug,
-        category: match.category,
-        // Prefer live business address when we have it
-        address: match.address || p.address,
-        postcode: match.postcode || p.postcode,
-      };
-    });
-
-    const extras: PrelaunchDirectoryPin[] = memberRows
-      .filter((m) => !matchedMemberIds.has(m.id) && m.lat != null && m.lng != null && !isObviousTestShop(m.name, m.slug))
-      .map((m) => ({
-        id: `member-${m.id}`,
-        name: m.name,
-        lat: m.lat as number,
-        lng: m.lng as number,
-        postcode: m.postcode ?? undefined,
-        address: m.address ?? undefined,
-        district: m.city ?? undefined,
-        type: m.category,
-        category: m.category,
-        isMember: true,
-        slug: m.slug,
-      }));
-
-    // Members first in the list, then curated board
-    return [...extras, ...curated].sort((a, b) => {
-      if (!!a.isMember !== !!b.isMember) return a.isMember ? -1 : 1;
-      return a.name.localeCompare(b.name);
-    });
-  }, [pins, members]);
+  const directoryPins = useMemo(
+    () => mergeDirectoryShops(pins, members ?? [], { isTest: isObviousTestShop }).filter((shop) => Number.isFinite(shop.lat) && Number.isFinite(shop.lng)),
+    [pins, members],
+  );
 
   const normalized = search.trim().toLowerCase();
   const filteredPins = useMemo(() => {
@@ -1767,6 +1719,34 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
                       <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {p.name}
                       </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          rememberPendingFollow({
+                            name: p.name,
+                            directoryPinId: p.directoryPinId,
+                            businessId: p.businessId,
+                          });
+                          const next = new URLSearchParams({ mode: "register" });
+                          if (p.directoryPinId) next.set("pin", p.directoryPinId);
+                          if (p.businessId) next.set("business", p.businessId);
+                          window.location.href = `/signin?${next}`;
+                        }}
+                        style={{
+                          fontFamily: "'Space Mono', monospace",
+                          fontSize: 9,
+                          letterSpacing: "0.08em",
+                          padding: "6px 8px",
+                          border: `1px solid ${FG}`,
+                          background: BG,
+                          color: FG,
+                          cursor: "pointer",
+                          flexShrink: 0,
+                        }}
+                      >
+                        FOLLOW
+                      </button>
                       {p.isMember ? (
                         <span style={{
                           fontFamily: "'DM Sans', sans-serif",

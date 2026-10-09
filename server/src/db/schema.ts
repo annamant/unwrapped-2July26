@@ -1,7 +1,7 @@
 import {
-  pgTable, text, integer, boolean, timestamp, real, jsonb, pgEnum, uuid, varchar, uniqueIndex
+  pgTable, text, integer, boolean, timestamp, real, jsonb, pgEnum, uuid, varchar, uniqueIndex, check
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
@@ -59,6 +59,8 @@ export const notificationPreferences = pgTable("notification_preferences", {
   quietHoursStart: integer("quiet_hours_start").default(22).notNull(), // hour in 24h
   quietHoursEnd: integer("quiet_hours_end").default(8).notNull(),
   quietHoursEnabled: boolean("quiet_hours_enabled").default(true).notNull(),
+  /** Email when a followed shop publishes a drop. One-click unsubscribe sets this false. */
+  dropAlertsEnabled: boolean("drop_alerts_enabled").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -93,8 +95,12 @@ export const businesses = pgTable("businesses", {
   // Set when a "thank you / what's next" email has been sent to the owner after
   // they claimed their profile. Prevents double-sending on repeat runs.
   thankYouSentAt: timestamp("thank_you_sent_at"),
+  /** Curated directory pin this shop claimed, so earlier follows keep working. */
+  directoryPinId: text("directory_pin_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (t) => [
+  uniqueIndex("businesses_directory_pin_unique").on(t.directoryPinId).where(sql`${t.directoryPinId} is not null`),
+]);
 
 // ─── Business Applications ────────────────────────────────────────────────────
 
@@ -226,10 +232,27 @@ export const waitlist = pgTable("waitlist", {
 export const follows = pgTable("follows", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
-  businessId: uuid("business_id").references(() => businesses.id, { onDelete: "cascade" }).notNull(),
+  /** Null when the shop is still an unclaimed curated pin. */
+  businessId: uuid("business_id").references(() => businesses.id, { onDelete: "cascade" }),
+  /** Stable id from the curated directory. Stays set after the shop claims. */
+  directoryPinId: text("directory_pin_id"),
+  /** Chosen on the signup "which shops?" step. */
+  requestedAtSignup: boolean("requested_at_signup").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => [
   uniqueIndex("follows_user_business_unique").on(t.userId, t.businessId),
+  uniqueIndex("follows_user_pin_unique").on(t.userId, t.directoryPinId).where(sql`${t.directoryPinId} is not null`),
+  check("follows_target_present", sql`${t.businessId} is not null or ${t.directoryPinId} is not null`),
+]);
+
+/** One follower email per drop, so a republish or overlapping fan-out cannot double-send. */
+export const dropAlertSends = pgTable("drop_alert_sends", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  dropId: uuid("drop_id").references(() => drops.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  sentAt: timestamp("sent_at").defaultNow().notNull(),
+}, (t) => [
+  uniqueIndex("drop_alert_sends_drop_user_unique").on(t.dropId, t.userId),
 ]);
 
 // ─── Notification Mutes ───────────────────────────────────────────────────────

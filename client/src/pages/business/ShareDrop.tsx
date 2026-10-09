@@ -7,6 +7,7 @@ import useIsMobile from "../../hooks/useIsMobile";
 import {
   copyText,
   dropPublicUrl,
+  shopFollowUrl,
   dropShareNudge,
   formatCollectionWindow,
   isDropId,
@@ -101,6 +102,7 @@ export default function ShareDrop() {
             dropId={data.drop.id}
             status={data.drop.status}
             dropUrl={dropPublicUrl(data.drop.id)}
+            shopUrl={shopFollowUrl(data.business.slug)}
             copied={copied}
             urlInputRef={urlInputRef}
             nudgeRef={nudgeRef}
@@ -121,6 +123,7 @@ function ShareBody({
   dropId,
   status,
   dropUrl,
+  shopUrl,
   copied,
   urlInputRef,
   nudgeRef,
@@ -134,6 +137,7 @@ function ShareBody({
   dropId: string;
   status: string;
   dropUrl: string;
+  shopUrl: string;
   copied: Copied;
   urlInputRef: React.RefObject<HTMLInputElement>;
   nudgeRef: React.RefObject<HTMLTextAreaElement>;
@@ -198,14 +202,17 @@ function ShareBody({
       </Section>
 
       <Section label="TILL POSTER QR">
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, margin: "0 0 16px", lineHeight: 1.5 }}>
-          Shoppers scan this to open the drop page — not the till scanner.
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, margin: "0 0 12px", lineHeight: 1.5 }}>
+          Shoppers scan this to follow the shop. The drop link above is still this drop. This is not the till scanner.
+        </p>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, margin: "0 0 16px", wordBreak: "break-all" }}>
+          {shopUrl}
         </p>
         <div style={{
           border: `1px solid ${BORDER}`, background: MUTED,
           padding: isMobile ? 20 : 28, textAlign: "center",
         }}>
-          <TillPosterQr url={dropUrl} />
+          <TillPosterQr url={shopUrl} />
         </div>
       </Section>
 

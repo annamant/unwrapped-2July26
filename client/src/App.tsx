@@ -36,17 +36,54 @@ import Resources from "./pages/Resources";
 import { Privacy, Terms } from "./pages/Legal";
 import LondonHub from "./pages/LondonHub";
 import BoroughLanding from "./pages/BoroughLanding";
+import DirectoryShop from "./pages/DirectoryShop";
+import Unsubscribe from "./pages/Unsubscribe";
+import AdminFollows from "./pages/admin/Follows";
+import { clearPendingFollow, readPendingFollow } from "./lib/shopFollow";
+import { useEffect, useRef } from "react";
 
 /** Applies path-based defaults; BusinessProfile / DropDetail / London pages override with richer tags. */
 function RouteSeo() {
   const [loc] = useLocation();
   const path = loc.split("?")[0] || "/";
   // Deep public pages set their own SeoHead once data loads — skip defaults to avoid flicker.
-  if (path.startsWith("/business/") || path.startsWith("/drop/") || path === "/london" || path.startsWith("/london/")) {
+  if (
+    path.startsWith("/business/") ||
+    path.startsWith("/drop/") ||
+    path.startsWith("/shop/") ||
+    path === "/unsubscribe" ||
+    path === "/london" ||
+    path.startsWith("/london/")
+  ) {
     return null;
   }
   const seo = seoForPath(path);
   return <SeoHead {...seo} />;
+}
+
+function PendingFollow() {
+  const { data: user } = trpc.auth.me.useQuery();
+  const utils = trpc.useUtils();
+  const follow = trpc.businesses.follow.useMutation({
+    onSuccess: () => {
+      clearPendingFollow();
+      utils.businesses.myFollows.invalidate();
+    },
+  });
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (!user || started.current) return;
+    const pending = readPendingFollow();
+    if (!pending?.directoryPinId && !pending?.businessId) return;
+    started.current = true;
+    follow.mutate({
+      directoryPinId: pending.directoryPinId,
+      businessId: pending.businessId,
+    });
+  }, [user, follow]);
+
+  return null;
 }
 
 export default function App() {
@@ -87,6 +124,7 @@ export default function App() {
 
   return (
     <>
+      <PendingFollow />
       <RouteSeo />
       <Switch>
         {/* Public */}
@@ -103,6 +141,8 @@ export default function App() {
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={Terms} />
         <Route path="/business/:slug" component={BusinessProfile} />
+        <Route path="/shop/:pinId" component={DirectoryShop} />
+        <Route path="/unsubscribe" component={Unsubscribe} />
 
         {/* Shopper — requires auth */}
         <Route path="/onboarding" component={() => !user ? <Redirect to="/signin" /> : user.hasBusiness ? <Redirect to="/dashboard" /> : user.role === "admin" ? <Redirect to="/admin" /> : <Onboarding />} />
@@ -129,6 +169,7 @@ export default function App() {
         <Route path="/admin/applications" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApplications />} />
         <Route path="/admin/recommendations" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminRecommendations />} />
         <Route path="/admin/apparel-map" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminApparelMap />} />
+        <Route path="/admin/follows" component={() => user?.role !== "admin" ? <Redirect to="/home" /> : <AdminFollows />} />
 
         {/* 404 */}
         <Route>

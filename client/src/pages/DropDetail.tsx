@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
 import DropMedia from "../components/DropMedia";
+import { rememberPendingFollow } from "../lib/shopFollow";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
 const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "";
@@ -28,7 +29,8 @@ export default function DropDetail() {
     { dropId: id }, { enabled: !!id && !!user }
   );
   const { data: followStatus } = trpc.businesses.followStatus.useQuery(
-    { businessId: data?.business.id ?? "" }, { enabled: !!data && !!user }
+    { businessId: data?.business.id, directoryPinId: data?.business.directoryPinId ?? undefined },
+    { enabled: !!data && !!user }
   );
 
   const utils = trpc.useUtils();
@@ -171,19 +173,31 @@ export default function DropDetail() {
               >
                 {business.name}
               </a>
-              {user && (
-                <button
-                  onClick={() => followStatus?.following ? unfollow.mutate({ businessId: business.id }) : follow.mutate({ businessId: business.id })}
-                  style={{
-                    fontFamily: "'Space Mono', monospace", fontSize: 9,
-                    letterSpacing: "0.1em", padding: "6px 14px",
-                    border: `1px solid ${BORDER}`, background: followStatus?.following ? FG : BG,
-                    color: followStatus?.following ? BG : FG, cursor: "pointer",
-                  }}
-                >
-                  {followStatus?.following ? "FOLLOWING" : "+ FOLLOW"}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  const target = {
+                    businessId: business.id,
+                    directoryPinId: business.directoryPinId ?? undefined,
+                    name: business.name,
+                  };
+                  if (!user) {
+                    rememberPendingFollow(target);
+                    navigate("/signin?mode=register");
+                    return;
+                  }
+                  if (followStatus?.following) unfollow.mutate(target);
+                  else follow.mutate(target);
+                }}
+                style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 9,
+                  letterSpacing: "0.1em", padding: "6px 14px",
+                  border: `1px solid ${FG}`, background: followStatus?.following ? FG : BG,
+                  color: followStatus?.following ? BG : FG, cursor: "pointer",
+                }}
+              >
+                {followStatus?.following ? "FOLLOWING" : "FOLLOW"}
+              </button>
             </div>
 
             {/* Title */}

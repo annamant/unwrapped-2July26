@@ -3,6 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import type { PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
+import { shopPublicPath } from "../lib/directoryShops";
 
 export interface DirectoryMapProps {
   pins: PrelaunchDirectoryPin[];
@@ -58,6 +59,13 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
     : pin.postcode
       ? esc(pin.postcode)
       : "—";
+  const href = `${shopPublicPath(pin)}?follow=1`;
+  const follow = `<a href="${esc(href)}"
+           style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
+                  text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
+                  letter-spacing:0.1em;padding:10px 0;text-align:center">
+          FOLLOW
+        </a>`;
 
   if (pin.isMember && pin.slug) {
     const categoryLine = pin.category
@@ -75,24 +83,19 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
           ${addressLine}
         </div>
         ${categoryLine}
-        <a href="/business/${esc(pin.slug)}"
-           style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
-                  text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
-                  letter-spacing:0.1em;padding:10px 0;text-align:center">
-          VIEW PROFILE
-        </a>
+        ${follow}
       </div>
     `;
   }
 
-  const trackLine = pin.track
-    ? `<div style="font-size:11px;color:#7A7A7A;margin-top:6px">${esc(pin.track)}</div>`
+  const trackLine = pin.type
+    ? `<div style="font-size:11px;color:#7A7A7A;margin-top:6px">${esc(pin.type)}</div>`
     : "";
 
   return `
     <div style="font-family:'DM Sans',sans-serif;min-width:220px">
       <div style="font-size:10px;color:#7A7A7A;font-family:'Space Mono',monospace;letter-spacing:0.1em;margin-bottom:6px">
-        DIRECTORY LISTING
+        SHOP
       </div>
       <div style="font-size:15px;font-weight:700;color:#160703;line-height:1.2;margin-bottom:8px">
         ${esc(pin.name)}
@@ -101,12 +104,7 @@ function makePopupHTML(pin: PrelaunchDirectoryPin): string {
         ${addressLine}
       </div>
       ${trackLine}
-      <a href="/business-apply"
-         style="display:block;margin-top:12px;background:#160703;color:#FFE0E7;
-                text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;
-                letter-spacing:0.1em;padding:10px 0;text-align:center">
-        APPLY TO PARTNER YOUR SHOP
-      </a>
+      ${follow}
     </div>
   `;
 }

@@ -18,7 +18,7 @@ Status: **canonical product / positioning source of truth** (v1). Marketing (CMO
 **Public ask:** Notify me.  
 **Public sub:** It connects you with the local shops you already like.  
 **Public product loop (secondary — how it works):** Get notified → Claim it → Collect it.  
-**Under Notify me:** Sign up and we'll tell you when a shop you know has something on. Alerts are not live yet — do not write this as if pings already arrive.  
+**Under Notify me:** Follow the shops you like and we'll email you when they post something.  
 **Public shop line:** Tell your regulars when you've got something on. Links to the partner application.  
 **Public explanation:** Unwrapped connects people with the local shops they already like. Any kind of local shop — a bakery, florist, bookshop, barber, or deli are examples, not a food-only product. Notify-first. Do not define the product by what it is not. Do not lead with photos. No “Opening soon”. No street names. No city-wide directory.  
 **Public merchant promise:** Tell your regulars when you've got something on.
@@ -44,7 +44,7 @@ Unwrapped resolves this visibility crisis by merging a **hyperlocal map** with *
 
 Unwrapped covers **any kind of local shop people already know**. It is not a food-only or bakery-only product. A bakery, florist, bookshop, barber, or deli are examples of the same job: a place someone already trusts, with a deal on for a short window.
 
-The shopper hook is the notification. Unwrapped lets you know when that shop has something on. Sign up, and we'll tell you when they do. Alerts are not live yet — do not write this as if pings already arrive.
+The shopper hook is the notification. Unwrapped lets you know when that shop has something on. Follow the shops you like and we'll email you when they post something.
 
 **Launch focus:** local shops posting **named, limited deals** — a loaf, a bunch, a book, a cut, a tin. The rule is the same in every category: limited, specific, time-bound. Neighbourhood density still matters more than listing every shop in the city.
 

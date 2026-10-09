@@ -3,7 +3,7 @@ import { and, eq, gte, lte, inArray, sql, desc } from "drizzle-orm";
 import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, adminProcedure } from "../trpc";
 import { drops, businesses, locations, reservations, waitlist } from "../db/schema";
 import { TRPCError } from "@trpc/server";
-import { dispatchDropNotifications } from "../notifications/dispatch";
+import { queueDropAlerts } from "../follows/dispatchFollowers";
 import { stripeEnabled, refundPaymentIntent } from "../payments/stripe";
 import { checkoutFromList, receiveFromList } from "../payments/fees";
 import { geocodeAddress, haversineKm } from "../geo";
@@ -220,12 +220,13 @@ export const dropsRouter = router({
         })
         .returning();
 
-      // Fire notifications to matching users (non-blocking — don't await)
-      dispatchDropNotifications({
+      // Follower emails + push. Not awaited — publishing must not wait on mail.
+      queueDropAlerts({
         id: drop.id,
         title: drop.title,
         businessId: ctx.business.id,
         businessName: ctx.business.name,
+        businessSlug: ctx.business.slug,
         category: drop.category,
         price: drop.price,
         originalPrice: drop.originalPrice,
@@ -233,7 +234,9 @@ export const dropsRouter = router({
         collectionEnd: drop.collectionEnd.toISOString(),
         locationLat: loc.latitude,
         locationLng: loc.longitude,
-      }).catch(err => console.error("[drops.create] notification dispatch failed:", err));
+        imageUrl: drop.imageUrl,
+        mediaType: drop.mediaType,
+      });
 
       // Send early access to waitlist if toggled
       if (input.sendEarlyAccess) {

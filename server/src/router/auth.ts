@@ -11,6 +11,7 @@ import {
 import { TRPCError } from "@trpc/server";
 import { sendPasswordResetEmail } from "../notifications/dispatch";
 import { resolveLoginRedirect } from "../auth/resolveLoginRedirect";
+import { saveSignupFollows, type FollowInput } from "../follows/persist";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
 
@@ -56,6 +57,15 @@ function rateLimit(key: string, max: number, windowMs: number) {
   if (attempts.size > 10_000) attempts.clear(); // crude memory cap
 }
 
+async function rememberSignupShops(
+  db: Parameters<typeof saveSignupFollows>[0],
+  userId: string,
+  shopFollows: FollowInput[] | undefined,
+) {
+  if (!shopFollows?.length) return;
+  await saveSignupFollows(db, userId, shopFollows);
+}
+
 async function createSession(ctx: any, userId: string) {
   const token = generateToken();
   const expiresAt = new Date();
@@ -81,6 +91,10 @@ export const authRouter = router({
       email: z.string().email("Invalid email"),
       password: z.string().min(8, "Password must be at least 8 characters"),
       name: z.string().min(1, "Name is required").max(80),
+      shopFollows: z.array(z.object({
+        businessId: z.string().uuid().optional(),
+        directoryPinId: z.string().trim().min(1).max(200).optional(),
+      })).max(40).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       rateLimit(`register-ip:${ctx.req.ip ?? "unknown"}`, 20, 10 * 60 * 1000);
@@ -106,6 +120,7 @@ export const authRouter = router({
           .set({ passwordHash, name: input.name })
           .where(eq(users.id, existing.id));
         const token = await createSession(ctx, existing.id);
+        await rememberSignupShops(ctx.db, existing.id, input.shopFollows);
         return { success: true, redirect: "/onboarding", token };
       }
 
@@ -121,6 +136,7 @@ export const authRouter = router({
         .returning();
 
       const token = await createSession(ctx, user.id);
+      await rememberSignupShops(ctx.db, user.id, input.shopFollows);
       return { success: true, redirect: "/onboarding", token };
     }),
 
@@ -326,6 +342,19 @@ export const authRouter = router({
           },
         });
       return { success: true };
+    }),
+
+  setDropAlerts: protectedProcedure
+    .input(z.object({ enabled: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .insert(notificationPreferences)
+        .values({ userId: ctx.user.id, dropAlertsEnabled: input.enabled })
+        .onConflictDoUpdate({
+          target: notificationPreferences.userId,
+          set: { dropAlertsEnabled: input.enabled, updatedAt: new Date() },
+        });
+      return { enabled: input.enabled };
     }),
 
   getNotificationPreferences: protectedProcedure.query(async ({ ctx }) => {

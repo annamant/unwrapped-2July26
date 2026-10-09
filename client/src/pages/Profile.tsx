@@ -33,6 +33,12 @@ export default function Profile() {
   const updateNotifPrefs = trpc.auth.updateNotificationPreferences.useMutation({
     onSuccess: () => utils.auth.getNotificationPreferences.invalidate(),
   });
+  const setDropAlerts = trpc.auth.setDropAlerts.useMutation({
+    onSuccess: () => utils.auth.getNotificationPreferences.invalidate(),
+  });
+  const unfollow = trpc.businesses.unfollow.useMutation({
+    onSuccess: () => utils.businesses.myFollows.invalidate(),
+  });
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "reservations", label: "My drops" },
@@ -138,7 +144,7 @@ export default function Profile() {
             {!following?.length ? (
               <EmptyState
                 title="You're not following anyone yet"
-                sub="Follow member shops and we'll tell you when they drop. Don't see yours? Nominate them."
+                sub="Follow shops and we'll email you when they post something."
                 cta="See member shops"
                 href="/home?tab=shops"
                 extraCta="Nominate a shop"
@@ -146,22 +152,36 @@ export default function Profile() {
               />
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 1, background: BORDER }}>
-                {following.map(({ business, since }) => (
-                  <a
-                    key={business.id}
-                    href={`/business/${business.slug}`}
-                    style={{ background: BG, padding: "20px", textDecoration: "none", display: "block" }}
+                {following.map((row) => (
+                  <div
+                    key={row.businessId ?? row.directoryPinId ?? row.name}
+                    style={{ background: BG, padding: "20px", display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center" }}
                   >
-                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase" }}>
-                      {business.category}
-                    </div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600, color: FG, marginBottom: 6 }}>
-                      {business.name}
-                    </div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
-                      Following since {format(new Date(since), "d MMM yyyy")}
-                    </div>
-                  </a>
+                    <a href={row.path} style={{ textDecoration: "none", minWidth: 0 }}>
+                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 9, color: MUTED_FG, letterSpacing: "0.1em", marginBottom: 6, textTransform: "uppercase" }}>
+                        {row.category ?? "Shop"}
+                      </div>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 600, color: FG, marginBottom: 6 }}>
+                        {row.name}
+                      </div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
+                        Following since {format(new Date(row.since), "d MMM yyyy")}
+                      </div>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => unfollow.mutate({
+                        businessId: row.businessId ?? undefined,
+                        directoryPinId: row.directoryPinId ?? undefined,
+                      })}
+                      style={{
+                        fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.08em",
+                        padding: "8px 12px", border: `1px solid ${FG}`, background: BG, color: FG, cursor: "pointer", flexShrink: 0,
+                      }}
+                    >
+                      UNFOLLOW
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
@@ -177,8 +197,21 @@ export default function Profile() {
                 DROP ALERTS
               </div>
               <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, lineHeight: 1.6, marginBottom: 16 }}>
-                Get notified the moment a new drop lands near you in a category you follow.
+                We'll email you when a shop you follow posts something. Turn this off to stop every drop alert, or unfollow a shop from Following.
               </p>
+              <button
+                type="button"
+                onClick={() => setDropAlerts.mutate({ enabled: notifPrefs?.dropAlertsEnabled === false })}
+                style={{
+                  background: notifPrefs?.dropAlertsEnabled === false ? BG : FG,
+                  color: notifPrefs?.dropAlertsEnabled === false ? FG : BG,
+                  border: `1px solid ${FG}`,
+                  fontFamily: "'Space Mono', monospace", fontSize: 10,
+                  letterSpacing: "0.1em", padding: "11px 24px", cursor: "pointer", marginBottom: 16,
+                }}
+              >
+                {notifPrefs?.dropAlertsEnabled === false ? "TURN DROP EMAILS ON" : "UNSUBSCRIBE FROM ALL ALERTS"}
+              </button>
               {pushStatus === "enabled" ? (
                 <p style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#22C55E", letterSpacing: "0.1em" }}>✓ ALERTS ENABLED</p>
               ) : pushStatus === "denied" ? (

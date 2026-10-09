@@ -14,9 +14,9 @@ export const PILOT_H1 =
 
 export const PILOT_KICKER = "Notify me";
 
-/** Under the Notify me button. Alerts are not live yet — future tense only. */
+/** Under the Notify me button. Follow emails are live. */
 export const PILOT_NOTE =
-  "Sign up and we'll tell you when a shop you know has something on.";
+  "Follow the shops you like and we'll email you when they post something.";
 
 export const PILOT_LOOP = "Get notified. Then claim. Then collect.";
 

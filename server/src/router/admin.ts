@@ -2,6 +2,8 @@ import { z } from "zod";
 import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens, locations } from "../db/schema";
+import { linkBusinessToDirectoryPin } from "../follows/linkPin";
+import { loadFollowCounts } from "../follows/counts";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive, platformFeePence } from "../payments/fees";
 import {
@@ -187,6 +189,12 @@ async function provisionClaimableBusiness(
       approvedAt: new Date(),
     })
     .returning();
+
+  try {
+    await linkBusinessToDirectoryPin(db, business);
+  } catch (err) {
+    console.error("[follows] could not link curated pin:", err);
+  }
 
   // Approval always emails (same as before). Claim invites only go to accounts
   // that still need a password — existing signed-up owners already have access.
@@ -393,6 +401,11 @@ export const adminRouter = router({
                 approvedAt: new Date(),
               })
               .returning();
+            try {
+              await linkBusinessToDirectoryPin(ctx.db, business);
+            } catch (err) {
+              console.error("[follows] could not link curated pin:", err);
+            }
             created.push({
               id: business.id,
               name: business.name,
@@ -1367,4 +1380,9 @@ export const adminRouter = router({
         .orderBy(desc(drops.createdAt))
         .limit(input.limit);
     }),
+
+  // Internal: follower counts for curated pins and live businesses.
+  followCounts: adminProcedure.query(async ({ ctx }) => {
+    return loadFollowCounts(ctx.db);
+  }),
 });

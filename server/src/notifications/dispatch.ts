@@ -640,11 +640,9 @@ export async function dispatchDropNotifications(drop: DropPayload): Promise<void
         const userSubs = subsByUser.get(user.id) ?? [];
         const tasks: Promise<void>[] = [];
 
-        // Web push for each registered subscription
+        // Web push for each registered subscription.
+        // Drop alert emails are sent only to followers (see follows/dispatchFollowers).
         userSubs.forEach(sub => tasks.push(sendPushNotification(sub, drop)));
-
-        // Email if they have one
-        if (user.email) tasks.push(sendDropEmail(user.email, drop));
 
         return tasks;
       }),
