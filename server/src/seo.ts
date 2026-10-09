@@ -114,7 +114,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
   },
   "/instagram": {
     path: "/instagram",
-    title: "Live drops for Instagram — Unwrapped",
+    title: PILOT_TITLE,
     description:
       "Unwrapped lets you know when a shop you already know has something on. Sign up and we'll tell you when something's on.",
     type: "website",
