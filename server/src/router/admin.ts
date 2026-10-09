@@ -2,6 +2,16 @@ import { z } from "zod";
 import { and, eq, asc, desc, count, gte, lte, sql, isNull, isNotNull, inArray } from "drizzle-orm";
 import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens, locations } from "../db/schema";
+import { linkBusinessToDirectoryPin } from "../follows/linkPin";
+import { loadFollowCounts } from "../follows/counts";
+import {
+  planAdminTestAlert,
+  sampleAdminTestDrop,
+  sendPlannedAdminTestAlert,
+} from "../follows/adminTestAlert";
+import { apiOrigin, clientOrigin, sendAlertEmailViaResend } from "../follows/dispatchFollowers";
+import { resolveUnsubscribeSecret } from "../follows/token";
+import { takeRateLimit } from "../follows/rateLimit";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive, platformFeePence } from "../payments/fees";
 import {
@@ -187,6 +197,12 @@ async function provisionClaimableBusiness(
       approvedAt: new Date(),
     })
     .returning();
+
+  try {
+    await linkBusinessToDirectoryPin(db, business);
+  } catch (err) {
+    console.error("[follows] could not link curated pin:", err);
+  }
 
   // Approval always emails (same as before). Claim invites only go to accounts
   // that still need a password — existing signed-up owners already have access.
@@ -393,6 +409,11 @@ export const adminRouter = router({
                 approvedAt: new Date(),
               })
               .returning();
+            try {
+              await linkBusinessToDirectoryPin(ctx.db, business);
+            } catch (err) {
+              console.error("[follows] could not link curated pin:", err);
+            }
             created.push({
               id: business.id,
               name: business.name,
@@ -1367,4 +1388,96 @@ export const adminRouter = router({
         .orderBy(desc(drops.createdAt))
         .limit(input.limit);
     }),
+
+  // Internal: follower counts for curated pins and live businesses.
+  followCounts: adminProcedure.query(async ({ ctx }) => {
+    return loadFollowCounts(ctx.db);
+  }),
+
+  /**
+   * Email the signed-in admin one follower-alert using the live template.
+   * Never fans out, never writes drop_alert_sends, never accepts another recipient.
+   */
+  sendSelfTestAlert: adminProcedure.mutation(async ({ ctx }) => {
+    const adminEmail = ctx.user.email?.trim();
+    if (!adminEmail) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Admin email missing" });
+    }
+    if (!takeRateLimit(`admin-test-alert:${ctx.user.id}`, 5, 10 * 60 * 1000)) {
+      throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Wait a few minutes before another test alert" });
+    }
+
+    const secret = resolveUnsubscribeSecret();
+    if (!secret) {
+      throw new TRPCError({ code: "PRECONDITION_FAILED", message: "ALERT_UNSUBSCRIBE_SECRET missing" });
+    }
+    if (!process.env.RESEND_API_KEY) {
+      throw new TRPCError({ code: "PRECONDITION_FAILED", message: "RESEND_API_KEY missing" });
+    }
+
+    const origin = clientOrigin();
+    const api = apiOrigin();
+
+    const [latest] = await ctx.db
+      .select({
+        id: drops.id,
+        title: drops.title,
+        price: drops.price,
+        imageUrl: drops.imageUrl,
+        mediaType: drops.mediaType,
+        businessName: businesses.name,
+        businessSlug: businesses.slug,
+      })
+      .from(drops)
+      .innerJoin(businesses, eq(drops.businessId, businesses.id))
+      .where(and(eq(drops.status, "active"), eq(businesses.status, "active")))
+      .orderBy(desc(drops.createdAt))
+      .limit(1);
+
+    const sample = !latest;
+    const drop = latest
+      ? {
+          id: latest.id,
+          title: latest.title,
+          pricePence: latest.price,
+          imageUrl: latest.imageUrl,
+          mediaType: (latest.mediaType === "video" ? "video" : "image") as "image" | "video",
+          businessName: latest.businessName,
+          bookingUrl: `${origin}/drop/${latest.id}`,
+        }
+      : sampleAdminTestDrop(origin);
+
+    const plan = planAdminTestAlert({
+      adminUserId: ctx.user.id,
+      adminEmail,
+      adminEmailsEnv: process.env.ADMIN_EMAILS,
+      drop,
+      sample,
+      secret,
+      clientOrigin: origin,
+      apiOrigin: api,
+    });
+    if (!plan.ok) {
+      throw new TRPCError({ code: "FORBIDDEN", message: plan.reason });
+    }
+
+    try {
+      const result = await sendPlannedAdminTestAlert({
+        plan,
+        adminEmail,
+        mailer: sendAlertEmailViaResend,
+      });
+      return {
+        ok: true as const,
+        to: result.to,
+        sample: result.sample,
+        subject: result.subject,
+        shopName: drop.businessName,
+        dropTitle: drop.title,
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Could not send test alert";
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message });
+    }
+  }),
 });

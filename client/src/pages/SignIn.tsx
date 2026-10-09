@@ -1,46 +1,55 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useSearch } from "wouter";
 import { trpc, setSessionToken } from "../trpc";
 import useIsMobile from "../hooks/useIsMobile";
 import { BG, FG, BORDER, V, V_DEEP, CREAM } from "../theme";
 import { PILOT_NOTE } from "../lib/pilotCorridor";
+import { PRELAUNCH_WAVE1_DIRECTORY_PINS } from "../lib/prelaunch_wave1_directory_pins";
+import { mergeDirectoryShops } from "../lib/directoryShops";
+import { isObviousTestShop } from "../lib/testShop";
+import { clearPendingFollow, readPendingFollow, rememberPendingFollow } from "../lib/shopFollow";
+import ShopAlertPicker, { type ShopChoice } from "../components/ShopAlertPicker";
 
 export default function SignIn() {
   const isMobile = useIsMobile(900);
   const search = useSearch();
-  const startRegister = new URLSearchParams(search.replace(/^\?/, "")).get("mode") === "register";
+  const params = new URLSearchParams(search.replace(/^\?/, ""));
+  const startRegister = params.get("mode") === "register";
   const [mode, setMode] = useState<"login" | "register">(startRegister ? "register" : "login");
+  const [step, setStep] = useState<"account" | "shops">("account");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const login = trpc.auth.login.useMutation();
   const register = trpc.auth.register.useMutation();
+  const { data: members } = trpc.businesses.directoryMembers.useQuery(undefined, { retry: false });
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      if (mode === "login") {
-        const result = await login.mutateAsync({ email, password, portal: "shopper" });
-        setSessionToken(result.token);
-        window.location.href = result.redirect;
-      } else {
-        const result = await register.mutateAsync({ email, password, name });
-        setSessionToken(result.token);
-        window.location.href = result.redirect;
-      }
-    } catch (err: any) {
-      setError(err?.message ?? "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const shops: ShopChoice[] = useMemo(() => {
+    return mergeDirectoryShops(PRELAUNCH_WAVE1_DIRECTORY_PINS, members ?? [], { isTest: isObviousTestShop }).map((shop) => ({
+      key: shop.directoryPinId ? `pin:${shop.directoryPinId}` : `biz:${shop.businessId}`,
+      name: shop.name,
+      detail: [shop.postcode || shop.district, shop.type || shop.category].filter(Boolean).join(" · ") || "Shop",
+      directoryPinId: shop.directoryPinId,
+      businessId: shop.businessId,
+    }));
+  }, [members]);
 
-  const inputStyle: React.CSSProperties = {
+  useEffect(() => {
+    const pending = readPendingFollow();
+    const pin = params.get("pin") || pending?.directoryPinId;
+    const business = params.get("business") || pending?.businessId;
+    if (pin) rememberPendingFollow({ directoryPinId: pin, businessId: business ?? undefined, name: pending?.name });
+    const key = pin ? `pin:${pin}` : business ? `biz:${business}` : "";
+    if (key) setSelected((current) => (current.includes(key) ? current : [key, ...current]));
+    // The signup URL is fixed for this page load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const inputStyle: CSSProperties = {
     width: "100%",
     padding: "14px 16px",
     fontFamily: "'DM Sans', sans-serif",
@@ -52,6 +61,61 @@ export default function SignIn() {
     boxSizing: "border-box",
     marginBottom: 12,
   };
+
+  function shopFollowsFor(keys: string[]) {
+    const pending = readPendingFollow();
+    const chosen = shops.filter((shop) => keys.includes(shop.key));
+    const payload = chosen.map((shop) => ({
+      directoryPinId: shop.directoryPinId,
+      businessId: shop.businessId,
+    }));
+    if (pending && !payload.some((shop) => shop.directoryPinId === pending.directoryPinId && shop.businessId === pending.businessId)) {
+      payload.unshift({ directoryPinId: pending.directoryPinId, businessId: pending.businessId });
+    }
+    return payload.filter((shop) => shop.directoryPinId || shop.businessId);
+  }
+
+  async function createAccount(keys: string[]) {
+    setError("");
+    setLoading(true);
+    try {
+      const result = await register.mutateAsync({
+        email,
+        password,
+        name,
+        shopFollows: shopFollowsFor(keys),
+      });
+      clearPendingFollow();
+      setSessionToken(result.token);
+      window.location.href = result.redirect;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(message);
+      setStep("account");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    if (mode === "register") {
+      setStep("shops");
+      return;
+    }
+    setLoading(true);
+    try {
+      const result = await login.mutateAsync({ email, password, portal: "shopper" });
+      setSessionToken(result.token);
+      window.location.href = result.redirect;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
@@ -78,50 +142,66 @@ export default function SignIn() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: isMobile ? "32px 20px" : 48, background: "#FFF0F4" }}>
-        <div style={{ width: "100%", maxWidth: 380 }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: FG }}>
-            {mode === "login" ? "Sign in" : "Create account"}
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 32, lineHeight: 1.5 }}>
-            {PILOT_NOTE}
-          </p>
+        <div style={{ width: "100%", maxWidth: 420 }}>
+          {mode === "register" && step === "shops" ? (
+            <>
+              {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginBottom: 12 }}>{error}</p>}
+              <ShopAlertPicker
+                shops={shops}
+                selected={selected}
+                pending={loading}
+                onToggle={(key) => setSelected((current) => current.includes(key) ? current.filter((item) => item !== key) : [...current, key])}
+                onSkip={() => createAccount([])}
+                onContinue={() => createAccount(selected)}
+              />
+            </>
+          ) : (
+            <>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, marginBottom: 8, color: FG }}>
+                {mode === "login" ? "Sign in" : "Create account"}
+              </h2>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#888", marginBottom: 32, lineHeight: 1.5 }}>
+                {PILOT_NOTE}
+              </p>
 
-          <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>
-            {(["login", "register"] as const).map((m) => (
-              <button key={m} onClick={() => { setMode(m); setError(""); }}
-                style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#160703" : "#888", cursor: "pointer" }}>
-                {m === "login" ? "Sign in" : "Create account"}
-              </button>
-            ))}
-          </div>
+              <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "2px solid #E2E2E2" }}>
+                {(["login", "register"] as const).map((m) => (
+                  <button key={m} onClick={() => { setMode(m); setStep("account"); setError(""); }}
+                    style={{ flex: 1, padding: "12px 0", background: "none", border: "none", borderBottom: mode === m ? `2px solid ${V}` : "2px solid transparent", marginBottom: -2, fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: mode === m ? 600 : 400, color: mode === m ? "#160703" : "#888", cursor: "pointer" }}>
+                    {m === "login" ? "Sign in" : "Create account"}
+                  </button>
+                ))}
+              </div>
 
-          <form onSubmit={handleSubmit}>
-            {mode === "register" && (
-              <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} required style={inputStyle} />
-            )}
-            <input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
-            <input type="password" placeholder={mode === "register" ? "Password (min 8 characters)" : "Password"} value={password} onChange={(e) => setPassword(e.target.value)} required style={{ ...inputStyle, marginBottom: 0 }} />
+              <form onSubmit={handleSubmit}>
+                {mode === "register" && (
+                  <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} required style={inputStyle} />
+                )}
+                <input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
+                <input type="password" placeholder={mode === "register" ? "Password (min 8 characters)" : "Password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={mode === "register" ? 8 : undefined} style={{ ...inputStyle, marginBottom: 0 }} />
 
-            {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 12, marginBottom: 0 }}>{error}</p>}
+                {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, marginTop: 12, marginBottom: 0 }}>{error}</p>}
 
-            <button type="submit" disabled={loading}
-              style={{ display: "block", width: "100%", background: loading ? "#888" : V, color: CREAM, fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 500, textAlign: "center", padding: "16px 0", border: "none", marginTop: 20, cursor: loading ? "not-allowed" : "pointer" }}>
-              {loading ? "Please wait…" : mode === "login" ? "Sign in →" : "Create account →"}
-            </button>
-          </form>
+                <button type="submit" disabled={loading}
+                  style={{ display: "block", width: "100%", background: loading ? "#888" : V, color: CREAM, fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 500, textAlign: "center", padding: "16px 0", border: "none", marginTop: 20, cursor: loading ? "not-allowed" : "pointer" }}>
+                  {loading ? "Please wait…" : mode === "login" ? "Sign in →" : "Continue →"}
+                </button>
+              </form>
 
-          {mode === "login" && (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginTop: 16, textAlign: "center" }}>
-              <a href="/reset-password" style={{ color: "#888", textDecoration: "none" }}>Forgot your password?</a>
-            </p>
+              {mode === "login" && (
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginTop: 16, textAlign: "center" }}>
+                  <a href="/reset-password" style={{ color: "#888", textDecoration: "none" }}>Forgot your password?</a>
+                </p>
+              )}
+
+              <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid #E2E2E2", textAlign: "center" }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB" }}>
+                  Are you a business?{" "}
+                  <a href="/business/signin" style={{ color: V, textDecoration: "none", fontWeight: 500 }}>Business sign in →</a>
+                </p>
+              </div>
+            </>
           )}
-
-          <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid #E2E2E2", textAlign: "center" }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#ABABAB" }}>
-              Are you a business?{" "}
-              <a href="/business/signin" style={{ color: V, textDecoration: "none", fontWeight: 500 }}>Business sign in →</a>
-            </p>
-          </div>
         </div>
       </div>
     </div>

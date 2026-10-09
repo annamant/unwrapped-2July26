@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useRoute, useLocation } from "wouter";
+import { useEffect, useRef, useState } from "react";
+import { useRoute, useLocation, useSearch } from "wouter";
 import { trpc } from "../trpc";
 import Nav from "../components/Nav";
 import SeoHead from "../components/SeoHead";
@@ -10,6 +10,7 @@ import { requestPushPermission } from "../hooks/usePushNotifications";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice from "../components/DropPrice";
 import DropMedia from "../components/DropMedia";
+import { rememberPendingFollow } from "../lib/shopFollow";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
 
@@ -17,22 +18,24 @@ export default function BusinessProfile() {
   const isMobile = useIsMobile();
   const [, params] = useRoute("/business/:slug");
   const [, navigate] = useLocation();
+  const search = useSearch();
   const slug = params?.slug ?? "";
   const [pushStatus, setPushStatus] = useState<"idle" | "requesting" | "done" | "denied">("idle");
+  const followIntentStarted = useRef(false);
 
   const { data, isLoading } = trpc.businesses.getBySlug.useQuery({ slug }, { enabled: !!slug });
   const { data: user } = trpc.auth.me.useQuery();
   const { data: followStatus } = trpc.businesses.followStatus.useQuery(
-    { businessId: data?.business.id ?? "" },
+    { businessId: data?.business.id, directoryPinId: data?.business.directoryPinId ?? undefined },
     { enabled: !!data && !!user }
   );
 
   const utils = trpc.useUtils();
   const follow = trpc.businesses.follow.useMutation({
-    onSuccess: () => utils.businesses.followStatus.invalidate({ businessId: data?.business.id ?? "" }),
+    onSuccess: () => utils.businesses.followStatus.invalidate(),
   });
   const unfollow = trpc.businesses.unfollow.useMutation({
-    onSuccess: () => utils.businesses.followStatus.invalidate({ businessId: data?.business.id ?? "" }),
+    onSuccess: () => utils.businesses.followStatus.invalidate(),
   });
 
   async function handleNotify() {
@@ -41,6 +44,25 @@ export default function BusinessProfile() {
     const result = await requestPushPermission();
     setPushStatus(result === "granted" ? "done" : result === "denied" ? "denied" : "idle");
   }
+
+  useEffect(() => {
+    const q = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+    if (q.get("follow") !== "1" || followIntentStarted.current || !data) return;
+    const target = {
+      businessId: data.business.id,
+      directoryPinId: data.business.directoryPinId ?? undefined,
+      name: data.business.name,
+    };
+    if (!user) {
+      followIntentStarted.current = true;
+      rememberPendingFollow(target);
+      navigate("/signin?mode=register");
+      return;
+    }
+    if (followStatus === undefined || followStatus.following) return;
+    followIntentStarted.current = true;
+    follow.mutate(target);
+  }, [search, data, user, followStatus, follow, navigate]);
 
   if (isLoading) return (
     <div style={{ minHeight: "100vh", background: BG }}>
@@ -70,6 +92,22 @@ export default function BusinessProfile() {
   const activeDrops = drops.filter(d => d.status === "active" || d.status === "sold_out");
   const isFollowing = followStatus?.following ?? false;
   const borough = findBoroughForShop(business);
+
+  function toggleFollow() {
+    if (!data) return;
+    const target = {
+      businessId: data.business.id,
+      directoryPinId: data.business.directoryPinId ?? undefined,
+      name: data.business.name,
+    };
+    if (!user) {
+      rememberPendingFollow(target);
+      navigate("/signin?mode=register");
+      return;
+    }
+    if (isFollowing) unfollow.mutate(target);
+    else follow.mutate(target);
+  }
   const place = borough?.name || business.city;
   const seoDescription = truncateMeta(
     business.description ||
@@ -130,32 +168,24 @@ export default function BusinessProfile() {
               )}
             </div>
 
-            <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
-              {user ? (
-                <button
-                  onClick={() => isFollowing
-                    ? unfollow.mutate({ businessId: business.id })
-                    : follow.mutate({ businessId: business.id })}
-                  style={{
-                    fontFamily: "'Space Mono', monospace", fontSize: 10,
-                    letterSpacing: "0.1em", padding: "12px 24px",
-                    border: `1px solid ${FG}`,
-                    background: isFollowing ? FG : BG,
-                    color: isFollowing ? BG : FG,
-                    cursor: "pointer",
-                  }}
-                >
-                  {isFollowing ? "FOLLOWING" : "+ FOLLOW"}
-                </button>
-              ) : (
-                <a href="/signin" style={{
-                  fontFamily: "'Space Mono', monospace", fontSize: 10,
-                  letterSpacing: "0.1em", padding: "12px 24px",
-                  border: `1px solid ${FG}`, color: FG, textDecoration: "none",
-                }}>
-                  + FOLLOW
-                </a>
-              )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10, flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={toggleFollow}
+                style={{
+                  fontFamily: "'Space Mono', monospace", fontSize: 12,
+                  letterSpacing: "0.12em", padding: "14px 28px",
+                  border: `1px solid ${FG}`,
+                  background: isFollowing ? BG : FG,
+                  color: isFollowing ? FG : BG,
+                  cursor: "pointer",
+                }}
+              >
+                {isFollowing ? "FOLLOWING" : "FOLLOW"}
+              </button>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, margin: 0, maxWidth: 260, lineHeight: 1.45 }}>
+                We'll email you when they post something.
+              </p>
               {business.instagramHandle && (
                 <a
                   href={`https://instagram.com/${business.instagramHandle.replace("@", "")}`}

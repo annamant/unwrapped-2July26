@@ -1,12 +1,37 @@
 import { z } from "zod";
-import { and, eq, desc, count, gte, lte, inArray, sql } from "drizzle-orm";
+import { and, eq, desc, count, gte, lte, inArray, or, sql } from "drizzle-orm";
 import { router, publicProcedure, protectedProcedure, businessOwnerProcedure, adminProcedure } from "../trpc";
 import { businesses, businessApplications, follows, notificationMutes, locations, drops, reservations, users } from "../db/schema";
 import { TRPCError } from "@trpc/server";
 import { effectiveReceive } from "../payments/fees";
 import { isIndexablePartner } from "../seoIndexable";
+import { applyFollow, applyUnfollow, isFollowing } from "../follows/persist";
+import { takeRateLimit } from "../follows/rateLimit";
+import { matchCuratedPinToBusiness } from "../curatedDirectory";
+import { WAVE1_DIRECTORY_PINS } from "../wave1Directory";
+import { linkBusinessToDirectoryPin } from "../follows/linkPin";
 
 const UNCLAIMED_OWNER_EMAIL = "unclaimed-directory@shopunwrapped.com";
+
+const followTargetInput = z.object({
+  businessId: z.string().uuid().optional(),
+  directoryPinId: z.string().trim().min(1).max(200).optional(),
+}).refine((value) => Boolean(value.businessId || value.directoryPinId), {
+  message: "Choose a shop",
+});
+
+function assertFollowRate(userId: string, ip: string | undefined) {
+  const okUser = takeRateLimit(`follow-user:${userId}`, 40, 10 * 60 * 1000);
+  const okIp = takeRateLimit(`follow-ip:${ip ?? "unknown"}`, 80, 10 * 60 * 1000);
+  if (!okUser || !okIp) {
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many follow changes. Try again in a few minutes." });
+  }
+}
+
+function followerWhere(businessId: string, directoryPinId: string | null | undefined) {
+  if (!directoryPinId) return eq(follows.businessId, businessId);
+  return or(eq(follows.businessId, businessId), eq(follows.directoryPinId, directoryPinId));
+}
 
 function generateSlug(name: string): string {
   return name
@@ -89,6 +114,7 @@ export const businessesRouter = router({
           address: businesses.address,
           postcode: businesses.postcode,
           status: businesses.status,
+          directoryPinId: businesses.directoryPinId,
           contactEmail: businesses.contactEmail,
           passwordHash: users.passwordHash,
         })
@@ -105,7 +131,7 @@ export const businessesRouter = router({
       const [followCount] = await ctx.db
         .select({ count: count() })
         .from(follows)
-        .where(eq(follows.businessId, biz.id));
+        .where(followerWhere(biz.id, biz.directoryPinId));
 
       // Only expose publicly visible drops (no drafts/cancelled)
       const bizDrops = await ctx.db
@@ -147,61 +173,132 @@ export const businessesRouter = router({
       return { business: publicBiz, followCount: followCount.count, drops: bizDrops, indexable };
     }),
 
-  // Shopper: follow a business
-  follow: protectedProcedure
-    .input(z.object({ businessId: z.string().uuid() }))
-    .mutation(async ({ ctx, input }) => {
-      const [biz] = await ctx.db
-        .select({ id: businesses.id, status: businesses.status })
+  // Public shop page for an unclaimed curated pin (and the claimed business, once linked).
+  directoryShop: publicProcedure
+    .input(z.object({ pinId: z.string().min(1).max(200) }))
+    .query(async ({ ctx, input }) => {
+      const pin = WAVE1_DIRECTORY_PINS.find((candidate) => candidate.id === input.pinId);
+      if (!pin) return null;
+
+      let [biz] = await ctx.db
+        .select({
+          id: businesses.id,
+          slug: businesses.slug,
+          name: businesses.name,
+          postcode: businesses.postcode,
+          status: businesses.status,
+          directoryPinId: businesses.directoryPinId,
+        })
         .from(businesses)
-        .where(eq(businesses.id, input.businessId))
+        .where(and(eq(businesses.directoryPinId, pin.id), eq(businesses.status, "active")))
         .limit(1);
 
-      if (!biz || biz.status !== "active") {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });
+      if (!biz) {
+        const candidates = await ctx.db
+          .select({
+            id: businesses.id,
+            name: businesses.name,
+            postcode: businesses.postcode,
+            slug: businesses.slug,
+            status: businesses.status,
+            directoryPinId: businesses.directoryPinId,
+          })
+          .from(businesses)
+          .where(eq(businesses.status, "active"));
+        const match = matchCuratedPinToBusiness(pin, candidates);
+        if (match) {
+          try {
+            await linkBusinessToDirectoryPin(ctx.db, match);
+          } catch (err) {
+            console.error("[follows] directory shop link failed:", err);
+          }
+          biz = match;
+        }
       }
 
-      await ctx.db
-        .insert(follows)
-        .values({ userId: ctx.user.id, businessId: input.businessId })
-        .onConflictDoNothing();
-
-      return { success: true };
+      return {
+        pin: {
+          id: pin.id,
+          name: pin.name,
+          address: pin.address ?? null,
+          postcode: pin.postcode ?? null,
+          type: pin.type ?? null,
+        },
+        business: biz ? { id: biz.id, slug: biz.slug, name: biz.name } : null,
+      };
     }),
 
-  // Shopper: unfollow a business
-  unfollow: protectedProcedure
-    .input(z.object({ businessId: z.string().uuid() }))
+  // Shopper: follow a curated pin and/or a live business.
+  follow: protectedProcedure
+    .input(followTargetInput)
     .mutation(async ({ ctx, input }) => {
-      await ctx.db
-        .delete(follows)
-        .where(and(eq(follows.userId, ctx.user.id), eq(follows.businessId, input.businessId)));
+      assertFollowRate(ctx.user.id, ctx.req.ip);
+      await applyFollow(ctx.db, ctx.user.id, input, false);
       return { success: true };
     }),
 
-  // Shopper: check follow status for a business
-  followStatus: protectedProcedure
-    .input(z.object({ businessId: z.string().uuid() }))
-    .query(async ({ ctx, input }) => {
-      const [row] = await ctx.db
-        .select({ id: follows.id })
-        .from(follows)
-        .where(and(eq(follows.userId, ctx.user.id), eq(follows.businessId, input.businessId)))
-        .limit(1);
-      return { following: !!row };
+  // Shopper: unfollow a curated pin and/or a live business.
+  unfollow: protectedProcedure
+    .input(followTargetInput)
+    .mutation(async ({ ctx, input }) => {
+      assertFollowRate(ctx.user.id, ctx.req.ip);
+      await applyUnfollow(ctx.db, ctx.user.id, input);
+      return { success: true };
     }),
 
-  // Shopper: list followed businesses
+  // Shopper: check follow status
+  followStatus: protectedProcedure
+    .input(followTargetInput)
+    .query(async ({ ctx, input }) => {
+      return { following: await isFollowing(ctx.db, ctx.user.id, input) };
+    }),
+
+  // Shopper: list followed shops, including unclaimed curated pins.
   myFollows: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
+    const rows = await ctx.db
       .select({
-        business: { id: businesses.id, name: businesses.name, slug: businesses.slug, logoUrl: businesses.logoUrl, category: businesses.category },
-        since: follows.createdAt,
+        follow: {
+          businessId: follows.businessId,
+          directoryPinId: follows.directoryPinId,
+          requestedAtSignup: follows.requestedAtSignup,
+          createdAt: follows.createdAt,
+        },
+        business: {
+          id: businesses.id,
+          name: businesses.name,
+          slug: businesses.slug,
+          logoUrl: businesses.logoUrl,
+          category: businesses.category,
+        },
       })
       .from(follows)
-      .innerJoin(businesses, eq(follows.businessId, businesses.id))
+      .leftJoin(businesses, eq(follows.businessId, businesses.id))
       .where(eq(follows.userId, ctx.user.id))
       .orderBy(desc(follows.createdAt));
+
+    const pinById = new Map(WAVE1_DIRECTORY_PINS.map((pin) => [pin.id, pin]));
+    return rows.map((row) => {
+      const pin = row.follow.directoryPinId ? pinById.get(row.follow.directoryPinId) : undefined;
+      const name = row.business?.name ?? pin?.name ?? "Shop";
+      const slug = row.business?.slug ?? null;
+      const directoryPinId = row.follow.directoryPinId;
+      const path = slug
+        ? `/business/${slug}`
+        : directoryPinId
+          ? `/shop/${encodeURIComponent(directoryPinId)}`
+          : "/home?tab=shops";
+      return {
+        name,
+        category: row.business?.category ?? pin?.type ?? null,
+        slug,
+        businessId: row.follow.businessId,
+        directoryPinId,
+        path,
+        since: row.follow.createdAt,
+        requestedAtSignup: row.follow.requestedAtSignup,
+        business: row.business,
+      };
+    });
   }),
 
   // Shopper: mute/unmute notifications from a business
@@ -361,7 +458,7 @@ export const businessesRouter = router({
     const [followerCount] = await ctx.db
       .select({ count: count() })
       .from(follows)
-      .where(eq(follows.businessId, ctx.business.id));
+      .where(followerWhere(ctx.business.id, ctx.business.directoryPinId));
 
     return {
       businessName: ctx.business.name,

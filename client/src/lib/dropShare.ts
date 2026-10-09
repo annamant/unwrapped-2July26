@@ -13,6 +13,11 @@ export function dropPublicUrl(dropId: string): string {
   return `${PUBLIC_SITE_ORIGIN}/drop/${dropId}`;
 }
 
+/** Till QR and the shop share link. Follow is the primary action on this page. */
+export function shopFollowUrl(slug: string): string {
+  return `${PUBLIC_SITE_ORIGIN}/business/${encodeURIComponent(slug)}`;
+}
+
 export function formatCollectionWindow(
   collectionStart: Date | string,
   collectionEnd: Date | string,

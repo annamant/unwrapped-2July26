@@ -225,7 +225,9 @@ export function seoForPath(pathname: string): SeoProps {
     path === "/onboarding" ||
     path === "/signin" ||
     path === "/business/signin" ||
-    path === "/reset-password"
+    path === "/reset-password" ||
+    path === "/unsubscribe" ||
+    path.startsWith("/shop/")
   ) {
     return {
       title: `${SITE_NAME}`,

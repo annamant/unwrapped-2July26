@@ -198,6 +198,8 @@ export default function BusinessSettings() {
               <a href={`/business/${profile.slug}`} style={{ color: FG, textDecoration: "none" }}>
                 /business/{profile.slug}
               </a>
+              {" "}
+              — follow is the main action. The till QR on Share uses this page.
             </p>
           )}
         </section>

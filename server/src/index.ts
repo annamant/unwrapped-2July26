@@ -12,6 +12,8 @@ import { pushSubscriptions, reservations, drops } from "./db/schema";
 import { and, eq, gt, sql } from "drizzle-orm";
 import { refundPaymentIntent } from "./payments/stripe";
 import { buildSitemapPayload, renderSitemapXml, resolveSeoMeta } from "./seo";
+import { markDropAlertsUnsubscribed, unsubscribeConfirmationHtml } from "./follows/dispatchFollowers";
+import { resolveUnsubscribeSecret, verifyAlertUnsubscribeToken } from "./follows/token";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -156,6 +158,32 @@ app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), (req,
 });
 
 app.use(express.json());
+
+// One-click unsubscribe for follower alert emails. Token is signed; no login.
+async function handleAlertUnsubscribe(req: express.Request, res: express.Response) {
+  const secret = resolveUnsubscribeSecret();
+  const token = typeof req.query.token === "string" ? req.query.token : "";
+  const userId = secret && token ? verifyAlertUnsubscribeToken(token, secret) : null;
+  const ok = userId ? await markDropAlertsUnsubscribed(userId) : false;
+  if (req.headers.accept?.includes("application/json")) {
+    return res.status(ok ? 200 : 400).json({ ok });
+  }
+  return res.status(ok ? 200 : 400).type("html").send(unsubscribeConfirmationHtml(ok));
+}
+
+app.get("/api/alerts/unsubscribe", (req, res) => {
+  handleAlertUnsubscribe(req, res).catch((err) => {
+    console.error("[alerts] unsubscribe failed:", err);
+    res.status(500).type("html").send(unsubscribeConfirmationHtml(false));
+  });
+});
+
+app.post("/api/alerts/unsubscribe", (req, res) => {
+  handleAlertUnsubscribe(req, res).catch((err) => {
+    console.error("[alerts] unsubscribe failed:", err);
+    res.status(500).json({ ok: false });
+  });
+});
 
 // ─── Auth routes (not tRPC — sign-out handled via tRPC mutation) ─────────────
 
