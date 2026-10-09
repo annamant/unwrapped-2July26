@@ -16,15 +16,15 @@ function check(name: string, ok: boolean) {
   }
 }
 
-check("stripe floor is £0.30", STRIPE_GBP_MIN_CHARGE_PENCE === 30);
-check("list floor matches stripe charge floor", MIN_LIST_PRICE_PENCE === 30);
+check("product floor is £5", MIN_LIST_PRICE_PENCE === 500);
+check("message is exact", MIN_LIST_PRICE_MESSAGE === "Enter a price of at least £5.");
 check("zero is rejected", paidListPriceError(0) === MIN_LIST_PRICE_MESSAGE);
-check("one pence is rejected", paidListPriceError(1) === MIN_LIST_PRICE_MESSAGE);
-check("29 pence is rejected", paidListPriceError(29) === MIN_LIST_PRICE_MESSAGE);
-check("£0.30 is accepted", paidListPriceError(30) === null);
+check("stripe minimum alone is rejected", paidListPriceError(30) === MIN_LIST_PRICE_MESSAGE);
+check("£4.99 is rejected", paidListPriceError(499) === MIN_LIST_PRICE_MESSAGE);
+check("£5 is accepted", paidListPriceError(500) === null);
 check(
-  "£0.30 list price clears Stripe's charge minimum",
-  checkoutFromList(30) >= STRIPE_GBP_MIN_CHARGE_PENCE,
+  "£5 list price clears Stripe's charge minimum",
+  checkoutFromList(500) >= STRIPE_GBP_MIN_CHARGE_PENCE,
 );
 
 if (failed > 0) {
