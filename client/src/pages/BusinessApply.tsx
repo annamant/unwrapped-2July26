@@ -2,7 +2,7 @@ import { useState } from "react";
 import { trpc } from "../trpc";
 import { MERCHANT_FAQS } from "../lib/seo";
 import useIsMobile from "../hooks/useIsMobile";
-import { LOCAL_COLLECT_LINE, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "../lib/pilotCorridor";
+import { SHOP_VALUE_HEAD, SHOP_VALUE_POINTS } from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
@@ -192,36 +192,6 @@ export default function BusinessApply() {
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, textAlign: "center", lineHeight: 1.6 }}>
             By applying you agree to our business terms. We'll never share your information.
           </p>
-        </div>
-
-        <div style={{ marginTop: 48, paddingTop: 36, borderTop: `1px solid ${BORDER}` }}>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 14,
-            color: MUTED_FG,
-            lineHeight: 1.6,
-            margin: "0 0 28px",
-            maxWidth: 520,
-          }}>
-            {LOCAL_COLLECT_LINE}
-          </p>
-          <h2 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? 24 : 28,
-            fontWeight: 700,
-            color: FG,
-            lineHeight: 1.2,
-            marginBottom: 16,
-          }}>
-            {SHOPPER_VALUE_HEAD}
-          </h2>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-            {SHOPPER_VALUE_POINTS.map((point) => (
-              <li key={point} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: FG, lineHeight: 1.5 }}>
-                {point}
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div style={{ marginTop: 56, paddingTop: 40, borderTop: `1px solid ${BORDER}` }}>
