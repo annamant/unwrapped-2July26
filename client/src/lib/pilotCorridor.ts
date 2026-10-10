@@ -4,39 +4,64 @@
  */
 
 export const PILOT_TITLE =
-  "Unwrapped lets you know when a shop you already know has something on.";
+  "Your favourite local shops, telling you first.";
 
 export const PILOT_DESCRIPTION =
-  "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.";
+  "Pick the shops you love. When one has something worth the trip, like a fresh batch, a one-off piece or a limited run, you hear about it before it sells out. Pay to hold it, then pick it up in store.";
 
 export const PILOT_H1 =
-  "Unwrapped lets you know when a shop you already know has something on.";
+  "Your favourite local shops, telling you first.";
 
-export const PILOT_KICKER = "Notify me";
+export const PILOT_KICKER = "Choose my shops";
 
-/** Under the Notify me button. Follow emails are live. */
+/** Under the Choose my shops button. */
 export const PILOT_NOTE =
-  "Follow the shops you like and we'll email you when they post something.";
+  "Free. Emails only from shops you pick. Unsubscribe in one click.";
 
-export const PILOT_LOOP = "Get notified. Then claim. Then collect.";
+export const PILOT_LOOP = "Pick your shops. Get the heads-up. Pay for it, collect it.";
 
-export const PILOT_SUB =
-  "It connects you with the local shops you already like.";
+export const PILOT_SUB = PILOT_DESCRIPTION;
 
-/** Shop-side line in the notify hero. Links to the existing partner application. */
+/** Shop-side line. Links to the existing partner application. */
 export const PILOT_SHOP =
   "Tell your regulars when you've got something on.";
 
-/** Below the notify hero. Not the H1. */
-export const SHOPPER_VALUE_HEAD =
-  "Hear from the shops you already like, only when something's worth the trip.";
+/** How it works — shopper steps. */
+export const HOW_IT_WORKS_HEAD = "How it works";
 
-export const SHOPPER_VALUE_POINTS = [
-  "The shop comes to you, so there's nothing to browse or hunt for.",
-  "Book it and it's yours before it sells out.",
-  "Collect it in store.",
+export const HOW_IT_WORKS_STEPS = [
+  {
+    num: "01",
+    title: "Pick your shops.",
+    body: "Any local shop you already go to. Not listed? Tell us which one.",
+    recommendLink: true,
+  },
+  {
+    num: "02",
+    title: "Get the heads-up.",
+    body: "Only when they post something, never spam.",
+    recommendLink: false,
+  },
+  {
+    num: "03",
+    title: "Pay for it, collect it.",
+    body: "It's held for you in store.",
+    recommendLink: false,
+  },
 ] as const;
 
+/** Below how-it-works steps. Never a headline. */
+export const LOCAL_COLLECT_LINE =
+  "Like Vinted or Whatnot, but from shops near you, and no courier.";
+
+export const SHOP_LIST_HEAD = "Follow the shops you know.";
+
+export const SHOP_LIST_FOOT =
+  "Shops start posting as they join. Follow now and you'll hear the moment they do.";
+
+export const CLOSE_HEAD = "Which shops should we watch for you?";
+
+/** Kept for business apply / FOR SHOPS band. */
 export const SHOP_VALUE_HEAD =
   "Tell your regulars when you've got something on, and they come through the door.";
 
@@ -47,10 +72,20 @@ export const SHOP_VALUE_POINTS = [
   "Free to join.",
 ] as const;
 
-/** Below the fold. Never a headline. */
-export const LOCAL_COLLECT_LINE =
-  "Like Whatnot or Vinted, but local: no courier, you collect in store.";
-
 /** Neutral London map centre. Not a neighbourhood label. */
 export const PILOT_MAP = { lat: 51.509865, lng: -0.118092, zoom: 13 };
 
+/**
+ * Real claimed member shops to hide from the public homepage list/map only.
+ * Keep them in the DB and available in admin / signup picker.
+ */
+export const HOMEPAGE_HIDDEN_MEMBER_NAMES = [
+  "Brixton Village",
+  "Brixton Village Market",
+  "Dash The Henge Store",
+  "G-Force Reformer Pilates",
+  "Get Rid of and Donate CIC",
+  "Inverted Audio Record Store",
+  "Pulkra",
+  "Wave Brazilian Jiu Jitsu",
+] as const;

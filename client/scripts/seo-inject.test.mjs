@@ -1,4 +1,5 @@
 import {
+  DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   SITE,
   cacheControlForAsset,
@@ -12,7 +13,7 @@ const SHELL = `<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <title>${DEFAULT_TITLE}</title>
-    <meta name="description" content="It connects you with the local shops you already like. Sign up and we'll tell you when something's on." />
+    <meta name="description" content="${DEFAULT_DESCRIPTION}" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://shopunwrapped.com/" />
@@ -97,7 +98,7 @@ check(
 
 const homeInjected = injectSeo(SHELL, {
   title: DEFAULT_TITLE,
-  description: "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
+  description: DEFAULT_DESCRIPTION,
   canonical: `${SITE}/`,
   image: `${SITE}/og-image.png`,
   type: "website",

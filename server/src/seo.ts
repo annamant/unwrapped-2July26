@@ -11,7 +11,20 @@ import {
   londonHubJsonLd,
   londonHubSeo,
 } from "./londonBoroughs";
-import { LOCAL_COLLECT_LINE, PILOT_DESCRIPTION, PILOT_H1, PILOT_KICKER, PILOT_NOTE, PILOT_SHOP, PILOT_SUB, PILOT_TITLE, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "./pilotCorridor";
+import {
+  CLOSE_HEAD,
+  HOW_IT_WORKS_STEPS,
+  LOCAL_COLLECT_LINE,
+  PILOT_DESCRIPTION,
+  PILOT_H1,
+  PILOT_KICKER,
+  PILOT_NOTE,
+  PILOT_SUB,
+  PILOT_TITLE,
+  SHOP_LIST_HEAD,
+  SHOP_VALUE_HEAD,
+  SHOP_VALUE_POINTS,
+} from "./pilotCorridor";
 
 const SITE = () =>
   (process.env.CLIENT_URL ?? "https://shopunwrapped.com").split(",")[0].trim().replace(/\/$/, "") ||
@@ -25,19 +38,19 @@ const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Unwrapped lets you know when a shop you already know has something on. It connects you with the local shops you already like.",
+    a: "Your favourite local shops, telling you first. Pick the shops you love. When one has something worth the trip, you hear about it before it sells out.",
   },
   {
     q: "How does it work?",
-    a: "The shop comes to you, so there's nothing to browse or hunt for. Book it and it's yours before it sells out. Collect it in store.",
+    a: "Pick your shops. Get the heads-up only when they post something. Pay for it, then collect it in store.",
   },
   {
     q: "How do I collect?",
-    a: "Claim and pay in the app, then walk in during the collection window with your QR.",
+    a: "Pay to hold it in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "What will I be notified about?",
-    a: "We'll let you know when a shop you already know has something on.",
+    q: "What will I hear about?",
+    a: "Emails only from shops you pick — when they post something worth the trip.",
   },
 ];
 
@@ -564,11 +577,11 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_NOTE)}</p><p>${escapeHtml(PILOT_SHOP)}</p><h2>${escapeHtml(SHOPPER_VALUE_HEAD)}</h2><ul>${SHOPPER_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_VALUE_HEAD)}</h2><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p><a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a> · <a href="${escapeHtml(SITE())}">shopunwrapped.com</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_NOTE)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_VALUE_HEAD)}</h2><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
           : path === "/business-apply"
-            ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOPPER_VALUE_HEAD)}</h2><ul>${SHOPPER_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul></article>`
+            ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p><a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`
             : path === "/london"
-            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Get notified. Then claim. Then collect.</h2></article>`
+            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Pick your shops. Get the heads-up. Pay for it, collect it.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }

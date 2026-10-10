@@ -6,11 +6,30 @@ import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
-import { LOCAL_COLLECT_LINE, PILOT_H1, PILOT_MAP, PILOT_NOTE, PILOT_SHOP, PILOT_SUB, SHOP_VALUE_HEAD, SHOP_VALUE_POINTS, SHOPPER_VALUE_HEAD, SHOPPER_VALUE_POINTS } from "../lib/pilotCorridor";
+import {
+  CLOSE_HEAD,
+  HOMEPAGE_HIDDEN_MEMBER_NAMES,
+  HOW_IT_WORKS_STEPS,
+  LOCAL_COLLECT_LINE,
+  PILOT_H1,
+  PILOT_KICKER,
+  PILOT_MAP,
+  PILOT_NOTE,
+  PILOT_SUB,
+  SHOP_LIST_FOOT,
+  SHOP_LIST_HEAD,
+  SHOP_VALUE_HEAD,
+  SHOP_VALUE_POINTS,
+} from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
-import { mergeDirectoryShops } from "../lib/directoryShops";
+import { mergeDirectoryShops, normalizeDirectoryName } from "../lib/directoryShops";
 import { rememberPendingFollow } from "../lib/shopFollow";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V, V_DEEP, V_RICH, CREAM, RADIUS, RADIUS_SM, BG_WASH, SECTION_WASH, BAND_WASH } from "../theme";
+
+const CHOOSE_SHOPS_HREF = "/signin?mode=register";
+const HIDDEN_MEMBER_NAME_SET = new Set(
+  HOMEPAGE_HIDDEN_MEMBER_NAMES.map((name) => normalizeDirectoryName(name)),
+);
 
 const HERO_SHOP_IMAGES = [
   "/landing/hero-owner-florist.jpg",
@@ -107,11 +126,6 @@ const HOW_IT_WORKS_PHONES: {
     media: "photo",
   },
 ];
-
-const HOW_IT_WORKS_STEPS = SHOPPER_VALUE_POINTS.map((text, i) => ({
-  num: String(i + 1).padStart(2, "0"),
-  text,
-}));
 
 const LANDING_CSS = `
 @keyframes uw-fade-up {
@@ -607,30 +621,15 @@ export default function Landing() {
                 lineHeight: 1.5,
                 marginBottom: isMobile ? 24 : 28,
                 fontWeight: 500,
-                maxWidth: 520,
+                maxWidth: 540,
               }}
             >
               {PILOT_SUB}
             </p>
 
-            <p
-              className="uw-fade-3"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 14 : 15,
-                color: "rgba(255,240,244,0.62)",
-                lineHeight: 1.5,
-                marginBottom: isMobile ? 22 : 26,
-                fontWeight: 500,
-                maxWidth: 520,
-              }}
-            >
-              A bakery, a florist, a bookshop, a barber, a deli.
-            </p>
-
             <div className="uw-fade-4" style={{ maxWidth: 460 }}>
               <button
-                onClick={() => navigate("/signin?mode=register")}
+                onClick={() => navigate(CHOOSE_SHOPS_HREF)}
                 className="uw-btn-primary"
                 style={{
                   background: BG,
@@ -646,7 +645,7 @@ export default function Landing() {
                   boxShadow: "0 12px 32px rgba(0,0,0,0.28)",
                 }}
               >
-                Notify me
+                {PILOT_KICKER}
               </button>
               <p style={{
                 marginTop: isMobile ? 12 : 14,
@@ -659,21 +658,6 @@ export default function Landing() {
               }}>
                 {PILOT_NOTE}
               </p>
-              <div style={{
-                marginTop: isMobile ? 12 : 14,
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 12 : 13,
-                color: "rgba(255,240,244,0.58)",
-                fontWeight: 500,
-              }}>
-                {PILOT_SHOP}{" "}
-                <a
-                  href="/business-apply"
-                  style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
-                >
-                  Partner with us
-                </a>
-              </div>
             </div>
           </div>
 
@@ -765,7 +749,7 @@ export default function Landing() {
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 10,
             fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: V, letterSpacing: "0.06em", marginBottom: 12,
+            color: V, letterSpacing: "0.06em", marginBottom: 18,
           }}>
             <span
               className="uw-pulse-dot"
@@ -773,33 +757,13 @@ export default function Landing() {
             />
             HOW IT WORKS
           </div>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 15 : 17,
-            color: MUTED_FG,
-            lineHeight: 1.5,
-            margin: "0 0 14px",
-            maxWidth: 560,
-            fontWeight: 500,
-          }}>
-            {LOCAL_COLLECT_LINE}
-          </p>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 24 : 32,
-            fontWeight: 700, letterSpacing: "-0.8px",
-            lineHeight: 1.15, marginBottom: 18, maxWidth: 640,
-            color: FG,
-          }}>
-            {SHOPPER_VALUE_HEAD}
-          </h2>
           <div style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
             gap: 14,
             maxWidth: 860,
           }}>
-            {HOW_IT_WORKS_STEPS.map(({ num, text }) => (
+            {HOW_IT_WORKS_STEPS.map(({ num, title, body, recommendLink }) => (
               <div key={num} style={{
                 border: `1px solid ${BORDER}`,
                 borderRadius: 14,
@@ -818,16 +782,47 @@ export default function Landing() {
                 </div>
                 <div style={{
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 15 : 16,
-                  fontWeight: 500,
+                  fontSize: isMobile ? 16 : 17,
+                  fontWeight: 700,
                   color: FG,
+                  lineHeight: 1.3,
+                  marginBottom: 8,
+                }}>
+                  {title}
+                </div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 14 : 15,
+                  fontWeight: 500,
+                  color: MUTED_FG,
                   lineHeight: 1.45,
                 }}>
-                  {text}
+                  {recommendLink ? (
+                    <>
+                      Any local shop you already go to. Not listed?{" "}
+                      <a href="/recommend" style={{ color: FG, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>
+                        Tell us which one
+                      </a>
+                      .
+                    </>
+                  ) : (
+                    body
+                  )}
                 </div>
               </div>
             ))}
           </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 14 : 15,
+            color: MUTED_FG,
+            lineHeight: 1.5,
+            margin: "18px 0 0",
+            maxWidth: 560,
+            fontWeight: 500,
+          }}>
+            {LOCAL_COLLECT_LINE}
+          </p>
         </div>
 
         <div style={{
@@ -1012,51 +1007,7 @@ export default function Landing() {
         />
       )}
 
-      {/* ── 6b. RECOMMEND A SHOP — neighbourhood nominations ── */}
-      <section style={{
-        padding: isMobile ? "48px 20px" : "64px 40px",
-        borderBottom: "none",
-        background: SECTION_WASH,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <div style={{ maxWidth: 720 }}>
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: V, letterSpacing: "0.06em", marginBottom: 16,
-          }}>
-            FOR NEIGHBOURS · NOMINATE
-          </div>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(26px, 3.4vw, 38px)",
-            fontWeight: 700, color: FG,
-            lineHeight: 1.15, letterSpacing: "-0.8px", marginBottom: 16,
-          }}>
-            A shop you already like isn't here yet?
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-            color: MUTED_FG, lineHeight: 1.7, marginBottom: 28, maxWidth: 520, fontWeight: 300,
-          }}>
-            Tell us its name. A bakery, a florist, a bookshop, a barber, a deli — any local shop you already go to.
-          </p>
-          <a
-            href="/recommend"
-            className="uw-btn-primary"
-            style={{
-              background: V_DEEP, color: BG,
-              fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-              letterSpacing: "0.04em", padding: "15px 28px",
-              textDecoration: "none", display: "inline-block", border: "none",
-            }}
-          >
-            RECOMMEND A SHOP
-          </a>
-        </div>
-      </section>
-
-      {/* ── 7. CLOSE — final convert ── */}
+      {/* ── CLOSE — choose shops ── */}
       <section style={{
         padding: isMobile ? "56px 20px" : "80px 40px",
         background: BAND_WASH,
@@ -1077,57 +1028,29 @@ export default function Landing() {
           }}
         />
         <div style={{ position: "relative", maxWidth: 640 }}>
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 9,
-            color: "rgba(255,224,231,0.72)", letterSpacing: "0.06em", marginBottom: 16,
-          }}>
-            NOTIFY ME
-          </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(28px, 3.6vw, 42px)",
             fontWeight: 700, lineHeight: 1.12, letterSpacing: "-1px",
-            marginBottom: 16,
+            marginBottom: 28,
             color: BG,
           }}>
-            Want to know when something's on?
+            {CLOSE_HEAD}
           </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 16,
-            color: "rgba(255,248,245,0.7)", lineHeight: 1.65,
-            marginBottom: 32, maxWidth: 480, fontWeight: 300,
-          }}>
-            {PILOT_NOTE}
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-            <button
-              onClick={() => navigate("/signin?mode=register")}
-              className="uw-btn-primary"
-              style={{
-                background: V, color: BG,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 10,
-                letterSpacing: "0.04em", padding: "15px 28px",
-                border: "none", cursor: "pointer",
-              }}
-            >
-              NOTIFY ME
-            </button>
-          </div>
-          <p style={{
-            marginTop: 18,
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 13,
-            color: "rgba(255,248,245,0.65)",
-            fontWeight: 500,
-          }}>
-            {PILOT_SHOP}{" "}
-            <a
-              href="/business-apply"
-              style={{ color: CREAM, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
-            >
-              Partner with us
-            </a>
-          </p>
+          <button
+            onClick={() => navigate(CHOOSE_SHOPS_HREF)}
+            className="uw-btn-primary"
+            style={{
+              background: V, color: BG,
+              fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 16 : 18,
+              fontWeight: 800,
+              letterSpacing: "-0.2px", padding: isMobile ? "16px 28px" : "18px 32px",
+              border: "none", cursor: "pointer",
+              borderRadius: RADIUS_SM,
+            }}
+          >
+            {PILOT_KICKER}
+          </button>
         </div>
       </section>
 
@@ -1146,12 +1069,6 @@ export default function Landing() {
               Unwrapped
             </span>
           </div>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-            color: MUTED_FG, lineHeight: 1.65, maxWidth: 280, fontWeight: 300,
-          }}>
-            {PILOT_H1}
-          </p>
         </div>
 
         <div>
@@ -1166,7 +1083,7 @@ export default function Landing() {
               { label: "Sign in", href: "/signin" },
               { label: "For shops", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
-              { label: "Notify me", href: "/signin?mode=register" },
+              { label: "Choose my shops", href: CHOOSE_SHOPS_HREF },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (
@@ -1406,7 +1323,7 @@ function HowItWorksPhones() {
                       borderRadius: 999,
                     }}
                   >
-                    Claim
+                    Book
                   </span>
                 </div>
               </div>
@@ -1478,7 +1395,14 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
   const { data: members } = trpc.businesses.directoryMembers.useQuery();
 
   const directoryPins = useMemo(
-    () => mergeDirectoryShops(pins, members ?? [], { isTest: isObviousTestShop }).filter((shop) => Number.isFinite(shop.lat) && Number.isFinite(shop.lng)),
+    () =>
+      mergeDirectoryShops(pins, members ?? [], { isTest: isObviousTestShop })
+        .filter((shop) => Number.isFinite(shop.lat) && Number.isFinite(shop.lng))
+        .filter((shop) => {
+          // Display-only: hide listed claimed members from the public homepage.
+          if (shop.directoryPinId) return true;
+          return !HIDDEN_MEMBER_NAME_SET.has(normalizeDirectoryName(shop.name));
+        }),
     [pins, members],
   );
 
@@ -1523,15 +1447,6 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
         alignItems: "start",
       }}>
         <div>
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 9,
-            color: FG,
-            letterSpacing: "0.06em",
-            marginBottom: 12,
-          }}>
-            SHOPS YOU ALREADY KNOW
-          </div>
           <h2 style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: isMobile ? 29 : 36,
@@ -1541,21 +1456,21 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
             lineHeight: 1.08,
             marginBottom: 12,
           }}>
-            We'll let you know when something's on
+            {SHOP_LIST_HEAD}
           </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 14,
-            color: FG,
-            lineHeight: 1.65,
-            maxWidth: 520,
-            fontWeight: 400,
-            marginBottom: 8,
-          }}>
-            {filteredPins.length === 0
-              ? "No matches. Clear your search to see the full list."
-              : "Shops you already know. We'll let you know when something's on."}
-          </p>
+          {filteredPins.length === 0 ? (
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 14,
+              color: FG,
+              lineHeight: 1.65,
+              maxWidth: 520,
+              fontWeight: 400,
+              marginBottom: 8,
+            }}>
+              No matches. Clear your search to see the full list.
+            </p>
+          ) : null}
           <div style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 10,
@@ -1768,6 +1683,19 @@ function PrelaunchDirectorySection({ pins }: { pins: PrelaunchDirectoryPin[] }) 
               })
             )}
           </div>
+          {filteredPins.length > 0 ? (
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              color: MUTED_FG,
+              lineHeight: 1.55,
+              marginTop: 14,
+              maxWidth: 520,
+              fontWeight: 500,
+            }}>
+              {SHOP_LIST_FOOT}
+            </p>
+          ) : null}
         </div>
 
         <div style={{
@@ -2041,7 +1969,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
           padding: "12px 14px", borderRadius: RADIUS_SM,
           letterSpacing: "0.02em",
         }}>
-          Claim · illustrative only
+          Book · illustrative only
         </div>
       </div>
     </div>

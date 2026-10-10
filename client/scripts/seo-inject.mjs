@@ -6,9 +6,9 @@
 
 export const SITE = "https://shopunwrapped.com";
 export const DEFAULT_TITLE =
-  "Unwrapped lets you know when a shop you already know has something on.";
+  "Your favourite local shops, telling you first.";
 export const DEFAULT_DESCRIPTION =
-  "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.";
+  "Pick the shops you love. When one has something worth the trip, like a fresh batch, a one-off piece or a limited run, you hear about it before it sells out. Pay to hold it, then pick it up in store.";
 export const DEFAULT_OG = `${SITE}/og-image.png`;
 
 export function escapeHtml(s) {
