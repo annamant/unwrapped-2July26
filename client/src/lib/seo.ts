@@ -13,19 +13,19 @@ export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Unwrapped lets you know when a shop you already know has something on. It connects you with the local shops you already like.",
+    a: "Your favourite local shops, telling you first. Pick the shops you love. When one has something worth the trip, you hear about it before it sells out.",
   },
   {
     q: "How does it work?",
-    a: "The shop comes to you, so there's nothing to browse or hunt for. Book it and it's yours before it sells out. Collect it in store.",
+    a: "Pick your shops. Get the heads-up only when they post something. Pay for it, then collect it in store.",
   },
   {
     q: "How do I collect?",
-    a: "Claim and pay in the app, then walk in during the collection window with your QR.",
+    a: "Pay to hold it in the app, then walk in during the collection window with your QR.",
   },
   {
-    q: "What will I be notified about?",
-    a: "We'll let you know when a shop you already know has something on.",
+    q: "What will I hear about?",
+    a: "Emails only from shops you pick — when they post something worth the trip.",
   },
 ];
 

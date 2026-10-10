@@ -1,4 +1,5 @@
 import {
+  DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   SITE,
   cacheControlForAsset,
@@ -12,7 +13,7 @@ const SHELL = `<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <title>${DEFAULT_TITLE}</title>
-    <meta name="description" content="It connects you with the local shops you already like. Sign up and we'll tell you when something's on." />
+    <meta name="description" content="${DEFAULT_DESCRIPTION}" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://shopunwrapped.com/" />
@@ -29,7 +30,7 @@ const SHELL = `<!DOCTYPE html>
   </head>
   <body>
     <div id="root"></div>
-    <noscript><h1>Unwrapped lets you know when a shop you already know has something on.</h1></noscript>
+    <noscript><h1>Your favourite local shops, telling you first.</h1></noscript>
   </body>
 </html>`;
 
@@ -65,7 +66,7 @@ check("london does not keep home canonical", london.includes(`href="${SITE}/"`) 
 check("london strips homepage JSON-LD", /"@type":"Organization"/.test(london), false);
 check("london injects route JSON-LD", london.includes('"@type":"CollectionPage"'), true);
 check("london replaces homepage noscript", london.includes("<h1>London boroughs</h1>"), true);
-check("london noscript is not the homepage hero", london.includes("Unwrapped lets you know when a shop you already know has something on"), false);
+check("london noscript is not the homepage hero", london.includes("Your favourite local shops, telling you first"), false);
 
 const biz = injectSeo(SHELL, {
   title: "Brixton Village Market · Lambeth — Unwrapped",
@@ -97,7 +98,7 @@ check(
 
 const homeInjected = injectSeo(SHELL, {
   title: DEFAULT_TITLE,
-  description: "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.",
+  description: DEFAULT_DESCRIPTION,
   canonical: `${SITE}/`,
   image: `${SITE}/og-image.png`,
   type: "website",

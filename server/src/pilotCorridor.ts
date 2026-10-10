@@ -4,34 +4,48 @@
  */
 
 export const PILOT_TITLE =
-  "Unwrapped lets you know when a shop you already know has something on.";
+  "Your favourite local shops, telling you first.";
 
 export const PILOT_DESCRIPTION =
-  "It connects you with the local shops you already like. Sign up and we'll tell you when something's on.";
+  "Pick the shops you love. When one has something worth the trip, like a fresh batch, a one-off piece or a limited run, you hear about it before it sells out. Pay to hold it, then pick it up in store.";
 
 export const PILOT_H1 =
-  "Unwrapped lets you know when a shop you already know has something on.";
+  "Your favourite local shops, telling you first.";
 
-export const PILOT_KICKER = "Notify me";
+export const PILOT_KICKER = "Choose my shops";
 
 export const PILOT_NOTE =
-  "Follow the shops you like and we'll email you when they post something.";
+  "Free. Emails only from shops you pick. Unsubscribe in one click.";
 
-export const PILOT_SUB =
-  "It connects you with the local shops you already like.";
+export const PILOT_SUB = PILOT_DESCRIPTION;
 
 export const PILOT_SHOP =
   "Tell your regulars when you've got something on.";
 
-/** Below the notify hero. Keep aligned with client/src/lib/pilotCorridor.ts. */
-export const SHOPPER_VALUE_HEAD =
-  "Hear from the shops you already like, only when something's worth the trip.";
-
-export const SHOPPER_VALUE_POINTS = [
-  "The shop comes to you, so there's nothing to browse or hunt for.",
-  "Book it and it's yours before it sells out.",
-  "Collect it in store.",
+export const HOW_IT_WORKS_STEPS = [
+  {
+    num: "01",
+    title: "Pick your shops.",
+    body: "Any local shop you already go to. Not listed? Tell us which one.",
+  },
+  {
+    num: "02",
+    title: "Get the heads-up.",
+    body: "Only when they post something, never spam.",
+  },
+  {
+    num: "03",
+    title: "Pay for it, collect it.",
+    body: "It's held for you in store.",
+  },
 ] as const;
+
+export const LOCAL_COLLECT_LINE =
+  "Like Vinted or Whatnot, but from shops near you, and no courier.";
+
+export const SHOP_LIST_HEAD = "Follow the shops you know.";
+
+export const CLOSE_HEAD = "Which shops should we watch for you?";
 
 export const SHOP_VALUE_HEAD =
   "Tell your regulars when you've got something on, and they come through the door.";
@@ -42,6 +56,3 @@ export const SHOP_VALUE_POINTS = [
   "You choose what and how many, so you never have to discount your brand.",
   "Free to join.",
 ] as const;
-
-export const LOCAL_COLLECT_LINE =
-  "Like Whatnot or Vinted, but local: no courier, you collect in store.";
