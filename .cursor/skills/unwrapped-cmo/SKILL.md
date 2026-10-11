@@ -32,9 +32,9 @@ You already know the brand, the job, and the tools. The human briefs you when th
 |--|--|
 | **Playbook** | **`marketing/instagram/LONDON_HIGH_STREETS.md`** — read before any Instagram plan/produce run |
 | **Entry point** | `marketing/instagram/README.md` |
-| **Format** | Exactly **6** photo-led slides (1080×1350) · no text-only walls |
-| **Every edition includes** | Cover · Where+Then · Now · **Did you know?** · Breath photo · **Engage** (favourite shop + Recommend CTA) |
-| **Human intake** | `marketing/instagram/EPISODE_INTAKE.md` — street + ≥3 photos we own |
+| **Format** | Exactly **6** photo-led **docu** slides (1080×1350) · images support the story — not titled photo cards |
+| **Every edition includes** | Identity · scale/character · Then (history peak) · Now (today’s social energy) · curious twist · Ask (favourite shop + `/recommend` only). **No** WHERE/NOW/DID YOU KNOW labels |
+| **Human intake** | `marketing/instagram/EPISODE_INTAKE.md` — street + unique photos we own (ideally 6, one per beat) |
 | **Street backlog** | `marketing/instagram/STREET_BACKLOG.md` — 52 streets · next = Phase 1 #01 Rye Lane |
 | **Cadence** | ~1 high street / week · profile highlight: **London High Streets** |
 | **Not a website blog** | No blog on shopunwrapped.com (SEO policy) — this series is **Instagram-only** |
@@ -173,13 +173,17 @@ Optional future: they may keep a private note of which Google/Meta account owns 
 ```
 CMO Run (London High Streets episode):
 - [ ] 1. Read LONDON_HIGH_STREETS.md + calendar + STREET_BACKLOG.md
-- [ ] 2. Confirm intake: street name + ≥3 photos we own (do not invent / scrape for publish)
-- [ ] 3. Research Where / Then / Now / Did you know? — verify or [VERIFY] and hold
-- [ ] 4. Build exactly 6 photo-led slides (1080×1350) + caption + first comment
-- [ ] 5. Save under marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/
-- [ ] 6. Update CONTENT_CALENDAR.md + STREET_BACKLOG.md status
-- [ ] 7. Carousel → Meta Business Suite only. Draft until human says post
-- [ ] 8. CMO report
+- [ ] 2. Confirm intake: street name + unique photos we own (ideally 6; do not invent / scrape for publish)
+- [ ] 3. Research pass — BID · council · Historic England / National Heritage List · Wikipedia. Prefer hard numbers. [VERIFY] or hold
+- [ ] 4. Lock one full story paragraph (where → then → now → twist → favourite-shop ask)
+- [ ] 5. Split to 6 beats + photo–text map BEFORE design (do not blur identity / scale / now)
+- [ ] 6. Rights pass (CC / owned / Anna-supplied; council PR = look-dev until cleared)
+- [ ] 7. Compose all 6 (1080×1350), show the full set, iterate on notes
+- [ ] 8. Caption = full piece · hashtags/credits in first comment · CTA `/recommend` only
+- [ ] 9. Save under marketing/instagram/drafts/YYYY-MM-DD-[street-slug]/
+- [ ] 10. Update CONTENT_CALENDAR.md + STREET_BACKLOG.md status
+- [ ] 11. Carousel → Meta Business Suite only. Draft until human says post
+- [ ] 12. CMO report
 
 CMO Run (other Instagram — drop alert, one-off):
 - [ ] 1. Read calendar · check shopunwrapped.com for live drop context

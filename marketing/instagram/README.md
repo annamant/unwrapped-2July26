@@ -10,12 +10,12 @@
 
 | | |
 |--|--|
-| **What** | One London high street per **6-slide photo-led carousel**. Anna’s photos · short on-image hooks · full story in caption · curious fact · recommend CTA. |
+| **What** | One London high street per **6-slide docu carousel**. Lock a full story paragraph, then split across slides. Anna’s photos · caption = the piece · hashtags/credits in first comment · favourite-shop ask + `/recommend` only. |
 | **What it is NOT** | Text-only slides · typographic explainers · mixed-street dumps · fake partnerships · a website blog |
 | **Cadence** | ~1 high street per week |
 | **Highlight** | `London High Streets` on profile |
 | **Playbook** | **[LONDON_HIGH_STREETS.md](./LONDON_HIGH_STREETS.md)** |
-| **Intake** | **[EPISODE_INTAKE.md](./EPISODE_INTAKE.md)** — street + ≥3 photos |
+| **Intake** | **[EPISODE_INTAKE.md](./EPISODE_INTAKE.md)** — street + unique photos (ideally 6, one per beat) |
 | **Street list** | **[STREET_BACKLOG.md](./STREET_BACKLOG.md)** — 52 streets · Phase 1 South London first |
 
 **Website blog:** There is **no** blog on shopunwrapped.com (SEO policy). This series is **Instagram only**.
@@ -32,7 +32,7 @@
 
 1. Read **[LONDON_HIGH_STREETS.md](./LONDON_HIGH_STREETS.md)** before planning or producing.
 2. Read **CONTENT_CALENDAR.md** — grid is empty; next = #01 Rye Lane.
-3. One high street = **6 photo-led slides** · Did you know? · Engage → `/recommend`.
+3. One high street = **6 docu slides** (identity · scale · then · now · twist · ask) → `/recommend` only.
 4. Human supplies photos per [EPISODE_INTAKE.md](./EPISODE_INTAKE.md). Agent does not invent photos or scrape Google for publish.
 5. Carousels → **Meta Business Suite**. Draft until human says publish/post.
 6. Update the calendar.
