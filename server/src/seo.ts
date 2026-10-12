@@ -38,7 +38,7 @@ const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Your favourite local shops, telling you first. Pick the shops you love. When one has something worth the trip, you hear about it before it sells out.",
+    a: "Know first. Reserve first. Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.",
   },
   {
     q: "How does it work?",
@@ -65,7 +65,7 @@ const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What if they don't show up?",
-    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
+    a: "They pay when they reserve. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
   },
   {
     q: "Who is Unwrapped for?",
@@ -115,7 +115,7 @@ const STATIC: Record<string, Omit<SeoPayload, "canonical" | "image" | "robots"> 
     path: "/business-apply",
     title: "Apply to partner your shop — Unwrapped",
     description:
-      "Tell your regulars when you've got something on, and they come through the door. Customers pay before they arrive. Free to join.",
+      "We promote your offers to your customers at the right moment, in a way they'll want to open. Free to join, and you only pay when you sell.",
     type: "website",
   },
   "/recommend": {
@@ -399,7 +399,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     const place = borough?.name || biz.city;
     const desc = truncate(
       biz.description ||
-        `${biz.name} on Unwrapped — see drops from this ${place || "London"} shop, claim in the app, collect at the counter.`,
+        `${biz.name} on Unwrapped — see drops from this ${place || "London"} shop, reserve in the app, collect at the counter.`,
     );
     const image = biz.coverUrl || biz.logoUrl || DEFAULT_OG();
     const title = place ? `${biz.name} · ${place} — Unwrapped` : `${biz.name} — Unwrapped`;
@@ -468,7 +468,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
     if (!row || (row.status !== "active" && row.status !== "sold_out")) {
       return {
         title: "Drop not found — Unwrapped",
-        description: "This drop is no longer available on Unwrapped. See live specials from local shops — claim in the app, collect in person.",
+        description: "This drop is no longer available on Unwrapped. See live specials from local shops — reserve in the app, collect in person.",
         canonical: abs(path),
         image: DEFAULT_OG(),
         type: "website",
@@ -479,7 +479,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
 
     const desc = truncate(
       row.description ||
-        `${row.title} from ${row.businessName} on Unwrapped — a shop you already know has something on. Claim it, then collect it in store.`,
+        `${row.title} from ${row.businessName} on Unwrapped — a shop you already know has something on. Reserve it, then collect it in store.`,
     );
     const image = row.imageUrl || DEFAULT_OG();
     const title = `${row.title} · ${row.businessName} — Unwrapped`;
@@ -524,7 +524,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
         },
       }
         : undefined,
-      bodyHtml: `<article><h1>${escapeHtml(row.title)}</h1><p>From ${escapeHtml(row.businessName)}</p><p>${escapeHtml(desc)}</p><p><a href="${escapeHtml(abs(`/drop/${row.dropId}`))}">Claim on Unwrapped</a></p></article>`,
+      bodyHtml: `<article><h1>${escapeHtml(row.title)}</h1><p>From ${escapeHtml(row.businessName)}</p><p>${escapeHtml(desc)}</p><p><a href="${escapeHtml(abs(`/drop/${row.dropId}`))}">Reserve on Unwrapped</a></p></article>`,
     };
   }
 

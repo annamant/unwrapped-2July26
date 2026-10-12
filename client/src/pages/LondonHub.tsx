@@ -124,7 +124,7 @@ export default function LondonHub() {
             Get notified. Then claim. Then collect.
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.6, maxWidth: 560 }}>
-            We'll let you know when a shop you like has something on. You claim it, then you collect it.
+            We'll let you know when a shop you like has something on. You reserve it, then you collect it.
           </p>
         </div>
       </section>

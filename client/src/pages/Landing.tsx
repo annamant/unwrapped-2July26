@@ -4,7 +4,7 @@ import { trpc } from "../trpc";
 import DropMap, { toDropPin } from "../components/DropMap";
 import DirectoryMap from "../components/DirectoryMap";
 import useIsMobile from "../hooks/useIsMobile";
-import { checkoutFromList, discountPercent } from "../lib/fees";
+import { checkoutFromList, discountPercent, reserveCtaLabel } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 import {
   CLOSE_HEAD,
@@ -115,7 +115,7 @@ const HOW_IT_WORKS_PHONES: {
     title: "This week's bunch — example",
     business: "A florist you know · example",
     pricePence: 1800,
-    media: "photo",
+    media: "video",
   },
   {
     ownerImage: "/landing/hero-owner-salon.jpg",
@@ -840,7 +840,7 @@ export default function Landing() {
             color: MUTED_FG,
             fontWeight: 500,
           }}>
-            Examples from any kind of shop. Nothing here can be claimed yet.
+            Examples from any kind of shop — photo or video. Nothing here can be reserved yet.
           </p>
         </div>
       </section>
@@ -870,7 +870,7 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif", fontSize: 15,
             color: MUTED_FG, lineHeight: 1.6, maxWidth: 560, fontWeight: 400, marginBottom: 16,
           }}>
-            Then you claim it, and collect it.
+            Then you reserve it, and collect it.
           </p>
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: 12,
@@ -1293,38 +1293,17 @@ function HowItWorksPhones() {
                 </div>
                 <div
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 8,
+                    background: V,
+                    color: "#fff",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    padding: "10px 12px",
+                    borderRadius: 999,
+                    textAlign: "center",
                   }}
                 >
-                  <span
-                    style={{
-                      background: "#fff",
-                      color: FG,
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 14,
-                      fontWeight: 800,
-                      padding: "8px 12px",
-                      borderRadius: 999,
-                    }}
-                  >
-                    £{(phone.pricePence / 100).toFixed(phone.pricePence % 100 === 0 ? 0 : 2)}
-                  </span>
-                  <span
-                    style={{
-                      background: V,
-                      color: "#fff",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 12,
-                      fontWeight: 800,
-                      padding: "8px 14px",
-                      borderRadius: 999,
-                    }}
-                  >
-                    Book
-                  </span>
+                  {reserveCtaLabel(phone.pricePence)}
                 </div>
               </div>
             </div>
@@ -1969,7 +1948,7 @@ function SampleDropCard({ sample, compact = false }: { sample: SampleDrop; compa
           padding: "12px 14px", borderRadius: RADIUS_SM,
           letterSpacing: "0.02em",
         }}>
-          Book · illustrative only
+          {reserveCtaLabel(sample.pricePence)} · illustrative only
         </div>
       </div>
     </div>

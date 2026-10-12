@@ -77,7 +77,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["CR0", "CR2", "CR7", "SE19", "SE25"],
     neighbourhoods: ["Croydon", "South Norwood", "Thornton Heath", "Crystal Palace", "Purley", "Addiscombe"],
-    blurb: "Croydon and South Norwood high streets — see the real thing, claim in the app, collect in person.",
+    blurb: "Croydon and South Norwood high streets — see the real thing, reserve in the app, collect in person.",
   },
   {
     slug: "bromley",
@@ -101,7 +101,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["KT1", "KT2", "KT3", "KT5", "KT6", "KT9"],
     neighbourhoods: ["Kingston", "Surbiton", "New Malden", "Tolworth", "Norbiton"],
-    blurb: "Kingston and Surbiton high streets on Unwrapped — see it, claim it, collect it.",
+    blurb: "Kingston and Surbiton high streets on Unwrapped — see it, reserve it, collect it.",
   },
   {
     slug: "sutton",
@@ -217,7 +217,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "east",
     outcodes: ["IG11", "RM8", "RM9", "RM10"],
     neighbourhoods: ["Barking", "Dagenham", "Becontree"],
-    blurb: "Barking and Dagenham high streets — see it, claim it, collect it.",
+    blurb: "Barking and Dagenham high streets — see it, reserve it, collect it.",
   },
   {
     slug: "havering",
