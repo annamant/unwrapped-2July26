@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import useIsMobile from "../hooks/useIsMobile";
 import DropPrice, { formatDropPriceLabel } from "../components/DropPrice";
 import DropMedia from "../components/DropMedia";
+import { reserveCtaLabel } from "../lib/fees";
 import { rememberPendingFollow } from "../lib/shopFollow";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../theme";
 
@@ -91,7 +92,7 @@ export default function DropDetail() {
   const scarce = !soldOut && drop.availableQuantity <= 3;
   const seoDescription = truncateMeta(
     drop.description ||
-      `${drop.title} from ${business.name} on Unwrapped — a shop you already know has something on. Claim it, then collect it in store.`,
+      `${drop.title} from ${business.name} on Unwrapped — a shop you already know has something on. Reserve it, then collect it in store.`,
   );
 
   const reserving = createPI.isPending || reserve.isPending;
@@ -344,11 +345,7 @@ export default function DropDetail() {
                     opacity: reserving ? 0.6 : 1, marginBottom: 12,
                   }}
                 >
-                  {reserving
-                    ? "PROCESSING…"
-                    : drop.price === 0
-                    ? "RESERVE"
-                    : `RESERVE — ${formatDropPriceLabel(drop.price, drop.originalPrice)}`}
+                  {reserving ? "PROCESSING…" : reserveCtaLabel(drop.price)}
                 </button>
                 {reserveError && (
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: V, lineHeight: 1.5 }}>
@@ -444,7 +441,7 @@ function CheckoutForm({ amountLabel, onPaid, onCancel, finalizing, fallbackPayme
           opacity: paying || finalizing ? 0.6 : 1, marginBottom: 8,
         }}
       >
-        {finalizing ? "ISSUING TICKET…" : paying ? "PROCESSING…" : `PAY ${amountLabel}`}
+        {finalizing ? "ISSUING TICKET…" : paying ? "PROCESSING…" : `Pay ${amountLabel} to reserve`}
       </button>
       <button
         type="button"

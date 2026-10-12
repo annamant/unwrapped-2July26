@@ -43,6 +43,13 @@ export function formatPounds(pence: number): string {
   return `£${(pence / 100).toFixed(2)}`;
 }
 
+/** Shopper-facing reserve CTA — paid drops only show the amount they pay. */
+export function reserveCtaLabel(pricePence: number): string {
+  if (pricePence <= 0) return "Reserve";
+  const pounds = (pricePence / 100).toFixed(pricePence % 100 === 0 ? 0 : 2);
+  return `Pay £${pounds} to reserve`;
+}
+
 /** Approximate list price from stored seller receive amount (legacy drops may differ by 1p). */
 export function listFromReceive(receivePence: number): number {
   if (receivePence <= 0) return 0;

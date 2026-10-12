@@ -13,7 +13,7 @@ export const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 export const HOME_FAQS: { q: string; a: string }[] = [
   {
     q: "What is Unwrapped?",
-    a: "Your favourite local shops, telling you first. Pick the shops you love. When one has something worth the trip, you hear about it before it sells out.",
+    a: "Know first. Reserve first. Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.",
   },
   {
     q: "How does it work?",
@@ -41,7 +41,7 @@ export const MERCHANT_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What if they don't show up?",
-    a: "They pay when they claim. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
+    a: "They pay when they reserve. You set the collection window. You're not holding stock for a maybe — which is why this works psychologically as well as operationally.",
   },
   {
     q: "Who is Unwrapped for?",
@@ -249,7 +249,7 @@ export function seoForPath(pathname: string): SeoProps {
       return {
         title: `Apply to partner your shop — ${SITE_NAME}`,
         description:
-          "Tell your regulars when you've got something on, and they come through the door. Customers pay before they arrive. Free to join.",
+          "We promote your offers to your customers at the right moment, in a way they'll want to open. Free to join, and you only pay when you sell.",
         path,
         jsonLd: merchantJsonLd(),
       };

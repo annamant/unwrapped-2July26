@@ -3,14 +3,12 @@
  * Keep aligned with client/src/lib/pilotCorridor.ts.
  */
 
-export const PILOT_TITLE =
-  "Your favourite local shops, telling you first.";
+export const PILOT_TITLE = "Know first. Reserve first.";
 
 export const PILOT_DESCRIPTION =
-  "Pick the shops you love. When one has something worth the trip, like a fresh batch, a one-off piece or a limited run, you hear about it before it sells out. Pay to hold it, then pick it up in store.";
+  "Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.";
 
-export const PILOT_H1 =
-  "Your favourite local shops, telling you first.";
+export const PILOT_H1 = "Know first. Reserve first.";
 
 export const PILOT_KICKER = "Choose my shops";
 
@@ -48,7 +46,7 @@ export const SHOP_LIST_HEAD = "Follow the shops you know.";
 export const CLOSE_HEAD = "Which shops should we watch for you?";
 
 export const SHOP_VALUE_HEAD =
-  "Tell your regulars when you've got something on, and they come through the door.";
+  "We promote your offers to your customers at the right moment, in a way they'll want to open. Free to join, and you only pay when you sell.";
 
 export const SHOP_VALUE_POINTS = [
   "Post one photo or short video and a line. No content job, no followers to build.",
