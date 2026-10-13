@@ -3,7 +3,10 @@ import { trpc } from "../../trpc";
 import { AdminLayout } from "./Dashboard";
 import { format } from "date-fns";
 import useIsMobile from "../../hooks/useIsMobile";
+import { SIGNUP_INTERESTS } from "../../lib/signupInterests";
 import { BG, FG, BORDER, MUTED, MUTED_FG, V } from "../../theme";
+
+const INTEREST_LABEL = Object.fromEntries(SIGNUP_INTERESTS.map((item) => [item.id, item.label]));
 
 type DbTab = "accounts" | "warehouse";
 
@@ -220,7 +223,7 @@ function AccountsTab({ isMobile }: { isMobile: boolean }) {
                 {user.statusLabel}
                 {user.signupInterests?.length ? (
                   <div style={{ marginTop: 4, color: MUTED_FG }}>
-                    Interests: {user.signupInterests.join(", ")}
+                    Interests: {user.signupInterests.map((id) => INTEREST_LABEL[id] ?? id).join(", ")}
                   </div>
                 ) : null}
               </div>
