@@ -4,6 +4,7 @@ import { router, adminProcedure } from "../trpc";
 import { businesses, businessApplications, shopRecommendations, users, drops, reservations, passwordResetTokens, locations } from "../db/schema";
 import { linkBusinessToDirectoryPin } from "../follows/linkPin";
 import { loadFollowCounts } from "../follows/counts";
+import { buildInterestCounts } from "../signupInterests";
 import {
   planAdminTestAlert,
   sampleAdminTestDrop,
@@ -979,6 +980,7 @@ export const adminRouter = router({
           name: users.name,
           role: users.role,
           onboardingComplete: users.onboardingComplete,
+          signupInterests: users.signupInterests,
           hasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
           createdAt: users.createdAt,
         })
@@ -1057,6 +1059,7 @@ export const adminRouter = router({
           name: u.name,
           role: u.role,
           onboardingComplete: u.onboardingComplete,
+          signupInterests: u.signupInterests ?? [],
           hasPassword: u.hasPassword,
           createdAt: u.createdAt,
           kind,
@@ -1392,6 +1395,15 @@ export const adminRouter = router({
   // Internal: follower counts for curated pins and live businesses.
   followCounts: adminProcedure.query(async ({ ctx }) => {
     return loadFollowCounts(ctx.db);
+  }),
+
+  /** Aggregate signup interest picks across subscribers. */
+  interestCounts: adminProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db
+      .select({ signupInterests: users.signupInterests })
+      .from(users)
+      .where(sql`${users.passwordHash} IS NOT NULL`);
+    return buildInterestCounts(rows);
   }),
 
   /**

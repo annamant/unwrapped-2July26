@@ -218,6 +218,11 @@ function AccountsTab({ isMobile }: { isMobile: boolean }) {
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
                 {user.statusLabel}
+                {user.signupInterests?.length ? (
+                  <div style={{ marginTop: 4, color: MUTED_FG }}>
+                    Interests: {user.signupInterests.join(", ")}
+                  </div>
+                ) : null}
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
                 {format(new Date(user.createdAt), "d MMM yyyy")}

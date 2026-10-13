@@ -20,6 +20,21 @@ export const PILOT_SUB = PILOT_DESCRIPTION;
 export const PILOT_SHOP =
   "Tell your regulars when you've got something on.";
 
+/** Under the shopper hero — keep aligned with client/src/lib/pilotCorridor.ts. */
+export const WHAT_UNWRAPPED_HEAD = "What Unwrapped is";
+
+export const WHAT_UNWRAPPED_IS =
+  "Unwrapped connects you with the local businesses near you that you love.";
+
+export const WHAT_UNWRAPPED_DOES =
+  "You pick your interests and your favourite businesses, and we tell you the moment one posts something new. You pay to reserve it before anyone else can, then collect or turn up.";
+
+export const WHAT_UNWRAPPED_WHY =
+  "Sign up for priority access — you hear first and reserve first — and for convenience: no checking feeds, no queueing, no missing out.";
+
+export const WHAT_UNWRAPPED_EXAMPLES =
+  "It could be an item from a shop you like, a meal from a lunch spot you already go to, or a last-minute appointment at a barber or salon.";
+
 export const HOW_IT_WORKS_STEPS = [
   {
     num: "01",

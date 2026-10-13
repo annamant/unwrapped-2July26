@@ -15,6 +15,7 @@ function csvCell(value: string | number) {
 export default function AdminFollows() {
   const isMobile = useIsMobile(768);
   const { data, isLoading } = trpc.admin.followCounts.useQuery();
+  const { data: interestRows, isLoading: interestsLoading } = trpc.admin.interestCounts.useQuery();
   const [sortKey, setSortKey] = useState<SortKey>("followers");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [testMessage, setTestMessage] = useState<string | null>(null);
@@ -55,9 +56,11 @@ export default function AdminFollows() {
   }
 
   function exportCsv() {
-    const header = ["name", "kind", "followers", "requested_at_signup", "slug", "pin_id", "business_id"];
+    const shopHeader = ["name", "kind", "followers", "requested_at_signup", "slug", "pin_id", "business_id"];
+    const interestHeader = ["interest_id", "label", "subscribers"];
     const lines = [
-      header.join(","),
+      "# shops",
+      shopHeader.join(","),
       ...rows.map((row) => [
         csvCell(row.name),
         row.kind,
@@ -66,6 +69,14 @@ export default function AdminFollows() {
         csvCell(row.slug ?? ""),
         csvCell(row.pinId ?? ""),
         csvCell(row.businessId ?? ""),
+      ].join(",")),
+      "",
+      "# signup_interests",
+      interestHeader.join(","),
+      ...(interestRows ?? []).map((row) => [
+        csvCell(row.id),
+        csvCell(row.label),
+        row.subscribers,
       ].join(",")),
     ];
     const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
@@ -153,6 +164,36 @@ export default function AdminFollows() {
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 16, lineHeight: 1.5, maxWidth: 560 }}>
           Send me a test alert emails only your signed-in admin address (must be in ADMIN_EMAILS), using the live drop-alert template. It never emails followers and never records a send.
         </p>
+
+        <div style={{ marginBottom: 28 }}>
+          <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: FG, margin: "0 0 12px" }}>
+            Signup interests
+          </h2>
+          {interestsLoading ? (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG }}>Loading interests…</p>
+          ) : (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {(interestRows ?? []).map((row) => (
+                <div
+                  key={row.id}
+                  style={{
+                    border: `1px solid ${BORDER}`,
+                    padding: "10px 14px",
+                    background: BG,
+                    minWidth: isMobile ? "100%" : 160,
+                  }}
+                >
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, fontWeight: 600 }}>
+                    {row.label}
+                  </div>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>
+                    {row.subscribers} subscriber{row.subscribers === 1 ? "" : "s"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
           {([

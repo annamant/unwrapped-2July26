@@ -18,6 +18,11 @@ import {
   PILOT_SUB,
   SHOP_LIST_FOOT,
   SHOP_LIST_HEAD,
+  WHAT_UNWRAPPED_DOES,
+  WHAT_UNWRAPPED_EXAMPLES,
+  WHAT_UNWRAPPED_HEAD,
+  WHAT_UNWRAPPED_IS,
+  WHAT_UNWRAPPED_WHY,
 } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { mergeDirectoryShops, normalizeDirectoryName } from "../lib/directoryShops";
@@ -723,6 +728,71 @@ export default function Landing() {
           )}
         </div>
 
+      </section>
+
+      {/* ── 1b. WHAT UNWRAPPED IS — directly under the hero ── */}
+      <section style={{
+        position: "relative",
+        zIndex: 1,
+        background: SECTION_WASH,
+        borderBottom: "none",
+      }}>
+        <div style={{
+          padding: isMobile ? "36px 20px 32px" : "48px 40px 40px",
+          maxWidth: 720,
+        }}>
+          <div style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 9,
+            color: V,
+            letterSpacing: "0.06em",
+            marginBottom: 14,
+            fontWeight: 700,
+          }}>
+            {WHAT_UNWRAPPED_HEAD.toUpperCase()}
+          </div>
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 22 : 28,
+            fontWeight: 750,
+            color: FG,
+            letterSpacing: "-0.6px",
+            lineHeight: 1.2,
+            marginBottom: 16,
+          }}>
+            {WHAT_UNWRAPPED_IS}
+          </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 15 : 16,
+            color: FG,
+            lineHeight: 1.55,
+            fontWeight: 500,
+            margin: "0 0 14px",
+          }}>
+            {WHAT_UNWRAPPED_DOES}
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 15 : 16,
+            color: FG,
+            lineHeight: 1.55,
+            fontWeight: 500,
+            margin: "0 0 14px",
+          }}>
+            {WHAT_UNWRAPPED_WHY}
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 14 : 15,
+            color: MUTED_FG,
+            lineHeight: 1.55,
+            fontWeight: 500,
+            margin: 0,
+          }}>
+            {WHAT_UNWRAPPED_EXAMPLES}
+          </p>
+        </div>
       </section>
 
       {/* ── 2. HOW IT WORKS — below the fold, not the hook ── */}

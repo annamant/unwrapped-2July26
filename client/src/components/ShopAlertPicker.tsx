@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
+import { SIGNUP_INTERESTS, type SignupInterestId } from "../lib/signupInterests";
 
 export type ShopChoice = {
   key: string;
@@ -12,14 +13,18 @@ export type ShopChoice = {
 export default function ShopAlertPicker({
   shops,
   selected,
+  interests,
   onToggle,
+  onToggleInterest,
   onSkip,
   onContinue,
   pending,
 }: {
   shops: ShopChoice[];
   selected: string[];
+  interests: SignupInterestId[];
   onToggle: (key: string) => void;
+  onToggleInterest: (id: SignupInterestId) => void;
   onSkip: () => void;
   onContinue: () => void;
   pending: boolean;
@@ -55,6 +60,43 @@ export default function ShopAlertPicker({
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.5, marginBottom: 20 }}>
         Follow the shops you like and we'll email you when they post something. You can skip this.
       </p>
+
+      <div style={{ marginBottom: 24 }}>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 13,
+          fontWeight: 700,
+          color: FG,
+          marginBottom: 10,
+        }}>
+          Your interests <span style={{ fontWeight: 500, color: MUTED_FG }}>(optional)</span>
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }} role="group" aria-label="Interests">
+          {SIGNUP_INTERESTS.map((interest) => {
+            const on = interests.includes(interest.id);
+            return (
+              <button
+                key={interest.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => onToggleInterest(interest.id)}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 13,
+                  padding: "8px 12px",
+                  cursor: "pointer",
+                  border: on ? `1.5px solid ${FG}` : `1px solid ${BORDER}`,
+                  background: on ? "#FFCEDA" : BG,
+                  color: FG,
+                }}
+              >
+                {interest.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <input
         type="search"
         value={query}
@@ -116,7 +158,8 @@ export default function ShopAlertPicker({
         })}
       </div>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12 }}>
-        {selected.length === 0 ? "None selected" : `${selected.length} selected`}
+        {selected.length === 0 ? "No shops selected" : `${selected.length} shop${selected.length === 1 ? "" : "s"} selected`}
+        {interests.length > 0 ? ` · ${interests.length} interest${interests.length === 1 ? "" : "s"}` : ""}
       </p>
       <button
         type="button"
