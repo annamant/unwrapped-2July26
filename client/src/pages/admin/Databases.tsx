@@ -226,6 +226,11 @@ function AccountsTab({ isMobile }: { isMobile: boolean }) {
                     Interests: {user.signupInterests.map((id) => INTEREST_LABEL[id] ?? id).join(", ")}
                   </div>
                 ) : null}
+                {user.signupRequestedShops?.length ? (
+                  <div style={{ marginTop: 4, color: MUTED_FG }}>
+                    Shops typed: {user.signupRequestedShops.join(", ")}
+                  </div>
+                ) : null}
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG }}>
                 {format(new Date(user.createdAt), "d MMM yyyy")}

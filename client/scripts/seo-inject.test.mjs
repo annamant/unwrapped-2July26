@@ -30,7 +30,7 @@ const SHELL = `<!DOCTYPE html>
   </head>
   <body>
     <div id="root"></div>
-    <noscript><h1>Know first. Reserve first.</h1></noscript>
+    <noscript><h1>First pick from the local shops you love.</h1></noscript>
   </body>
 </html>`;
 
@@ -66,7 +66,7 @@ check("london does not keep home canonical", london.includes(`href="${SITE}/"`) 
 check("london strips homepage JSON-LD", /"@type":"Organization"/.test(london), false);
 check("london injects route JSON-LD", london.includes('"@type":"CollectionPage"'), true);
 check("london replaces homepage noscript", london.includes("<h1>London boroughs</h1>"), true);
-check("london noscript is not the homepage hero", london.includes("Know first. Reserve first."), false);
+check("london noscript is not the homepage hero", london.includes("First pick from the local shops you love."), false);
 
 const biz = injectSeo(SHELL, {
   title: "Brixton Village Market · Lambeth — Unwrapped",

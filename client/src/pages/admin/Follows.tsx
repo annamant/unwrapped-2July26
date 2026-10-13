@@ -16,6 +16,7 @@ export default function AdminFollows() {
   const isMobile = useIsMobile(768);
   const { data, isLoading } = trpc.admin.followCounts.useQuery();
   const { data: interestRows, isLoading: interestsLoading } = trpc.admin.interestCounts.useQuery();
+  const { data: accountsData } = trpc.admin.listUsers.useQuery({ kind: "all", limit: 5000 });
   const [sortKey, setSortKey] = useState<SortKey>("followers");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [testMessage, setTestMessage] = useState<string | null>(null);
@@ -55,9 +56,20 @@ export default function AdminFollows() {
     }
   }
 
+  const typedShopRows = useMemo(() => {
+    return (accountsData?.users ?? [])
+      .filter((user) => (user.signupRequestedShops?.length ?? 0) > 0)
+      .map((user) => ({
+        email: user.email,
+        name: user.name ?? "",
+        shops: (user.signupRequestedShops ?? []).join("; "),
+      }));
+  }, [accountsData]);
+
   function exportCsv() {
     const shopHeader = ["name", "kind", "followers", "requested_at_signup", "slug", "pin_id", "business_id"];
     const interestHeader = ["interest_id", "label", "subscribers"];
+    const typedHeader = ["email", "name", "shops_typed_not_listed"];
     const lines = [
       "# shops",
       shopHeader.join(","),
@@ -77,6 +89,14 @@ export default function AdminFollows() {
         csvCell(row.id),
         csvCell(row.label),
         row.subscribers,
+      ].join(",")),
+      "",
+      "# shops_typed_not_listed",
+      typedHeader.join(","),
+      ...typedShopRows.map((row) => [
+        csvCell(row.email),
+        csvCell(row.name),
+        csvCell(row.shops),
       ].join(",")),
     ];
     const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
@@ -188,6 +208,36 @@ export default function AdminFollows() {
                   </div>
                   <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, color: MUTED_FG, marginTop: 4 }}>
                     {row.subscribers} subscriber{row.subscribers === 1 ? "" : "s"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginBottom: 28 }}>
+          <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: FG, margin: "0 0 12px" }}>
+            Shops typed (not listed)
+          </h2>
+          {typedShopRows.length === 0 ? (
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: MUTED_FG }}>
+              No free-text shop names yet.
+            </p>
+          ) : (
+            <div style={{ border: `1px solid ${BORDER}`, background: BG }}>
+              {typedShopRows.map((row) => (
+                <div
+                  key={row.email}
+                  style={{ padding: "12px 14px", borderBottom: `1px solid ${BORDER}` }}
+                >
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: FG, fontWeight: 600 }}>
+                    {row.name || row.email}
+                  </div>
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: MUTED_FG, marginTop: 2 }}>
+                    {row.email}
+                  </div>
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: FG, marginTop: 6 }}>
+                    {row.shops}
                   </div>
                 </div>
               ))}
