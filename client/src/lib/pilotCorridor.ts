@@ -24,6 +24,35 @@ export const PILOT_SUB = PILOT_DESCRIPTION;
 export const PILOT_SHOP =
   "Tell your regulars when you've got something on.";
 
+/**
+ * Directly under the shopper hero — What it is / What it does / Why sign up.
+ * For everyone (not women-only). Not food-only. No high street / street names /
+ * photographed specials / commission numbers.
+ */
+export const WHAT_UNWRAPPED_HEAD = "What Unwrapped is";
+
+export const WHAT_IT_IS_LABEL = "What it is";
+export const WHAT_IT_IS =
+  "Unwrapped connects you with the local businesses near you that you love.";
+
+export const WHAT_IT_DOES_LABEL = "What it does";
+export const WHAT_IT_DOES =
+  "You pick your interests and your favourite businesses, and we tell you the moment one posts something new. You pay to reserve it before anyone else can, then collect or turn up.";
+
+export const WHY_SIGN_UP_LABEL = "Why sign up";
+export const WHY_SIGN_UP =
+  "Sign up for priority access — you hear first and reserve first — and for convenience: no checking feeds, no queueing, no missing out.";
+
+/** @deprecated Prefer WHAT_IT_IS — kept so older imports keep compiling. */
+export const WHAT_UNWRAPPED_IS = WHAT_IT_IS;
+/** @deprecated Prefer WHAT_IT_DOES */
+export const WHAT_UNWRAPPED_DOES = WHAT_IT_DOES;
+/** @deprecated Prefer WHY_SIGN_UP */
+export const WHAT_UNWRAPPED_WHY = WHY_SIGN_UP;
+
+export const WHAT_UNWRAPPED_EXAMPLES =
+  "It could be an item from a shop you like, a meal from a lunch spot you already go to, or a last-minute appointment at a barber or salon.";
+
 /** How it works — shopper steps. */
 export const HOW_IT_WORKS_HEAD = "How it works";
 

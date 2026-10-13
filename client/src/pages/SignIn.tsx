@@ -9,6 +9,7 @@ import { mergeDirectoryShops } from "../lib/directoryShops";
 import { isObviousTestShop } from "../lib/testShop";
 import { clearPendingFollow, readPendingFollow, rememberPendingFollow } from "../lib/shopFollow";
 import ShopAlertPicker, { type ShopChoice } from "../components/ShopAlertPicker";
+import type { SignupInterestId } from "../lib/signupInterests";
 
 export default function SignIn() {
   const isMobile = useIsMobile(900);
@@ -23,6 +24,7 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  const [interests, setInterests] = useState<SignupInterestId[]>([]);
 
   const login = trpc.auth.login.useMutation();
   const register = trpc.auth.register.useMutation();
@@ -75,7 +77,7 @@ export default function SignIn() {
     return payload.filter((shop) => shop.directoryPinId || shop.businessId);
   }
 
-  async function createAccount(keys: string[]) {
+  async function createAccount(keys: string[], chosenInterests: SignupInterestId[]) {
     setError("");
     setLoading(true);
     try {
@@ -84,6 +86,7 @@ export default function SignIn() {
         password,
         name,
         shopFollows: shopFollowsFor(keys),
+        interests: chosenInterests,
       });
       clearPendingFollow();
       setSessionToken(result.token);
@@ -149,10 +152,12 @@ export default function SignIn() {
               <ShopAlertPicker
                 shops={shops}
                 selected={selected}
+                interests={interests}
                 pending={loading}
                 onToggle={(key) => setSelected((current) => current.includes(key) ? current.filter((item) => item !== key) : [...current, key])}
-                onSkip={() => createAccount([])}
-                onContinue={() => createAccount(selected)}
+                onToggleInterest={(id) => setInterests((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])}
+                onSkip={() => createAccount([], [])}
+                onContinue={() => createAccount(selected, interests)}
               />
             </>
           ) : (

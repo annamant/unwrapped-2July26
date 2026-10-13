@@ -18,6 +18,14 @@ import {
   PILOT_SUB,
   SHOP_LIST_FOOT,
   SHOP_LIST_HEAD,
+  WHAT_IT_DOES,
+  WHAT_IT_DOES_LABEL,
+  WHAT_IT_IS,
+  WHAT_IT_IS_LABEL,
+  WHAT_UNWRAPPED_EXAMPLES,
+  WHAT_UNWRAPPED_HEAD,
+  WHY_SIGN_UP,
+  WHY_SIGN_UP_LABEL,
 } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { mergeDirectoryShops, normalizeDirectoryName } from "../lib/directoryShops";
@@ -725,6 +733,120 @@ export default function Landing() {
 
       </section>
 
+      {/* ── What it is / What it does / Why sign up — directly under the hero ── */}
+      <section
+        aria-labelledby="what-unwrapped-heading"
+        style={{
+          position: "relative",
+          zIndex: 1,
+          background: SECTION_WASH,
+          borderBottom: `1px solid ${BORDER}`,
+        }}
+      >
+        <div style={{
+          padding: isMobile ? "36px 20px 32px" : "48px 40px 40px",
+          maxWidth: 720,
+        }}>
+          <h2
+            id="what-unwrapped-heading"
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 24 : 28,
+              fontWeight: 800,
+              color: FG,
+              letterSpacing: "-0.6px",
+              lineHeight: 1.15,
+              marginBottom: isMobile ? 20 : 24,
+            }}
+          >
+            {WHAT_UNWRAPPED_HEAD}
+          </h2>
+
+          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              fontWeight: 800,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              color: V,
+              marginBottom: 6,
+            }}>
+              {WHAT_IT_IS_LABEL}
+            </h3>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 15 : 16,
+              color: FG,
+              lineHeight: 1.55,
+              fontWeight: 500,
+              margin: 0,
+            }}>
+              {WHAT_IT_IS}
+            </p>
+          </div>
+
+          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              fontWeight: 800,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              color: V,
+              marginBottom: 6,
+            }}>
+              {WHAT_IT_DOES_LABEL}
+            </h3>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 15 : 16,
+              color: FG,
+              lineHeight: 1.55,
+              fontWeight: 500,
+              margin: 0,
+            }}>
+              {WHAT_IT_DOES}
+            </p>
+          </div>
+
+          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
+            <h3 style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              fontWeight: 800,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              color: V,
+              marginBottom: 6,
+            }}>
+              {WHY_SIGN_UP_LABEL}
+            </h3>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 15 : 16,
+              color: FG,
+              lineHeight: 1.55,
+              fontWeight: 500,
+              margin: 0,
+            }}>
+              {WHY_SIGN_UP}
+            </p>
+          </div>
+
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 14 : 15,
+            color: MUTED_FG,
+            lineHeight: 1.55,
+            fontWeight: 500,
+            margin: 0,
+          }}>
+            {WHAT_UNWRAPPED_EXAMPLES}
+          </p>
+        </div>
+      </section>
+
       {/* ── 2. HOW IT WORKS — below the fold, not the hook ── */}
       <section style={{ borderBottom: "none", position: "relative", zIndex: 1, overflow: "hidden" }}>
         <div aria-hidden style={{
@@ -944,7 +1066,7 @@ export default function Landing() {
             fontWeight: 500,
             lineHeight: 1.5,
           }}>
-            Own a shop?{" "}
+            Own a business?{" "}
             <a
               href="/business-apply"
               className="uw-link"

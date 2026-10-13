@@ -12,6 +12,7 @@ import { TRPCError } from "@trpc/server";
 import { sendPasswordResetEmail } from "../notifications/dispatch";
 import { resolveLoginRedirect } from "../auth/resolveLoginRedirect";
 import { saveSignupFollows, type FollowInput } from "../follows/persist";
+import { sanitizeSignupInterests, SIGNUP_INTEREST_IDS } from "../signupInterests";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
 
@@ -95,11 +96,13 @@ export const authRouter = router({
         businessId: z.string().uuid().optional(),
         directoryPinId: z.string().trim().min(1).max(200).optional(),
       })).max(40).optional(),
+      interests: z.array(z.enum(SIGNUP_INTEREST_IDS)).max(SIGNUP_INTEREST_IDS.length).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       rateLimit(`register-ip:${ctx.req.ip ?? "unknown"}`, 20, 10 * 60 * 1000);
 
       const email = input.email.toLowerCase();
+      const signupInterests = sanitizeSignupInterests(input.interests ?? []);
       const [existing] = await ctx.db
         .select({ id: users.id, passwordHash: users.passwordHash })
         .from(users)
@@ -117,7 +120,7 @@ export const authRouter = router({
         }
         await ctx.db
           .update(users)
-          .set({ passwordHash, name: input.name })
+          .set({ passwordHash, name: input.name, signupInterests })
           .where(eq(users.id, existing.id));
         const token = await createSession(ctx, existing.id);
         await rememberSignupShops(ctx.db, existing.id, input.shopFollows);
@@ -132,6 +135,7 @@ export const authRouter = router({
           name: input.name,
           role: "consumer",
           onboardingComplete: false,
+          signupInterests,
         })
         .returning();
 

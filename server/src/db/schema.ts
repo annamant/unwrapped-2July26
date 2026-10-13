@@ -24,6 +24,8 @@ export const users = pgTable("users", {
   role: userRoleEnum("role").default("consumer").notNull(),
   onboardingComplete: boolean("onboarding_complete").default(false).notNull(),
   interestCategories: text("interest_categories").array().default([]).notNull(),
+  /** Optional broad interests from the signup "which shops?" step. */
+  signupInterests: text("signup_interests").array().default([]).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
