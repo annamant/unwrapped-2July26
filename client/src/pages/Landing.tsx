@@ -18,8 +18,6 @@ import {
   PILOT_SUB,
   SHOP_LIST_FOOT,
   SHOP_LIST_HEAD,
-  SHOP_VALUE_HEAD,
-  SHOP_VALUE_POINTS,
 } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { mergeDirectoryShops, normalizeDirectoryName } from "../lib/directoryShops";
@@ -884,119 +882,6 @@ export default function Landing() {
       </section>
       )}
 
-      {/* ── 4. FOUNDING SHOPPERS ── */}
-      {PRE_LAUNCH && (
-        <section style={{
-          padding: isMobile ? "52px 20px" : "72px 40px",
-          borderBottom: "none",
-          background: V,
-          position: "relative",
-          zIndex: 1,
-          overflow: "hidden",
-        }}>
-          <div aria-hidden style={{
-            position: "absolute",
-            top: "-20%",
-            right: "-15%",
-            width: 480,
-            height: 480,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255,80,50,0.18), transparent 70%)",
-            filter: "blur(80px)",
-            pointerEvents: "none",
-          }} />
-          <div aria-hidden style={{
-            position: "absolute",
-            bottom: "-25%",
-            left: "-10%",
-            width: 420,
-            height: 420,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(139,22,11,0.25), transparent 65%)",
-            filter: "blur(70px)",
-            pointerEvents: "none",
-          }} />
-
-          <div style={{ width: "100%", maxWidth: 680, margin: "0 auto", position: "relative" }}>
-            <div style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 9,
-              fontWeight: 800,
-              color: CREAM,
-              letterSpacing: "0.09em",
-              marginBottom: 16,
-              background: "rgba(255,240,244,0.12)",
-              padding: "6px 12px",
-              borderRadius: 999,
-              border: "1px solid rgba(255,240,244,0.2)",
-            }}>
-              <span
-                className="uw-pulse-dot"
-                style={{ width: 6, height: 6, borderRadius: "50%", background: CREAM, display: "inline-block", flexShrink: 0 }}
-              />
-              FOR SHOPS
-            </div>
-            <h2 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 26 : 36,
-              fontWeight: 800,
-              color: CREAM,
-              letterSpacing: isMobile ? "-0.6px" : "-1px",
-              lineHeight: 1.12,
-              marginBottom: 18,
-            }}>
-              {SHOP_VALUE_HEAD}
-            </h2>
-            <ul style={{
-              listStyle: "none",
-              padding: 0,
-              margin: "0 0 28px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-            }}>
-              {SHOP_VALUE_POINTS.map((point) => (
-                <li key={point} style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: isMobile ? 15 : 16,
-                  fontWeight: 500,
-                  color: "rgba(255,240,244,0.92)",
-                  lineHeight: 1.45,
-                  padding: isMobile ? "12px 14px" : "14px 16px",
-                  border: "1px solid rgba(255,240,244,0.18)",
-                  borderRadius: 12,
-                  background: "rgba(255,240,244,0.06)",
-                }}>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <a
-              href="/business-apply"
-              className="uw-btn-primary"
-              style={{
-                background: CREAM,
-                color: V_DEEP,
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: 800,
-                letterSpacing: "-0.2px",
-                padding: isMobile ? "17px 28px" : "18px 32px",
-                textDecoration: "none",
-                display: "inline-block",
-                borderRadius: RADIUS_SM,
-                boxShadow: "0 14px 38px rgba(0,0,0,0.35)",
-              }}
-            >
-              Partner with us
-            </a>
-          </div>
-        </section>
-      )}
-
       {/* Curated shop map and list. All 132 wave-1 pins, including unclaimed. */}
       {PRE_LAUNCH ? (
         <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS} />
@@ -1051,6 +936,28 @@ export default function Landing() {
           >
             {PILOT_KICKER}
           </button>
+          <p style={{
+            marginTop: isMobile ? 22 : 26,
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 13 : 14,
+            color: "rgba(255,240,244,0.72)",
+            fontWeight: 500,
+            lineHeight: 1.5,
+          }}>
+            Own a shop?{" "}
+            <a
+              href="/business-apply"
+              className="uw-link"
+              style={{
+                color: CREAM,
+                fontWeight: 700,
+                textDecoration: "underline",
+                textUnderlineOffset: 3,
+              }}
+            >
+              Partner with us
+            </a>
+          </p>
         </div>
       </section>
 

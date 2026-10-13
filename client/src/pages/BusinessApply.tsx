@@ -2,7 +2,11 @@ import { useState } from "react";
 import { trpc } from "../trpc";
 import { MERCHANT_FAQS } from "../lib/seo";
 import useIsMobile from "../hooks/useIsMobile";
-import { SHOP_VALUE_HEAD, SHOP_VALUE_POINTS } from "../lib/pilotCorridor";
+import {
+  SHOP_HOW_IT_WORKS_STEPS,
+  SHOP_VALUE_HEAD,
+  SHOP_VALUE_POINTS,
+} from "../lib/pilotCorridor";
 import { BG, FG, BORDER, MUTED_FG, V } from "../theme";
 
 
@@ -86,16 +90,16 @@ export default function BusinessApply() {
           </div>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? 28 : 40,
+            fontSize: isMobile ? 26 : 34,
             fontWeight: 700,
             color: FG,
-            lineHeight: 1.15,
-            letterSpacing: isMobile ? "-0.6px" : "-1px",
-            marginBottom: 20,
+            lineHeight: 1.25,
+            letterSpacing: isMobile ? "-0.5px" : "-0.8px",
+            marginBottom: 24,
           }}>
             {SHOP_VALUE_HEAD}
           </h1>
-          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 36px", display: "flex", flexDirection: "column", gap: 10 }}>
             {SHOP_VALUE_POINTS.map((point) => (
               <li key={point} style={{
                 display: "flex",
@@ -111,6 +115,56 @@ export default function BusinessApply() {
               </li>
             ))}
           </ul>
+
+          <div style={{ marginBottom: 36 }}>
+            <div style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 9,
+              color: MUTED_FG,
+              letterSpacing: "0.15em",
+              marginBottom: 14,
+            }}>
+              HOW IT WORKS
+            </div>
+            <ol style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}>
+              {SHOP_HOW_IT_WORKS_STEPS.map(({ num, title }) => (
+                <li key={num} style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "baseline",
+                }}>
+                  <span style={{
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: V,
+                    letterSpacing: "0.04em",
+                    flexShrink: 0,
+                    minWidth: 18,
+                  }}>
+                    {num}
+                  </span>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 15,
+                    color: FG,
+                    lineHeight: 1.45,
+                    fontWeight: 500,
+                  }}>
+                    {title}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: MUTED_FG, lineHeight: 1.7, margin: 0 }}>
             We review every application to keep Unwrapped curated. Tell us about your shop and we'll be in touch within 2–3 working days.
           </p>
