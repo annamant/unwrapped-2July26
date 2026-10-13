@@ -21,6 +21,7 @@ import {
   PILOT_NOTE,
   PILOT_SUB,
   PILOT_TITLE,
+  SHOP_HOW_IT_WORKS_STEPS,
   SHOP_LIST_HEAD,
   SHOP_VALUE_HEAD,
   SHOP_VALUE_POINTS,
@@ -577,9 +578,9 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_NOTE)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_VALUE_HEAD)}</h2><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a> · <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_NOTE)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>Own a shop? <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
           : path === "/business-apply"
-            ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><p><a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`
+            ? `<article><h1>Partner your shop</h1><p>${escapeHtml(SHOP_VALUE_HEAD)}</p><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><h2>How it works</h2><ol>${SHOP_HOW_IT_WORKS_STEPS.map((step) => `<li>${escapeHtml(step.title)}</li>`).join("")}</ol><p><a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`
             : path === "/london"
             ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Pick your shops. Get the heads-up. Pay for it, collect it.</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,

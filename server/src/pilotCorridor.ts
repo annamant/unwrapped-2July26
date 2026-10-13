@@ -49,8 +49,15 @@ export const SHOP_VALUE_HEAD =
   "We promote your offers to your customers at the right moment, in a way they'll want to open. Free to join, and you only pay when you sell.";
 
 export const SHOP_VALUE_POINTS = [
-  "Post one photo or short video and a line. No content job, no followers to build.",
+  "Post one photo or short video and a line. No content job: your regulars follow you with one scan.",
   "Customers pay before they arrive, so no-shows don't cost you.",
   "You choose what and how many, so you never have to discount your brand.",
-  "Free to join.",
+] as const;
+
+/** How it works — shop steps on /business-apply. No commission numbers. */
+export const SHOP_HOW_IT_WORKS_STEPS = [
+  { num: "1", title: "Sign up." },
+  { num: "2", title: "Post a photo or short video with a price." },
+  { num: "3", title: "Your customers get told and pay to reserve." },
+  { num: "4", title: "They collect in store." },
 ] as const;
