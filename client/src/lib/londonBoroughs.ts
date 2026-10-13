@@ -45,7 +45,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["SW11", "SW12", "SW15", "SW17", "SW18", "SW19"],
     neighbourhoods: ["Battersea", "Balham", "Putney", "Tooting", "Wandsworth", "Earlsfield", "Southfields", "Clapham Junction"],
-    blurb: "Battersea, Balham, Putney, Tooting — see what's ready on Wandsworth high streets and collect at the counter.",
+    blurb: "Battersea, Balham, Putney, Tooting — see what's ready from Wandsworth local businesses and collect at the counter.",
   },
   {
     slug: "southwark",
@@ -61,7 +61,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["SE3", "SE4", "SE6", "SE8", "SE12", "SE13", "SE14", "SE23", "SE26"],
     neighbourhoods: ["Lewisham", "Deptford", "New Cross", "Catford", "Forest Hill", "Sydenham", "Blackheath", "Ladywell", "Hither Green"],
-    blurb: "Deptford, Forest Hill, Catford and New Cross — local drops from Lewisham high streets.",
+    blurb: "Deptford, Forest Hill, Catford and New Cross — local drops from Lewisham businesses.",
   },
   {
     slug: "greenwich",
@@ -69,7 +69,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["SE3", "SE7", "SE9", "SE10", "SE18", "SE28"],
     neighbourhoods: ["Greenwich", "Woolwich", "Charlton", "Eltham", "Blackheath", "Plumstead", "Thamesmead"],
-    blurb: "Greenwich, Woolwich, Blackheath — claim what's live and collect on the south-east high street.",
+    blurb: "Greenwich, Woolwich, Blackheath — claim what's live and collect from south-east local businesses.",
   },
   {
     slug: "croydon",
@@ -77,7 +77,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["CR0", "CR2", "CR7", "SE19", "SE25"],
     neighbourhoods: ["Croydon", "South Norwood", "Thornton Heath", "Crystal Palace", "Purley", "Addiscombe"],
-    blurb: "Croydon and South Norwood high streets — see the real thing, reserve in the app, collect in person.",
+    blurb: "Croydon and South Norwood local businesses — see the real thing, reserve in the app, collect in person.",
   },
   {
     slug: "bromley",
@@ -101,7 +101,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["KT1", "KT2", "KT3", "KT5", "KT6", "KT9"],
     neighbourhoods: ["Kingston", "Surbiton", "New Malden", "Tolworth", "Norbiton"],
-    blurb: "Kingston and Surbiton high streets on Unwrapped — see it, reserve it, collect it.",
+    blurb: "Kingston and Surbiton local businesses on Unwrapped — see it, reserve it, collect it.",
   },
   {
     slug: "sutton",
@@ -117,7 +117,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["TW1", "TW2", "TW9", "TW10", "TW11", "TW12", "SW13", "SW14"],
     neighbourhoods: ["Richmond", "Twickenham", "Teddington", "Barnes", "East Sheen", "Mortlake", "Kew", "Ham"],
-    blurb: "Richmond, Barnes and Twickenham — high-street drops with photos you can trust.",
+    blurb: "Richmond, Barnes and Twickenham — local business drops with photos you can trust.",
   },
   {
     slug: "bexley",
@@ -125,7 +125,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "south",
     outcodes: ["DA1", "DA5", "DA6", "DA7", "DA8", "DA14", "DA15", "DA16", "DA17", "DA18"],
     neighbourhoods: ["Bexleyheath", "Sidcup", "Welling", "Erith", "Crayford", "Belvedere"],
-    blurb: "Bexleyheath, Sidcup and Welling — Unwrapped coming to south-east London high streets.",
+    blurb: "Bexleyheath, Sidcup and Welling — Unwrapped coming to south-east London local businesses.",
   },
 
   // ── Central ──────────────────────────────────────────────────────────────
@@ -151,7 +151,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "central",
     outcodes: ["NW1", "NW3", "NW5", "WC1", "N1", "N6", "N7", "N19"],
     neighbourhoods: ["Camden Town", "Kentish Town", "Hampstead", "Bloomsbury", "King's Cross", "Gospel Oak"],
-    blurb: "Camden, Kentish Town and Hampstead high streets — see the drop before you go.",
+    blurb: "Camden, Kentish Town and Hampstead local businesses — see the drop before you go.",
   },
   {
     slug: "islington",
@@ -167,7 +167,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "central",
     outcodes: ["W8", "W10", "W11", "W14", "SW3", "SW5", "SW7", "SW10"],
     neighbourhoods: ["Kensington", "Chelsea", "Notting Hill", "Earl's Court", "South Kensington", "Holland Park"],
-    blurb: "Chelsea, Kensington and Notting Hill — visual drops from RBKC high streets.",
+    blurb: "Chelsea, Kensington and Notting Hill — visual drops from RBKC local businesses.",
   },
   {
     slug: "hackney",
@@ -193,7 +193,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "east",
     outcodes: ["E6", "E7", "E12", "E13", "E15", "E16", "E20"],
     neighbourhoods: ["Stratford", "Forest Gate", "East Ham", "West Ham", "Canning Town", "Plaistow"],
-    blurb: "Stratford and Forest Gate — east London high streets you can browse before you visit.",
+    blurb: "Stratford and Forest Gate — east London local businesses you can browse before you visit.",
   },
   {
     slug: "waltham-forest",
@@ -201,7 +201,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "east",
     outcodes: ["E10", "E11", "E17", "E4"],
     neighbourhoods: ["Walthamstow", "Leyton", "Leytonstone", "Chingford"],
-    blurb: "Walthamstow and Leyton — claim local drops and collect on the high street.",
+    blurb: "Walthamstow and Leyton — claim local drops and collect from local businesses.",
   },
   {
     slug: "redbridge",
@@ -217,7 +217,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "east",
     outcodes: ["IG11", "RM8", "RM9", "RM10"],
     neighbourhoods: ["Barking", "Dagenham", "Becontree"],
-    blurb: "Barking and Dagenham high streets — see it, reserve it, collect it.",
+    blurb: "Barking and Dagenham local businesses — see it, reserve it, collect it.",
   },
   {
     slug: "havering",
@@ -235,7 +235,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "north",
     outcodes: ["N4", "N8", "N10", "N15", "N17", "N22"],
     neighbourhoods: ["Crouch End", "Hornsey", "Tottenham", "Wood Green", "Muswell Hill", "Harringay"],
-    blurb: "Crouch End, Tottenham and Wood Green — Unwrapped for Haringey high streets.",
+    blurb: "Crouch End, Tottenham and Wood Green — Unwrapped for Haringey local businesses.",
   },
   {
     slug: "enfield",
@@ -269,7 +269,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "west",
     outcodes: ["W3", "W5", "W7", "W13", "UB1", "UB2", "UB5", "UB6"],
     neighbourhoods: ["Ealing", "Acton", "Hanwell", "Southall", "Greenford", "Northolt"],
-    blurb: "Ealing and Acton high streets — claim local drops on Unwrapped.",
+    blurb: "Ealing and Acton local businesses — claim local drops on Unwrapped.",
   },
   {
     slug: "hounslow",
@@ -285,7 +285,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "west",
     outcodes: ["NW2", "NW6", "NW9", "NW10", "HA0", "HA9"],
     neighbourhoods: ["Willesden", "Kilburn", "Wembley", "Harlesden", "Neasden", "Queens Park"],
-    blurb: "Kilburn, Willesden and Wembley — Unwrapped for Brent high streets.",
+    blurb: "Kilburn, Willesden and Wembley — Unwrapped for Brent local businesses.",
   },
   {
     slug: "harrow",
@@ -301,7 +301,7 @@ export const LONDON_BOROUGHS: LondonBorough[] = [
     region: "west",
     outcodes: ["UB3", "UB4", "UB7", "UB8", "UB9", "UB10", "HA4", "HA6"],
     neighbourhoods: ["Uxbridge", "Ruislip", "Hayes", "West Drayton", "Northwood", "Yiewsley"],
-    blurb: "Uxbridge and Ruislip — west London high streets on Unwrapped.",
+    blurb: "Uxbridge and Ruislip — west London local businesses on Unwrapped.",
   },
 ];
 

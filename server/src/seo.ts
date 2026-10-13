@@ -25,11 +25,14 @@ import {
   SHOP_LIST_HEAD,
   SHOP_VALUE_HEAD,
   SHOP_VALUE_POINTS,
-  WHAT_UNWRAPPED_DOES,
+  WHAT_IT_DOES,
+  WHAT_IT_DOES_LABEL,
+  WHAT_IT_IS,
+  WHAT_IT_IS_LABEL,
   WHAT_UNWRAPPED_EXAMPLES,
   WHAT_UNWRAPPED_HEAD,
-  WHAT_UNWRAPPED_IS,
-  WHAT_UNWRAPPED_WHY,
+  WHY_SIGN_UP,
+  WHY_SIGN_UP_LABEL,
 } from "./pilotCorridor";
 
 const SITE = () =>
@@ -583,7 +586,7 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(PILOT_NOTE)}</p><h2>${escapeHtml(WHAT_UNWRAPPED_HEAD)}</h2><p>${escapeHtml(WHAT_UNWRAPPED_IS)}</p><p>${escapeHtml(WHAT_UNWRAPPED_DOES)}</p><p>${escapeHtml(WHAT_UNWRAPPED_WHY)}</p><p>${escapeHtml(WHAT_UNWRAPPED_EXAMPLES)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>Own a business? <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>${escapeHtml(PILOT_NOTE)}</p><h2>${escapeHtml(WHAT_UNWRAPPED_HEAD)}</h2><h3>${escapeHtml(WHAT_IT_IS_LABEL)}</h3><p>${escapeHtml(WHAT_IT_IS)}</p><h3>${escapeHtml(WHAT_IT_DOES_LABEL)}</h3><p>${escapeHtml(WHAT_IT_DOES)}</p><h3>${escapeHtml(WHY_SIGN_UP_LABEL)}</h3><p>${escapeHtml(WHY_SIGN_UP)}</p><p>${escapeHtml(WHAT_UNWRAPPED_EXAMPLES)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>Own a business? <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
           : path === "/business-apply"
             ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><h2>How it works</h2><ol>${SHOP_HOW_IT_WORKS_STEPS.map((step) => `<li>${escapeHtml(step.title)}</li>`).join("")}</ol><p><a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`
             : path === "/london"
