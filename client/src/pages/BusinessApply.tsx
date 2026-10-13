@@ -90,25 +90,15 @@ export default function BusinessApply() {
           </div>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? 28 : 40,
+            fontSize: isMobile ? 26 : 34,
             fontWeight: 700,
             color: FG,
-            lineHeight: 1.15,
-            letterSpacing: isMobile ? "-0.6px" : "-1px",
-            marginBottom: 20,
-          }}>
-            Partner your shop
-          </h1>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 16 : 17,
-            color: FG,
-            lineHeight: 1.55,
-            margin: "0 0 24px",
-            fontWeight: 500,
+            lineHeight: 1.25,
+            letterSpacing: isMobile ? "-0.5px" : "-0.8px",
+            marginBottom: 24,
           }}>
             {SHOP_VALUE_HEAD}
-          </p>
+          </h1>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 36px", display: "flex", flexDirection: "column", gap: 10 }}>
             {SHOP_VALUE_POINTS.map((point) => (
               <li key={point} style={{
