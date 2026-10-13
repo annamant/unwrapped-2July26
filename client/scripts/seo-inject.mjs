@@ -5,9 +5,9 @@
  */
 
 export const SITE = "https://shopunwrapped.com";
-export const DEFAULT_TITLE = "Know first. Reserve first.";
+export const DEFAULT_TITLE = "First pick from the local shops you love.";
 export const DEFAULT_DESCRIPTION =
-  "Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.";
+  "Tell us the shops and the kinds of things you want to hear about. When there's something new, you're the first to know. Pay to reserve in a tap and it's held for you under your name.";
 export const DEFAULT_OG = `${SITE}/og-image.png`;
 
 export function escapeHtml(s) {

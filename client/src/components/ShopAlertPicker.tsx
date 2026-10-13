@@ -14,8 +14,10 @@ export default function ShopAlertPicker({
   shops,
   selected,
   interests,
+  requestedShopsText,
   onToggle,
   onToggleInterest,
+  onRequestedShopsChange,
   onSkip,
   onContinue,
   pending,
@@ -23,8 +25,10 @@ export default function ShopAlertPicker({
   shops: ShopChoice[];
   selected: string[];
   interests: SignupInterestId[];
+  requestedShopsText: string;
   onToggle: (key: string) => void;
   onToggleInterest: (id: SignupInterestId) => void;
+  onRequestedShopsChange: (value: string) => void;
   onSkip: () => void;
   onContinue: () => void;
   pending: boolean;
@@ -156,6 +160,42 @@ export default function ShopAlertPicker({
             </button>
           );
         })}
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <label
+          htmlFor="signup-requested-shops"
+          style={{
+            display: "block",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 13,
+            fontWeight: 700,
+            color: FG,
+            marginBottom: 8,
+          }}
+        >
+          Shops you'd follow that aren't listed{" "}
+          <span style={{ fontWeight: 500, color: MUTED_FG }}>(optional)</span>
+        </label>
+        <textarea
+          id="signup-requested-shops"
+          value={requestedShopsText}
+          onChange={(e) => onRequestedShopsChange(e.target.value)}
+          rows={3}
+          placeholder="One per line, or separated by commas"
+          style={{
+            width: "100%",
+            padding: "12px 14px",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 15,
+            border: `1px solid ${BORDER}`,
+            background: BG,
+            color: FG,
+            outline: "none",
+            boxSizing: "border-box",
+            resize: "vertical",
+            lineHeight: 1.45,
+          }}
+        />
       </div>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: MUTED_FG, marginBottom: 12 }}>
         {selected.length === 0 ? "No shops selected" : `${selected.length} shop${selected.length === 1 ? "" : "s"} selected`}

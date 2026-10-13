@@ -7,10 +7,14 @@ import useIsMobile from "../hooks/useIsMobile";
 import { checkoutFromList, discountPercent, reserveCtaLabel } from "../lib/fees";
 import { PRELAUNCH_WAVE1_DIRECTORY_PINS, type PrelaunchDirectoryPin } from "../lib/prelaunch_wave1_directory_pins";
 import {
+  BEFORE_SIGNUP_FAQS,
+  BEFORE_SIGNUP_HEAD,
   CLOSE_HEAD,
+  CLOSE_SUB,
+  FEELS_LIKE_BODY,
+  FEELS_LIKE_HEAD,
   HOMEPAGE_HIDDEN_MEMBER_NAMES,
   HOW_IT_WORKS_STEPS,
-  LOCAL_COLLECT_LINE,
   PILOT_H1,
   PILOT_KICKER,
   PILOT_MAP,
@@ -18,14 +22,8 @@ import {
   PILOT_SUB,
   SHOP_LIST_FOOT,
   SHOP_LIST_HEAD,
-  WHAT_IT_DOES,
-  WHAT_IT_DOES_LABEL,
-  WHAT_IT_IS,
-  WHAT_IT_IS_LABEL,
-  WHAT_UNWRAPPED_EXAMPLES,
-  WHAT_UNWRAPPED_HEAD,
-  WHY_SIGN_UP,
-  WHY_SIGN_UP_LABEL,
+  WHY_LIKE_HEAD,
+  WHY_LIKE_POINTS,
 } from "../lib/pilotCorridor";
 import { isObviousTestShop } from "../lib/testShop";
 import { mergeDirectoryShops, normalizeDirectoryName } from "../lib/directoryShops";
@@ -733,9 +731,9 @@ export default function Landing() {
 
       </section>
 
-      {/* ── What it is / What it does / Why sign up — directly under the hero ── */}
+      {/* ── What it feels like / Why you'll like it — directly under the hero ── */}
       <section
-        aria-labelledby="what-unwrapped-heading"
+        aria-labelledby="feels-like-heading"
         style={{
           position: "relative",
           zIndex: 1,
@@ -748,7 +746,7 @@ export default function Landing() {
           maxWidth: 720,
         }}>
           <h2
-            id="what-unwrapped-heading"
+            id="feels-like-heading"
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: isMobile ? 24 : 28,
@@ -756,94 +754,51 @@ export default function Landing() {
               color: FG,
               letterSpacing: "-0.6px",
               lineHeight: 1.15,
-              marginBottom: isMobile ? 20 : 24,
+              marginBottom: isMobile ? 14 : 16,
             }}
           >
-            {WHAT_UNWRAPPED_HEAD}
+            {FEELS_LIKE_HEAD}
           </h2>
-
-          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
-            <h3 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
-              fontWeight: 800,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: V,
-              marginBottom: 6,
-            }}>
-              {WHAT_IT_IS_LABEL}
-            </h3>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 15 : 16,
-              color: FG,
-              lineHeight: 1.55,
-              fontWeight: 500,
-              margin: 0,
-            }}>
-              {WHAT_IT_IS}
-            </p>
-          </div>
-
-          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
-            <h3 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
-              fontWeight: 800,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: V,
-              marginBottom: 6,
-            }}>
-              {WHAT_IT_DOES_LABEL}
-            </h3>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 15 : 16,
-              color: FG,
-              lineHeight: 1.55,
-              fontWeight: 500,
-              margin: 0,
-            }}>
-              {WHAT_IT_DOES}
-            </p>
-          </div>
-
-          <div style={{ marginBottom: isMobile ? 16 : 18 }}>
-            <h3 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 13,
-              fontWeight: 800,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: V,
-              marginBottom: 6,
-            }}>
-              {WHY_SIGN_UP_LABEL}
-            </h3>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: isMobile ? 15 : 16,
-              color: FG,
-              lineHeight: 1.55,
-              fontWeight: 500,
-              margin: 0,
-            }}>
-              {WHY_SIGN_UP}
-            </p>
-          </div>
-
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 14 : 15,
-            color: MUTED_FG,
+            fontSize: isMobile ? 15 : 17,
+            color: FG,
             lineHeight: 1.55,
             fontWeight: 500,
-            margin: 0,
+            margin: `0 0 ${isMobile ? 28 : 36}px`,
           }}>
-            {WHAT_UNWRAPPED_EXAMPLES}
+            {FEELS_LIKE_BODY}
           </p>
+
+          <h2 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 24 : 28,
+            fontWeight: 800,
+            color: FG,
+            letterSpacing: "-0.6px",
+            lineHeight: 1.15,
+            marginBottom: isMobile ? 16 : 20,
+          }}>
+            {WHY_LIKE_HEAD}
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 14 : 16 }}>
+            {WHY_LIKE_POINTS.map((point) => (
+              <p
+                key={point.lead}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 15 : 16,
+                  color: FG,
+                  lineHeight: 1.55,
+                  fontWeight: 500,
+                  margin: 0,
+                }}
+              >
+                <strong style={{ fontWeight: 800 }}>{point.lead}</strong>{" "}
+                {point.body}
+              </p>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -883,7 +838,7 @@ export default function Landing() {
             gap: 14,
             maxWidth: 860,
           }}>
-            {HOW_IT_WORKS_STEPS.map(({ num, title, body, recommendLink }) => (
+            {HOW_IT_WORKS_STEPS.map(({ num, title, body }) => (
               <div key={num} style={{
                 border: `1px solid ${BORDER}`,
                 borderRadius: 14,
@@ -917,32 +872,11 @@ export default function Landing() {
                   color: MUTED_FG,
                   lineHeight: 1.45,
                 }}>
-                  {recommendLink ? (
-                    <>
-                      Any local shop you already go to. Not listed?{" "}
-                      <a href="/recommend" style={{ color: FG, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>
-                        Tell us which one
-                      </a>
-                      .
-                    </>
-                  ) : (
-                    body
-                  )}
+                  {body}
                 </div>
               </div>
             ))}
           </div>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: isMobile ? 14 : 15,
-            color: MUTED_FG,
-            lineHeight: 1.5,
-            margin: "18px 0 0",
-            maxWidth: 560,
-            fontWeight: 500,
-          }}>
-            {LOCAL_COLLECT_LINE}
-          </p>
         </div>
 
         <div style={{
@@ -1004,6 +938,63 @@ export default function Landing() {
       </section>
       )}
 
+      {/* ── Before you sign up (FAQ) ── */}
+      <section
+        aria-labelledby="before-signup-heading"
+        style={{
+          position: "relative",
+          zIndex: 1,
+          background: SECTION_WASH,
+          borderBottom: `1px solid ${BORDER}`,
+        }}
+      >
+        <div style={{
+          padding: isMobile ? "40px 20px" : "56px 40px",
+          maxWidth: 720,
+        }}>
+          <h2
+            id="before-signup-heading"
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: isMobile ? 24 : 28,
+              fontWeight: 800,
+              color: FG,
+              letterSpacing: "-0.6px",
+              lineHeight: 1.15,
+              marginBottom: isMobile ? 20 : 24,
+            }}
+          >
+            {BEFORE_SIGNUP_HEAD}
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 18 : 20 }}>
+            {BEFORE_SIGNUP_FAQS.map((item) => (
+              <div key={item.q}>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 15 : 16,
+                  fontWeight: 800,
+                  color: FG,
+                  marginBottom: 6,
+                  lineHeight: 1.35,
+                }}>
+                  {item.q}
+                </div>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: isMobile ? 14 : 15,
+                  color: MUTED_FG,
+                  lineHeight: 1.55,
+                  fontWeight: 500,
+                  margin: 0,
+                }}>
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Curated shop map and list. All 132 wave-1 pins, including unclaimed. */}
       {PRE_LAUNCH ? (
         <PrelaunchDirectorySection pins={PRELAUNCH_WAVE1_DIRECTORY_PINS} />
@@ -1039,11 +1030,22 @@ export default function Landing() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(28px, 3.6vw, 42px)",
             fontWeight: 700, lineHeight: 1.12, letterSpacing: "-1px",
-            marginBottom: 28,
+            marginBottom: 14,
             color: BG,
           }}>
             {CLOSE_HEAD}
           </h2>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: isMobile ? 15 : 17,
+            color: "rgba(255,240,244,0.82)",
+            lineHeight: 1.5,
+            fontWeight: 500,
+            marginBottom: 28,
+            maxWidth: 480,
+          }}>
+            {CLOSE_SUB}
+          </p>
           <button
             onClick={() => navigate(CHOOSE_SHOPS_HREF)}
             className="uw-btn-primary"

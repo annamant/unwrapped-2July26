@@ -13,6 +13,7 @@ import { sendPasswordResetEmail } from "../notifications/dispatch";
 import { resolveLoginRedirect } from "../auth/resolveLoginRedirect";
 import { saveSignupFollows, type FollowInput } from "../follows/persist";
 import { sanitizeSignupInterests, SIGNUP_INTEREST_IDS } from "../signupInterests";
+import { sanitizeSignupRequestedShops } from "../signupRequestedShops";
 
 // ─── Password hashing via Node built-in crypto.scrypt ─────────────────────────
 
@@ -97,12 +98,15 @@ export const authRouter = router({
         directoryPinId: z.string().trim().min(1).max(200).optional(),
       })).max(40).optional(),
       interests: z.array(z.enum(SIGNUP_INTEREST_IDS)).max(SIGNUP_INTEREST_IDS.length).optional(),
+      /** Free-text names for shops not in the picker (comma or newline separated). */
+      requestedShops: z.string().max(4000).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       rateLimit(`register-ip:${ctx.req.ip ?? "unknown"}`, 20, 10 * 60 * 1000);
 
       const email = input.email.toLowerCase();
       const signupInterests = sanitizeSignupInterests(input.interests ?? []);
+      const signupRequestedShops = sanitizeSignupRequestedShops(input.requestedShops ?? "");
       const [existing] = await ctx.db
         .select({ id: users.id, passwordHash: users.passwordHash })
         .from(users)
@@ -120,7 +124,7 @@ export const authRouter = router({
         }
         await ctx.db
           .update(users)
-          .set({ passwordHash, name: input.name, signupInterests })
+          .set({ passwordHash, name: input.name, signupInterests, signupRequestedShops })
           .where(eq(users.id, existing.id));
         const token = await createSession(ctx, existing.id);
         await rememberSignupShops(ctx.db, existing.id, input.shopFollows);
@@ -136,6 +140,7 @@ export const authRouter = router({
           role: "consumer",
           onboardingComplete: false,
           signupInterests,
+          signupRequestedShops,
         })
         .returning();
 

@@ -12,9 +12,13 @@ import {
   londonHubSeo,
 } from "./londonBoroughs";
 import {
+  BEFORE_SIGNUP_FAQS,
+  BEFORE_SIGNUP_HEAD,
   CLOSE_HEAD,
+  CLOSE_SUB,
+  FEELS_LIKE_BODY,
+  FEELS_LIKE_HEAD,
   HOW_IT_WORKS_STEPS,
-  LOCAL_COLLECT_LINE,
   PILOT_DESCRIPTION,
   PILOT_H1,
   PILOT_KICKER,
@@ -25,14 +29,8 @@ import {
   SHOP_LIST_HEAD,
   SHOP_VALUE_HEAD,
   SHOP_VALUE_POINTS,
-  WHAT_IT_DOES,
-  WHAT_IT_DOES_LABEL,
-  WHAT_IT_IS,
-  WHAT_IT_IS_LABEL,
-  WHAT_UNWRAPPED_EXAMPLES,
-  WHAT_UNWRAPPED_HEAD,
-  WHY_SIGN_UP,
-  WHY_SIGN_UP_LABEL,
+  WHY_LIKE_HEAD,
+  WHY_LIKE_POINTS,
 } from "./pilotCorridor";
 
 const SITE = () =>
@@ -45,21 +43,10 @@ const DEFAULT_TITLE = PILOT_TITLE;
 const DEFAULT_DESCRIPTION = PILOT_DESCRIPTION;
 
 const HOME_FAQS: { q: string; a: string }[] = [
-  {
-    q: "What is Unwrapped?",
-    a: "Know first. Reserve first. Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.",
-  },
+  ...BEFORE_SIGNUP_FAQS,
   {
     q: "How does it work?",
-    a: "Pick your shops. Get the heads-up only when they post something. Pay for it, then collect it in store.",
-  },
-  {
-    q: "How do I collect?",
-    a: "Pay to hold it in the app, then walk in during the collection window with your QR.",
-  },
-  {
-    q: "What will I hear about?",
-    a: "Emails only from shops you pick — when they post something worth the trip.",
+    a: HOW_IT_WORKS_STEPS.map((step) => `${step.title} ${step.body}`).join(" "),
   },
 ];
 
@@ -586,11 +573,11 @@ export async function resolveSeoMeta(pathname: string): Promise<SeoPayload> {
               : undefined,
       bodyHtml:
         path === "/"
-          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>${escapeHtml(PILOT_NOTE)}</p><h2>${escapeHtml(WHAT_UNWRAPPED_HEAD)}</h2><h3>${escapeHtml(WHAT_IT_IS_LABEL)}</h3><p>${escapeHtml(WHAT_IT_IS)}</p><h3>${escapeHtml(WHAT_IT_DOES_LABEL)}</h3><p>${escapeHtml(WHAT_IT_DOES)}</p><h3>${escapeHtml(WHY_SIGN_UP_LABEL)}</h3><p>${escapeHtml(WHY_SIGN_UP)}</p><p>${escapeHtml(WHAT_UNWRAPPED_EXAMPLES)}</p><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><p>${escapeHtml(LOCAL_COLLECT_LINE)}</p><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>Own a business? <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
+          ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_SUB)}</p><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>${escapeHtml(PILOT_NOTE)}</p><h2>${escapeHtml(FEELS_LIKE_HEAD)}</h2><p>${escapeHtml(FEELS_LIKE_BODY)}</p><h2>${escapeHtml(WHY_LIKE_HEAD)}</h2><ul>${WHY_LIKE_POINTS.map((point) => `<li><strong>${escapeHtml(point.lead)}</strong> ${escapeHtml(point.body)}</li>`).join("")}</ul><h2>How it works</h2><ol>${HOW_IT_WORKS_STEPS.map((step) => `<li><strong>${escapeHtml(step.title)}</strong> ${escapeHtml(step.body)}</li>`).join("")}</ol><h2>${escapeHtml(BEFORE_SIGNUP_HEAD)}</h2><dl>${BEFORE_SIGNUP_FAQS.map((item) => `<dt>${escapeHtml(item.q)}</dt><dd>${escapeHtml(item.a)}</dd>`).join("")}</dl><h2>${escapeHtml(SHOP_LIST_HEAD)}</h2><h2>${escapeHtml(CLOSE_HEAD)}</h2><p>${escapeHtml(CLOSE_SUB)}</p><p><a href="${escapeHtml(abs("/signin?mode=register"))}">${escapeHtml(PILOT_KICKER)}</a></p><p>Own a business? <a href="${escapeHtml(abs("/business-apply"))}">Partner with us</a></p></article>`
           : path === "/business-apply"
             ? `<article><h1>${escapeHtml(SHOP_VALUE_HEAD)}</h1><ul>${SHOP_VALUE_POINTS.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul><h2>How it works</h2><ol>${SHOP_HOW_IT_WORKS_STEPS.map((step) => `<li>${escapeHtml(step.title)}</li>`).join("")}</ol><p><a href="${escapeHtml(abs("/business-apply"))}">Apply to partner your shop</a></p></article>`
             : path === "/london"
-            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>Pick your shops. Get the heads-up. Pay for it, collect it.</h2></article>`
+            ? `<article><h1>${escapeHtml(PILOT_H1)}</h1><p>${escapeHtml(PILOT_KICKER)}</p><p>${escapeHtml(staticPage.description)}</p><h2>${escapeHtml(CLOSE_HEAD)}</h2></article>`
             : `<article><h1>${escapeHtml(staticPage.title)}</h1><p>${escapeHtml(staticPage.description)}</p></article>`,
     };
   }

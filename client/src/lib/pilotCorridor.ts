@@ -1,22 +1,27 @@
 /**
  * Shopper-facing lines for the public site.
  * Keep the copy aligned with server/src/pilotCorridor.ts.
+ *
+ * Rules for shopper homepage copy: no "high street", no street names,
+ * no commission numbers, no request counts, and nothing telling shoppers
+ * we'll take their requests to shops or use their picks to onboard shops.
  */
 
-export const PILOT_TITLE = "Know first. Reserve first.";
+export const PILOT_TITLE = "First pick from the local shops you love.";
 
 export const PILOT_DESCRIPTION =
-  "Hear the moment your favourite local shops post something new, and pay to reserve it before anyone else can.";
+  "Tell us the shops and the kinds of things you want to hear about. When there's something new, you're the first to know. Pay to reserve in a tap and it's held for you under your name.";
 
-export const PILOT_H1 = "Know first. Reserve first.";
+export const PILOT_H1 = "First pick from the local shops you love.";
 
-export const PILOT_KICKER = "Get first dibs";
+export const PILOT_KICKER = "Get first dibs. Free.";
 
 /** Under the Get first dibs button. */
 export const PILOT_NOTE =
-  "Free. Emails only from shops you pick. Unsubscribe in one click.";
+  "Only the shops and interests you choose. Unsubscribe in one click.";
 
-export const PILOT_LOOP = "Pick your shops. Get the heads-up. Pay for it, collect it.";
+export const PILOT_LOOP =
+  "Tell us what you're after. Hear the moment something's up. Reserve it and collect.";
 
 export const PILOT_SUB = PILOT_DESCRIPTION;
 
@@ -24,34 +29,32 @@ export const PILOT_SUB = PILOT_DESCRIPTION;
 export const PILOT_SHOP =
   "Tell your regulars when you've got something on.";
 
-/**
- * Directly under the shopper hero — What it is / What it does / Why sign up.
- * For everyone (not women-only). Not food-only. No high street / street names /
- * photographed specials / commission numbers.
- */
-export const WHAT_UNWRAPPED_HEAD = "What Unwrapped is";
+/** Directly under the shopper hero. */
+export const FEELS_LIKE_HEAD = "What it feels like";
 
-export const WHAT_IT_IS_LABEL = "What it is";
-export const WHAT_IT_IS =
-  "Unwrapped connects you with the local businesses near you that you love.";
+export const FEELS_LIKE_BODY =
+  "The sourdough you always miss. The jacket that was never there when you went in. The barber slot that opened ten minutes ago. You hear first, and it's yours before anyone else can take it.";
 
-export const WHAT_IT_DOES_LABEL = "What it does";
-export const WHAT_IT_DOES =
-  "You pick your interests and your favourite businesses, and we tell you the moment one posts something new. You pay to reserve it before anyone else can, then collect or turn up.";
+export const WHY_LIKE_HEAD = "Why you'll like it";
 
-export const WHY_SIGN_UP_LABEL = "Why sign up";
-export const WHY_SIGN_UP =
-  "Sign up for priority access — you hear first and reserve first — and for convenience: no checking feeds, no queueing, no missing out.";
-
-/** @deprecated Prefer WHAT_IT_IS — kept so older imports keep compiling. */
-export const WHAT_UNWRAPPED_IS = WHAT_IT_IS;
-/** @deprecated Prefer WHAT_IT_DOES */
-export const WHAT_UNWRAPPED_DOES = WHAT_IT_DOES;
-/** @deprecated Prefer WHY_SIGN_UP */
-export const WHAT_UNWRAPPED_WHY = WHY_SIGN_UP;
-
-export const WHAT_UNWRAPPED_EXAMPLES =
-  "It could be an item from a shop you like, a meal from a lunch spot you already go to, or a last-minute appointment at a barber or salon.";
+export const WHY_LIKE_POINTS = [
+  {
+    lead: "Get the thing you wanted.",
+    body: "Something good goes up and you get the first chance at it.",
+  },
+  {
+    lead: "No queueing, no wasted trips.",
+    body: "You only go in when something is waiting for you.",
+  },
+  {
+    lead: "Back your local shops.",
+    body: "Your money goes to the independents you want around for years.",
+  },
+  {
+    lead: "Only what you chose.",
+    body: "Follow specific shops, or whole interests like vintage, coffee, barbers or salons.",
+  },
+] as const;
 
 /** How it works — shopper steps. */
 export const HOW_IT_WORKS_HEAD = "How it works";
@@ -59,34 +62,46 @@ export const HOW_IT_WORKS_HEAD = "How it works";
 export const HOW_IT_WORKS_STEPS = [
   {
     num: "01",
-    title: "Pick your shops.",
-    body: "Any local shop you already go to. Not listed? Tell us which one.",
-    recommendLink: true,
+    title: "Tell us what you're after.",
+    body: "Name the local shops you'd follow, or pick the interests you care about.",
   },
   {
     num: "02",
-    title: "Get the heads-up.",
-    body: "Only when they post something, never spam.",
-    recommendLink: false,
+    title: "Hear the moment something's up.",
+    body: "We alert you when a shop or interest you chose has something new.",
   },
   {
     num: "03",
-    title: "Pay for it, collect it.",
-    body: "It's held for you in store.",
-    recommendLink: false,
+    title: "Reserve it and collect.",
+    body: "It's held for you under your name. No courier, no waiting.",
   },
 ] as const;
 
-/** Below how-it-works steps. Never a headline. */
-export const LOCAL_COLLECT_LINE =
-  "Like Vinted or Whatnot, but from shops near you, and no courier.";
+export const BEFORE_SIGNUP_HEAD = "Before you sign up";
+
+export const BEFORE_SIGNUP_FAQS = [
+  {
+    q: "Is it free?",
+    a: "Yes. Joining costs nothing.",
+  },
+  {
+    q: "Why pay to reserve?",
+    a: "Paying is what holds it for you. If the shop can't hand it over, or you cancel before collection opens, you get a full refund.",
+  },
+  {
+    q: "When does it start?",
+    a: "Live in London now, with more shops joining every week.",
+  },
+] as const;
 
 export const SHOP_LIST_HEAD = "Follow the shops you know.";
 
 export const SHOP_LIST_FOOT =
   "Shops start posting as they join. Follow now and you'll hear the moment they do.";
 
-export const CLOSE_HEAD = "Which shops should we watch for you?";
+export const CLOSE_HEAD = "Which shops would you hate to miss out on?";
+
+export const CLOSE_SUB = "Name them, and you'll hear first when they post.";
 
 /** Shop-facing value prop — business apply only, not the homepage. */
 export const SHOP_VALUE_HEAD =

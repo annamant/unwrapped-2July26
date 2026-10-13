@@ -981,6 +981,7 @@ export const adminRouter = router({
           role: users.role,
           onboardingComplete: users.onboardingComplete,
           signupInterests: users.signupInterests,
+          signupRequestedShops: users.signupRequestedShops,
           hasPassword: sql<boolean>`${users.passwordHash} IS NOT NULL`,
           createdAt: users.createdAt,
         })
@@ -1060,6 +1061,7 @@ export const adminRouter = router({
           role: u.role,
           onboardingComplete: u.onboardingComplete,
           signupInterests: u.signupInterests ?? [],
+          signupRequestedShops: u.signupRequestedShops ?? [],
           hasPassword: u.hasPassword,
           createdAt: u.createdAt,
           kind,

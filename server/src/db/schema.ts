@@ -26,6 +26,8 @@ export const users = pgTable("users", {
   interestCategories: text("interest_categories").array().default([]).notNull(),
   /** Optional broad interests from the signup "which shops?" step. */
   signupInterests: text("signup_interests").array().default([]).notNull(),
+  /** Optional free-text shop names typed when a shop isn't in the signup picker. */
+  signupRequestedShops: text("signup_requested_shops").array().default([]).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

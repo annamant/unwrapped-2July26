@@ -25,6 +25,7 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [interests, setInterests] = useState<SignupInterestId[]>([]);
+  const [requestedShopsText, setRequestedShopsText] = useState("");
 
   const login = trpc.auth.login.useMutation();
   const register = trpc.auth.register.useMutation();
@@ -77,7 +78,11 @@ export default function SignIn() {
     return payload.filter((shop) => shop.directoryPinId || shop.businessId);
   }
 
-  async function createAccount(keys: string[], chosenInterests: SignupInterestId[]) {
+  async function createAccount(
+    keys: string[],
+    chosenInterests: SignupInterestId[],
+    requestedShops: string,
+  ) {
     setError("");
     setLoading(true);
     try {
@@ -87,6 +92,7 @@ export default function SignIn() {
         name,
         shopFollows: shopFollowsFor(keys),
         interests: chosenInterests,
+        requestedShops,
       });
       clearPendingFollow();
       setSessionToken(result.token);
@@ -153,11 +159,13 @@ export default function SignIn() {
                 shops={shops}
                 selected={selected}
                 interests={interests}
+                requestedShopsText={requestedShopsText}
                 pending={loading}
                 onToggle={(key) => setSelected((current) => current.includes(key) ? current.filter((item) => item !== key) : [...current, key])}
                 onToggleInterest={(id) => setInterests((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])}
-                onSkip={() => createAccount([], [])}
-                onContinue={() => createAccount(selected, interests)}
+                onRequestedShopsChange={setRequestedShopsText}
+                onSkip={() => createAccount([], [], "")}
+                onContinue={() => createAccount(selected, interests, requestedShopsText)}
               />
             </>
           ) : (
