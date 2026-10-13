@@ -944,7 +944,7 @@ export default function Landing() {
             fontWeight: 500,
             lineHeight: 1.5,
           }}>
-            Own a shop?{" "}
+            Own a business?{" "}
             <a
               href="/business-apply"
               className="uw-link"
