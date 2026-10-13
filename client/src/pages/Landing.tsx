@@ -1112,7 +1112,7 @@ export default function Landing() {
               { label: "Sign in", href: "/signin" },
               { label: "For shops", href: "/business-apply" },
               { label: "Recommend a shop", href: "/recommend" },
-              { label: "Choose my shops", href: CHOOSE_SHOPS_HREF },
+              { label: PILOT_KICKER, href: CHOOSE_SHOPS_HREF },
               { label: "Resources", href: "/resources" },
               { label: "Instagram", href: "https://www.instagram.com/shopunwrapped/", external: true },
             ].map(({ label, href, external }) => (

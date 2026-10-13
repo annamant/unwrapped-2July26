@@ -10,9 +10,9 @@ export const PILOT_DESCRIPTION =
 
 export const PILOT_H1 = "Know first. Reserve first.";
 
-export const PILOT_KICKER = "Choose my shops";
+export const PILOT_KICKER = "Get first dibs";
 
-/** Under the Choose my shops button. */
+/** Under the Get first dibs button. */
 export const PILOT_NOTE =
   "Free. Emails only from shops you pick. Unsubscribe in one click.";
 
